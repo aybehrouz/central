@@ -17,9 +17,9 @@
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\D}[2]{\mathbb{D}(#1 || #2)}
+\newcommand{\ED}[3]{\E_#3 \left[ \D{#1}{#2} \right]}
 \newcommand{\sumover}[1]{\sum_{#1 \in \mathcal{\uppercase{#1}}}}
-\newcommand{\expD}[2]{\ln \frac{Q(#1 \mid #2)}{P(#1 \mid #2)}Q(#1, #2)}
-\newcommand{\augexpD}[2]{\ln \frac{\aug{Q}(#1 \mid #2)}{\aug{P}(#1 \mid #2)}\aug{Q}(#1, #2)}
+\newcommand{\Dexpand}[2]{\ln \frac{Q(#1 \mid #2)}{P(#1 \mid #2)}Q(#1, #2)}
 \newcommand{\given}[2]{#1|#2}
 \newcommand{\aug}[1]{#1^*}
 

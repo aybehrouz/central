@@ -8,8 +8,8 @@
     We say $\given{S}{E}$ ($S$ given $E$) \emph{$\epsilon$-converges} by a distribution $P$ in $\M$,
     if for every distribution $Q$ in $\M$ we have:
     \begin{equation}
-        \E_Q[\D{P_{\given{S}{E}}}{Q_{\given{S}{E}}}] =
-        \sumover{s}\sumover{e} \expD{s}{e} < \epsilon \ \cdot
+        \ED{P_{\given{S}{E}}}{Q_{\given{S}{E}}}{Q} =
+        \sumover{s}\sumover{e} \Dexpand{s}{e} < \epsilon \ \cdot
         \label{eq:e-convergence}
     \end{equation}
 \end{definition}
@@ -17,7 +17,7 @@
 \begin{definition}[$\epsilon$-convergent distribution]
     Let $S$ be a random variable, and $\mathbf{E}$ be a set of random variables in a probabilistic model $\M$.
     We say $P$ is an \emph{$\epsilon$-convergent distribution} for $\given{S}{\mathbf{E}}$ in $\M$, if for all
-    $E \in \mathbf{E}$, $\given{S}{E}$ $\epsilon$-converges in $\M$ by $P$.
+    $E \in \mathbf{E}$, $\given{S}{E}$ $\epsilon$-converges by $P$ in $\M$.
 \end{definition}
 
 \begin{theorem}
@@ -44,12 +44,12 @@
     Assume, by contradiction, that $\given{S}{\mathbf{E}}$ does not $\epsilon$-converge by $P$ in $\M$.
     Therefore, there must exist $Q$ and $E_i \in \mathbf{E}$ in $\M$ such that:
     \[
-        \E_Q[\D{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}] \geq \epsilon \ \cdot
+        \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} \geq \epsilon \ \cdot
     \]
     Equations~\ref{eq:th1-1} and~\ref{eq:th1-2} hold for every $Q$ and $E_i$, and we can rewrite the left hand
     side of this inequality using them:
     \begin{align*}
-        \E_Q[\D{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}] &= \sumover{s} \sum_{e_i \in \mathcal{E}_i} \expD{s}{e_i} \\
+        \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} &= \sumover{s} \sum_{e_i \in \mathcal{E}_i} \Dexpand{s}{e_i} \\
         &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e}, I = i)}{\aug{P}(\aug{s} \mid \aug{e}, I = i)}\aug{Q}(\aug{s},\aug{e} \mid I = i)\\
         &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e} \mid I = i) \ ,
     \end{align*}
@@ -70,22 +70,7 @@
     which means $\given{\aug{S}}{\aug{E}}$ does not $\epsilon$-converge by $\aug{P}$ in $\aug{\M}$.
 \end{proof}
 
-\begin{definition}[conditional]
-    A \emph{conditional} is a set of conditional probabilities of an event $A$ such that the conditions form a
-    partition of the sample space, i.e they are disjoint events whose their probabilities sum to one.
-    \[
-        P(A \mid X E_i) \mid E_i \cap E_j =\emptyset
-    \]
-    Note that according to this definition, an event conditioned on a vector of random variables is
-    always a conditional.
-\end{definition}
-Kullback-Leibler directed divergence
-\begin{equation}
-    <\sumover{s}\sumover{e} \ln \frac{Q(s \mid e)}{P(s \mid e)}Q(s,e) < \epsilon\label{eq:equation}
-\end{equation}
-
-
-lkllklk said Nobody ~\cite{Nobody06}
+blahblahblah said Nobody ~\cite{Nobody06}
 
 
 \bibliography{main}

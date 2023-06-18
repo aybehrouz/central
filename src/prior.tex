@@ -22,18 +22,19 @@
 
 \begin{theorem}
     Consider two probabilistic models $\M$ and $\aug{\M}$.
-    Let $\mathbf{E}$ be a countable set of random variables in $\M$, and $\aug{E}$ be a single random
-    variable in $\M^*$.
-    Assume there exist a random variable $I$ in $\aug{\M}$, such that for every probability measure $Q$
-    in $\M$, there exist a probability measure $\aug{Q}$ in $\aug{\M}$,
-    such that for every $E_i \in \mathbf{E}$ we have:
+    Let $\mathbf{E}$ be a \textbf{countable} set of random variables in $\M$, and $\aug{E}$ be a single random variable
+    in $\M^*$.
+    Suppose that there exists a random variable $I$ in $\aug{\M}$, such that for \textbf{every} probability measure $P$
+    in $\M$, there exists a probability measure $\aug{P}$ in $\aug{\M}$,
+    such that for every $E_i \in \mathbf{E}$, every $s \in \mathcal{S}$ and every $e_i \in \mathcal{E}_i$, there exist
+    some values $\aug{s}, \aug{e}$ such that we have:
     \begin{equation}
-        Q(S,E_i) = \aug{Q}(\aug{S},\aug{E} \mid I = i)\ ,
+        P(S=s,E_i=e_i) = \aug{P}(\aug{S}=\aug{s},\aug{E}=\aug{e} \mid I = i)\ \cdot
         \label{eq:th1-1}
     \end{equation}
-    while $I$ and $\aug{E}$ are conditionally independent:
+    In addition, $I$ and $\aug{E}$ are conditionally independent:
     \begin{equation}
-        \aug{Q}(\aug{S} \mid \aug{E}) = \aug{Q}(\aug{S} \mid \aug{E}, I)\ \cdot
+        \aug{P}(\aug{S} \mid \aug{E}) = \aug{P}(\aug{S} \mid \aug{E}, I)\ \cdot
         \label{eq:th1-2}
     \end{equation}
     Then $\given{S}{\mathbf{E}}$ $\epsilon$-converges by $P$ in $\M$,
@@ -46,19 +47,18 @@
     \[
         \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} \geq \epsilon \ \cdot
     \]
-    Equations~\ref{eq:th1-1} and~\ref{eq:th1-2} hold for every $Q$ and $E_i$, and we can rewrite the left hand
-    side of this inequality using them:
+    By using equations~\ref{eq:th1-1} and~\ref{eq:th1-2} we can rewrite the left hand side:
     \begin{align*}
         \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} &= \sumover{s} \sum_{e_i \in \mathcal{E}_i} \Dexpand{s}{e_i} \\
         &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e}, I = i)}{\aug{P}(\aug{s} \mid \aug{e}, I = i)}\aug{Q}(\aug{s},\aug{e} \mid I = i)\\
-        &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e} \mid I = i) \ ,
+        &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e} \mid I = i) \ \cdot
     \end{align*}
-    so we must have:
+    Hence, we have:
     \[
         \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e} \mid I = i) \geq \epsilon \ \cdot
     \]
     Since $\aug{Q}(i)$ is a distribution and is non-negative for every $i$, we can multiply both sides of this
-    inequality to $\aug{Q}(i)$ and sum over all values of $i$.
+    inequality to $\aug{Q}(i)$ and sum over all values of $i$:
     \begin{align*}
         \sum_{i} \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e}, I = i)
         &\geq \sum_{i} \epsilon \aug{Q}(i) \\

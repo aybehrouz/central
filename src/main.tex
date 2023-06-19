@@ -13,13 +13,17 @@
 \newtheorem{theorem}{Theorem}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
+\newtheorem*{proposition}{Proposition}
 
-\newcommand{\E}{\mathbb{E}}
+\newcommand{\set}[1]{\mathbf{#1}}
+\newcommand{\valset}[1]{\mathcal{\uppercase{#1}}}
+\newcommand{\measure}[1]{\mathbb{#1}}
+\newcommand{\E}{\measure{E}}
 \newcommand{\M}{\mathcal{M}}
-\newcommand{\D}[2]{\mathbb{D}(#1 || #2)}
+\newcommand{\D}[2]{\measure{D}(#1 || #2)}
 \newcommand{\ED}[3]{\E_#3 \left[ \D{#1}{#2} \right]}
-\newcommand{\sumover}[1]{\sum_{#1 \in \mathcal{\uppercase{#1}}}}
-\newcommand{\Dexpand}[2]{\ln \frac{Q(#1 \mid #2)}{P(#1 \mid #2)}Q(#1, #2)}
+\newcommand{\sumover}[1]{\sum_{#1 \in \valset{#1}}}
+\newcommand{\PQdive}[2]{\ln \frac{Q(#1 \mid #2)}{P(#1 \mid #2)}Q(#1, #2)}
 \newcommand{\given}[2]{#1|#2}
 \newcommand{\aug}[1]{#1^*}
 

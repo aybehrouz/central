@@ -1,6 +1,6 @@
 \begin{definition}[probabilistic model]
-    We define a \emph{probabilistic model} as a pair $(\mathcal{S}, \mathcal{P})$, where $\mathcal{S}$ is a sample
-    space, and $\mathcal{P}$ is a set of \emph{acceptable} probability measures on $\mathcal{S}$.
+    We define a \emph{probabilistic model} as a pair $\left(\set{S}, \set{P}\right)$, where $\set{S}$ is a sample
+    space, and $\set{P}$ is a set of \emph{acceptable} probability measures on $\set{S}$.
 \end{definition}
 
 \begin{definition}[$\epsilon$-convergence]
@@ -9,24 +9,39 @@
     if for every distribution $Q$ in $\M$ we have:
     \begin{equation}
         \ED{P_{\given{S}{E}}}{Q_{\given{S}{E}}}{Q} =
-        \sumover{s}\sumover{e} \Dexpand{s}{e} < \epsilon \ \cdot
+        \sumover{s}\sumover{e} \PQdive{s}{e} < \epsilon \ \cdot
         \label{eq:e-convergence}
     \end{equation}
 \end{definition}
 
 \begin{definition}[$\epsilon$-convergent distribution]
-    Let $S$ be a random variable, and $\mathbf{E}$ be a set of random variables in a probabilistic model $\M$.
-    We say $P$ is an \emph{$\epsilon$-convergent distribution} for $\given{S}{\mathbf{E}}$ in $\M$, if for all
-    $E \in \mathbf{E}$, $\given{S}{E}$ $\epsilon$-converges by $P$ in $\M$.
+    Let $S$ be a random variable, and $\set{E}$ be a set of random variables in a probabilistic model $\M$.
+    We say $P$ is an \emph{$\epsilon$-convergent distribution} for $\given{S}{\set{E}}$ in $\M$, if for all
+    $E \in \set{E}$, $\given{S}{E}$ $\epsilon$-converges by $P$ in $\M$.
 \end{definition}
+
+\begin{definition}[convergence measure]
+    Let $S$ and $E$ be random variables in a probabilistic model $\M=\left(\set{S}, \set{P}\right)$.
+    We define the \emph{convergence measure} of $\given{S}{E}$ as follows:
+    \begin{equation}
+        \measure{C}_\M\left[\given{S}{E}\right]=\min_{P \in \set{P}} \max_{Q \in \set{P}} \sumover{s} \sumover{e} \PQdive{s}{e}
+        \label{eq:C}
+    \end{equation}
+\end{definition}
+
+\begin{proposition}
+    Let $S$ be a random variable, and $\set{E}$ be a set of random variables in a probabilistic model $\M$.
+    If there exists $E \in \set{E}$ such that $\measure{C}_\M[\given{S}{E}] \geq \epsilon$, then there is no
+    $\epsilon$-convergent distribution for $\given{S}{\set{E}}$ in $\M$,
+\end{proposition}
 
 \begin{theorem}
     Consider two probabilistic models $\M$ and $\aug{\M}$.
-    Let $\mathbf{E}$ be a \textbf{countable} set of random variables in $\M$, and $\aug{E}$ be a single random variable
+    Let $\set{E}$ be a countable set of random variables in $\M$, and $\aug{E}$ be a single random variable
     in $\M^*$.
     Suppose that there exists a random variable $I$ in $\aug{\M}$, such that for \textbf{every} probability measure $P$
     in $\M$, there exists a probability measure $\aug{P}$ in $\aug{\M}$,
-    such that for every $E_i \in \mathbf{E}$, every $s \in \mathcal{S}$ and every $e_i \in \mathcal{E}_i$, there exist
+    such that for every $E_i \in \set{E}$, every $s \in \valset{s}$ and every $e_i \in \valset{E}_i$, there exist
     some values $\aug{s}, \aug{e}$ such that we have:
     \begin{equation}
         P(S=s,E_i=e_i) = \aug{P}(\aug{S}=\aug{s},\aug{E}=\aug{e} \mid I = i)\ \cdot
@@ -37,19 +52,19 @@
         \aug{P}(\aug{S} \mid \aug{E}) = \aug{P}(\aug{S} \mid \aug{E}, I)\ \cdot
         \label{eq:th1-2}
     \end{equation}
-    Then $\given{S}{\mathbf{E}}$ $\epsilon$-converges by $P$ in $\M$,
+    Then $\given{S}{\set{E}}$ $\epsilon$-converges by $P$ in $\M$,
     if $\given{\aug{S}}{\aug{E}}$ $\epsilon$-converges by $\aug{P}$ in $\aug{\M}$.
 \end{theorem}
 
 \begin{proof}
-    Assume, by contradiction, that $\given{S}{\mathbf{E}}$ does not $\epsilon$-converge by $P$ in $\M$.
-    Therefore, there must exist $Q$ and $E_i \in \mathbf{E}$ in $\M$ such that:
+    Assume, by contradiction, that $\given{S}{\set{E}}$ does not $\epsilon$-converge by $P$ in $\M$.
+    Therefore, there must exist $Q$ and $E_i \in \set{E}$ in $\M$ such that:
     \[
         \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} \geq \epsilon \ \cdot
     \]
     By using equations~\ref{eq:th1-1} and~\ref{eq:th1-2} we can rewrite the left hand side:
     \begin{align*}
-        \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} &= \sumover{s} \sum_{e_i \in \mathcal{E}_i} \Dexpand{s}{e_i} \\
+        \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} &= \sumover{s} \sum_{e_i \in \mathcal{E}_i} \PQdive{s}{e_i} \\
         &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e}, I = i)}{\aug{P}(\aug{s} \mid \aug{e}, I = i)}\aug{Q}(\aug{s},\aug{e} \mid I = i)\\
         &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e} \mid I = i) \ \cdot
     \end{align*}

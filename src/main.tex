@@ -8,7 +8,9 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
-\usepackage{hyperref} % should be the last import
+\usepackage{hyperref}
+\usepackage{amssymb} % should be the last import
+\usepackage{xspace}
 
 
 \newtheorem{theorem}{Theorem}
@@ -16,16 +18,40 @@
 \newtheorem{definition}{Definition}[section]
 \newtheorem*{proposition}{Proposition}
 
-\newcommand{\set}[1]{\mathbf{#1}}
-\newcommand{\valset}[1]{\mathcal{\uppercase{#1}}}
-\newcommand{\measure}[1]{\mathbb{#1}}
+\newcommand{\set}[1]{\ensuremath{\mathcal{\uppercase{#1}}}\xspace}
+\newcommand{\rv}[1]{\ensuremath{\uppercase{#1}}\xspace}
+\newcommand{\rvec}[1]{\ensuremath{\mathbf{\uppercase{#1}}}\xspace}
+\newcommand{\rval}[1]{\ensuremath{\lowercase{#1}}\xspace}
+\newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
+\newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
+\newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
+
+\newcommand{\KLcond}[2]{\sum_{\vval{#1} \in \vrange{#1}} \sum_{\vval{#2} \in \range{#2}} Q(\vval{#1}, \vval{#2}) \ln \frac{Q(\vval{#1} \mid \vval{#2})}{P(\vval{#1} \mid \vval{#2})}}
+\newcommand{\KLcondcond}[3]{\sum_{\vval{#1} \in \vrange{#1}} \sum_{\vval{#2} \in \range{#2}} \pi(\vval{#1}, \vval{#2} \mid \vval{#3}) \ln \frac{\pi\left(\vval{#1} \mid \vval{#2}, \vval{#3}\right)}{P\left(\vval{#1} \mid \vval{#2}\right)}}
+\newcommand{\refKL}[3]{\int \sum_{\vval{#1} \in \vrange{#1}} \sum_{\vval{#2} \in \range{#2}} P(\vval{#1}, \vval{#2}, \vval{#3}) \ln \frac{\pi\left(\vval{#1} \mid \vval{#2}, \vval{#3}\right)}{P\left(\vval{#1} \mid \vval{#2}\right)}d#3}
+\newcommand{\measure}[1]{\ensuremath{\mathbb{#1}}\xspace}
+\newcommand{\given}[2]{#1|#2}
+\newcommand{\xIe}{\ensuremath{\given {\rvec{x}}{\rvec{e}}}\xspace}
+\newcommand{\Mt}{\ensuremath{\M_{\rvec{\theta}}}\xspace}
+\newcommand{\M}{\ensuremath{\mathcal{M}}\xspace}
+\newcommand{\pmodel}{\ensuremath{\Mt \equiv \left(\set{S}, \set{P}\right)}\xspace}
+\newcommand{\model}{\ensuremath{\M \equiv \left(\set{S}, \set{P}\right)}\xspace}
+\newcommand{\tmax}{\max_{\vval{\theta} \in \Theta}}
+\newcommand{\pmin}{\min_{P \in \set{P}}}
+\newcommand{\pmax}{\max_{P \in \set{P}}}
+
+\newcommand{\condb}[2]{\left[#1|#2\right]}
+\newcommand{\condp}[2]{\left(#1|#2\right)}
+\newcommand{\KL}[2]{\measure{D}_{\text{KL}}(#1 || #2)}
+\newcommand{\minmax}{\min_{P \in \set{P}} \max_{Q \in \set{P}}}
+
+
 \newcommand{\E}{\measure{E}}
-\newcommand{\M}{\mathcal{M}}
+
 \newcommand{\D}[2]{\measure{D}(#1 || #2)}
 \newcommand{\ED}[3]{\E_#3 \left[ \D{#1}{#2} \right]}
-\newcommand{\sumover}[1]{\sum_{#1 \in \valset{#1}}}
+\newcommand{\sumover}[1]{\sum_{#1 \in \range{#1}}}
 \newcommand{\PQdive}[2]{\ln \frac{Q(#1 \mid #2)}{P(#1 \mid #2)}Q(#1, #2)}
-\newcommand{\given}[2]{#1|#2}
 \newcommand{\aug}[1]{#1^*}
 
 

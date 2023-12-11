@@ -3,7 +3,7 @@ a random variable \rv{x} with possible values from $\range{x}$ and value \rval{x
 a random vector \rvec{x} with range $\vrange{x}$ and value \vval{x},
 a set \set{A}, and a measure \measure{M}.
 
-\begin{definition}[probabilistic model]
+\begin{definition}[Probabilistic model]
     We define a \emph{probabilistic model} \M as a pair $\left(\set{S}, \set{P}\right)$, where \set{S} is a sample
     space, and \set{P} is a set of acceptable probability measures on \set{S}.
 \end{definition}
@@ -18,7 +18,7 @@ a set \set{A}, and a measure \measure{M}.
     We call $P$ an \emph{$\epsilon$-convergent distribution} for \xIe in \M.
 \end{definition}
 
-\begin{definition}[convergence measure]
+\begin{definition}[Convergence measure]
     Let \rvec{x} and \rvec{e} be random vectors in a probabilistic model \model.
     We define the \emph{convergence measure} of \xIe by $P \in \set{P}$ as follows:
     \begin{equation}
@@ -37,7 +37,7 @@ a set \set{A}, and a measure \measure{M}.
     for \xIe in \M.
 \end{proposition}
 
-\begin{definition}[parametric model]
+\begin{definition}[Parametric model]
     Let \rvec{\theta} be a random vector.
     A parametric model is a probabilistic model \pmodel, where for
     every $P \in \set{P}$ there is a prior distribution $p$, such that for every $\rval{s} \in \set{s}$ we have:
@@ -62,10 +62,11 @@ a set \set{A}, and a measure \measure{M}.
 \end{theorem}
 
 \begin{proof}
-
+    To do
 \end{proof}
 
-\begin{theorem}[Minimax]
+
+\begin{theorem}[Minimax theorem~\cite{Du1995}]
     Let $X \subset \mathbb {R}^{n}$ and $Y \subset \mathbb {R} ^{m}$ be compact convex sets.
     If $f:X\times Y\rightarrow \mathbb {R}$ is a continuous function that is concave-convex, i.e.
 
@@ -82,7 +83,7 @@ a set \set{A}, and a measure \measure{M}.
 
 \begin{theorem}
     Let \rvec{x} and \rvec{e} be two random vectors in a parametric model \pmodel.
-    For the convergence measure of \xIe in \Mt we have:
+    The convergence measure of \xIe in \Mt satisfies:
     \begin{equation}
         \measure{C}_{\Mt} \left[\xIe \right] < \pmax \refKL{x}{e}{\theta}\ ,
         \label{eq:c_Cp}
@@ -91,7 +92,7 @@ a set \set{A}, and a measure \measure{M}.
 \end{theorem}
 
 \begin{proof}
-
+    To do
 \end{proof}
 
 

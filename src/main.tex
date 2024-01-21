@@ -2,7 +2,7 @@
 %! Date = 6/15/23
 
 % Preamble
-\documentclass[11pt]{article}
+\documentclass[a4]{report}
 
 % Packages
 \usepackage{amsmath}
@@ -11,9 +11,11 @@
 \usepackage{hyperref}
 \usepackage{amssymb} % should be the last import
 \usepackage{xspace}
+\usepackage{xargs}
 
 
 \newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
 \newtheorem*{proposition}{Proposition}
@@ -25,10 +27,18 @@
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
 \newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
+\newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
+\newcommand{\prob}[2][P]{#1(\vval{#2})}
 
-\newcommand{\KLcond}[2]{\sum_{\vval{#1} \in \vrange{#1}} \sum_{\vval{#2} \in \range{#2}} Q(\vval{#1}, \vval{#2}) \ln \frac{Q(\vval{#1} \mid \vval{#2})}{P(\vval{#1} \mid \vval{#2})}}
-\newcommand{\KLcondcond}[3]{\sum_{\vval{#1} \in \vrange{#1}} \sum_{\vval{#2} \in \range{#2}} \pi(\vval{#1}, \vval{#2} \mid \vval{#3}) \ln \frac{\pi\left(\vval{#1} \mid \vval{#2}, \vval{#3}\right)}{P\left(\vval{#1} \mid \vval{#2}\right)}}
-\newcommand{\refKL}[3]{\int \sum_{\vval{#1} \in \vrange{#1}} \sum_{\vval{#2} \in \range{#2}} P(\vval{#1}, \vval{#2}, \vval{#3}) \ln \frac{\pi\left(\vval{#1} \mid \vval{#2}, \vval{#3}\right)}{P\left(\vval{#1} \mid \vval{#2}\right)}d#3}
+\newcommandx{\KLcond}[4][1=P, 2=Q, 3=x, 4=e]{
+    \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in \range{#4}}
+    #2(\vval{#3}, \vval{#4}) \ln \frac{#2(\vval{#3} \mid \vval{#4})}{#1(\vval{#3} \mid \vval{#4})}
+}
+\newcommandx{\KLparam}[5][1=P, 2=\pi, 3=x, 4=e, 5={e,\theta}]{
+    \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in\range{#4}}
+    \pi(\vval{#3}, \vval{#4} \mid \vval{\theta})
+    \ln \frac{#2\left(\vval{#3} \mid \vval{#5}\right)} {#1\left(\vval{#3} \mid \vval{#4}\right)}
+}
 \newcommand{\measure}[1]{\ensuremath{\mathbb{#1}}\xspace}
 \newcommand{\given}[2]{#1|#2}
 \newcommand{\xIe}{\ensuremath{\given {\rvec{x}}{\rvec{e}}}\xspace}
@@ -57,6 +67,14 @@
 
 % Document
 \begin{document}
+
+    \section{Introduction}
+    Our notation:
+    \begin{itemize}
+        \item Random variable \rv{x} with value \rval{x} and possible values from $\range{x}$,
+        \item Random vector \rvec{x} with range $\vrange{x}$ and some assignment \vval{x},
+        \item Set \set{A}, and a measure \measure{M}.
+    \end{itemize}
 
     \section{Making Decisions under Uncertainty}\label{sec:uncertainty}
 

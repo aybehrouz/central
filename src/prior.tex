@@ -1,28 +1,23 @@
-We will use this notation for showing
-a random variable \rv{x} with possible values from $\range{x}$ and value \rval{x},
-a random vector \rvec{x} with range $\vrange{x}$ and value \vval{x},
-a set \set{A}, and a measure \measure{M}.
-
-\begin{definition}[Probabilistic model]
+\begin{definition}[Probabilistic Model]
     We define a \emph{probabilistic model} \M as a pair $\left(\set{S}, \set{P}\right)$, where \set{S} is a sample
-    space, and \set{P} is a set of acceptable probability measures on \set{S}.
+    space, and \set{P} is a set of probability measures on \set{S}.
 \end{definition}
 \begin{definition}[$\epsilon$-convergence]
     Let \rvec{x} and \rvec{e} be two random vectors in a probabilistic model \model.
-    We say \xIe (\rvec{x} given \rvec{e}) \emph{$\epsilon$-converges} by a distribution $P$ in \M,
-    if for every distribution $Q \in \set{p}$ we have:
+    We say \xIe (\rvec{x} given \rvec{e}) \emph{$\epsilon$-converges} with a distribution $P$ in \M, if for every
+    distribution $Q \in \set{p}$ we have:
     \begin{equation}
-        \KLcond{x}{e} < \epsilon \ \cdot
+        \KLcond < \epsilon \ \cdot
         \label{eq:e-convergence}
     \end{equation}
     We call $P$ an \emph{$\epsilon$-convergent distribution} for \xIe in \M.
 \end{definition}
 
-\begin{definition}[Convergence measure]
+\begin{definition}[Convergence Measure]
     Let \rvec{x} and \rvec{e} be random vectors in a probabilistic model \model.
-    We define the \emph{convergence measure} of \xIe by $P \in \set{P}$ as follows:
+    We define the \emph{convergence measure} of \xIe with $P \in \set{P}$ as follows:
     \begin{equation}
-        \measure{C}_P \left[\xIe \right] = \max_{Q \in \set{P}} \KLcond{x}{e}\ \cdot
+        \measure{C}_P \left[\xIe \right] = \max_{Q \in \set{P}} \KLcond\ \cdot
         \label{eq:Cp}
     \end{equation}
     And, we define the convergence measure of \xIe in \M as follows:
@@ -37,36 +32,82 @@ a set \set{A}, and a measure \measure{M}.
     for \xIe in \M.
 \end{proposition}
 
-\begin{definition}[Parametric model]
+\begin{definition}[Parametric Model]
     Let \rvec{\theta} be a random vector.
     A parametric model is a probabilistic model \pmodel, where for
-    every $P \in \set{P}$ there is a prior distribution $p$, such that for every $\rval{s} \in \set{s}$ we have:
-    \[
+    every $P \in \set{P}$ there is a prior probability $p$, such that for every $\rval{s} \in \set{s}$ we have:
+    \begin{equation}
         P(\rval{s}) = \int \pi(\rval{s} | \vval{\theta}) p(\vval{\theta}) d\theta \ ,
-    \]
-    while $\pi$ is some known probability measure.
+        \label{eq:parametric}
+    \end{equation}
+    while $\pi$ is some known probability distribution.
 \end{definition}
 
 \begin{theorem}
     Let \pmodel be a parametric model, and \rvec{x}, \rvec{e} be two random vectors in \Mt.
     For every $P \in \set{P}$ we have:
     \begin{equation}
-        \measure{C}_P \left[\xIe \right] < \tmax \KLcondcond{x}{e}{\theta}\ \cdot
+        \measure{C}_P \left[\xIe \right] < \tmax \KLparam\ \cdot
         \label{eq:parametric_Cp}
     \end{equation}
     Moreover, by bayes' theorem we have:
     \begin{equation}
-        \frac{\pi(\vval{x \mid e, \theta})}{P(\vval{x \mid e})} = \frac{P(\vval{\theta \mid x, e})}{P(\vval{\theta \mid e})} \ \cdot
+        \frac{\pi(\vval{x \mid e, \theta})}{P(\vval{x \mid e})} =
+        \frac{P(\vval{\theta \mid x, e})}{P(\vval{\theta \mid e})} \ \cdot
         \label{eq:bayes}
     \end{equation}
 \end{theorem}
 
 \begin{proof}
-    To do
+    Let $R$ be an arbitrary distribution in \Mt, since the Kullback-Leibler divergence is always positive,
+    its expected value is also positive and for every parameter value \rvec{\theta} we have:
+    \[
+        \KLparam[R] \geq 0 \ \cdot
+    \]
+    Using this, we can derive the following inequality for every distribution $P$ and
+    every parameter \vval{\theta}:
+    \[
+        \KLparam[P][R][x][e][e] \leq \KLparam \ \cdot
+    \]
+    Since this inequality holds for any value of \vval{\theta}, the maximum of the right-hand side
+    is also greater than or equal to the maximum of the left-hand side w.r.t \vval{\theta}:
+    \begin{equation}
+        \tmax \KLparam[P][R][x][e][e] \leq \tmax \KLparam \ \cdot
+        \label{eq:ineq-theorem1}
+    \end{equation}
+
+    \Mt is a parametric model and
+    $
+    \prob [R]{x,e} = \int \pcond [\pi]{x,e}{\theta} \prob [r]{\theta} d\vval{\theta}
+    $, while $\prob [r]{\theta}$ is a probability distribution.
+    Obviously for every \vval{\theta} we have:
+    \[
+        \KLparam[P][R][x][e][e] \leq \tmax \KLparam[P][R][x][e][e]\ \cdot
+    \]
+    Since $\prob [r]{\theta}$ is a distribution and is non-negative, we can multiply both sides of this inequality
+    by $\prob [r]{\theta}$ and integrate.
+    Notice that the right hand side is not a function of \vval{\theta} and it remains unchanged
+    because $\int \prob [r]{\theta} d\theta = 1$:
+    \[
+        \KLcond[P][R] \leq \tmax \KLparam[P][R][x][e][e]\ \cdot
+    \]
+    Now by Inequality~\ref{eq:ineq-theorem1}, for every distribution $P$ and $R$ we conlcude:
+    \[
+        \KLcond[P][R] \leq \tmax \KLparam\ ,
+    \]
+    which proves the theorem.
 \end{proof}
 
+\begin{corollary}
+    If a distribution $P \in \set{P}$ satisfies:
+    \begin{equation}
+        \KLparam = \epsilon\ ,
+        \label{eq:equation}
+    \end{equation}
+    then $\measure{C}_{\Mt} \left[\xIe \right] < \epsilon$, and $P$ is an $\epsilon$-convergent distribution for \xIe.
+\end{corollary}
 
-\begin{theorem}[Minimax theorem~\cite{Du1995}]
+\begin{theorem}[Minimax~\cite{Du1995}]
     Let $X \subset \mathbb {R}^{n}$ and $Y \subset \mathbb {R} ^{m}$ be compact convex sets.
     If $f:X\times Y\rightarrow \mathbb {R}$ is a continuous function that is concave-convex, i.e.
 
@@ -85,7 +126,7 @@ a set \set{A}, and a measure \measure{M}.
     Let \rvec{x} and \rvec{e} be two random vectors in a parametric model \pmodel.
     The convergence measure of \xIe in \Mt satisfies:
     \begin{equation}
-        \measure{C}_{\Mt} \left[\xIe \right] < \pmax \refKL{x}{e}{\theta}\ ,
+        \measure{C}_{\Mt} \left[\xIe \right] < \pmax \KLparam{x}{e}{\theta}\ ,
         \label{eq:c_Cp}
     \end{equation}
     where $P(\vval{x}, \vval{e}, \vval{\theta})=\pi(\vval{x}, \vval{e} \mid \vval{\theta})p(\vval{\theta})$.
@@ -94,6 +135,7 @@ a set \set{A}, and a measure \measure{M}.
 \begin{proof}
     To do
 \end{proof}
+
 
 
 \begin{definition}[$\epsilon$-convergent distribution]

@@ -2,16 +2,17 @@
 %! Date = 6/15/23
 
 % Preamble
-\documentclass[a4]{report}
+\documentclass[a4]{article}
 
 % Packages
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{hyperref}
-\usepackage{amssymb} % should be the last import
 \usepackage{xspace}
 \usepackage{xargs}
+\usepackage{amssymb} % should be the last import
+
 
 
 \newtheorem{theorem}{Theorem}
@@ -21,27 +22,44 @@
 \newtheorem*{proposition}{Proposition}
 
 \newcommand{\set}[1]{\ensuremath{\mathcal{\uppercase{#1}}}\xspace}
-\newcommand{\rv}[1]{\ensuremath{\uppercase{#1}}\xspace}
+\newcommand{\rv}[2][i]{\ensuremath{\uppercase{#2}_{#1}}\xspace}
+\newcommand{\rval}[2][i]{\ensuremath{\lowercase{#2}_{#1}}\xspace}
 \newcommand{\rvec}[1]{\ensuremath{\mathbf{\uppercase{#1}}}\xspace}
-\newcommand{\rval}[1]{\ensuremath{\lowercase{#1}}\xspace}
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
 \newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
 \newcommand{\prob}[2][P]{#1(\vval{#2})}
-
-\newcommandx{\KLcond}[4][1=P, 2=Q, 3=x, 4=e]{
-    \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in \range{#4}}
-    #2(\vval{#3}, \vval{#4}) \ln \frac{#2(\vval{#3} \mid \vval{#4})}{#1(\vval{#3} \mid \vval{#4})}
+\newcommand{\Ex}[2]{\measure{E}_#1 \left[#2\right]}
+\newcommandx{\Pcond}[3][1=P, 2=\rval{x}_i, 3=\rval{e}_i]{#1 \left(#2 \mid #3 \right)}
+\newcommandx{\Dcond}[4][1=Q, 2=P, 3=\rv{x}, 4=\rval{e}, usedefault]{
+    \measure{D}_{#3 \mid #4} \left(#1 \parallel #2 \right)
 }
+
+\newcommand{\DxP}{\measure{D}_\set{X}\left[ P \right]}
+\newcommand{\xe}{\rval{x}, \rval{e}}
+\newcommand{\xIe}{\ensuremath{\rval{x} \mid \rval{e}}}
+\newcommand{\sumOverixe}{\sum_i \sum_{\rval{x}, \rval{e}}}
+\newcommand{\xet}{\rval{x}, \rval{e}, \rval[]{\theta}}
+\newcommand{\xIet}{\rval{x} \mid \rval{e}, \rval[]{\theta}}
+\newcommand{\xeIt}{\rval{x}, \rval{e} \mid \rval[]{\theta}}
+\newcommand{\tIxe}{\rval[]{\theta} \mid \rval{x}, \rval{e}}
+\newcommand{\tIe}{\rval[]{\theta} \mid \rval{e}}
+\newcommand{\pairsX}{\set{X} = \left\{(\rv[1]{X}, \rv[1]{E}), (\rv[2]{X}, \rv[2]{E}), \dots \right\}}
+\newcommand{\Dtheta}[1][P]{\sumOverixe \pi(\xeIt) \ln \frac{\pi(\xIet)}{#1(\xIe)}}
+
 \newcommandx{\KLparam}[5][1=P, 2=\pi, 3=x, 4=e, 5={e,\theta}]{
     \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in\range{#4}}
     \pi(\vval{#3}, \vval{#4} \mid \vval{\theta})
     \ln \frac{#2\left(\vval{#3} \mid \vval{#5}\right)} {#1\left(\vval{#3} \mid \vval{#4}\right)}
 }
+\newcommandx{\KLcond}[4][1=P, 2=Q, 3=x, 4=e]{
+    \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in \range{#4}}
+    #2(\vval{#3}, \vval{#4}) \ln \frac{#2(\vval{#3} \mid \vval{#4})}{#1(\vval{#3} \mid \vval{#4})}
+}
+
 \newcommand{\measure}[1]{\ensuremath{\mathbb{#1}}\xspace}
 \newcommand{\given}[2]{#1|#2}
-\newcommand{\xIe}{\ensuremath{\given {\rvec{x}}{\rvec{e}}}\xspace}
 \newcommand{\Mt}{\ensuremath{\M_{\rvec{\theta}}}\xspace}
 \newcommand{\M}{\ensuremath{\mathcal{M}}\xspace}
 \newcommand{\pmodel}{\ensuremath{\Mt \equiv \left(\set{S}, \set{P}\right)}\xspace}

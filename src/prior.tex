@@ -2,98 +2,93 @@
     We define a \emph{probabilistic model} \M as a pair $\left(\set{S}, \set{P}\right)$, where \set{S} is a sample
     space, and \set{P} is a set of probability measures on \set{S}.
 \end{definition}
-\begin{definition}[$\epsilon$-convergence]
-    Let \rvec{x} and \rvec{e} be two random vectors in a probabilistic model \model.
-    We say \xIe (\rvec{x} given \rvec{e}) \emph{$\epsilon$-converges} with a distribution $P$ in \M, if for every
-    distribution $Q \in \set{p}$ we have:
-    \begin{equation}
-        \KLcond < \epsilon \ \cdot
-        \label{eq:e-convergence}
-    \end{equation}
-    We call $P$ an \emph{$\epsilon$-convergent distribution} for \xIe in \M.
-\end{definition}
 
-\begin{definition}[Convergence Measure]
-    Let \rvec{x} and \rvec{e} be random vectors in a probabilistic model \model.
-    We define the \emph{convergence measure} of \xIe with $P \in \set{P}$ as follows:
+\begin{definition}[Divergence Measure]
+    Let $\pairsX$ be a set of pairs of discrete random
+    variables in a probabilistic model \model.
+    We define the \emph{divergence measure of $P \in \set{P}$ for \set{X}} as follows:
     \begin{equation}
-        \measure{C}_P \left[\xIe \right] = \max_{Q \in \set{P}} \KLcond\ \cdot
-        \label{eq:Cp}
+        \DxP = \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond},
+        \label{eq:div_measure}
     \end{equation}
-    And, we define the convergence measure of \xIe in \M as follows:
+    where $\Ex{Q}{.}$ denotes expectation relative to $Q$ and each $\Dcond$ is the Kullback-Leibler divergence
+    between $P(\rv{X}|\rv{E})$ and $Q(\rv{X}|\rv{E})$:
+    \[
+        \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
+    \]
+    Moreover, we define \emph{the center of \M for \set{X}} to be a distribution $C_\set{X} \in \set{P}$ which
+    minimizes the divergence measure for \set{X}:
     \begin{equation}
-        \measure{C}_\M \left[\xIe \right] = \pmin \measure{C}_P \left[\xIe \right]\ \cdot
-        \label{eq:Cm}
+        C_\set{X} = \pmin \DxP\cdot
+        \label{eq:center}
     \end{equation}
 \end{definition}
 
 \begin{proposition}
-    If $\measure{C}_\M \left[\xIe \right] \geq \epsilon$, then there is no $\epsilon$-convergent distribution
-    for \xIe in \M.
+    Using the linearity of expectation, we have:
+    \begin{equation}
+        \DxP = \max_{Q \in \set{P}} \sumOverixe Q(\xe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
+        \label{eq:div_measure_full}
+    \end{equation}
 \end{proposition}
 
 \begin{definition}[Parametric Model]
     Let \rvec{\theta} be a random vector.
     A parametric model is a probabilistic model \pmodel, where for
-    every $P \in \set{P}$ there is a prior probability $p$, such that for every $\rval{s} \in \set{s}$ we have:
+    every $P \in \set{P}$ there is a prior probability $p$, such that for every $\rval[]{s} \in \set{s}$ we have:
     \begin{equation}
-        P(\rval{s}) = \int \pi(\rval{s} | \vval{\theta}) p(\vval{\theta}) d\theta \ ,
+        P(\rval[]{s}) = \int \pi(\rval[]{s} | \vval{\theta}) p(\vval{\theta}) d\vval{\theta},
         \label{eq:parametric}
     \end{equation}
     while $\pi$ is some known probability distribution.
 \end{definition}
 
 \begin{theorem}
-    Let \pmodel be a parametric model, and \rvec{x}, \rvec{e} be two random vectors in \Mt.
+    Let \pmodel be a parametric model, and $\pairsX$ be a set of random variable pairs in \Mt.
     For every $P \in \set{P}$ we have:
-    \begin{equation}
-        \measure{C}_P \left[\xIe \right] < \tmax \KLparam\ \cdot
-        \label{eq:parametric_Cp}
-    \end{equation}
-    Moreover, by bayes' theorem we have:
-    \begin{equation}
-        \frac{\pi(\vval{x \mid e, \theta})}{P(\vval{x \mid e})} =
-        \frac{P(\vval{\theta \mid x, e})}{P(\vval{\theta \mid e})} \ \cdot
-        \label{eq:bayes}
-    \end{equation}
+    \begin{align}
+        \DxP &\leq \tmax \Ex{\pi}{\sum_i \Dcond[][][][{\rval{e}, \theta}] \;\middle|\; \vval{\theta}\,}\\
+        &= \tmax \Dtheta\cdot
+        \label{eq:DxP_upper_bound}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     Let $R$ be an arbitrary distribution in \Mt, since the Kullback-Leibler divergence is always positive,
     its expected value is also positive and for every parameter value \rvec{\theta} we have:
     \[
-        \KLparam[R] \geq 0 \ \cdot
+        \Dtheta[R] \geq 0\ \cdot
     \]
     Using this, we can derive the following inequality for every distribution $P$ and
     every parameter \vval{\theta}:
+    \newcommand{\RP}{\sumOverixe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
     \[
-        \KLparam[P][R][x][e][e] \leq \KLparam \ \cdot
+        \RP \leq \Dtheta\cdot
     \]
     Since this inequality holds for any value of \vval{\theta}, the maximum of the right-hand side
     is also greater than or equal to the maximum of the left-hand side w.r.t \vval{\theta}:
     \begin{equation}
-        \tmax \KLparam[P][R][x][e][e] \leq \tmax \KLparam \ \cdot
+        \tmax \RP \leq \tmax \Dtheta\cdot
         \label{eq:ineq-theorem1}
     \end{equation}
 
     \Mt is a parametric model and
-    $
-    \prob [R]{x,e} = \int \pcond [\pi]{x,e}{\theta} \prob [r]{\theta} d\vval{\theta}
-    $, while $\prob [r]{\theta}$ is a probability distribution.
+    $R(\xe) = \int \pi(\xeIt)r(\vval{\theta}) d\vval{\theta}$, while $r(\vval{\theta})$ is
+    a probability distribution.
     Obviously for every \vval{\theta} we have:
     \[
-        \KLparam[P][R][x][e][e] \leq \tmax \KLparam[P][R][x][e][e]\ \cdot
+        \RP \leq \tmax \RP\cdot
     \]
-    Since $\prob [r]{\theta}$ is a distribution and is non-negative, we can multiply both sides of this inequality
+    Since $\prob [r]{\theta}$ is a distribution and is non-negative, we can multiply this inequality
     by $\prob [r]{\theta}$ and integrate.
-    Notice that the right hand side is not a function of \vval{\theta} and it remains unchanged
+    Notice that the right hand side is not a function of \vval{\theta} and it will remain unchanged
     because $\int \prob [r]{\theta} d\theta = 1$:
     \[
-        \KLcond[P][R] \leq \tmax \KLparam[P][R][x][e][e]\ \cdot
+        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \RP\cdot
     \]
-    Now by Inequality~\ref{eq:ineq-theorem1}, for every distribution $P$ and $R$ we conlcude:
+    Now by Inequality~\ref{eq:ineq-theorem1}, for \emph{every} distribution $P$ and $R$ we conlcude:
     \[
-        \KLcond[P][R] \leq \tmax \KLparam\ ,
+        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \Dtheta,
     \]
     which proves the theorem.
 \end{proof}
@@ -117,7 +112,7 @@
     \end{itemize}
     Then we have that:
     \begin{equation}
-        \max_{x\in X}\min_{y\in Y}f(x,y) = \min_{y\in Y}\max_{x\in X}f(x,y)\ \cdot
+        \max_{x\in X}\min_{y\in Y}f(x, y) = \min_{y\in Y}\max_{x\in X}f(x,y)\ \cdot
         \label{eq:minimax}
     \end{equation}
 \end{theorem}
@@ -133,7 +128,6 @@
 \end{theorem}
 
 \begin{proof}
-    To do
 \end{proof}
 
 

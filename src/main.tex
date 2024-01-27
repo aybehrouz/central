@@ -16,6 +16,7 @@
 
 
 \newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}{Corollary}[theorem]
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
@@ -28,25 +29,38 @@
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
 \newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
+\newcommand{\param}{\varTheta}
+\newcommand{\paramValue}{\theta}
+\newcommand{\paramRange}{\theta}
 \newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
 \newcommand{\prob}[2][P]{#1(\vval{#2})}
 \newcommand{\Ex}[2]{\measure{E}_#1 \left[#2\right]}
 \newcommandx{\Pcond}[3][1=P, 2=\rval{x}_i, 3=\rval{e}_i]{#1 \left(#2 \mid #3 \right)}
-\newcommandx{\Dcond}[4][1=Q, 2=P, 3=\rv{x}, 4=\rval{e}, usedefault]{
-    \measure{D}_{#3 \mid #4} \left(#1 \parallel #2 \right)
-}
+
 
 \newcommand{\DxP}{\measure{D}_\set{X}\left[ P \right]}
-\newcommand{\xe}{\rval{x}, \rval{e}}
-\newcommand{\xIe}{\ensuremath{\rval{x} \mid \rval{e}}}
 \newcommand{\sumOverixe}{\sum_i \sum_{\rval{x}, \rval{e}}}
-\newcommand{\xet}{\rval{x}, \rval{e}, \rval[]{\theta}}
-\newcommand{\xIet}{\rval{x} \mid \rval{e}, \rval[]{\theta}}
-\newcommand{\xeIt}{\rval{x}, \rval{e} \mid \rval[]{\theta}}
-\newcommand{\tIxe}{\rval[]{\theta} \mid \rval{x}, \rval{e}}
-\newcommand{\tIe}{\rval[]{\theta} \mid \rval{e}}
+\newcommand{\xe}{\rval{x}, \rval{e}}
+\newcommand{\xIe}{\rval{x} \mid \rval{e}}
+\newcommand{\xet}{\rval{x}, \rval{e}, \paramValue}
+\newcommand{\xIet}{\rval{x} \mid \rval{e},  \paramValue}
+\newcommand{\xeIt}{\rval{x}, \rval{e} \mid  \paramValue}
+\newcommand{\tIxe}{\paramValue \mid \rval{x}, \rval{e}}
+\newcommand{\tIe}{\paramValue \mid \rval{e}}
 \newcommand{\pairsX}{\set{X} = \left\{(\rv[1]{X}, \rv[1]{E}), (\rv[2]{X}, \rv[2]{E}), \dots \right\}}
-\newcommand{\Dtheta}[1][P]{\sumOverixe \pi(\xeIt) \ln \frac{\pi(\xIet)}{#1(\xIe)}}
+\newcommand{\paramDist}[2][P]{
+    \uppercase{#1}(#2) =\int \pi(#2 \mid \paramValue) \lowercase{#1}(\paramValue) d\paramValue
+}
+
+\newcommandx{\Dcond}[4][1=Q, 2=P, 3={\rv{x} \mid \rval{e}}, 4={\rv{x} \mid \rval{e}}, usedefault]{
+    \measure{D}\left( #1_{#3} \parallel #2_{#4} \right)
+}
+
+\newcommand{\DExparam}[1][\paramValue]{
+    \Ex{\pi}{\sum_i \Dcond[\pi][][\rv{x} \mid \rval{e}, #1] \;\middle|\;#1\,}
+}
+
+\newcommand{\Dparam}[1][P]{\sumOverixe \pi(\xeIt) \ln \frac{\pi(\xIet)}{#1(\xIe)}}
 
 \newcommandx{\KLparam}[5][1=P, 2=\pi, 3=x, 4=e, 5={e,\theta}]{
     \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in\range{#4}}

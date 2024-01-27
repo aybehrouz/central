@@ -12,97 +12,118 @@
         \label{eq:div_measure}
     \end{equation}
     where $\Ex{Q}{.}$ denotes expectation relative to $Q$ and each $\Dcond$ is the Kullback-Leibler divergence
-    between $P(\rv{X}|\rv{E})$ and $Q(\rv{X}|\rv{E})$:
+    between $P(\rv{X}|\rval{E})$ and $Q(\rv{X}|\rval{E})$:
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]
-    Moreover, we define \emph{the center of \M for \set{X}} to be a distribution $C_\set{X} \in \set{P}$ which
+    Moreover, we define \emph{the central distribution for \set{X}} to be a distribution $C_\set{X} \in \set{P}$ which
     minimizes the divergence measure for \set{X}:
     \begin{equation}
-        C_\set{X} = \pmin \DxP\cdot
+        C_\set{X} = \arg\pmin \DxP\cdot
         \label{eq:center}
     \end{equation}
 \end{definition}
 
 \begin{proposition}
     Using the linearity of expectation, we have:
-    \begin{equation}
+    \begin{equation*}
         \DxP = \max_{Q \in \set{P}} \sumOverixe Q(\xe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
         \label{eq:div_measure_full}
-    \end{equation}
+    \end{equation*}
 \end{proposition}
 
 \begin{definition}[Parametric Model]
-    Let \rvec{\theta} be a random vector.
+    Let $\param$ be a random vector.
     A parametric model is a probabilistic model \pmodel, where for
     every $P \in \set{P}$ there is a prior probability $p$, such that for every $\rval[]{s} \in \set{s}$ we have:
     \begin{equation}
-        P(\rval[]{s}) = \int \pi(\rval[]{s} | \vval{\theta}) p(\vval{\theta}) d\vval{\theta},
+        \paramDist{\rval[]{s}},
         \label{eq:parametric}
     \end{equation}
     while $\pi$ is some known probability distribution.
 \end{definition}
 
-\begin{theorem}
-    Let \pmodel be a parametric model, and $\pairsX$ be a set of random variable pairs in \Mt.
+\begin{lemma}
+    Let \pmodel be a parametric model, and $\pairsX$ be a set of discrete random variable pairs in \Mt.
     For every $P \in \set{P}$ we have:
     \begin{align}
-        \DxP &\leq \tmax \Ex{\pi}{\sum_i \Dcond[][][][{\rval{e}, \theta}] \;\middle|\; \vval{\theta}\,}\\
-        &= \tmax \Dtheta\cdot
-        \label{eq:DxP_upper_bound}
+        \DxP &\leq \tmax \DExparam\\  \label{eq:DxP_upper_bound}
+        &= \tmax \Dparam\cdot
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     Let $R$ be an arbitrary distribution in \Mt, since the Kullback-Leibler divergence is always positive,
-    its expected value is also positive and for every parameter value \rvec{\theta} we have:
+    its expected value is also positive, and for every parameter value $\paramValue$ we have:
     \[
-        \Dtheta[R] \geq 0\ \cdot
+        \Dparam[R] \geq 0\ \cdot
     \]
     Using this, we can derive the following inequality for every distribution $P$ and
     every parameter \vval{\theta}:
     \newcommand{\RP}{\sumOverixe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
     \[
-        \RP \leq \Dtheta\cdot
+        \RP \leq \Dparam\cdot
     \]
-    Since this inequality holds for any value of \vval{\theta}, the maximum of the right-hand side
-    is also greater than or equal to the maximum of the left-hand side w.r.t \vval{\theta}:
+    Since this inequality holds for any $\paramValue$, the maximum of the right-hand side
+    is also greater than or equal to the maximum of the left-hand side w.r.t $\paramValue$:
     \begin{equation}
-        \tmax \RP \leq \tmax \Dtheta\cdot
+        \tmax \RP \leq \tmax \Dparam\cdot
         \label{eq:ineq-theorem1}
     \end{equation}
 
-    \Mt is a parametric model and
-    $R(\xe) = \int \pi(\xeIt)r(\vval{\theta}) d\vval{\theta}$, while $r(\vval{\theta})$ is
+    \Mt is a parametric model and $\paramDist[R]{\xe}$, while $r(\paramValue)$ is
     a probability distribution.
-    Obviously for every \vval{\theta} we have:
+    Obviously for every $\paramValue$ we have:
     \[
         \RP \leq \tmax \RP\cdot
     \]
     Since $\prob [r]{\theta}$ is a distribution and is non-negative, we can multiply this inequality
     by $\prob [r]{\theta}$ and integrate.
-    Notice that the right hand side is not a function of \vval{\theta} and it will remain unchanged
+    Notice that the right hand side is not a function of $\paramValue$ and it will remain unchanged
     because $\int \prob [r]{\theta} d\theta = 1$:
     \[
         \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \RP\cdot
     \]
     Now by Inequality~\ref{eq:ineq-theorem1}, for \emph{every} distribution $P$ and $R$ we conlcude:
     \[
-        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \Dtheta,
+        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \Dparam,
     \]
     which proves the theorem.
 \end{proof}
 
-\begin{corollary}
-    If a distribution $P \in \set{P}$ satisfies:
+\begin{theorem}
+    Let \pmodel be a parametric model and $\set{X}$ be a set of pairs of discrete random variables in \Mt.
+    If for every value of $\paramValue$ there is a distribution $R \in \set{P}$ such that
+    $R(\rval[]{s}) = \pi(\rval[]{s} \mid \paramValue)$ for every $\rval[]{s} \in \set{S}$,
+    then for any $P \in \set{P}$ we have:
     \begin{equation}
-        \KLparam = \epsilon\ ,
-        \label{eq:equation}
+        \DxP = \tmax \DExparam\cdot
+        \label{eq:div_parametric}
     \end{equation}
-    then $\measure{C}_{\Mt} \left[\xIe \right] < \epsilon$, and $P$ is an $\epsilon$-convergent distribution for \xIe.
-\end{corollary}
+    \label{th:div_for_parametric}
+\end{theorem}
 
-\begin{theorem}[Minimax~\cite{Du1995}]
+\begin{proof}
+    For an arbitrary distribution $P \in \set{P}$, we let:
+    \[
+        \paramValue^* = \arg\tmax \DExparam\cdot
+    \]
+    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\,.\,|\paramValue^*)$, and we have:
+    \[
+        \Ex{R}{\sum_i \Dcond[R]} = \DExparam[\paramValue^*]\cdot
+    \]
+    On the other hand, we see:
+    \[
+        \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond} \geq \Ex{R}{\sum_i \Dcond[R]},
+    \]
+    Thus:
+    \[
+        \DxP \geq \tmax \DExparam\cdot
+    \]
+    This and Inequality~\ref{eq:DxP_upper_bound} proves the theorem.
+\end{proof}
+
+\begin{theorem}[Minimax theorem~\cite{Du1995}]
     Let $X \subset \mathbb {R}^{n}$ and $Y \subset \mathbb {R} ^{m}$ be compact convex sets.
     If $f:X\times Y\rightarrow \mathbb {R}$ is a continuous function that is concave-convex, i.e.
 
@@ -118,105 +139,18 @@
 \end{theorem}
 
 \begin{theorem}
-    Let \rvec{x} and \rvec{e} be two random vectors in a parametric model \pmodel.
-    The convergence measure of \xIe in \Mt satisfies:
+    Let \pmodel be a parametric model which satisfies the conditions of Theorem~\ref{th:div_for_parametric},
+    and $\pairsX$ be a set of pairs of discrete random variables in \Mt.
+    The central distribution for $\set{X}$ in \Mt can be obtained by:
     \begin{equation}
-        \measure{C}_{\Mt} \left[\xIe \right] < \pmax \KLparam{x}{e}{\theta}\ ,
+        C_{\set{X}} = \pmax \int \DExparam p(\paramValue) d\paramValue
         \label{eq:c_Cp}
     \end{equation}
-    where $P(\vval{x}, \vval{e}, \vval{\theta})=\pi(\vval{x}, \vval{e} \mid \vval{\theta})p(\vval{\theta})$.
+    where $p(\paramValue)$ is the prior distribution for $P$.
 \end{theorem}
 
 \begin{proof}
 \end{proof}
-
-
-
-\begin{definition}[$\epsilon$-convergent distribution]
-    Let $S$ be a random variable, and \set{E} be a set of random variables in a probabilistic model $\M$.
-    We say $P$ is an \emph{$\epsilon$-convergent distribution} for $\given{S}{\set{E}}$ in $\M$, if for all
-    $E \in \set{E}$, $\given{S}{E}$ $\epsilon$-converges by $P$ in $\M$.
-\end{definition}
-
-
-\begin{proposition}
-    Let $S$ be a random variable, and $\set{E}$ be a set of random variables in a probabilistic model $\M$.
-    If there exists $E \in \set{E}$ such that $\measure{C}_\M[\given{S}{E}] \geq \epsilon$, then there is no
-    $\epsilon$-convergent distribution for $\given{S}{\set{E}}$ in $\M$,
-\end{proposition}
-
-\begin{theorem}
-    Consider two probabilistic models $\M$ and $\aug{\M}$.
-    Let $\set{E}$ be a countable set of random variables in $\M$, and $\aug{E}$ be a single random variable
-    in $\M^*$.
-    Suppose that there exists a random variable $I$ in $\aug{\M}$, such that for \textbf{every} probability measure $P$
-    in $\M$, there exists a probability measure $\aug{P}$ in $\aug{\M}$,
-    such that for every $E_i \in \set{E}$, every $s \in \range{s}$ and every $e_i \in \range{E}_i$, there exist
-    some values $\aug{s}, \aug{e}$ such that we have:
-    \begin{equation}
-        P(S=s,E_i=e_i) = \aug{P}(\aug{S}=\aug{s},\aug{E}=\aug{e} \mid I = i)\ \cdot
-        \label{eq:th1-1}
-    \end{equation}
-    In addition, $I$ and $\aug{E}$ are conditionally independent:
-    \begin{equation}
-        \aug{P}(\aug{S} \mid \aug{E}) = \aug{P}(\aug{S} \mid \aug{E}, I)\ \cdot
-        \label{eq:th1-2}
-    \end{equation}
-    Then $\given{S}{\set{E}}$ $\epsilon$-converges by $P$ in $\M$,
-    if $\given{\aug{S}}{\aug{E}}$ $\epsilon$-converges by $\aug{P}$ in $\aug{\M}$.
-\end{theorem}
-
-\begin{proof}
-    Assume, by contradiction, that $\given{S}{\set{E}}$ does not $\epsilon$-converge by $P$ in $\M$.
-    Therefore, there must exist $Q$ and $E_i \in \set{E}$ in $\M$ such that:
-    \[
-        \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} \geq \epsilon \ \cdot
-    \]
-    By using equations~\ref{eq:th1-1} and~\ref{eq:th1-2} we can rewrite the left hand side:
-    \begin{align*}
-        \ED{P_{\given{S}{E_i}}}{Q_{\given{S}{E_i}}}{Q} &= \sumover{s} \sum_{e_i \in \mathcal{E}_i} \PQdive{s}{e_i} \\
-        &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e}, I = i)}{\aug{P}(\aug{s} \mid \aug{e}, I = i)}\aug{Q}(\aug{s},\aug{e} \mid I = i)\\
-        &= \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e} \mid I = i) \ \cdot
-    \end{align*}
-    Hence, we have:
-    \[
-        \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e} \mid I = i) \geq \epsilon \ \cdot
-    \]
-    Since $\aug{Q}(i)$ is a distribution and is non-negative for every $i$, we can multiply both sides of this
-    inequality to $\aug{Q}(i)$ and sum over all values of $i$:
-    \begin{align*}
-        \sum_{i} \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e}, I = i)
-        &\geq \sum_{i} \epsilon \aug{Q}(i) \\
-        \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})} \sum_{i}  \aug{Q}(\aug{s},\aug{e}, I = i)
-        &\geq \epsilon \sum_{i}  \aug{Q}(i) \\
-        \sumover{\aug{s}}\sumover{\aug{e}}\ln \frac{\aug{Q}(\aug{s} \mid \aug{e})}{\aug{P}(\aug{s} \mid \aug{e})}\aug{Q}(\aug{s},\aug{e})
-        &\geq \epsilon \ ,
-    \end{align*}
-    which means $\given{\aug{S}}{\aug{E}}$ does not $\epsilon$-converge by $\aug{P}$ in $\aug{\M}$.
-\end{proof}
-
-blahblahblah said Nobody ~\cite{Nobody06}
-
-
-
-\begin{definition}[conditional model]
-    Let $\M \equiv \left(\set{S}, \set{P}\right)$ be a probabilistic model. $\M$ conditioned on an event
-    $\set{A} \subset \set{S}$ is a probabilistic model $\M_{|\set{A}} \equiv (\set{A}, \set{P}_{|\set{A}})$,
-    where $\set{P}_{|\set{A}}$ is the set of probability measures obtained by conditioning every probability
-    measure in $\set{P}$ on $\set{A}$.
-\end{definition}
-
-\begin{definition}[model radius]
-    Let $\M \equiv \left(\set{S}, \set{P}\right)$ be a probabilistic model.
-    We define the \emph{radius} of $\M$ as follows:
-    \begin{equation}
-        \measure{R}_\M = \minmax \left\{ \KL{Q}{P} \right\} = \minmax \sumover{s} Q(s)\ln \frac{Q(s)}{P(s)}\ \cdot
-        \label{eq:radius}
-    \end{equation}
-\end{definition}
-
-
-
 
 \bibliography{main}
 \bibliographystyle{plain}

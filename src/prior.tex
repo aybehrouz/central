@@ -124,16 +124,16 @@
 \end{proof}
 
 \begin{theorem}[Minimax theorem~\cite{Du1995}]
-    Let $X \subset \mathbb {R}^{n}$ and $Y \subset \mathbb {R} ^{m}$ be compact convex sets.
-    If $f:X\times Y\rightarrow \mathbb {R}$ is a continuous function that is concave-convex, i.e.
+    Let $\set{X} \subset \mathbb {R}^{n}$ and $\set{Y} \subset \mathbb {R}^{m}$ be compact convex sets.
+    If $f:\set{X}\times \set{Y}\rightarrow \mathbb {R}$ is a continuous function that is concave-convex, i.e.
 
     \begin{itemize}
-        \item $f(\cdot ,y):X\to \mathbb {R}$ is concave for fixed $y$, and
-        \item $f(x,\cdot ):Y\to \mathbb {R}$ is convex for fixed $x$.
+        \item $f(\cdot ,y):\set{X}\to \mathbb {R}$ is concave for fixed $y$, and
+        \item $f(x,\cdot ):\set{Y}\to \mathbb {R}$ is convex for fixed $x$.
     \end{itemize}
     Then we have that:
     \begin{equation}
-        \max_{x\in X}\min_{y\in Y}f(x, y) = \min_{y\in Y}\max_{x\in X}f(x,y)\ \cdot
+        \max_{x\in \set{X}}\min_{y\in \set{Y}}f(x, y) = \min_{y\in \set{Y}}\max_{x\in \set{X}}f(x,y)\ \cdot
         \label{eq:minimax}
     \end{equation}
 \end{theorem}

@@ -67,7 +67,7 @@
     Since this inequality holds for any $\paramValue$, the maximum of the right-hand side
     is also greater than or equal to the maximum of the left-hand side w.r.t $\paramValue$:
     \begin{equation}
-        \tmax \RP \leq \tmax \Dparam\cdot
+        \tmax \RP \leq \tmax \DExparam\cdot
         \label{eq:ineq-theorem1}
     \end{equation}
 
@@ -108,7 +108,7 @@
     \[
         \paramValue^* = \arg\tmax \DExparam\cdot
     \]
-    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\,.\,|\paramValue^*)$, and we have:
+    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\cdot\,|\paramValue^*)$, and we have:
     \[
         \Ex{R}{\sum_i \Dcond[R]} = \DExparam[\paramValue^*]\cdot
     \]
@@ -124,6 +124,7 @@
 \end{proof}
 
 \begin{theorem}[Minimax theorem~\cite{Du1995}]
+    \label{th:minimax}
     Let $\set{X} \subset \mathbb {R}^{n}$ and $\set{Y} \subset \mathbb {R}^{m}$ be compact convex sets.
     If $f:\set{X}\times \set{Y}\rightarrow \mathbb {R}$ is a continuous function that is concave-convex, i.e.
 
@@ -133,23 +134,85 @@
     \end{itemize}
     Then we have that:
     \begin{equation}
-        \max_{x\in \set{X}}\min_{y\in \set{Y}}f(x, y) = \min_{y\in \set{Y}}\max_{x\in \set{X}}f(x,y)\ \cdot
+        \max_{x\in \set{X}}\min_{y\in \set{Y}}f(x, y) = \min_{y\in \set{Y}}\max_{x\in \set{X}}f(x,y)\cdot
         \label{eq:minimax}
     \end{equation}
 \end{theorem}
 
 \begin{theorem}
-    Let \pmodel be a parametric model which satisfies the conditions of Theorem~\ref{th:div_for_parametric},
-    and $\pairsX$ be a set of pairs of discrete random variables in \Mt.
-    The central distribution for $\set{X}$ in \Mt can be obtained by:
+    Consider a generic parametric model \pmodel,
+    and let $\pairsX$ be a set of pairs of discrete random variables in \Mt.
+    Assume that for every $Q_1, Q_2 \in \set{P}$ and any real number $0 \leq \alpha \leq 1$, there is
+    a distribution $Q^* \in \set{P}$, such that for every $\xe,i$ we have:
     \begin{equation}
-        C_{\set{X}} = \pmax \int \DExparam p(\paramValue) d\paramValue
-        \label{eq:c_Cp}
+        Q^*(\xIe) = \alpha Q_1(\xIe) + (1 - \alpha) Q_2(\xIe)\cdot
+        \label{eq:convex_dist_set}
     \end{equation}
-    where $p(\paramValue)$ is the prior distribution for $P$.
+    In this model, the central distribution for $\set{X}$ can be obtained by:
+    \begin{align}
+        C_{\set{X}} &= \arg\pmax \int \DExparam p(\paramValue) d\paramValue\\
+        &= \arg\pmax \int \Dminimax d\paramValue,
+        \label{eq:c_Cp}
+    \end{align}
+    where $P(\xet) = \pi(\xeIt) p(\paramValue)$.
 \end{theorem}
 
 \begin{proof}
+    \newcommandx{\f}[2][1 = r, 2 = P_{\rv{X} \mid \rval{e}}]{ f(#1, #2)}
+    We prove this theorem using the Minimax theorem.
+    For that, we define a functional as follows:
+    \begin{equation*}
+        \f = \int \DExparam r(\paramValue) d\paramValue,
+    \end{equation*}
+    where $r(\paramValue)$ is an arbitrary probability distribution, and $P \in \set{P}$.
+    Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is like maximizing
+    with respect to $\paramValue$.
+    Thus we have:
+    \[
+        C_{\set{X}} = \arg\pmin \max_{r} \f\cdot
+    \]
+
+    The domain of $r$ is the set of all probability distributions which is a compact convex set.
+    Moreover, by Equation~\ref{eq:convex_dist_set} the set of probability distributions for
+    $\rv{X}|\rv{E}$ in \Mt is also a compact convex set.
+    Therefore, the domain of $\f$ is a compact convex set.
+
+    Obivously, $\f[r][\cdot]$ is a linear function, which is both concave and convex.
+    On the other hand, if we let $\paramDist[r]{\xe}$ for $\f[\cdot]$ we have:
+    \begin{equation}
+        \f[\cdot] = c - \sumOverixe R(\xe) \ln P(\xIe)\cdot
+        \label{eq:max_for_P}
+    \end{equation}
+    If we calculate the Hessian matrix of $\f[\cdot]$, we observe that the matrix is diagonal, and each element
+    of the main diagonal is $-\frac{R(\xIe)}{P(\xIe)^2}$.
+    Thus, the hessian matrix of $\f[\cdot]$ is negative semi-definite and $\f[\cdot]$ is a concave function.
+    Now, by Theorem~\ref{th:minimax} we have:
+    \begin{equation}
+        \pmin \max_{r} \f = \max_{r} \pmin \f\cdot
+        \label{eq:divergence_minmax}
+    \end{equation}
+    By Equation~\ref{eq:max_for_P} we can see that for an arbitrary fixed $r$ we have:
+    \[
+        \pmin \f = \pmax \sumOverixe R(\xe) \ln P(\xIe)\cdot
+    \]
+
+    We know that the Kullback–Leibler divergence, and therefore its expected value, is non-negative:
+    \[
+        \Ex{R}{\sum_i \Dcond[R]} \geq 0\cdot
+    \]
+    By simple algebra we get:
+    \[
+        \sumOverixe R(\xe) \ln P(\xIe) \leq \sumOverixe R(\xe) \ln R(\xIe)\cdot
+    \]
+    Remember that \Mt is a generic parametric model, so $R \in \set{P}$ and we can reach this
+    upper bound by letting $P = R$.
+    \[
+        \pmin \f = \int \Dminimax[R] d\paramValue\cdot
+    \]
+    By Equation~\ref{eq:divergence_minmax} we conclude:
+    \[
+        C_{\set{X}} = \arg\max_{R \in \set{R}} \int \DExparam[][R] r(\paramValue) d\paramValue\cdot
+    \]
 \end{proof}
 
 \bibliography{main}

@@ -2,7 +2,7 @@
 %! Date = 6/15/23
 
 % Preamble
-\documentclass[a4]{article}
+\documentclass[11pt]{article}
 
 % Packages
 \usepackage{amsmath}
@@ -56,11 +56,12 @@
     \measure{D}\left( #1_{#3} \parallel #2_{#4} \right)
 }
 
-\newcommand{\DExparam}[1][\paramValue]{
-    \Ex{\pi}{\sum_i \Dcond[\pi][][\rv{x} \mid \rval{e}, #1] \;\middle|\;#1\,}
+\newcommandx{\DExparam}[2][1=\paramValue, 2=P, usedefault]{
+    \Ex{\pi}{\sum_i \Dcond[\pi][#2][\rv{x} \mid \rval{e}, #1] \;\middle|\;#1\,}
 }
 
 \newcommand{\Dparam}[1][P]{\sumOverixe \pi(\xeIt) \ln \frac{\pi(\xIet)}{#1(\xIe)}}
+\newcommand{\Dminimax}[1][P]{\sumOverixe #1(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)}}
 
 \newcommandx{\KLparam}[5][1=P, 2=\pi, 3=x, 4=e, 5={e,\theta}]{
     \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in\range{#4}}

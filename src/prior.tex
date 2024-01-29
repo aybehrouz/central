@@ -11,7 +11,7 @@
         \DxP = \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond},
         \label{eq:div_measure}
     \end{equation}
-    where $\Ex{Q}{.}$ denotes expectation relative to $Q$ and each $\Dcond$ is the Kullback-Leibler divergence
+    where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and each $\Dcond$ is the Kullback-Leibler divergence
     between $P(\rv{X}|\rval{E})$ and $Q(\rv{X}|\rval{E})$:
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
@@ -149,11 +149,11 @@
         \label{eq:convex_dist_set}
     \end{equation}
     In this model, the central distribution for $\set{X}$ can be obtained by:
-    \begin{align}
+    \begin{align*}
         C_{\set{X}} &= \arg\pmax \int \DExparam p(\paramValue) d\paramValue\\
         &= \arg\pmax \int \Dminimax d\paramValue,
         \label{eq:c_Cp}
-    \end{align}
+    \end{align*}
     where $P(\xet) = \pi(\xeIt) p(\paramValue)$.
 \end{theorem}
 

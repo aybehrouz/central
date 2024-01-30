@@ -16,7 +16,7 @@
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]
-    Moreover, we define \emph{the central distribution for \set{X}} to be a distribution $C_\set{X} \in \set{P}$ which
+    We also define \emph{the central distribution for \set{X}} to be a distribution $C_\set{X} \in \set{P}$ which
     minimizes the divergence measure for \set{X}:
     \begin{equation}
         C_\set{X} = \arg\pmin \DxP\cdot
@@ -25,7 +25,7 @@
 \end{definition}
 
 \begin{proposition}
-    Using the linearity of expectation, we have:
+    Using the linearity of expectation, we have
     \begin{equation*}
         \DxP = \max_{Q \in \set{P}} \sumOverixe Q(\xe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
         \label{eq:div_measure_full}
@@ -34,46 +34,46 @@
 
 \begin{definition}[Parametric Model]
     Let $\param$ be a random vector.
-    A parametric model is a probabilistic model \pmodel, where for
-    every $P \in \set{P}$ there is a prior probability $p$, such that for every $\rval[]{s} \in \set{s}$ we have:
+    A parametric model is a probabilistic model \pmodel, where for every $P \in \set{P}$ there is a prior probability
+    distribution $p$, such that for every $\rval[]{s} \in \set{s}$ we have
     \begin{equation}
         \paramDist{\rval[]{s}},
         \label{eq:parametric}
     \end{equation}
-    while $\pi$ is some known probability distribution.
+    while $\pi$ is a known probability distribution.
 \end{definition}
 
 \begin{lemma}
+    \label{lm:DxP_uppper_bound}
     Let \pmodel be a parametric model, and $\pairsX$ be a set of discrete random variable pairs in \Mt.
-    For every $P \in \set{P}$ we have:
-    \begin{align}
+    For every $P \in \set{P}$ we have
+    \begin{align*}
         \DxP &\leq \tmax \DExparam\\  \label{eq:DxP_upper_bound}
         &= \tmax \Dparam\cdot
-    \end{align}
+    \end{align*}
 \end{lemma}
 
 \begin{proof}
-    Let $R$ be an arbitrary distribution in \Mt, since the Kullback-Leibler divergence is always positive,
-    its expected value is also positive, and for every parameter value $\paramValue$ we have:
+    Let $R$ be an arbitrary distribution in \Mt, since the Kullback-Leibler divergence is positive,
+    its expected value is also positive, and for every parameter value $\paramValue$ we have
     \[
         \Dparam[R] \geq 0\ \cdot
     \]
-    Using this, we can derive the following inequality for every distribution $P$ and
-    every parameter \vval{\theta}:
+    Using this, for every distribution $P$ and every parameter \vval{\theta}, we obtain
     \newcommand{\RP}{\sumOverixe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
     \[
         \RP \leq \Dparam\cdot
     \]
     Since this inequality holds for any $\paramValue$, the maximum of the right-hand side
-    is also greater than or equal to the maximum of the left-hand side w.r.t $\paramValue$:
+    is also greater than or equal to the maximum of the left-hand side w.r.t. $\paramValue$:
     \begin{equation}
         \tmax \RP \leq \tmax \DExparam\cdot
         \label{eq:ineq-theorem1}
     \end{equation}
 
-    \Mt is a parametric model and $\paramDist[R]{\xe}$, while $r(\paramValue)$ is
+    \Mt is a parametric model and $\paramDist[R]{\xe}$, where $r(\paramValue)$ is
     a probability distribution.
-    Obviously for every $\paramValue$ we have:
+    Clearly, for every $\paramValue$ we have
     \[
         \RP \leq \tmax \RP\cdot
     \]
@@ -84,9 +84,9 @@
     \[
         \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \RP\cdot
     \]
-    Now by Inequality~\ref{eq:ineq-theorem1}, for \emph{every} distribution $P$ and $R$ we conlcude:
+    Now from Inequality~\ref{eq:ineq-theorem1}, for \emph{any} distribution $P$ and $R$ in \Mt, it follows that
     \[
-        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \Dparam,
+        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \DExparam,
     \]
     which proves the theorem.
 \end{proof}
@@ -104,23 +104,23 @@
 \end{theorem}
 
 \begin{proof}
-    For an arbitrary distribution $P \in \set{P}$, we let:
+    For an arbitrary distribution $P \in \set{P}$, we let
     \[
         \paramValue^* = \arg\tmax \DExparam\cdot
     \]
-    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\cdot\,|\paramValue^*)$, and we have:
+    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\cdot\,|\paramValue^*)$, and we can write
     \[
         \Ex{R}{\sum_i \Dcond[R]} = \DExparam[\paramValue^*]\cdot
     \]
-    On the other hand, we see:
+    On the other hand, we see
     \[
-        \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond} \geq \Ex{R}{\sum_i \Dcond[R]},
+        \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond} \geq \Ex{R}{\sum_i \Dcond[R]}\cdot
     \]
-    Thus:
+    Thus,
     \[
         \DxP \geq \tmax \DExparam\cdot
     \]
-    This and Inequality~\ref{eq:DxP_upper_bound} proves the theorem.
+    This inequality and Lemma \ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
 
 \begin{theorem}[Minimax theorem~\cite{Du1995}]
@@ -132,7 +132,7 @@
         \item $f(\cdot ,y):\set{X}\to \mathbb {R}$ is concave for fixed $y$, and
         \item $f(x,\cdot ):\set{Y}\to \mathbb {R}$ is convex for fixed $x$.
     \end{itemize}
-    Then we have that:
+    Then we have that
     \begin{equation}
         \max_{x\in \set{X}}\min_{y\in \set{Y}}f(x, y) = \min_{y\in \set{Y}}\max_{x\in \set{X}}f(x,y)\cdot
         \label{eq:minimax}
@@ -143,7 +143,7 @@
     Consider a generic parametric model \pmodel,
     and let $\pairsX$ be a set of pairs of discrete random variables in \Mt.
     Assume that for every $Q_1, Q_2 \in \set{P}$ and any real number $0 \leq \alpha \leq 1$, there is
-    a distribution $Q^* \in \set{P}$, such that for every $\xe,i$ we have:
+    a distribution $Q^* \in \set{P}$, such that for every $i, \xe$ we have
     \begin{equation}
         Q^*(\xIe) = \alpha Q_1(\xIe) + (1 - \alpha) Q_2(\xIe)\cdot
         \label{eq:convex_dist_set}
@@ -166,32 +166,31 @@
     \end{equation*}
     where $r(\paramValue)$ is an arbitrary probability distribution, and $P \in \set{P}$.
     Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is like maximizing
-    with respect to $\paramValue$.
-    Thus we have:
+    with respect to $\paramValue$, and we have
     \[
         C_{\set{X}} = \arg\pmin \max_{r} \f\cdot
     \]
 
-    The domain of $r$ is the set of all probability distributions which is a compact convex set.
-    Moreover, by Equation~\ref{eq:convex_dist_set} the set of probability distributions for
+    The domain of $r$ is the set of all probability distributions, which is a compact convex set.
+    Moreover, from Equation~\ref{eq:convex_dist_set}, it follows that the set of probability distributions for
     $\rv{X}|\rv{E}$ in \Mt is also a compact convex set.
-    Therefore, the domain of $\f$ is a compact convex set.
+    Thus, the domain of $\f$ is a compact convex set.
 
-    Obivously, $\f[r][\cdot]$ is a linear function, which is both concave and convex.
-    On the other hand, if we let $\paramDist[r]{\xe}$ for $\f[\cdot]$ we have:
+    For a fixed $P_{\rv{X} \mid \rval{e}}$, $\f[\cdot]$ is a linear function, which is both concave and convex.
+    On the other hand, if we let $\paramDist[r]{\xe}$ for $\f[r][\cdot]$ we have
     \begin{equation}
-        \f[\cdot] = c - \sumOverixe R(\xe) \ln P(\xIe)\cdot
+        \f[r][\cdot] = c - \sumOverixe R(\xe) \ln P(\xIe)\cdot
         \label{eq:max_for_P}
     \end{equation}
-    If we calculate the Hessian matrix of $\f[\cdot]$, we observe that the matrix is diagonal, and each element
-    of the main diagonal is $-\frac{R(\xIe)}{P(\xIe)^2}$.
-    Thus, the hessian matrix of $\f[\cdot]$ is negative semi-definite and $\f[\cdot]$ is a concave function.
-    Now, by Theorem~\ref{th:minimax} we have:
+    If we calculate the Hessian matrix of $\f[r][\cdot]$, we observe that the matrix is diagonal, and each element
+    of the main diagonal is $\frac{R(\xIe)}{P(\xIe)^2}$.
+    Thus, the hessian matrix of $\f[\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
+    Now, Theorem~\ref{th:minimax} implies
     \begin{equation}
         \pmin \max_{r} \f = \max_{r} \pmin \f\cdot
         \label{eq:divergence_minmax}
     \end{equation}
-    By Equation~\ref{eq:max_for_P} we can see that for an arbitrary fixed $r$ we have:
+    From Equation~\ref{eq:max_for_P} we can see that for an arbitrary fixed $r$ we have
     \[
         \pmin \f = \pmax \sumOverixe R(\xe) \ln P(\xIe)\cdot
     \]
@@ -204,7 +203,7 @@
     \[
         \sumOverixe R(\xe) \ln P(\xIe) \leq \sumOverixe R(\xe) \ln R(\xIe)\cdot
     \]
-    Remember that \Mt is a generic parametric model, so $R \in \set{P}$ and we can reach this
+    Recall that \Mt is a generic parametric model, so $R \in \set{P}$, and we can reach this
     upper bound by letting $P = R$.
     \[
         \pmin \f = \int \Dminimax[R] d\paramValue\cdot

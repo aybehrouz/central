@@ -77,10 +77,10 @@
     \[
         \RP \leq \tmax \RP\cdot
     \]
-    Since $\prob [r]{\theta}$ is a distribution and is non-negative, we can multiply this inequality
-    by $\prob [r]{\theta}$ and integrate.
+    Since $r$ is a distribution and is non-negative, we can multiply this inequality
+    by $r(\paramValue)$ and integrate.
     Notice that the right hand side is not a function of $\paramValue$ and it will remain unchanged
-    because $\int \prob [r]{\theta} d\theta = 1$:
+    because $\int \dt[r] = 1$:
     \[
         \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \RP\cdot
     \]
@@ -108,7 +108,7 @@
     \[
         \paramValue^* = \arg\tmax \DExparam\cdot
     \]
-    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\cdot\,|\paramValue^*)$, and we can write
+    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\cdot \mid \paramValue^*)$, and we can write
     \[
         \Ex{R}{\sum_i \Dcond[R]} = \DExparam[\paramValue^*]\cdot
     \]
@@ -140,6 +140,7 @@
 \end{theorem}
 
 \begin{theorem}
+    \label{th:central_by_max}
     Consider a generic parametric model \pmodel,
     and let $\pairsX$ be a set of pairs of discrete random variables in \Mt.
     Assume that for every $Q_1, Q_2 \in \set{P}$ and any real number $0 \leq \alpha \leq 1$, there is
@@ -149,11 +150,11 @@
         \label{eq:convex_dist_set}
     \end{equation}
     In this model, the central distribution for $\set{X}$ can be obtained by:
-    \begin{align*}
-        C_{\set{X}} &= \arg\pmax \int \DExparam p(\paramValue) d\paramValue\\
-        &= \arg\pmax \int \Dminimax d\paramValue,
-        \label{eq:c_Cp}
-    \end{align*}
+    \begin{align}
+        \Cx &= \arg\pmax \int \DExparam \dt\\
+        &= \arg\pmax \Dminimax,
+        \label{eq:Cx_by_max}
+    \end{align}
     where $P(\xet) = \pi(\xeIt) p(\paramValue)$.
 \end{theorem}
 
@@ -162,13 +163,13 @@
     We prove this theorem using the Minimax theorem.
     For that, we define a functional as follows:
     \begin{equation*}
-        \f = \int \DExparam r(\paramValue) d\paramValue,
+        \f = \int \DExparam \dt[r],
     \end{equation*}
     where $r(\paramValue)$ is an arbitrary probability distribution, and $P \in \set{P}$.
     Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is like maximizing
     with respect to $\paramValue$, and we have
     \[
-        C_{\set{X}} = \arg\pmin \max_{r} \f\cdot
+        \Cx = \arg\pmin \max_{r} \f\cdot
     \]
 
     The domain of $r$ is the set of all probability distributions, which is a compact convex set.
@@ -199,18 +200,71 @@
     \[
         \Ex{R}{\sum_i \Dcond[R]} \geq 0\cdot
     \]
-    By simple algebra we get:
+    By simple algebra we get
     \[
         \sumOverixe R(\xe) \ln P(\xIe) \leq \sumOverixe R(\xe) \ln R(\xIe)\cdot
     \]
     Recall that \Mt is a generic parametric model, so $R \in \set{P}$, and we can reach this
-    upper bound by letting $P = R$.
+    upper bound by letting $P = R$:
     \[
         \pmin \f = \int \Dminimax[R] d\paramValue\cdot
     \]
-    By Equation~\ref{eq:divergence_minmax} we conclude:
+    By Equation~\ref{eq:divergence_minmax} we conclude
     \[
-        C_{\set{X}} = \arg\max_{R \in \set{R}} \int \DExparam[][R] r(\paramValue) d\paramValue\cdot
+        \Cx = \arg\max_{R \in \set{R}} \int \DExparam[][R] \dt[r]\cdot
+    \]
+\end{proof}
+
+\begin{theorem}
+    \label{th:lambda}
+    Under the assumptions of Theorem~\ref{th:central_by_max}, the central distribution for \set{X} satisfies:
+    \[
+        \Dparam[\Cx] = \lambda,
+    \]
+    where $\lambda$ is a constant.
+\end{theorem}
+\begin{proof}
+    \renewcommand{\c}{c(\paramValue)}
+
+    Since \Mt is a parametric model, the central distribution for \set{X} maximizes the right-hand side of
+    Equation~\ref{eq:Cx_by_max} with respect to different choices of the prior distribution $p(\paramValue)$,
+    subject to the constraint $\int \dt[p] = 1$.
+    Applying the Lagrange multiplier technique, the local maximum of the right-hand side of
+    Equation~\ref{eq:Cx_by_max} will be a stationary point of the Lagrangian function:
+    \[
+        \Lagr = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
+    \]
+    Let us denote the prior distribution of \Cx by $\c$.
+    Let $p(\paramValue) = \c + \epsilon \eta(\paramValue)$ be a variation of $\c$, where $\eta(\paramValue)$ is
+    a continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
+
+    Since $\c$ is an extremizing function for the right-hand side of Equation~\ref{eq:Cx_by_max},
+    $\Lagr[\epsilon]$ has a stationary point where $\epsilon = 0$, and we have
+    \[
+        \parDerivAt = 0\cdot
+    \]
+    Note that
+    \begin{align*}
+        \de{p(\paramValue)} &= \eta(\paramValue),\\
+        \de{P(\xe)} &= \int \pi(\xeIt) \dt[\eta],\\
+        \de{P(\rval{e})} &= \int \pi(\eIt) \dt[\eta]\ \cdot
+    \end{align*}
+    Using the chain rule, we calculate the partial derivative of $\Lagr[\epsilon]$ relative to $\epsilon$:
+    \begin{align*}
+        \parDeriv\ =\ &\int \left( \Dparam  \right) \dt[\eta] \\
+        &- \int \left( \sumOverixe \pi(\xeIt) \frac{\int \pi(\xeIt) \dt[\eta]}{P(\xe)} \right) \dt \\
+        &+ \int \left( \sum_i \sum_{\rval{e}} \pi(\eIt) \frac{\int \pi(\eIt) \dt[\eta]}{P(\rval{e})} \right) \dt \\
+        &- \int \lambda \dt[\eta]
+    \end{align*}
+    Since $\paramDist{\xe}$ and $\paramDist{\rval{e}}$ we get
+    \begin{equation*}
+        \parDeriv = \int \left(-\lambda + \Dparam \right) \dt[\eta]\cdot
+    \end{equation*}
+    We let $ \parDerivAt = 0$.
+    Since $\eta(\paramValue)$ is an arbitrary function, by applying the fundamental lemma of the calculus of
+    variations and letting $\epsilon = 0$, we have
+    \[
+        \Dparam[\Cx] = \lambda\cdot \qedhere
     \]
 \end{proof}
 

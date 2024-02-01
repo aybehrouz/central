@@ -27,6 +27,9 @@
 \newcommand{\rval}[2][i]{\ensuremath{\lowercase{#2}_{#1}}\xspace}
 \newcommand{\rvec}[1]{\ensuremath{\mathbf{\uppercase{#1}}}\xspace}
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
+\newcommand{\Cx}{\ensuremath{C_\set{X}}\xspace}
+
+
 \newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\param}{\varTheta}
@@ -47,6 +50,7 @@
 \newcommand{\xeIt}{\rval{x}, \rval{e} \mid  \paramValue}
 \newcommand{\tIxe}{\paramValue \mid \rval{x}, \rval{e}}
 \newcommand{\tIe}{\paramValue \mid \rval{e}}
+\newcommand{\eIt}{\rval{e} \mid \paramValue}
 \newcommand{\pairsX}{\set{X} = \left\{(\rv[1]{X}, \rv[1]{E}), (\rv[2]{X}, \rv[2]{E}), \dots \right\}}
 \newcommand{\paramDist}[2][P]{
     \uppercase{#1}(#2) =\int \pi(#2 \mid \paramValue) \lowercase{#1}(\paramValue) d\paramValue
@@ -61,7 +65,7 @@
 }
 
 \newcommand{\Dparam}[1][P]{\sumOverixe \pi(\xeIt) \ln \frac{\pi(\xIet)}{#1(\xIe)}}
-\newcommand{\Dminimax}[1][P]{\sumOverixe #1(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)}}
+\newcommand{\Dminimax}[1][P]{\int \sumOverixe #1(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
 
 \newcommandx{\KLparam}[5][1=P, 2=\pi, 3=x, 4=e, 5={e,\theta}]{
     \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in\range{#4}}
@@ -72,7 +76,13 @@
     \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in \range{#4}}
     #2(\vval{#3}, \vval{#4}) \ln \frac{#2(\vval{#3} \mid \vval{#4})}{#1(\vval{#3} \mid \vval{#4})}
 }
-
+\newcommand{\Lagr}[1][p(\paramValue)]{\mathcal{L} \left[#1, \lambda\right]}
+\newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
+\newcommand{\de}[2][\epsilon]{\frac{d#2}{d#1}}
+\newcommandx{\parDeriv}[2][1=\mathcal{L}, 2=\epsilon]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommandx{\parDerivAt}[3][1=\mathcal{L}, 2=\epsilon, 3={\epsilon=0}]{
+    \left. \frac{\partial{#1}}{\partial{#2}} \right|_{#3}
+}
 \newcommand{\measure}[1]{\ensuremath{\mathbb{#1}}\xspace}
 \newcommand{\given}[2]{#1|#2}
 \newcommand{\Mt}{\ensuremath{\M_{\param}}\xspace}

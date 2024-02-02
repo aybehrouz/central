@@ -28,12 +28,16 @@
 \newcommand{\rvec}[1]{\ensuremath{\mathbf{\uppercase{#1}}}\xspace}
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
 \newcommand{\Cx}{\ensuremath{C_\set{X}}\xspace}
+\newcommand{\cPrior}[1][(\paramValue)]{c_\set{x}#1}
+\newcommand{\rhoPrior}[1][(\paramFuncValue)]{\rho#1}
 
 
 \newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\param}{\varTheta}
+\newcommand{\paramFunc}[1][i]{\Omega_{#1}}
 \newcommand{\paramValue}{\theta}
+\newcommand{\paramFuncValue}[1][i]{\omega_{#1}}
 \newcommand{\paramRange}{\theta}
 \newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
 \newcommand{\prob}[2][P]{#1(\vval{#2})}
@@ -43,17 +47,30 @@
 
 \newcommand{\DxP}{\measure{D}_\set{X}\left[ P \right]}
 \newcommand{\sumOverixe}{\sum_i \sum_{\rval{x}, \rval{e}}}
+\newcommand{\sumOverix}{\sum_i \sum_{\rval{x}}}
+\newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
 \newcommand{\xe}{\rval{x}, \rval{e}}
 \newcommand{\xIe}{\rval{x} \mid \rval{e}}
+\newcommand{\xIt}{\rval{x} \mid \paramValue}
 \newcommand{\xet}{\rval{x}, \rval{e}, \paramValue}
 \newcommand{\xIet}{\rval{x} \mid \rval{e},  \paramValue}
 \newcommand{\xeIt}{\rval{x}, \rval{e} \mid  \paramValue}
 \newcommand{\tIxe}{\paramValue \mid \rval{x}, \rval{e}}
 \newcommand{\tIe}{\paramValue \mid \rval{e}}
+\newcommand{\tIw}{\paramValue \mid \paramFuncValue}
 \newcommand{\eIt}{\rval{e} \mid \paramValue}
-\newcommand{\pairsX}{\set{X} = \left\{(\rv[1]{X}, \rv[1]{E}), (\rv[2]{X}, \rv[2]{E}), \dots \right\}}
+\newcommand{\xIw}{\rval{x} \mid \paramFuncValue}
+\newcommand{\wIx}{\paramFuncValue \mid \rval{x}}
+\newcommand{\Xpairs}{
+    \set{X} = \left\{(\rv[1]{X}, \rv[1]{E}), (\rv[2]{X}, \rv[2]{E}), \dots \right\}
+}
+\newcommand{\Xsingles}{
+    \set{X} = \left\{\rv[1]{X}, \rv[2]{X}, \rv[3]{X}, \dots \right\}
+}
+\newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
+\newcommand{\margDist}[2][p]{\int \pi(#2 \mid \paramValue) \dt[#1]}
 \newcommand{\paramDist}[2][P]{
-    \uppercase{#1}(#2) =\int \pi(#2 \mid \paramValue) \lowercase{#1}(\paramValue) d\paramValue
+    \uppercase{#1}(#2) =\margDist[\lowercase{#1}]{#2}
 }
 
 \newcommandx{\Dcond}[4][1=Q, 2=P, 3={\rv{x} \mid \rval{e}}, 4={\rv{x} \mid \rval{e}}, usedefault]{
@@ -64,7 +81,12 @@
     \Ex{\pi}{\sum_i \Dcond[\pi][#2][\rv{x} \mid \rval{e}, #1] \;\middle|\;#1\,}
 }
 
-\newcommand{\Dparam}[1][P]{\sumOverixe \pi(\xeIt) \ln \frac{\pi(\xIet)}{#1(\xIe)}}
+\newcommand{\Dparam}[1][P]{
+    \sumOverixe \pi(\xeIt) \ln \frac{\pi(\xIet)}{#1(\xIe)}
+}
+\newcommand{\DparamX}[1][P]{
+    \sum_i \sum_{\rval{x}} \pi(\rval{x} \mid \rval{\paramValue}) \ln \frac{\pi(\xIet)}{#1(\xIe)}
+}
 \newcommand{\Dminimax}[1][P]{\int \sumOverixe #1(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
 
 \newcommandx{\KLparam}[5][1=P, 2=\pi, 3=x, 4=e, 5={e,\theta}]{
@@ -77,7 +99,7 @@
     #2(\vval{#3}, \vval{#4}) \ln \frac{#2(\vval{#3} \mid \vval{#4})}{#1(\vval{#3} \mid \vval{#4})}
 }
 \newcommand{\Lagr}[1][p(\paramValue)]{\mathcal{L} \left[#1, \lambda\right]}
-\newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
+
 \newcommand{\de}[2][\epsilon]{\frac{d#2}{d#1}}
 \newcommandx{\parDeriv}[2][1=\mathcal{L}, 2=\epsilon]{\frac{\partial{#1}}{\partial{#2}}}
 \newcommandx{\parDerivAt}[3][1=\mathcal{L}, 2=\epsilon, 3={\epsilon=0}]{

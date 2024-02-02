@@ -4,7 +4,7 @@
 \end{definition}
 
 \begin{definition}[Divergence Measure]
-    Let $\pairsX$ be a set of pairs of discrete random
+    Let $\Xpairs$ be a set of pairs of discrete random
     variables in a probabilistic model \model.
     We define the \emph{divergence measure of $P \in \set{P}$ for \set{X}} as follows:
     \begin{equation}
@@ -19,7 +19,7 @@
     We also define \emph{the central distribution for \set{X}} to be a distribution $C_\set{X} \in \set{P}$ which
     minimizes the divergence measure for \set{X}:
     \begin{equation}
-        C_\set{X} = \arg\pmin \DxP\cdot
+        \Cx = \arg\pmin \DxP\cdot
         \label{eq:center}
     \end{equation}
 \end{definition}
@@ -45,7 +45,7 @@
 
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
-    Let \pmodel be a parametric model, and $\pairsX$ be a set of discrete random variable pairs in \Mt.
+    Let \pmodel be a parametric model, and $\Xpairs$ be a set of discrete random variable pairs in \Mt.
     For every $P \in \set{P}$ we have
     \begin{align*}
         \DxP &\leq \tmax \DExparam\\  \label{eq:DxP_upper_bound}
@@ -120,7 +120,7 @@
     \[
         \DxP \geq \tmax \DExparam\cdot
     \]
-    This inequality and Lemma \ref{lm:DxP_uppper_bound} prove the theorem.
+    This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
 
 \begin{theorem}[Minimax theorem~\cite{Du1995}]
@@ -142,11 +142,11 @@
 \begin{theorem}
     \label{th:central_by_max}
     Consider a generic parametric model \pmodel,
-    and let $\pairsX$ be a set of pairs of discrete random variables in \Mt.
+    and let $\Xpairs$ be a set of pairs of discrete random variables in \Mt.
     Assume that for every $Q_1, Q_2 \in \set{P}$ and any real number $0 \leq \alpha \leq 1$, there is
     a distribution $Q^* \in \set{P}$, such that for every $i, \xe$ we have
     \begin{equation}
-        Q^*(\xIe) = \alpha Q_1(\xIe) + (1 - \alpha) Q_2(\xIe)\cdot
+        Q^*(\xIe) = \convexCond{\xIe}\cdot
         \label{eq:convex_dist_set}
     \end{equation}
     In this model, the central distribution for $\set{X}$ can be obtained by:
@@ -207,11 +207,11 @@
     Recall that \Mt is a generic parametric model, so $R \in \set{P}$, and we can reach this
     upper bound by letting $P = R$:
     \[
-        \pmin \f = \int \Dminimax[R] d\paramValue\cdot
+        \pmin \f = \Dminimax[R]\cdot
     \]
     By Equation~\ref{eq:divergence_minmax} we conclude
     \[
-        \Cx = \arg\max_{R \in \set{R}} \int \DExparam[][R] \dt[r]\cdot
+        \Cx = \arg\max_{R \in \set{R}} \int \DExparam[][R] \dt[r]\cdot \qedhere
     \]
 \end{proof}
 
@@ -234,7 +234,7 @@
     \[
         \Lagr = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
     \]
-    Let us denote the prior distribution of \Cx by $\c$.
+    Let us denote the prior distribution corresponding to \Cx by $\c$.
     Let $p(\paramValue) = \c + \epsilon \eta(\paramValue)$ be a variation of $\c$, where $\eta(\paramValue)$ is
     a continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
 
@@ -246,14 +246,14 @@
     Note that
     \begin{align*}
         \de{p(\paramValue)} &= \eta(\paramValue),\\
-        \de{P(\xe)} &= \int \pi(\xeIt) \dt[\eta],\\
-        \de{P(\rval{e})} &= \int \pi(\eIt) \dt[\eta]\ \cdot
+        \de{P(\xe)} &= \margDist[\eta]{\xe},\\
+        \de{P(\rval{e})} &= \margDist[\eta]{\rval{e}}\cdot
     \end{align*}
     Using the chain rule, we calculate the partial derivative of $\Lagr[\epsilon]$ relative to $\epsilon$:
     \begin{align*}
         \parDeriv\ =\ &\int \left( \Dparam  \right) \dt[\eta] \\
-        &- \int \left( \sumOverixe \pi(\xeIt) \frac{\int \pi(\xeIt) \dt[\eta]}{P(\xe)} \right) \dt \\
-        &+ \int \left( \sum_i \sum_{\rval{e}} \pi(\eIt) \frac{\int \pi(\eIt) \dt[\eta]}{P(\rval{e})} \right) \dt \\
+        &- \int \left( \sumOverixe \pi(\xeIt) \frac{\margDist[\eta]{\xe}}{P(\xe)} \right) \dt \\
+        &+ \int \left( \sum_i \sum_{\rval{e}} \pi(\eIt) \frac{\margDist[\eta]{\rval{e}}}{P(\rval{e})} \right) \dt \\
         &- \int \lambda \dt[\eta]
     \end{align*}
     Since $\paramDist{\xe}$ and $\paramDist{\rval{e}}$ we get
@@ -262,10 +262,68 @@
     \end{equation*}
     We let $ \parDerivAt = 0$.
     Since $\eta(\paramValue)$ is an arbitrary function, by applying the fundamental lemma of the calculus of
-    variations and letting $\epsilon = 0$, we have
+    variations and letting $\epsilon = 0$, for every value of $\paramValue$ we have
     \[
         \Dparam[\Cx] = \lambda\cdot \qedhere
     \]
+\end{proof}
+
+\begin{theorem}
+    Let \pmodel be a generic parametric model, and $\Xsingles$ be a set of random variables in \Mt.
+    Let for every $i$, $\paramFunc$ be a function of the parameter $\param$ that fully parametrizes \rv{X}:
+    \begin{equation}
+        \pi(\xIt) = \pi \left( \rval{x} \mid \paramFunc(\paramValue) = \paramFuncValue \right)\cdot
+        \label{eq:func_of_theta}
+    \end{equation}
+    The prior distribution corresponding to the central distribution for \set{X} in \Mt can be characterized
+    by the following fixed point equation:
+    \begin{equation}
+        \cPrior \propto \left( \prod_i \Cx(\tIw) \rhoPrior \right)^{\frac{1}{|\set{x}|}},
+        \label{eq:fixed_point_cx}
+    \end{equation}
+    where
+    \[
+        \rhoPrior \propto \exp \left\{\sum_{\rval{x}} \pi(\xIw) \ln \Cx(\wIx) \right\}\cdot
+    \]
+
+\end{theorem}
+
+\begin{proof}
+    First, we show that the set of distributions of each \rv{X} is a convex set.
+    Let $Q^*(\rval{x}) = \convexCond{\rval{x}}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
+    arbitrary $i, \rval{x}$.
+
+    \Mt is a parametric model.
+    Therefore,
+    \begin{align*}
+        Q^*(\rval{x}) &= \alpha \margDist[q_1]{\rval{x}} + (1 - \alpha) \margDist[q_2]{\rval{x}}\\
+        &= \int \pi(\xIt) (\convexCond[q]{\rval{x}}) d\paramValue\cdot
+    \end{align*}
+    $\convexCond[q]{\rval{x}}$ is a valid prior distribution and \Mt is a generic parametric model.
+    That implies $Q^* \in \set{P}$.
+
+    Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies
+    \begin{equation}
+        \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\Cx(\rval{x})} = \lambda\cdot
+        \label{eq:lambda_th_proof}
+    \end{equation}
+    Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
+    \begin{align*}
+        \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\Cx(\rval{x})}
+        &= \sumOverix \pi(\xIw) \ln \frac{\pi(\xIw)}{\Cx(\rval{x})}\\
+        &= \sumOverix \pi(\xIw) \ln \frac{\Cx(\wIx)}{\cPrior[(\paramFuncValue)]}\\
+        &= \sum_i \ln \frac{\rhoPrior}{\cPrior[(\paramFuncValue])}\cdot
+    \end{align*}
+    Since each $\paramFunc$ is a function of $\param$, we have
+    $\Cx(\paramFuncValue, \paramValue)=\Cx(\paramValue)$ and
+    \begin{equation*}
+        \cPrior[(\paramFuncValue)] = \frac{\cPrior}{\Cx(\tIw)}\cdot
+    \end{equation*}
+    Now we rewrite Equation~\ref{eq:lambda_th_proof}:
+    \begin{align*}
+        |\set{X}| \ln \cPrior &= \sum_i \ln \left(\Cx(\tIw) \rhoPrior \right) - \lambda\\
+        \cPrior &= \left( e^{-\lambda} \prod_i \Cx(\tIw) \rhoPrior \right)^{\frac{1}{|\set{x}|}} \qedhere
+    \end{align*}
 \end{proof}
 
 \bibliography{main}

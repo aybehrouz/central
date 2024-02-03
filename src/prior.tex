@@ -35,13 +35,16 @@
 \begin{definition}[Parametric Model]
     Let $\param$ be a random vector.
     A parametric model is a probabilistic model \pmodel, where for every $P \in \set{P}$ there is a prior probability
-    distribution $p$, such that for every $\rval[]{s} \in \set{s}$ we have
+    distribution $p$, such that for every $\rval[]{s} \in \set{s}$
     \begin{equation}
         \paramDist{\rval[]{s}},
         \label{eq:parametric}
     \end{equation}
     while $\pi$ is a known probability distribution.
+
+
 \end{definition}
+
 
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
@@ -122,6 +125,14 @@
     \]
     This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
+
+\begin{definition}[Generic Parametric Model]
+    We say a parametric model \pmodel is \emph{generic}, if for any arbitrary probability distribution $r$,
+    there is a probability measure $R \in \set{P}$, such that for every $\rval[]{s} \in \set{s}$
+    \[
+        \paramDist[r]{\rval[]{s}}\cdot
+    \]
+\end{definition}
 
 \begin{theorem}[Minimax theorem~\cite{Du1995}]
     \label{th:minimax}
@@ -224,24 +235,26 @@
     where $\lambda$ is a constant.
 \end{theorem}
 \begin{proof}
-    \renewcommand{\c}{c(\paramValue)}
-
-    Since \Mt is a parametric model, the central distribution for \set{X} maximizes the right-hand side of
-    Equation~\ref{eq:Cx_by_max} with respect to different choices of the prior distribution $p(\paramValue)$,
-    subject to the constraint $\int \dt[p] = 1$.
-    Applying the Lagrange multiplier technique, the local maximum of the right-hand side of
-    Equation~\ref{eq:Cx_by_max} will be a stationary point of the Lagrangian function:
+    By Theorem~\ref{th:central_by_max}, the central distribution for \set{X} maximizes
     \[
-        \Lagr = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
+        \functional{p(\paramValue)} =\Dminimax,
     \]
-    Let us denote the prior distribution corresponding to \Cx by $\c$.
-    Let $p(\paramValue) = \c + \epsilon \eta(\paramValue)$ be a variation of $\c$, where $\eta(\paramValue)$ is
+    with respect to different choices of the prior distribution $p(\paramValue)$, subject to the
+    constraint $\int \dt[p] = 1$.
+
+    Applying the Lagrange multiplier technique, the local maximum of $\functional{}$ is a stationary point of the
+    Lagrangian functional:
+    \[
+        \Lagr[p(\paramValue)] = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
+    \]
+    Let us denote the prior distribution corresponding to \Cx by $\cPrior$.
+    Let $p(\paramValue) = \cPrior + \epsilon \eta(\paramValue)$ be a variation of $\cPrior$, where $\eta(\paramValue)$ is
     a continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
 
-    Since $\c$ is an extremizing function for the right-hand side of Equation~\ref{eq:Cx_by_max},
-    $\Lagr[\epsilon]$ has a stationary point where $\epsilon = 0$, and we have
+    Since $\cPrior$ is an extremizing function for $\functional{p(\paramValue)}$, the lagrangian
+    $\Lagr$ has a stationary point where $\epsilon = 0$, and we have
     \[
-        \parDerivAt = 0\cdot
+        \parDerivAt[\Lagr] = 0\cdot
     \]
     Note that
     \begin{align*}
@@ -249,7 +262,7 @@
         \de{P(\xe)} &= \margDist[\eta]{\xe},\\
         \de{P(\rval{e})} &= \margDist[\eta]{\rval{e}}\cdot
     \end{align*}
-    Using the chain rule, we calculate the partial derivative of $\Lagr[\epsilon]$ relative to $\epsilon$:
+    Using the chain rule, we calculate the partial derivative of $\Lagr$ relative to $\epsilon$:
     \begin{align*}
         \parDeriv\ =\ &\int \left( \Dparam  \right) \dt[\eta] \\
         &- \int \left( \sumOverixe \pi(\xeIt) \frac{\margDist[\eta]{\xe}}{P(\xe)} \right) \dt \\
@@ -270,7 +283,7 @@
 
 \begin{theorem}
     Let \pmodel be a generic parametric model, and $\Xsingles$ be a set of random variables in \Mt.
-    Let for every $i$, $\paramFunc$ be a function of the parameter $\param$ that fully parametrizes \rv{X}:
+    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \rv{X}:
     \begin{equation}
         \pi(\xIt) = \pi \left( \rval{x} \mid \paramFunc(\paramValue) = \paramFuncValue \right)\cdot
         \label{eq:func_of_theta}
@@ -297,9 +310,9 @@
     Therefore,
     \begin{align*}
         Q^*(\rval{x}) &= \alpha \margDist[q_1]{\rval{x}} + (1 - \alpha) \margDist[q_2]{\rval{x}}\\
-        &= \int \pi(\xIt) (\convexCond[q]{\rval{x}}) d\paramValue\cdot
+        &= \int \pi(\xIt) (\convexCond[q]{\paramValue}) d\paramValue\cdot
     \end{align*}
-    $\convexCond[q]{\rval{x}}$ is a valid prior distribution and \Mt is a generic parametric model.
+    $\convexCond[q]{\paramValue}$ is a valid prior distribution and \Mt is a generic parametric model.
     That implies $Q^* \in \set{P}$.
 
     Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies

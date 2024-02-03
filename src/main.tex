@@ -11,18 +11,22 @@
 \usepackage{hyperref}
 \usepackage{xspace}
 \usepackage{xargs}
+\usepackage{xifthen}
 \usepackage{amssymb} % should be the last import
 
 
 
 \newtheorem{theorem}{Theorem}
-\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{Corollary}[theorem]
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
 \newtheorem*{proposition}{Proposition}
 
 \newcommand{\set}[1]{\ensuremath{\mathcal{\uppercase{#1}}}\xspace}
+\newcommand{\functional}[2][F]{
+    \mathcal{#1}\ifthenelse{\isempty{#2}}{}{\left[#2\right]}
+}
 \newcommand{\rv}[2][i]{\ensuremath{\uppercase{#2}_{#1}}\xspace}
 \newcommand{\rval}[2][i]{\ensuremath{\lowercase{#2}_{#1}}\xspace}
 \newcommand{\rvec}[1]{\ensuremath{\mathbf{\uppercase{#1}}}\xspace}
@@ -98,7 +102,7 @@
     \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in \range{#4}}
     #2(\vval{#3}, \vval{#4}) \ln \frac{#2(\vval{#3} \mid \vval{#4})}{#1(\vval{#3} \mid \vval{#4})}
 }
-\newcommand{\Lagr}[1][p(\paramValue)]{\mathcal{L} \left[#1, \lambda\right]}
+\newcommand{\Lagr}[1][\epsilon]{\mathcal{L} \left[#1, \lambda\right]}
 
 \newcommand{\de}[2][\epsilon]{\frac{d#2}{d#1}}
 \newcommandx{\parDeriv}[2][1=\mathcal{L}, 2=\epsilon]{\frac{\partial{#1}}{\partial{#2}}}
@@ -134,12 +138,12 @@
 \begin{document}
 
     \section{Introduction}
-    Notation:
-    \begin{itemize}
-        \item Random variable \rv{x} with value \rval{x} and possible values from $\range{x}$,
-        \item Random vector \rvec{x} with range $\vrange{x}$ and some assignment \vval{x},
-        \item Set \set{A}, and a measure \measure{M}.
-    \end{itemize}
+%    Notation:
+%    \begin{itemize}
+%        \item Random variable \rv{x} with value \rval{x} and possible values from $\range{x}$,
+%        \item Random vector \rvec{x} with range $\vrange{x}$ and some assignment \vval{x},
+%        \item Set \set{A}, and a measure \measure{M}.
+%    \end{itemize}
 
     %\section{Making Decisions under Uncertainty}\label{sec:uncertainty}
 

@@ -1,0 +1,69 @@
+%    Notation:
+%    \begin{itemize}
+%        \item Random variable \rv{x} with value \rval{x} and possible values from $\range{x}$,
+%        \item Random vector \rvec{x} with range $\vrange{x}$ and some assignment \vval{x},
+%        \item Set \set{A}, and a measure \measure{M}.
+%    \end{itemize}
+
+
+\begin{theorem}
+    \newcommand{\XY}{\rv[]{X}, \rv[]{Y}}
+    \newcommand{\YIX}{\rv[]{Y} \mid \rval[]{x}}
+    Suppose that $\D[]$ is a divergence measure, defined for probability distributions $Q$ and $P$,
+    which satisfies the following properties:
+    \begin{enumerate}
+        \item  $\D[][Q][U] = \entropy{U}{} - \entropy{Q}{}$, where $U$ is the uniform distribution with the same
+        support as $Q$, and $\entropy{}{}$ denotes Shannon’s entropy.
+        \item For any two random variables $\XY$
+        \[
+            \D[\XY] = \D + \sumx \D[\YIX]Q(\rval[]{x})\cdot
+        \]
+    \end{enumerate}
+    Then, $\D[]$ is the Kullback-Leibler divergence.
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\T}{\varOmega}
+    \renewcommand{\t}{\omega}
+    \newcommand{\tIx}{\t \mid \rval[]{x}}
+    \newcommand{\TIx}{\T \mid \rval[]{x}}
+    \newcommand{\TX}{\T, \rv[]{x}}
+    \newcommand{\tx}{\t, \rval[]{x}}
+    \newcommand{\tent}[1]{\int q(#1) \ln q(#1) d\t}
+
+    \newcommand{\Qx}{Q(\rval[]{x})}
+    Let \rv[]{X} be a discrete random variable, and $P(\rv[]{X})$ and $Q(\rv[]{X})$ be two arbitrary distributions
+    for \rv[]{X}.
+    We define a new continuous random variable $\T$ and define
+    \begin{equation*}
+        p(\T = \t \mid \rvEq) =
+        \begin{cases}
+            \frac{1}{P(\rval[]{x})}, & 0 \leq \theta \leq P(\rvEq)\\
+            0, & \text{otherwise}\cdot
+        \end{cases}
+    \end{equation*}
+    Notice that both $P(\TIx)$ and $P(\TX)$ are uniform distributions, and
+    $\entropy{P}{\TIx} = \ln P(\rval[]{x})$, $\entropy{P}{\TX} = 0$.
+
+    We define $Q(\TIx)$ to be an arbitrary distribution that has the same support as $P(\TIx)$.
+    This ensures that $Q(\TX)$ and $P(\TX)$ have the same support too.
+    Thus, we have
+    \begin{align*}
+        \Dcond[][][\TX][\TX] &= \entropy{P}{\TX} - \entropy{Q}{\TX}\\
+        &= \sumx \tent{\tx}\\
+        &= \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
+    \end{align*}
+    and
+    \begin{align*}
+        \Dcond[][][\TIx][\TIx] &= \entropy{P}{\TIx} - \entropy{Q}{\TIx}\\
+        &= \ln P(\rval[]{x}) + \tent{\tIx}\cdot
+    \end{align*}
+    Now, we use the second property to obtain the divergence measure:
+    \begin{align*}
+        \D &= \D[\TX] - \sumx \D[\TIx]\Qx \\
+        &= \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(\rval[]{x}) \right)\\
+        &= \sumx \Qx  \left( \ln \Qx \int q(\tIx) d\t - \ln P(\rval[]{x}) \right)\\
+        &= \sumx \Qx \ln \frac{\Qx}{P(\rval[]{x})}\cdot \qedhere
+    \end{align*}
+\end{proof}
+

@@ -24,8 +24,13 @@
 \newtheorem*{proposition}{Proposition}
 
 \newcommand{\set}[1]{\ensuremath{\mathcal{\uppercase{#1}}}\xspace}
+
 \newcommand{\functional}[2][F]{
     \mathcal{#1}\ifthenelse{\isempty{#2}}{}{\left[#2\right]}
+}
+
+\newcommandx{\entropy}[2]{
+    \measure{H}\ifthenelse{\isempty{#1}}{}{\left[#1_{#2}\right]}
 }
 \newcommand{\rv}[2][i]{\ensuremath{\uppercase{#2}_{#1}}\xspace}
 \newcommand{\rval}[2][i]{\ensuremath{\lowercase{#2}_{#1}}\xspace}
@@ -52,6 +57,7 @@
 \newcommand{\DxP}{\measure{D}_\set{X}\left[ P \right]}
 \newcommand{\sumOverixe}{\sum_i \sum_{\rval{x}, \rval{e}}}
 \newcommand{\sumOverix}{\sum_i \sum_{\rval{x}}}
+\newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
 \newcommand{\xe}{\rval{x}, \rval{e}}
 \newcommand{\xIe}{\rval{x} \mid \rval{e}}
@@ -65,6 +71,7 @@
 \newcommand{\eIt}{\rval{e} \mid \paramValue}
 \newcommand{\xIw}{\rval{x} \mid \paramFuncValue}
 \newcommand{\wIx}{\paramFuncValue \mid \rval{x}}
+\newcommand{\rvEq}[1][x]{\rv[]{#1} = \rval[]{#1}}
 \newcommand{\Xpairs}{
     \set{X} = \left\{(\rv[1]{X}, \rv[1]{E}), (\rv[2]{X}, \rv[2]{E}), \dots \right\}
 }
@@ -80,9 +87,12 @@
 \newcommandx{\Dcond}[4][1=Q, 2=P, 3={\rv{x} \mid \rval{e}}, 4={\rv{x} \mid \rval{e}}, usedefault]{
     \measure{D}\left( #1_{#3} \parallel #2_{#4} \right)
 }
+\newcommandx{\D}[3][1={\rv[]{x}}, 2=Q, 3=P]{
+    \measure{D}\left( #2_{#1} \parallel #3_{#1} \right)
+}
 
 \newcommandx{\DExparam}[2][1=\paramValue, 2=P, usedefault]{
-    \Ex{\pi}{\sum_i \Dcond[\pi][#2][\rv{x} \mid \rval{e}, #1] \;\middle|\;#1\,}
+    \Ex{\pi}{\sum_i \Dcond[\pi][#2][\rv{x} \mid \rval{e}, #1] \;\middle|\;#1}
 }
 
 \newcommand{\Dparam}[1][P]{
@@ -127,7 +137,7 @@
 
 \newcommand{\E}{\measure{E}}
 
-\newcommand{\D}[2]{\measure{D}(#1 || #2)}
+
 \newcommand{\ED}[3]{\E_#3 \left[ \D{#1}{#2} \right]}
 \newcommand{\sumover}[1]{\sum_{#1 \in \range{#1}}}
 \newcommand{\PQdive}[2]{\ln \frac{Q(#1 \mid #2)}{P(#1 \mid #2)}Q(#1, #2)}
@@ -138,12 +148,8 @@
 \begin{document}
 
     \section{Introduction}
-%    Notation:
-%    \begin{itemize}
-%        \item Random variable \rv{x} with value \rval{x} and possible values from $\range{x}$,
-%        \item Random vector \rvec{x} with range $\vrange{x}$ and some assignment \vval{x},
-%        \item Set \set{A}, and a measure \measure{M}.
-%    \end{itemize}
+    \input{intro}
+
 
     %\section{Making Decisions under Uncertainty}\label{sec:uncertainty}
 

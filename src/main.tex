@@ -2,7 +2,7 @@
 %! Date = 6/15/23
 
 % Preamble
-\documentclass[a4paper, 11pt]{article}
+\documentclass[a4paper, 12pt]{article}
 
 % Packages
 \usepackage{amsmath}
@@ -38,6 +38,7 @@
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
 \newcommand{\Cx}{\ensuremath{C_\set{X}}\xspace}
 \newcommand{\cPrior}[1][(\paramValue)]{c_\set{x}#1}
+\newcommand{\cMass}[1]{c_\set{X}(#1)}
 \newcommand{\rhoPrior}[1][(\paramFuncValue)]{\rho#1}
 
 
@@ -60,6 +61,7 @@
 \newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
 \newcommand{\xe}{\rval{x}, \rval{e}}
+\newcommand{\XIE}{\rv{X} \mid \rv{E}}
 \newcommand{\xIe}{\rval{x} \mid \rval{e}}
 \newcommand{\xIt}{\rval{x} \mid \paramValue}
 \newcommand{\xet}{\rval{x}, \rval{e}, \paramValue}
@@ -92,7 +94,7 @@
 }
 
 \newcommandx{\DExparam}[2][1=\paramValue, 2=P, usedefault]{
-    \Ex{\pi}{\sum_i \Dcond[\pi][#2][\rv{x} \mid \rval{e}, #1] \;\middle|\;#1}
+    \Ex{\pi}{\sum_i \Dcond[\pi][#2][\rv{x} \mid \rval{e}, #1]\;\middle|\;#1}
 }
 
 \newcommand{\Dparam}[1][P]{
@@ -101,7 +103,7 @@
 \newcommand{\DparamX}[1][P]{
     \sum_i \sum_{\rval{x}} \pi(\rval{x} \mid \rval{\paramValue}) \ln \frac{\pi(\xIet)}{#1(\xIe)}
 }
-\newcommand{\Dminimax}[1][P]{\int \sumOverixe #1(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
+\newcommand{\Dminimax}[1][P]{\int \sumOverixe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
 
 \newcommandx{\KLparam}[5][1=P, 2=\pi, 3=x, 4=e, 5={e,\theta}]{
     \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in\range{#4}}

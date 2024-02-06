@@ -10,15 +10,16 @@
     \newcommand{\XY}{\rv[]{X}, \rv[]{Y}}
     \newcommand{\YIX}{\rv[]{Y} \mid \rval[]{x}}
     Suppose that $\D[]$ is a divergence measure, defined for probability distributions $Q$ and $P$,
-    which satisfies the following properties:
-    \begin{enumerate}
-        \item  $\D[][Q][U] = \entropy{U}{} - \entropy{Q}{}$, where $U$ is the uniform distribution with the same
-        support as $Q$, and $\entropy{}{}$ denotes Shannon’s entropy.
-        \item For any two random variables $\XY$
+    satisfying the following properties:
+    \begin{description}
+        \item[Consistency with entropy] If $U$ is the uniform distribution with the same support
+        as $Q$, then $\D[][Q][U] = \entropy{U}{} - \entropy{Q}{}$, where $\entropy{}{}$ denotes Shannon’s
+        entropy.
+        \item[Additivity] For any two random variables $\XY$
         \[
             \D[\XY] = \D + \sumx \D[\YIX]Q(\rval[]{x})\cdot
         \]
-    \end{enumerate}
+    \end{description}
     Then, $\D[]$ is the Kullback-Leibler divergence.
 \end{theorem}
 
@@ -38,7 +39,7 @@
     \begin{equation*}
         p(\T = \t \mid \rvEq) =
         \begin{cases}
-            \frac{1}{P(\rval[]{x})}, & 0 \leq \theta \leq P(\rvEq)\\
+            \frac{1}{P(\rval[]{x})}, & 0 \leq \theta \leq P(\rvEq),\\
             0, & \text{otherwise}\cdot
         \end{cases}
     \end{equation*}
@@ -58,7 +59,7 @@
         \Dcond[][][\TIx][\TIx] &= \entropy{P}{\TIx} - \entropy{Q}{\TIx}\\
         &= \ln P(\rval[]{x}) + \tent{\tIx}\cdot
     \end{align*}
-    Now, we use the second property to obtain the divergence measure:
+    Now, we use the additivity property to obtain a formula for our divergence measure:
     \begin{align*}
         \D &= \D[\TX] - \sumx \D[\TIx]\Qx \\
         &= \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(\rval[]{x}) \right)\\

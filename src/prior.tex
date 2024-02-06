@@ -48,7 +48,8 @@
 
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
-    Let \pmodel be a parametric model, and $\Xpairs$ be a set of discrete random variable pairs in \Mt.
+    Assume that \pmodel is a parametric model.
+    Let $\Xpairs$ be a set of discrete random variable pairs in \Mt.
     For every $P \in \set{P}$ we have
     \begin{align*}
         \DxP &\leq \tmax \DExparam\\  \label{eq:DxP_upper_bound}
@@ -95,6 +96,7 @@
 \end{proof}
 
 \begin{theorem}
+    \label{th:Dx_parametric_form}
     Let \pmodel be a parametric model and $\set{X}$ be a set of pairs of discrete random variables in \Mt.
     If for every value of $\paramValue$ there is a distribution $R \in \set{P}$ such that
     $R(\rval[]{s}) = \pi(\rval[]{s} \mid \paramValue)$ for every $\rval[]{s} \in \set{S}$,
@@ -134,6 +136,10 @@
     \]
 \end{definition}
 
+\begin{proposition}
+    A generic parametric model satisfies the conditions of Theorem~\ref{th:Dx_parametric_form}.
+\end{proposition}
+
 \begin{theorem}[Minimax theorem~\cite{Du1995}]
     \label{th:minimax}
     Let $\set{X} \subset \mathbb {R}^{n}$ and $\set{Y} \subset \mathbb {R}^{m}$ be compact convex sets.
@@ -166,11 +172,11 @@
         &= \arg\pmax \Dminimax,
         \label{eq:Cx_by_max}
     \end{align}
-    where $P(\xet) = \pi(\xeIt) p(\paramValue)$.
+    where $p(\xet) = \pi(\xeIt) p(\paramValue)$.
 \end{theorem}
 
 \begin{proof}
-    \newcommandx{\f}[2][1 = r, 2 = P_{\rv{X} \mid \rval{e}}]{ f(#1, #2)}
+    \newcommandx{\f}[2][1 = r, 2 = P_{\XIE}]{ f(#1, #2)}
     We prove this theorem using the Minimax theorem.
     For that, we define a functional as follows:
     \begin{equation*}
@@ -188,7 +194,7 @@
     $\rv{X}|\rv{E}$ in \Mt is also a compact convex set.
     Thus, the domain of $\f$ is a compact convex set.
 
-    For a fixed $P_{\rv{X} \mid \rval{e}}$, $\f[\cdot]$ is a linear function, which is both concave and convex.
+    For a fixed $P_{\XIE}$, $\f[\cdot]$ is a linear function, which is both concave and convex.
     On the other hand, if we let $\paramDist[r]{\xe}$ for $\f[r][\cdot]$ we have
     \begin{equation}
         \f[r][\cdot] = c - \sumOverixe R(\xe) \ln P(\xIe)\cdot
@@ -247,7 +253,7 @@
     \[
         \Lagr[p(\paramValue)] = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
     \]
-    Let us denote the prior distribution corresponding to \Cx by $\cPrior$.
+    Let us denote the prior distribution corresponding to the central distribution \Cx by $\cPrior$.
     Let $p(\paramValue) = \cPrior + \epsilon \eta(\paramValue)$ be a variation of $\cPrior$, where $\eta(\paramValue)$ is
     a continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
 
@@ -283,20 +289,21 @@
 
 \begin{theorem}
     Let \pmodel be a generic parametric model, and $\Xsingles$ be a set of random variables in \Mt.
-    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \rv{X}:
+    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \rv{X},
+    so that for $\paramFuncValue = \paramFunc(\paramValue)$ we have:
     \begin{equation}
-        \pi(\xIt) = \pi \left( \rval{x} \mid \paramFunc(\paramValue) = \paramFuncValue \right)\cdot
+        \pi(\xIt) = \pi \left( \rval{x} \mid \paramFuncValue \right)\cdot
         \label{eq:func_of_theta}
     \end{equation}
     The prior distribution corresponding to the central distribution for \set{X} in \Mt can be characterized
     by the following fixed point equation:
     \begin{equation}
-        \cPrior \propto \left( \prod_i \Cx(\tIw) \rhoPrior \right)^{\frac{1}{|\set{x}|}},
+        \cPrior \propto \left( \prod_i \cMass{\tIw} \rhoPrior \right)^{\frac{1}{|\set{x}|}},
         \label{eq:fixed_point_cx}
     \end{equation}
     where
     \[
-        \rhoPrior \propto \exp \left\{\sum_{\rval{x}} \pi(\xIw) \ln \Cx(\wIx) \right\}\cdot
+        \rhoPrior \propto \exp \left\{\sum_{\rval{x}} \pi(\xIw) \ln \cMass{\wIx} \right\}\cdot
     \]
 
 \end{theorem}
@@ -324,18 +331,19 @@
     \begin{align*}
         \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\Cx(\rval{x})}
         &= \sumOverix \pi(\xIw) \ln \frac{\pi(\xIw)}{\Cx(\rval{x})}\\
-        &= \sumOverix \pi(\xIw) \ln \frac{\Cx(\wIx)}{\cPrior[(\paramFuncValue)]}\\
+        &= \sumOverix \pi(\xIw) \ln \frac{\cMass{\wIx}}{\cPrior[(\paramFuncValue)]}\\
         &= \sum_i \ln \frac{\rhoPrior}{\cPrior[(\paramFuncValue])}\cdot
     \end{align*}
-    Since each $\paramFunc$ is a function of $\param$, we have
-    $\Cx(\paramFuncValue, \paramValue)=\Cx(\paramValue)$ and
+    Since each $\paramFunc$ is a function of $\param$, for $\paramFunc(\paramValue) = \paramFuncValue$
+    we have $\cMass{\paramValue, \paramFuncValue}=\cPrior$.
+    Therefore,
     \begin{equation*}
-        \cPrior[(\paramFuncValue)] = \frac{\cPrior}{\Cx(\tIw)}\cdot
+        \cPrior[(\paramFuncValue)] = \frac{\cPrior}{\cMass{\tIw}}\cdot
     \end{equation*}
     Now we rewrite Equation~\ref{eq:lambda_th_proof}:
     \begin{align*}
-        |\set{X}| \ln \cPrior &= \sum_i \ln \left(\Cx(\tIw) \rhoPrior \right) - \lambda\\
-        \cPrior &= \left( e^{-\lambda} \prod_i \Cx(\tIw) \rhoPrior \right)^{\frac{1}{|\set{x}|}} \qedhere
+        |\set{X}| \ln \cPrior &= \sum_i \ln \left(\cMass{\tIw} \rhoPrior \right) - \lambda\\
+        \cPrior &= \left( e^{-\lambda} \prod_i \cMass{\tIw} \rhoPrior \right)^{\frac{1}{|\set{x}|}} \qedhere
     \end{align*}
 \end{proof}
 

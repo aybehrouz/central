@@ -1,25 +1,25 @@
-\newcommand{\XIe}{\rv[]{X} \mid \rval[]{e}}
-Assume that for an environment we have decided on a probabilistic model \M, and without any particular prior
-knowledge we have chosen a distribution $P$ from that model.
-Because of our problem requirements, we are only interested in the probability of a random variable \rv[]{X}
+Assume that in an environment we are interested in the probability of a random variable \rv[]{X}
 conditioned on an observed evidence \rval[]{e}.
-Then, we ask an expert, who is familiar with the environment, to evaluate our distribution $P$.
+We have decided on a probabilistic model \M for the environment, and without any particular prior knowledge, we have
+chosen a distribution $P$ from our model.
+We ask an expert, who is familiar with the environment, to evaluate our distribution $P$.
 Presumably, that expert has his own beliefs about the environment and thinks that we should use a different
 distribution $Q$ instead of $P$.
-So to evaluate $P$, he would try to measure how bad using the wrong distribution $P(\XIe)$ is, while
-the true distribution is $Q$.
+Consequently, to evaluate $P$, he would try to measure how bad using the wrong distribution $P(\XIe[])$ is, while he
+thinks the true distribution is $Q$.
 
-Let us assume a real number can be assigned to that quantity and denote it as $\D[\XIe]$.
-It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
-Therefore, $\D[]$ actually is a measure of the divergence of $P$ from $Q$, when $Q$ is the true distribution.
+Let us assume that a real number can be used for measuring that quantity and denote it as $\D[{\XIe[]}]$.
+It seems reasonable as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
+Therefore, $\D[]$ actually would be a measure of the divergence of $P$ from $Q$, when $Q$ is the true distribution.
 
 It turns out that if we make some assumptions about the properties of this divergence measure, up to a constant
 factor, it must be equal to the Kullback–Leibler (KL) divergence.
-Interestingly, KL divergence is closely related to the concept of entropy:
+
+Alternatively, by assuming similar properties, we can show that if we accept entropy as a measure of the uncertainty
+of a distribution, we should also accept KL divergence as the right way for measuring divergence between distributions.
 
 \begin{theorem}
-    \newcommand{\XY}{\rv[]{X}, \rv[]{Y}}
-    \newcommand{\YIX}{\rv[]{Y} \mid \rval[]{x}}
+
     Suppose that $\D[]$ is a divergence measure, defined for probability distributions $Q$ and $P$,
     which satisfies the following properties:
     \begin{description}
@@ -28,7 +28,7 @@ Interestingly, KL divergence is closely related to the concept of entropy:
         entropy.
         \item[Additivity] For any two random variables $\XY$
         \[
-            \D[\XY] = \D + \sumx \D[\YIX]Q(\rval[]{x})\cdot
+            \D[\XY] = \D + \sumx \D[\YIx]Q(\rval[]{x})\cdot
         \]
     \end{description}
     Then, $\D[]$ is the Kullback-Leibler divergence.
@@ -84,20 +84,23 @@ distribution.
 The more the divergence is, the less the entropy should be.
 
 The second property tells us that the divergence is an additive quantity.
-We know that the divergence of $P(X,Y)$ from $Q(X,Y)$ is actually a measure of the generic loss of using $P(X,Y)$
-when we believe $Q(X,Y)$ is the true distribution.
-To calculate this loss, we can assume that $X$ happens before $Y$.
-In that way, this loss would include the loss of using $P(X)$, and then if we observe $X = x$, which can happen with
-probability $Q(x)$, it would also include the loss of using $P(Y \mid x)$.
-This property tells us that the right way for combining these individual terms is the addition.
+We know that the divergence of $P(\XY)$ from $Q(\XY)$ is actually a measure of the generic loss of using $P(\XY)$
+when we believe $Q(\XY)$ is the true distribution.
+To calculate this loss, we can assume that \rv[]{X} happens before \rv[]{Y}.
+In that way, this loss would include the loss of using $P(\rv[]{X})$, and then, if we observe
+$\rv[]{X} = \rval[]{x}$, which can happen with probability $Q(\rval[]{x})$, it would also include the loss of
+using $P(\YIx)$.
+This property indicates that for combining these individual terms we should use addition.
 
-Back to our example, the expert provides D as a measure of how good our distribution $P$ is.
-What if we find a distribution $C$ that every expert thinks is a good distribution?
-In other words $\D[]$ is a small value for any $Q$.
-This is very similar to the concept of bayesian convergence when the posterior converges to a distribution regardless
-of the prior distribution.
-Even if we can not find a dist that has a small divergence, still using the distribution that minimizes that amount
-seems a reasonable choice.
+Returning to our earlier discussion, this implies that to evaluate $P$ our expert should use the KL divergence
+between $P$ and $Q$.
+What if we find a distribution $C$ that has a small KL divergence from any other distribution in our model?
+In that way, every expert would agree that our distribution is a good choice.
+Interestingly, this relates to the concept of Bayesian convergence, where the posterior probability converges to the
+same distribution regardless of the prior distribution.
+
+Even if we cannot find a distribution that has a small divergence, still using the distribution that
+minimizes this quantity seems a reasonable choice.
 
 \begin{definition}[Central Distribution]
     Let $\Xpairs$ be a set of pairs of discrete random
@@ -108,7 +111,7 @@ seems a reasonable choice.
         \label{eq:div_measure}
     \end{equation}
     where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and each $\Dcond$ is the Kullback-Leibler divergence
-    between $P(\rv{X}|\rval{E})$ and $Q(\rv{X}|\rval{E})$:
+    between $P(\XIe)$ and $Q(\XIe)$:
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]

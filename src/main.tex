@@ -63,9 +63,17 @@
 \newcommand{\sumOverix}{\sum_i \sum_{\rval{x}}}
 \newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
-\newcommand{\xe}{\rval{x}, \rval{e}}
-\newcommand{\XIE}{\rv{X} \mid \rv{E}}
-\newcommand{\xIe}{\rval{x} \mid \rval{e}}
+
+\newcommand{\XE}[1][i]{\rv[#1]{x}, \rv[#1]{e}}
+\newcommand{\xe}[1][i]{\rval[#1]{x}, \rval[#1]{e}}
+
+\newcommand{\XIE}[1][i]{\rv[#1]{x} \mid \rv[#1]{e}}
+\newcommand{\XIe}[1][i]{\rv[#1]{x} \mid \rval[#1]{e}}
+\newcommand{\xIe}[1][i]{\rval[#1]{x} \mid \rval[#1]{e}}
+
+\newcommand{\XY}{\rv[]{X}, \rv[]{Y}}
+\newcommand{\YIx}{\rv[]{Y} \mid \rval[]{x}}
+
 \newcommand{\xIt}{\rval{x} \mid \paramValue}
 \newcommand{\xet}{\rval{x}, \rval{e}, \paramValue}
 \newcommand{\xIet}{\rval{x} \mid \rval{e},  \paramValue}
@@ -90,7 +98,7 @@
 
 \newcommand{\rvEq}[1][x]{\rv[]{#1} = \rval[]{#1}}
 \newcommand{\Xpairs}{
-    \set{X} = \left\{(\rv[1]{X}, \rv[1]{E}), (\rv[2]{X}, \rv[2]{E}), \dots \right\}
+    \set{X} = \left\{(\XE[1]), (\XE[2]), \dots \right\}
 }
 \newcommand{\Xsingles}{
     \set{X} = \left\{\rv[1]{X}, \rv[2]{X}, \rv[3]{X}, \dots \right\}

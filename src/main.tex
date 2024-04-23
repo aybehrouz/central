@@ -12,7 +12,8 @@
 \usepackage{xspace}
 \usepackage{xargs}
 \usepackage{xifthen}
-\usepackage{amssymb} % should be the last import
+\usepackage{amssymb}
+\usepackage{xcolor} % should be the last import
 
 
 
@@ -38,8 +39,9 @@
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
 \newcommand{\Cx}{\ensuremath{C_\set{X}}\xspace}
 \newcommand{\cPrior}[1][(\paramValue)]{c_\set{x}#1}
-\newcommand{\cMass}[1]{c_\set{X}(#1)}
-\newcommand{\rhoPrior}[1][(\paramFuncValue)]{\rho#1}
+\newcommand{\prior}{p(\paramValue)}
+\newcommand{\cMass}{c_\set{X}}
+\newcommand{\rhoPrior}[1][(\paramB \mid \paramA)]{\rho#1}
 
 
 \newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
@@ -51,12 +53,13 @@
 \newcommand{\paramRange}{\theta}
 \newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
 \newcommand{\prob}[2][P]{#1(\vval{#2})}
-\newcommand{\Ex}[2]{\measure{E}_#1 \left[#2\right]}
+\newcommand{\Ex}[2]{\measure{E}_{#1} \left[ #2 \right]}
 \newcommandx{\Pcond}[3][1=P, 2=\rval{x}_i, 3=\rval{e}_i]{#1 \left(#2 \mid #3 \right)}
 
 
 \newcommand{\DxP}{\measure{D}_\set{X}\left[ P \right]}
-\newcommand{\sumOverixe}{\sum_i \sum_{\rval{x}, \rval{e}}}
+\newcommand{\sumOverxe}{\sum_{\rval{x}, \rval{e}}}
+\newcommand{\sumOverixe}{\sum_i \sumOverxe}
 \newcommand{\sumOverix}{\sum_i \sum_{\rval{x}}}
 \newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
@@ -73,6 +76,18 @@
 \newcommand{\eIt}{\rval{e} \mid \paramValue}
 \newcommand{\xIw}{\rval{x} \mid \paramFuncValue}
 \newcommand{\wIx}{\paramFuncValue \mid \rval{x}}
+\newcommand{\paramB}{\rval{\beta}}
+\newcommand{\paramA}{\rval{\alpha}}
+\newcommand{\xIeb}{\pi(\rval{x} \mid \rval{e}, \paramB)}
+\newcommand{\xIebFull}{\pi(\rval{x} \mid \rval{e}, \beta)}
+\newcommand{\xeIba}{\pi(\rval{x}, \rval{e} \mid \paramA, \paramB)}
+\newcommand{\bIxe}[1][\cMass]{#1(\paramB \mid \rval{x}, \rval{e})}
+\newcommand{\bIa}[1][\cMass]{#1(\paramB \mid \paramA)}
+\newcommand{\bIaRoot}[1][\cMass]{#1(\beta \mid \alpha)}
+\newcommand{\abIab}{\cMass(\alpha, \beta \mid \paramA, \paramB)}
+\newcommand{\aIa}{\cMass(\alpha \mid \paramA)}
+
+
 \newcommand{\rvEq}[1][x]{\rv[]{#1} = \rval[]{#1}}
 \newcommand{\Xpairs}{
     \set{X} = \left\{(\rv[1]{X}, \rv[1]{E}), (\rv[2]{X}, \rv[2]{E}), \dots \right\}

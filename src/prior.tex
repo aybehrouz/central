@@ -1,9 +1,105 @@
-\begin{definition}[Probabilistic Model]
-    We define a \emph{probabilistic model} \M as a pair $\left(\set{S}, \set{P}\right)$, where \set{S} is a sample
-    space, and \set{P} is a set of probability measures on \set{S}.
-\end{definition}
+\newcommand{\XIe}{\rv[]{X} \mid \rval[]{e}}
+Assume that for an environment we have decided on a probabilistic model \M, and without any particular prior
+knowledge we have chosen a distribution $P$ from that model.
+Because of our problem requirements, we are only interested in the probability of a random variable \rv[]{X}
+conditioned on an observed evidence \rval[]{e}.
+Then, we ask an expert, who is familiar with the environment, to evaluate our distribution $P$.
+Presumably, that expert has his own beliefs about the environment and thinks that we should use a different
+distribution $Q$ instead of $P$.
+So to evaluate $P$, he would try to measure how bad using the wrong distribution $P(\XIe)$ is, while
+the true distribution is $Q$.
 
-\begin{definition}[Divergence Measure]
+Let us assume a real number can be assigned to that quantity and denote it as $\D[\XIe]$.
+It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
+Therefore, $\D[]$ actually is a measure of the divergence of $P$ from $Q$, when $Q$ is the true distribution.
+
+It turns out that if we make some assumptions about the properties of this divergence measure, up to a constant
+factor, it must be equal to the Kullback–Leibler (KL) divergence.
+Interestingly, KL divergence is closely related to the concept of entropy:
+
+\begin{theorem}
+    \newcommand{\XY}{\rv[]{X}, \rv[]{Y}}
+    \newcommand{\YIX}{\rv[]{Y} \mid \rval[]{x}}
+    Suppose that $\D[]$ is a divergence measure, defined for probability distributions $Q$ and $P$,
+    which satisfies the following properties:
+    \begin{description}
+        \item[Consistency with entropy] If $U$ is the uniform distribution with the same support
+        as $Q$, then $\D[][Q][U] = \entropy{U}{} - \entropy{Q}{}$, where $\entropy{}{}$ denotes Shannon’s
+        entropy.
+        \item[Additivity] For any two random variables $\XY$
+        \[
+            \D[\XY] = \D + \sumx \D[\YIX]Q(\rval[]{x})\cdot
+        \]
+    \end{description}
+    Then, $\D[]$ is the Kullback-Leibler divergence.
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\T}{\varOmega}
+    \renewcommand{\t}{\omega}
+    \newcommand{\tIx}{\t \mid \rval[]{x}}
+    \newcommand{\TIx}{\T \mid \rval[]{x}}
+    \newcommand{\TX}{\T, \rv[]{x}}
+    \newcommand{\tx}{\t, \rval[]{x}}
+    \newcommand{\tent}[1]{\int q(#1) \ln q(#1) d\t}
+
+    \newcommand{\Qx}{Q(\rval[]{x})}
+    Let \rv[]{X} be a discrete random variable, and $P(\rv[]{X})$ and $Q(\rv[]{X})$ be two arbitrary distributions
+    for \rv[]{X}.
+    We define a new continuous random variable $\T$ and define
+    \begin{equation*}
+        p(\T = \t \mid \rvEq) =
+        \begin{cases}
+            \frac{1}{P(\rval[]{x})} & 0 \leq \t \leq P(\rvEq),\\
+            0 & \text{otherwise}\cdot
+        \end{cases}
+    \end{equation*}
+    Notice that both $P(\T \mid \rv[]{x})$ and $P(\TX)$ are uniform distributions, and
+    $\entropy{P}{\TIx} = \ln P(\rval[]{x})$, $\entropy{P}{\TX} = 0$.
+
+    We define $Q(\TIx)$ to be an arbitrary distribution that has the same support as $P(\TIx)$.
+    This ensures that $Q(\TX)$ and $P(\TX)$ have the same support as well.
+    Thus, we have
+    \begin{align*}
+        \Dcond[][][\TX][\TX] &= \entropy{P}{\TX} - \entropy{Q}{\TX}\\
+        &= \sumx \tent{\tx}\\
+        &= \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
+    \end{align*}
+    and
+    \begin{align*}
+        \Dcond[][][\TIx][\TIx] &= \entropy{P}{\TIx} - \entropy{Q}{\TIx}\\
+        &= \ln P(\rval[]{x}) + \tent{\tIx}\cdot
+    \end{align*}
+    Now, we use the additivity property to obtain a formula for our divergence measure:
+    \begin{align*}
+        \D &= \D[\TX] - \sumx \D[\TIx]\Qx \\
+        &= \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(\rval[]{x}) \right)\\
+        &= \sumx \Qx  \left( \ln \Qx \int q(\tIx) d\t - \ln P(\rval[]{x}) \right)\\
+        &= \sumx \Qx \ln \frac{\Qx}{P(\rval[]{x})}\cdot \qedhere
+    \end{align*}
+\end{proof}
+
+The first property simply states that the entropy of a distribution is related to the divergence of the uniform
+distribution.
+The more the divergence is, the less the entropy should be.
+
+The second property tells us that the divergence is an additive quantity.
+We know that the divergence of $P(X,Y)$ from $Q(X,Y)$ is actually a measure of the generic loss of using $P(X,Y)$
+when we believe $Q(X,Y)$ is the true distribution.
+To calculate this loss, we can assume that $X$ happens before $Y$.
+In that way, this loss would include the loss of using $P(X)$, and then if we observe $X = x$, which can happen with
+probability $Q(x)$, it would also include the loss of using $P(Y \mid x)$.
+This property tells us that the right way for combining these individual terms is the addition.
+
+Back to our example, the expert provides D as a measure of how good our distribution $P$ is.
+What if we find a distribution $C$ that every expert thinks is a good distribution?
+In other words $\D[]$ is a small value for any $Q$.
+This is very similar to the concept of bayesian convergence when the posterior converges to a distribution regardless
+of the prior distribution.
+Even if we can not find a dist that has a small divergence, still using the distribution that minimizes that amount
+seems a reasonable choice.
+
+\begin{definition}[Central Distribution]
     Let $\Xpairs$ be a set of pairs of discrete random
     variables in a probabilistic model \model.
     We define the \emph{divergence measure of $P \in \set{P}$ for \set{X}} as follows:
@@ -41,8 +137,6 @@
         \label{eq:parametric}
     \end{equation}
     while $\pi$ is a known probability distribution.
-
-
 \end{definition}
 
 
@@ -344,6 +438,79 @@
     \begin{align*}
         |\set{X}| \ln \cPrior &= \sum_i \ln \left(\cMass{\tIw} \rhoPrior \right) - \lambda\\
         \cPrior &= \left( e^{-\lambda} \prod_i \cMass{\tIw} \rhoPrior \right)^{\frac{1}{|\set{x}|}} \qedhere
+    \end{align*}
+\end{proof}
+
+
+\begin{theorem}
+    Let \pmodel be a generic parametric model, and $\Xpairs$ be a set of random variables in \Mt.
+    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \rv{X},
+    so that for $\paramFuncValue = \paramFunc(\paramValue)$ we have:
+    \begin{equation}
+        \pi(\xIt) = \pi \left( \rval{x} \mid \paramFuncValue \right)\cdot
+        \label{eq:func_of_theta}
+    \end{equation}
+    The prior distribution corresponding to the central distribution for \set{X} in \Mt can be characterized
+    by the following fixed point equation:
+    \begin{equation}
+        \bIaRoot \propto \left( \prod_i \frac{\abIab \rhoPrior}{\aIa} \right)^{\frac{1}{|\set{x}|}},
+        \label{eq:fixed_point_cx}
+    \end{equation}
+    where
+    \[
+        \rhoPrior \propto \exp \left\{ \sumOverxe \xeIba \ln \bIxe \right\} \cdot
+    \]
+
+\end{theorem}
+
+\begin{proof}
+    First, we show that the set of distributions of each \rv{X} is a convex set.
+    Let $Q^*(\xIe) = \convexCond{\xIe}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
+    arbitrary $i, \xe$.
+
+    \Mt is a parametric model.
+    Therefore,
+    \begin{align*}
+        Q^*(\xIe) &= \alpha \int \xIebFull q_1(\beta \mid \rval {e}) d\beta + (1 - \alpha) \margDist[q_2]{\rval{x}}\\
+        &= \int \pi(\xIt) (\convexCond[q]{\paramValue}) d\paramValue\cdot
+    \end{align*}
+    $\convexCond[q]{\paramValue}$ is a valid prior distribution and \Mt is a generic parametric model.
+    That implies $Q^* \in \set{P}$.
+
+    Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies
+    \begin{equation}
+        \Dparam[\Cx] = \lambda\cdot
+        \label{eq:lambda_th_proof}
+    \end{equation}
+    Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
+    \begin{align*}
+        \lambda
+        &= \Dparam[\Cx]\\
+        &= \sumOverixe \xeIba \ln \frac{\xIeb}{\Cx(\xIe)} \\
+        &= \sumOverixe \xeIba \ln \frac{\bIxe}{\cMass(\paramB \mid \rval{e})} \\
+        &= \sum_i \ln \frac{\rhoPrior}{\bIa}\cdot
+    \end{align*}
+    Since each $\paramFunc$ is a function of $\param$, for $\paramFunc(\paramValue) = \paramFuncValue$
+    we have $\cMass{\paramValue, \paramA, \paramB}=\cPrior$ $\cMass{\alpha , \paramA} = \cMass{\alpha}$.
+    Therefore,
+    \begin{equation*}
+        \bIa = \frac{\aIa}{\abIab} \bIaRoot \cdot
+    \end{equation*}
+    Now we rewrite Equation~\ref{eq:lambda_th_proof}:
+    \[
+        |\set{X}| \ln \bIaRoot = -\lambda + \sum_i \ln \frac{\abIab \rhoPrior}{\aIa}
+    \]
+    Then:
+    \begin{align*}
+        \bIaRoot
+        &= \left( e^{-\lambda} \prod_i \frac{\abIab \rhoPrior}{\aIa} \right)^{\frac{1}{|\set{x}|}} \\
+        &= \left( e^{-\lambda} \prod_i \frac{\bIaRoot \rhoPrior}{\bIa} \right)^{\frac{1}{|\set{x}|}} \\
+        &= \bIaRoot \left( \prod_i \frac{ \rhoPrior}{\bIa} \right)^{\frac{1}{|\set{x}|}} \\
+        &= \bIaRoot \left(e^{-\lambda} \prod_i
+        \frac{\rhoPrior[(\paramA, \paramB) \cMass(\paramA)]}{\cMass(\paramA, \paramB) \rhoPrior[(\paramA)] } \right)
+        ^{\frac{1
+        }{|\set{x}|}}
+        \qedhere
     \end{align*}
 \end{proof}
 

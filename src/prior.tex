@@ -5,26 +5,25 @@ chosen a distribution $P$ from our model.
 We ask an expert, who is familiar with the environment, to evaluate our distribution $P$.
 Presumably, that expert has his own beliefs about the environment and thinks that we should use a different
 distribution $Q$ instead of $P$.
-Consequently, to evaluate $P$, he would try to measure how bad using the wrong distribution $P(\XIe[])$ is, while he
+Therefore, to evaluate $P$, he would try to measure how bad using the wrong distribution $P(\XIe[])$ is, while he
 thinks the true distribution is $Q$.
 
 Let us assume that a real number can be used for measuring that quantity and denote it as $\D[{\XIe[]}]$.
 It seems reasonable as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
-Therefore, $\D[]$ actually would be a measure of the divergence of $P$ from $Q$, when $Q$ is the true distribution.
+Therefore, $\D[]$ effectively is a measure of the divergence of $P$ from $Q$, when $Q$ is the true distribution.
 
 It turns out that if we make some assumptions about the properties of this divergence measure, up to a constant
 factor, it must be equal to the Kullback–Leibler (KL) divergence.
-
-Alternatively, by assuming similar properties, we can show that if we accept entropy as a measure of the uncertainty
-of a distribution, we should also accept KL divergence as the right way for measuring divergence between distributions.
+Or in an alternative derivation, by adopting a more minimal set of properties, we can show that if we accept
+Shannon’s entropy as a measure of the uncertainty of a distribution, we should also accept KL divergence as the right
+way for measuring divergence between distributions:
 
 \begin{theorem}
-
     Suppose that $\D[]$ is a divergence measure, defined for probability distributions $Q$ and $P$,
     which satisfies the following properties:
     \begin{description}
         \item[Consistency with entropy] If $U$ is the uniform distribution with the same support
-        as $Q$, then $\D[][Q][U] = \entropy{U}{} - \entropy{Q}{}$, where $\entropy{}{}$ denotes Shannon’s
+        as $Q$, then $\D[][Q][U] = \entropy{U}{} - \entropy{Q}{}$, where $\entropy{}{}$ denotes Shannon's
         entropy.
         \item[Additivity] For any two random variables $\XY$
         \[
@@ -79,8 +78,8 @@ of a distribution, we should also accept KL divergence as the right way for meas
     \end{align*}
 \end{proof}
 
-The first property simply states that the entropy of a distribution is related to the divergence of the uniform
-distribution.
+In this theorem, the first property simply states that the entropy of a distribution is related to the divergence of
+the uniform distribution.
 The more the divergence is, the less the entropy should be.
 
 The second property tells us that the divergence is an additive quantity.
@@ -99,8 +98,8 @@ In that way, every expert would agree that our distribution is a good choice.
 Interestingly, this relates to the concept of Bayesian convergence, where the posterior probability converges to the
 same distribution regardless of the prior distribution.
 
-Even if we cannot find a distribution that has a small divergence, still using the distribution that
-minimizes this quantity seems a reasonable choice.
+Even if we cannot find a distribution that has a small divergence from every distribution, still using the distribution
+that minimizes the maximum divergence seems a reasonable choice.
 
 \begin{definition}[Central Distribution]
     Let $\Xpairs$ be a set of pairs of discrete random
@@ -131,17 +130,7 @@ minimizes this quantity seems a reasonable choice.
     \end{equation*}
 \end{proposition}
 
-\begin{definition}[Parametric Model]
-    Let $\param$ be a random vector.
-    A parametric model is a probabilistic model \pmodel, where for every $P \in \set{P}$ there is a prior probability
-    distribution $p$, such that for every $\rval[]{s} \in \set{s}$
-    \begin{equation}
-        \paramDist{\rval[]{s}},
-        \label{eq:parametric}
-    \end{equation}
-    while $\pi$ is a known probability distribution.
-\end{definition}
-
+In this definition \set{x} plays a crucial role.
 
 \begin{lemma}
     \label{lm:DxP_uppper_bound}

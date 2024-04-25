@@ -51,7 +51,7 @@ We say a sequence of random variables $\seq$ is exchangeable if the ordering of 
 useful information.
 In other words, for an exchangeable sequence of random variables, the joint probability is the same
 for any permutation of variables, and this property holds for every subset of the sequence.
-For example, if each $X_i$ is a binary variable, the joint probability depends only on the total number of 1s
+For example, if each \rv{x} is a binary variable, the joint probability depends only on the total number of 1s
 and 0s, and the exact ordering of them is irrelevant.
 
 When a sequence of random variables is exchangeable, de Finetti's theorem states that their joint probability has a
@@ -62,11 +62,22 @@ special representation:
 \end{equation*}
 This means exchangeable observations are conditionally independent relative to some latent parameter $\paramValue$.
 
-Moreover, the theorem states that if each $X_i$ is discrete, $\post$ would be the multinomial distribution.
+Moreover, the theorem states that if each \rv{x} is discrete, $\post$ would be the multinomial distribution.
 So in our decision-making problem, if the evidence $e$ is a sequence of previous experiences of the
 environment $\seq$, and if we assume that our environment does not change over time so that this sequence is
 exchangeable, then to fully determine $\envDist$, we only need to determine the prior probability of our latent
 parameter $\prior$.
+
+\begin{definition}[Parametric Model]
+    Let $\param$ be a random vector.
+    A parametric model is a probabilistic model \pmodel, where for every $P \in \set{P}$ there is a prior probability
+    distribution $p$, such that for every $\rval[]{s} \in \set{s}$
+    \begin{equation}
+        \paramDist{\rval[]{s}},
+        \label{eq:parametric}
+    \end{equation}
+    while $\pi$ is a known probability distribution.
+\end{definition}
 
 Clearly, one way to select a suitable prior distribution $\prior$ is to use some prior knowledge about the
 environment.
@@ -79,7 +90,7 @@ excluded values.
 Unfortunately, arguments like this one can only rule out a small portion of the possible distributions for $\prior$,
 and we are left with many options while it remains unclear which one we should select.
 
-In this discussion, we will explore an approach to selecting a suitable prior distribution when we lack prior knowledge
-about the environment.
+In this discussion, we will explore a new approach to selecting a suitable prior distribution when we lack prior
+knowledge about the environment.
 
 

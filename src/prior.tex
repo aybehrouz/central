@@ -130,17 +130,36 @@ that minimizes the maximum divergence seems a reasonable choice.
     \end{equation*}
 \end{proposition}
 
-In this definition \set{x} plays a crucial role.
+For a parametric model (as defined in Definition~\ref{def:param-model}), it seems reasonable to define a conditional
+form of our divergence measure, conditioned on the value of the parameter.
+To do so, in Equation~\ref{eq:div_measure}, we replace normal expectation with conditional expectation.
+Since in a parametric model the parameter fully determines the distribution of the sample space,
+there is no longer a need to maximize over different distributions.
+
+\begin{definition}[Conditional Divergence Measure]
+    Assume that \pmodel is a parametric model, and $\Xpairs$ is a set of pairs of discrete random variables.
+    We define the \emph{divergence measure of $P \in \set{P}$ given $\paramValue$ for \set{X}} as follows:
+    \begin{align}
+        \DxPcond &= \DExparam \\
+        &= \Dparam \cdot
+        \label{eq:cond_div_measure}
+    \end{align}
+\end{definition}
+
+In a parametric model, the maximum of divergence happens for a prior distribution
+that is concentrated at a single value of the parameter $\paramValue$.
+That means, for a parametric model that allows any high peak prior, instead of maximizing over the set of
+all acceptable distributions, we can simply maximize over the parameter space, using the conditional version
+of the divergence measure.
 
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
     Assume that \pmodel is a parametric model.
     Let $\Xpairs$ be a set of discrete random variable pairs in \Mt.
     For every $P \in \set{P}$ we have
-    \begin{align*}
-        \DxP &\leq \tmax \DExparam\\  \label{eq:DxP_upper_bound}
-        &= \tmax \Dparam\cdot
-    \end{align*}
+    \begin{equation*}
+        \DxP \leq \tmax \DxPcond
+    \end{equation*}
 \end{lemma}
 
 \begin{proof}
@@ -157,7 +176,7 @@ In this definition \set{x} plays a crucial role.
     Since this inequality holds for any $\paramValue$, the maximum of the right-hand side
     is also greater than or equal to the maximum of the left-hand side w.r.t. $\paramValue$:
     \begin{equation}
-        \tmax \RP \leq \tmax \DExparam\cdot
+        \tmax \RP \leq \tmax \DxPcond \cdot
         \label{eq:ineq-theorem1}
     \end{equation}
 
@@ -176,19 +195,19 @@ In this definition \set{x} plays a crucial role.
     \]
     Now from Inequality~\ref{eq:ineq-theorem1}, for \emph{any} distribution $P$ and $R$ in \Mt, it follows that
     \[
-        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \DExparam,
+        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \DxPcond,
     \]
-    which proves the theorem.
+    which proves the lemma.
 \end{proof}
 
 \begin{theorem}
     \label{th:Dx_parametric_form}
-    Let \pmodel be a parametric model and $\set{X}$ be a set of pairs of discrete random variables in \Mt.
+    Let \pmodel be a parametric model, and $\Xpairs$ be a set of pairs of discrete random variables in \Mt.
     If for every value of $\paramValue$ there is a distribution $R \in \set{P}$ such that
     $R(\rval[]{s}) = \pi(\rval[]{s} \mid \paramValue)$ for every $\rval[]{s} \in \set{S}$,
     then for any $P \in \set{P}$ we have:
     \begin{equation}
-        \DxP = \tmax \DExparam\cdot
+        \DxP = \tmax \DxPcond\cdot
         \label{eq:div_parametric}
     \end{equation}
     \label{th:div_for_parametric}
@@ -199,7 +218,8 @@ In this definition \set{x} plays a crucial role.
     \[
         \paramValue^* = \arg\tmax \DExparam\cdot
     \]
-    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\cdot \mid \paramValue^*)$, and we can write
+    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\rval[]{s} \mid \paramValue^*)$
+    for every $\rval[]{s} \in \set{S}$, and therefore defines the same distribution for any random variable:
     \[
         \Ex{R}{\sum_i \Dcond[R]} = \DExparam[\paramValue^*]\cdot
     \]
@@ -209,7 +229,7 @@ In this definition \set{x} plays a crucial role.
     \]
     Thus,
     \[
-        \DxP \geq \tmax \DExparam\cdot
+        \DxP \geq \tmax \DxPcond\cdot
     \]
     This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
@@ -254,11 +274,11 @@ In this definition \set{x} plays a crucial role.
     \end{equation}
     In this model, the central distribution for $\set{X}$ can be obtained by:
     \begin{align}
-        \Cx &= \arg\pmax \int \DExparam \dt\\
+        \Cx &= \arg\pmax \int \DxPcond \dt\\
         &= \arg\pmax \Dminimax,
         \label{eq:Cx_by_max}
     \end{align}
-    where $p(\xet) = \pi(\xeIt) p(\paramValue)$.
+    where $\paramDist[p]{\rval[]{s}}$, for every $\rval[]{s} \in \set{s}$.
 \end{theorem}
 
 \begin{proof}
@@ -372,6 +392,56 @@ In this definition \set{x} plays a crucial role.
         \Dparam[\Cx] = \lambda\cdot \qedhere
     \]
 \end{proof}
+
+Let us consider predicting the outcome of a four-sided dice. This dice is unfair, with each face marked by a binary
+number: $00$, $01$, $10$, and $11$.
+Before making our prediction, we can roll the dice for several times and use the results to learn the associated
+probabilities.
+We assume that the dice rolls are independent.
+
+In a prediction problem, we seek the probability of the random variable we want to predict,
+conditioned on the observed data.
+For example, if we roll the dice for three times before making our prediction,
+we are interested in $P(\rv[4]{x} \mid \rv[1]{x},\rv[2]{x},\rv[3]{x})$, where \rv{x} denotes the outcome
+of the $i$-th dice roll.
+
+To find a central distribution for our problem, we first need to define our set of pairs of random variables $\Xpairs$.
+One natural way for doing this, is to let each \rv{x} be the outcome of the $i$-th dice
+roll, and define each \rv{e} as a vector of the previous dice outcomes $(\rv[1]{x},\rv[2]{x}, \dots, \rv[i-1]{x})$.
+
+Now let us rewrite Equation~\ref{eq:cond_div_measure} for our defined \set{x} set:
+\newcommand{\seqvalxx}{\rval[1]{x}, \rval[2]{x}}
+\newcommand{\seqvaldots}[1]{\rval[1]{x}, \cdots, \rval[{#1}]{x}}
+\begin{align*}
+    \DxPcond &= \KLcond{\rval[1]{x}}{} \\
+    &+ \KLcond{\rval[2]{x}}{\rval[1]{x}} \\
+    &+ \KLcond{\rval[3]{x}}{\seqvalxx} \\
+    &+ \ \cdots \\
+    &+ \KLcond{\rval[n]{x}}{\seqvaldots{n-1}}\cdot
+\end{align*}
+Since extra variables will be marginalized in a probability distribution,
+we can factor out $\pi(\seqvaldots{n} \mid \paramValue)$ from each term:
+\begin{align*}
+    \DxPcond &=
+    \sum_{\seqvaldots{n}} \pi(\seqvaldots{n} \mid \paramValue) \ln
+    \frac
+    {\pi(\rval[1]{x} \mid \paramValue) \pi(\rval[2]{x} \mid \rval[1]{x}, \paramValue)
+    \cdots \pi(\rval[n]{x} \mid \seqvaldots{n-1}, \paramValue)}
+    {P(\rval[1]{x}) P(\rval[2]{x} \mid \rval[1]{x}) \cdots P(\rval[n]{x} \mid \seqvaldots{n-1})} \\
+    &= \sum_{\seqvaldots{n}} \pi(\seqvaldots{n} \mid \paramValue) \ln
+    \frac{\pi(\seqvaldots{n} \mid \paramValue)}{P(\seqvaldots{n})}
+\end{align*}
+
+Now by Equation~\ref{eq:Cx_by_max} for the central distribution we have
+\begin{align*}
+    \Cx &= \arg\max_{} \int \sum_{\seqvaldots{n}} p(\seqvaldots{n}, \paramValue) \ln
+    \frac{\pi(\seqvaldots{n} \mid \paramValue)}{P(\seqvaldots{n})} d\paramValue \\
+    &= \arg\max_{} \int \sum_{\seqvaldots{n}} p(\seqvaldots{n}, \paramValue) \ln
+    \frac{p(\paramValue \mid \seqvaldots{n})}{p(\paramValue)} d\paramValue
+\end{align*}
+
+That means, the central distribution for our problem is the same distribution as when we use the reference
+prior~\cite{BERNARDO200517} for our main parameter.
 
 \begin{theorem}
     Let \pmodel be a generic parametric model, and $\Xsingles$ be a set of random variables in \Mt.

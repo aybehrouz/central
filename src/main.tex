@@ -58,6 +58,7 @@
 
 
 \newcommand{\DxP}{\measure{D}_\set{X}\left[ P \right]}
+\newcommand{\DxPcond}{\measure{D}_\set{X}\left[ P \mid \paramValue \right]}
 \newcommand{\sumOverxe}{\sum_{\rval{x}, \rval{e}}}
 \newcommand{\sumOverixe}{\sum_i \sumOverxe}
 \newcommand{\sumOverix}{\sum_i \sum_{\rval{x}}}
@@ -95,7 +96,6 @@
 \newcommand{\abIab}{\cMass(\alpha, \beta \mid \paramA, \paramB)}
 \newcommand{\aIa}{\cMass(\alpha \mid \paramA)}
 
-
 \newcommand{\rvEq}[1][x]{\rv[]{#1} = \rval[]{#1}}
 \newcommand{\Xpairs}{
     \set{X} = \left\{(\XE[1]), (\XE[2]), \dots \right\}
@@ -128,15 +128,18 @@
 }
 \newcommand{\Dminimax}[1][P]{\int \sumOverixe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
 
-\newcommandx{\KLparam}[5][1=P, 2=\pi, 3=x, 4=e, 5={e,\theta}]{
-    \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in\range{#4}}
-    \pi(\vval{#3}, \vval{#4} \mid \vval{\theta})
-    \ln \frac{#2\left(\vval{#3} \mid \vval{#5}\right)} {#1\left(\vval{#3} \mid \vval{#4}\right)}
+\newcommand{\KLcond}[3][P]{
+    \ifthenelse{\isempty{#3}}
+    {
+        \sum_{#2} \pi(#2 \mid \paramValue) \ln \frac{\pi(#2 \mid \paramValue)}{#1(#2)}
+    }
+    {
+        \sum_{#2, #3}
+        \pi(#2, #3 \mid \paramValue)
+        \ln \frac{\pi\left(#2 \mid #3,\paramValue \right)} {#1\left(#2 \mid #3\right)}
+    }
 }
-\newcommandx{\KLcond}[4][1=P, 2=Q, 3=x, 4=e]{
-    \sum_{\vval{#3} \in \vrange{#3}} \sum_{\vval{#4} \in \range{#4}}
-    #2(\vval{#3}, \vval{#4}) \ln \frac{#2(\vval{#3} \mid \vval{#4})}{#1(\vval{#3} \mid \vval{#4})}
-}
+
 \newcommand{\Lagr}[1][\epsilon]{\mathcal{L} \left[#1, \lambda\right]}
 
 \newcommand{\de}[2][\epsilon]{\frac{d#2}{d#1}}
@@ -154,19 +157,8 @@
 \newcommand{\pmin}{\min_{P \in \set{P}}}
 \newcommand{\pmax}{\max_{P \in \set{P}}}
 
-\newcommand{\condb}[2]{\left[#1|#2\right]}
-\newcommand{\condp}[2]{\left(#1|#2\right)}
-\newcommand{\KL}[2]{\measure{D}_{\text{KL}}(#1 || #2)}
-\newcommand{\minmax}{\min_{P \in \set{P}} \max_{Q \in \set{P}}}
 
 
-\newcommand{\E}{\measure{E}}
-
-
-\newcommand{\ED}[3]{\E_#3 \left[ \D{#1}{#2} \right]}
-\newcommand{\sumover}[1]{\sum_{#1 \in \range{#1}}}
-\newcommand{\PQdive}[2]{\ln \frac{Q(#1 \mid #2)}{P(#1 \mid #2)}Q(#1, #2)}
-\newcommand{\aug}[1]{#1^*}
 
 
 % Document

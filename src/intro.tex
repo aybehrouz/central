@@ -7,39 +7,39 @@
 
 \newcommand{\util}{U(a, x)}
 \newcommand{\envDist}{P^*}
-\newcommand{\seq}{X_1,X_2,\cdots}
 \newcommand{\post}{\pi(x_i \mid \paramValue)}
 
-Assume that in an environment, an agent must choose an action from a set of available actions.
-The utility of this action for the agent can be expressed as a real-valued function and depends on the unknown state
-of the environment.
-More precisely, if we denote the action as $a$ and the state of the environment as $x$, the utility of
-each action for the agent is a real-valued function $\util$.
-We further assume that an evidence $e$ of the environment state exists, and our agent can leverage this
+
+Consider an environment where an agent must select an action from a set of available actions. The utility of each
+action for the agent can be expressed as a real-valued function, which depends on the unknown state of the environment.
+Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the environment state. The utility
+function  $\util$ quantifies the desirability of each action.
+Additionally, we assume that an evidence \rval[]{e} of the environment state exists, and our agent can leverage this
 evidence to determine the optimal action.
 
 According to Bayesian decision theory, the optimal action, when evidence $e$ is observed, is the one
 that maximizes the expected utility conditioned on $e$:
 
 \begin{equation*}
-    a_{opt} = \arg\max_a \Ex{\envDist}{\util \mid e} = \arg\max_a\sumx \util \envDist(x \mid e).
+    a_{\text{optimal}} = \arg\max_a \Ex{\envDist}{\util \mid e} = \arg\max_a\sumx \util \envDist(x \mid e).
 \end{equation*}
 Here $\envDist(\XIe[])$ is the probability distribution of the environment state given the evidence.
-But how can we get this distribution?
+However, how can we obtain this distribution?
 Is there an objective distribution inherent in the environment that we need to somehow discover?
 
 From the subjective perspective on probability, the answer is negative.
 There is no such objective distribution, and $\envDist$ exists only in our minds.
-It is a tool that helps us regulate our reasoning, and an intermediate measure which is created inside the Bayesian
-decision-making framework to ensure we stay consistent with our assumptions and common sense principles.
+It serves as a tool that helps us regulate our reasoning---an intermediate measure created within the
+Bayesian decision-making framework to ensure we stay consistent with our assumptions and common sense principles.
 
-Thus, if we accept the subjective viewpoint, $\envDist$ needs to be determined by one’s prior knowledge and assumptions.
-When we do not have any assumptions and prior knowledge, the set of candidate distributions for $\envDist$ is simply
-the set of all probability distributions.
-As we make assumptions or use our prior knowledge, the probability distributions that are not consistent
-with our assumptions are removed from this set, and the set of acceptable probability distributions gets smaller
-and smaller.
-We shall call this set a probabilistic model:
+Considering the subjective viewpoint, the determination of $\envDist$ relies on one’s prior knowledge and
+assumptions.
+When we do not have any assumptions and lack prior knowledge, the set of candidate distributions for $\envDist$ simply
+encompasses all possible probability distributions.
+As we make assumptions or obtain some prior knowledge, the probability distributions that do not align
+with our assumptions or knowledge are eliminated from this set.
+Consequently, the set of acceptable probability distributions becomes more refined. We refer to this refined
+set as a probabilistic model:
 
 \begin{definition}[Probabilistic Model]
     We define a \emph{probabilistic model} \M as a pair $\left(\set{S}, \set{P}\right)$, where \set{S} is a sample
@@ -47,26 +47,30 @@ We shall call this set a probabilistic model:
 \end{definition}
 
 One of the most commonly used assumptions in the statistical modeling is the exchangeability assumption.
-We say a sequence of random variables $\seq$ is exchangeable if the ordering of variables does not provide any
+We say a sequence of random variables $\seqRvInf$ is exchangeable if the ordering of variables does not provide any
 useful information.
 In other words, for an exchangeable sequence of random variables, the joint probability is the same
-for any permutation of variables, and this property holds for every subset of the sequence.
-For example, if each \rv{x} is a binary variable, the joint probability depends only on the total number of 1s
-and 0s, and the exact ordering of them is irrelevant.
+for any permutation of variables.
+This property holds true for every subset of the sequence.
+
+For instance, if each \rv{x} represents a binary variable, the joint probability depends solely on the total count
+of 1s and 0s, and the specific order in which these variables appear becomes irrelevant.
 
 When a sequence of random variables is exchangeable, de Finetti's theorem states that their joint probability has a
 special representation:
 
 \begin{equation*}
-    P(x_1, x_2, \cdots) = \int \prod_i\post \dt.
+    P(\seqRvalInf) = \int \prod_i\post \dt.
 \end{equation*}
-This means exchangeable observations are conditionally independent relative to some latent parameter $\paramValue$.
+This means, exchangeable observations are conditionally independent relative to some latent parameter $\paramValue$.
 
-Moreover, the theorem states that if each \rv{x} is discrete, $\post$ would be the multinomial distribution.
-So in our decision-making problem, if the evidence $e$ is a sequence of previous experiences of the
-environment $\seq$, and if we assume that our environment does not change over time so that this sequence is
-exchangeable, then to fully determine $\envDist$, we only need to determine the prior probability of our latent
-parameter $\prior$.
+Moreover, the theorem states that if each \rv{x} is discrete, the distribution $\post$ corresponds to the multinomial
+distribution.
+
+Now, consider our decision-making problem: Suppose the evidence \rval[]{e} consists of a sequence of previous experiences
+of the environment.
+If we assume that our environment remains unchanged over time (making this sequence exchangeable),
+then to fully determine $\envDist$, we only need to establish the prior probability of our latent parameter $\prior$.
 
 \begin{definition}[Parametric Model]
     \label{def:param-model}
@@ -80,18 +84,18 @@ parameter $\prior$.
     while $\pi$ is a known probability distribution.
 \end{definition}
 
-Clearly, one way to select a suitable prior distribution $\prior$ is to use some prior knowledge about the
+Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on prior knowledge about the
 environment.
 However, what if such knowledge is unavailable?
 
 It is not difficult to identify some distributions that are not good choices for $\prior$.
-For instance, any distribution that gives zero probabilities to certain values of $\paramValue$ is not a good choice,
-because if we use such a prior, no evidence can convince us that the value of $\paramValue$ lies within those
+For instance, any distribution that assigns zero probabilities to certain values of $\paramValue$ is not a good choice.
+If we use such a prior, no evidence can convince us that the value of $\paramValue$ lies within those
 excluded values.
-Unfortunately, arguments like this one can only rule out a small portion of the possible distributions for $\prior$,
-and we are left with many options while it remains unclear which one we should select.
+Unfortunately, arguments like this one can only rule out a small portion of the potential distributions for $\prior$,
+leaving us with numerous options and an unclear path for selection.
 
-In this discussion, we will explore a new approach to selecting a suitable prior distribution when we lack prior
-knowledge about the environment.
+In this discussion, we will explore a new approach for choosing an appropriate prior distribution when prior
+knowledge about the environment is lacking.
 
 

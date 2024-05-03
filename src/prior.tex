@@ -2,21 +2,22 @@ Assume that in an environment we are interested in the probability of a random v
 conditioned on an observed evidence \rval[]{e}.
 We have decided on a probabilistic model \M for the environment, and without any particular prior knowledge, we have
 chosen a distribution $P$ from our model.
-We ask an expert, who is familiar with the environment, to evaluate our distribution $P$.
-Presumably, that expert has his own beliefs about the environment and thinks that we should use a different
-distribution $Q$ instead of $P$.
-Therefore, to evaluate $P$, he would try to measure how bad using the wrong distribution $P(\XIe[])$ is, while he
+
+We ask from an expert---a person familiar with the environment---to evaluate our distribution $P$.
+Presumably, that expert has his own beliefs about the environment and thinks we should use a different
+distribution $Q$, instead of $P$.
+Consequently, for evaluating $P$, he would try to measure how bad using the wrong distribution $P(\XIe[])$ is, while he
 thinks the true distribution is $Q$.
 
-Let us assume that a real number can be used for measuring that quantity and denote it as $\D[{\XIe[]}]$.
+Let's assume that a real number can be used to measure this concept, and denote it as $\D[{\XIe[]}]$.
 It seems reasonable as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
 Therefore, $\D[]$ effectively is a measure of the divergence of $P$ from $Q$, when $Q$ is the true distribution.
 
-It turns out that if we make some assumptions about the properties of this divergence measure, up to a constant
-factor, it must be equal to the Kullback–Leibler (KL) divergence.
-Or in an alternative derivation, by adopting a more minimal set of properties, we can show that if we accept
-Shannon’s entropy as a measure of the uncertainty of a distribution, we should also accept KL divergence as the right
-way for measuring divergence between distributions:
+Interestingly, if we make certain assumptions about the properties of this divergence measure,
+it turns out that---up to a constant factor---it must be equal to the Kullback–Leibler (KL) divergence.
+Alternatively, by adopting a more minimal set of properties, we can prove that if we accept Shannon’s entropy as a
+measure of the uncertainty of a distribution, we should also consider KL divergence as the appropriate method for
+measuring divergence between distributions.
 
 \begin{theorem}
     Suppose that $\D[]$ is a divergence measure, defined for probability distributions $Q$ and $P$,
@@ -98,12 +99,12 @@ In that way, every expert would agree that our distribution is a good choice.
 Interestingly, this relates to the concept of Bayesian convergence, where the posterior probability converges to the
 same distribution regardless of the prior distribution.
 
-Even if we cannot find a distribution that has a small divergence from every distribution, still using the distribution
-that minimizes the maximum divergence seems a reasonable choice.
+\begin{definition}[Query Set]
+    A \emph{query set} is a set of pairs of discrete random variables, all defined on the same sample space.
+\end{definition}
 
-\begin{definition}[Central Distribution]
-    Let $\Xpairs$ be a set of pairs of discrete random
-    variables in a probabilistic model \model.
+\begin{definition}
+    Let $\Xpairs$, be a query set in a probabilistic model \model.
     We define the \emph{divergence measure of $P \in \set{P}$ for \set{X}} as follows:
     \begin{equation}
         \DxP = \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond},
@@ -114,13 +115,8 @@ that minimizes the maximum divergence seems a reasonable choice.
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]
-    We also define \emph{the central distribution for \set{X}} to be a distribution $C_\set{X} \in \set{P}$ which
-    minimizes the divergence measure for \set{X}:
-    \begin{equation}
-        \Cx = \arg\pmin \DxP\cdot
-        \label{eq:center}
-    \end{equation}
 \end{definition}
+
 
 \begin{proposition}
     Using the linearity of expectation, we have
@@ -130,6 +126,11 @@ that minimizes the maximum divergence seems a reasonable choice.
     \end{equation*}
 \end{proposition}
 
+In this definition, the query set $\Xpairs$ plays a crucial role.
+Specifically, \set{x} defines the set of random variables for which we are interested in their distributions.
+Each \rv{x} represents a random variable whose distribution is important to us, and each \rv{e} corresponds to the
+evidence that is available for that variable.
+
 For a parametric model (as defined in Definition~\ref{def:param-model}), it seems reasonable to define a conditional
 form of our divergence measure, conditioned on the value of the parameter.
 To do so, in Equation~\ref{eq:div_measure}, we replace normal expectation with conditional expectation.
@@ -137,7 +138,8 @@ Since in a parametric model the parameter fully determines the distribution of t
 there is no longer a need to maximize over different distributions.
 
 \begin{definition}[Conditional Divergence Measure]
-    Assume that \pmodel is a parametric model, and $\Xpairs$ is a set of pairs of discrete random variables.
+    \label{def:cond_divergence}
+    Assume that \pmodel is a parametric model, and $\Xpairs$ is a query set.
     We define the \emph{divergence measure of $P \in \set{P}$ given $\paramValue$ for \set{X}} as follows:
     \begin{align}
         \DxPcond &= \DExparam \\
@@ -146,16 +148,28 @@ there is no longer a need to maximize over different distributions.
     \end{align}
 \end{definition}
 
+Even if we cannot find a distribution that has a small divergence from every distribution, still using the distribution
+that minimizes the maximum divergence seems a reasonable choice.
+
+\begin{definition}[Central Distribution]
+    In a model \model, we define the \emph{central distribution} for a query set \set{X} to be a distribution
+    $C_\set{X} \in \set{P} $ which minimizes the divergence measure for \set{X}:
+    \begin{equation}
+        \Cx = \arg\pmin \DxP\cdot
+        \label{eq:center}
+    \end{equation}
+\end{definition}
+
 In a parametric model, the maximum of divergence happens for a prior distribution
 that is concentrated at a single value of the parameter $\paramValue$.
-That means, for a parametric model that allows any high peak prior, instead of maximizing over the set of
+That means, for a parametric model which allows any high peak prior, instead of maximizing over the set of
 all acceptable distributions, we can simply maximize over the parameter space, using the conditional version
 of the divergence measure.
 
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
     Assume that \pmodel is a parametric model.
-    Let $\Xpairs$ be a set of discrete random variable pairs in \Mt.
+    Let $\Xpairs$ be a query set in \Mt.
     For every $P \in \set{P}$ we have
     \begin{equation*}
         \DxP \leq \tmax \DxPcond
@@ -393,55 +407,117 @@ of the divergence measure.
     \]
 \end{proof}
 
-Let us consider predicting the outcome of a four-sided dice. This dice is unfair, with each face marked by a binary
-number: $00$, $01$, $10$, and $11$.
+Consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is unfair, with each
+face marked by a binary number: $00$, $01$, $10$, and $11$.
 Before making our prediction, we can roll the dice for several times and use the results to learn the associated
 probabilities.
 We assume that the dice rolls are independent.
 
-In a prediction problem, we seek the probability of the random variable we want to predict,
+Let's focus on determining the central distribution for this problem.
+The first step in this process is to establish our query set $\Xpairs$.
+
+In a prediction problem, we are interested in the distribution of the random variable we want to predict,
 conditioned on the observed data.
 For example, if we roll the dice for three times before making our prediction,
-we are interested in $P(\rv[4]{x} \mid \rv[1]{x},\rv[2]{x},\rv[3]{x})$, where \rv{x} denotes the outcome
+we will need $P(\rv[4]{x} \mid \rv[1]{x},\rv[2]{x},\rv[3]{x})$, where \rv{x} denotes the outcome
 of the $i$-th dice roll.
 
-To find a central distribution for our problem, we first need to define our set of pairs of random variables $\Xpairs$.
-One natural way for doing this, is to let each \rv{x} be the outcome of the $i$-th dice
-roll, and define each \rv{e} as a vector of the previous dice outcomes $(\rv[1]{x},\rv[2]{x}, \dots, \rv[i-1]{x})$.
+Thus, one natural way for defining a query set $\Xpairs$ for this problem is to let each \rv{x} be the outcome of
+the $i$-th dice roll, and define each \rv{e} as a vector of the previous dice outcomes $(\seqRv{i-1})$.
 
-Now let us rewrite Equation~\ref{eq:cond_div_measure} for our defined \set{x} set:
-\newcommand{\seqvalxx}{\rval[1]{x}, \rval[2]{x}}
-\newcommand{\seqvaldots}[1]{\rval[1]{x}, \cdots, \rval[{#1}]{x}}
+Now let us calculate the conditional divergence measure for \set{x} as defined in Definition~\ref{def:cond_divergence}:
+\newcommand{\seqvalxx}[1][x]{\rval[1]{#1}, \rval[2]{#1}}
 \begin{align*}
     \DxPcond &= \KLcond{\rval[1]{x}}{} \\
     &+ \KLcond{\rval[2]{x}}{\rval[1]{x}} \\
     &+ \KLcond{\rval[3]{x}}{\seqvalxx} \\
     &+ \ \cdots \\
-    &+ \KLcond{\rval[n]{x}}{\seqvaldots{n-1}}\cdot
+    &+ \KLcond{\rval[n]{x}}{\seqRval{n-1}}\cdot
 \end{align*}
-Since extra variables will be marginalized in a probability distribution,
-we can factor out $\pi(\seqvaldots{n} \mid \paramValue)$ from each term:
+We factor out $\pi(\seqRval{n} \mid \paramValue)$ from every term, then we can use the chain rule for conditional
+probability:
 \begin{align*}
     \DxPcond &=
-    \sum_{\seqvaldots{n}} \pi(\seqvaldots{n} \mid \paramValue) \ln
+    \sum_{\seqRval{n}} \pi(\seqRval{n} \mid \paramValue) \ln
     \frac
     {\pi(\rval[1]{x} \mid \paramValue) \pi(\rval[2]{x} \mid \rval[1]{x}, \paramValue)
-    \cdots \pi(\rval[n]{x} \mid \seqvaldots{n-1}, \paramValue)}
-    {P(\rval[1]{x}) P(\rval[2]{x} \mid \rval[1]{x}) \cdots P(\rval[n]{x} \mid \seqvaldots{n-1})} \\
-    &= \sum_{\seqvaldots{n}} \pi(\seqvaldots{n} \mid \paramValue) \ln
-    \frac{\pi(\seqvaldots{n} \mid \paramValue)}{P(\seqvaldots{n})}
+    \cdots \pi(\rval[n]{x} \mid \seqRval{n-1}, \paramValue)}
+    {P(\rval[1]{x}) P(\rval[2]{x} \mid \rval[1]{x}) \cdots P(\rval[n]{x} \mid \seqRval{n-1})} \\
+    &= \KLcond{\seqRval{n}}{} \cdot
 \end{align*}
-
-Now by Equation~\ref{eq:Cx_by_max} for the central distribution we have
+By Equation~\ref{eq:Cx_by_max}, for the central distribution we have
 \begin{align*}
-    \Cx &= \arg\max_{} \int \sum_{\seqvaldots{n}} p(\seqvaldots{n}, \paramValue) \ln
-    \frac{\pi(\seqvaldots{n} \mid \paramValue)}{P(\seqvaldots{n})} d\paramValue \\
-    &= \arg\max_{} \int \sum_{\seqvaldots{n}} p(\seqvaldots{n}, \paramValue) \ln
-    \frac{p(\paramValue \mid \seqvaldots{n})}{p(\paramValue)} d\paramValue
+    \Cx &= \arg\max_{P} \int \left(\KLcond{\seqRval{n}}{}\right) \dt \\
+    &= \arg\max_{P} \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
+    \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
 \end{align*}
 
-That means, the central distribution for our problem is the same distribution as when we use the reference
-prior~\cite{BERNARDO200517} for our main parameter.
+That implies, the central distribution for our problem is the same as the distribution we obtain when using the
+reference prior~\cite{BERNARDO200517} for our main parameter.
+
+Now, imagine playing a game of chance involving our four-sided dice.
+After rolling the dice, we input the outcome into a mysterious machine.
+The machine then announces whether we have won or lost the game.
+We have no clue how the machine works, we are not even sure if the dice outcome truly affects the machine’s output.
+We just know that the machine is memory-less, and the result of each game is independent.
+
+Through experimentation, we want to learn how that machine works, so that by observing the dice outcome we can predict
+whether we will win the game.
+We assume that, first, we roll the dice $n$ times, and record each outcome.
+Next, we input a number of these dice outcomes into the machine and observe the result of each game.
+As we will see, this assumption is important for easier derivation of the central distribution.
+
+Let us define a query set for this problem.
+We denote this set as $\Xpairs$, where each \rv{x} is the result of the $i$-th game, and the evidence \rv{e} is a
+vector
+\[
+    (\seqRv{i-1}, \seqRv[y]{n}),
+\]
+where each \rv{y} denotes the $i$-th dice outcome.
+
+The conditional divergence for \set{x} can be obtained by
+\begin{align*}
+    \DxPcond &= \KLcond{\rval[1]{x}}{\seqRval[y]{n}} \\
+    &+ \KLcond{\rval[2]{x}}{\rval[1]{x},\seqRval[y]{n}} \\
+    &+ \KLcond{\rval[3]{x}}{\seqvalxx, \seqRval[y]{n}} \\
+    &+ \ \cdots \\
+\end{align*}
+After using the chain rule for conditional probability the right hand side simplifies to
+\begin{align*}
+    \KLcond{\seqRval{n}}{\seqRval[y]{n}} \cdot
+\end{align*}
+
+This implies that an alternative way for defining our query set is to define it as a single
+pair $\left\{(\rvec{x}, \rvec{e})\right\}$, where \rvec{x} is the vector of $n$ game's result, and \rvec{e} is the vector of $n$
+dice outcome.
+
+Assume that we decide to simplify our learning task.
+We choose to consider only the least significant digit of the dice outcome and ignore the other digit.
+For example, if the dice outcome is $10$, we treat it as $0$.
+This approach decreases the number of possible outcomes of the dice, making the learning process simpler.
+However, it also reduces our ability to predict the game’s result accurately.
+
+In order to find a central distribution for this version of our game, we should slightly modify the definition of the
+query set.
+While each \rv{x} remains unchanged, we need to represent each \rv{e} as a vector
+\[
+    (\seqRv{i-1}, \seqRv[y']{n}),
+\]
+where each \rv{y'} represents the least significant digit of the dice outcome.
+We denote this new query set with \set{x'}.
+
+\emph{explain how the central distribution for this version is different...}
+
+When we have a lot of learning data, there is no point in using this simpler version of our learning task.
+However, when there is not much data available, the simpler version can still produce some meaningful results,
+while the data is too small for the more complex version.
+
+Is it possible to have a probabilistic inference framework that is able to automatically choose between these two
+versions of the problem based on the data that is observed?
+It seems that the central distributing has this ability.
+For that, we need to use the central distribution for the query set $\set{x} \cup \set{x'}$.
+This seems reasonable, since when we want our probabilistic inference framework to choose between two versions of
+our problem, our query set should include random variables of both versions.
 
 \begin{theorem}
     Let \pmodel be a generic parametric model, and $\Xsingles$ be a set of random variables in \Mt.

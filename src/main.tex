@@ -96,12 +96,16 @@
 \newcommand{\abIab}{\cMass(\alpha, \beta \mid \paramA, \paramB)}
 \newcommand{\aIa}{\cMass(\alpha \mid \paramA)}
 
+\newcommand{\seqRval}[2][x]{\rval[1]{#1}, \ldots, \rval[{#2}]{#1}}
+\newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots, \rv[{#2}]{#1}}
+\newcommand{\seqRvalInf}[1][x]{\rval[1]{#1}, \rval[2]{#1}, \ldots}
+\newcommand{\seqRvInf}[1][x]{\rv[1]{#1}, \rv[2]{#1}, \ldots}
 \newcommand{\rvEq}[1][x]{\rv[]{#1} = \rval[]{#1}}
 \newcommand{\Xpairs}{
-    \set{X} = \left\{(\XE[1]), (\XE[2]), \dots \right\}
+    \set{X} = \left\{(\XE[1]), (\XE[2]), \ldots \right\}
 }
 \newcommand{\Xsingles}{
-    \set{X} = \left\{\rv[1]{X}, \rv[2]{X}, \rv[3]{X}, \dots \right\}
+    \set{X} = \left\{\rv[1]{X}, \rv[2]{X}, \rv[3]{X}, \ldots \right\}
 }
 \newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
 \newcommand{\margDist}[2][p]{\int \pi(#2 \mid \paramValue) \dt[#1]}

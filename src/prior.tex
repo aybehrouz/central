@@ -3,7 +3,7 @@ conditioned on an observed evidence \rval[]{e}.
 We have decided on a probabilistic model \M for the environment, and without any particular prior knowledge, we have
 chosen a distribution $P$ from our model.
 
-We ask from an expert---a person familiar with the environment---to evaluate our distribution $P$.
+We ask an expert---a person familiar with the environment---to evaluate our distribution $P$.
 Presumably, that expert has his own beliefs about the environment and thinks we should use a different
 distribution $Q$, instead of $P$.
 Consequently, for evaluating $P$, he would try to measure how bad using the wrong distribution $P(\XIe[])$ is, while he
@@ -133,9 +133,10 @@ evidence that is available for that variable.
 
 For a parametric model (as defined in Definition~\ref{def:param-model}), it seems reasonable to define a conditional
 form of our divergence measure, conditioned on the value of the parameter.
+
 To do so, in Equation~\ref{eq:div_measure}, we replace normal expectation with conditional expectation.
-Since in a parametric model the parameter fully determines the distribution of the sample space,
-there is no longer a need to maximize over different distributions.
+There will be no longer a need to maximize over different distributions, since in a parametric model the parameter
+fully determines the distribution of the sample space.
 
 \begin{definition}[Conditional Divergence Measure]
     \label{def:cond_divergence}
@@ -182,27 +183,27 @@ of the divergence measure.
     \[
         \Dparam[R] \geq 0\ \cdot
     \]
-    Using this, for every distribution $P$ and every parameter \vval{\theta}, we obtain
+    Using this, for every distribution $P$ and every \vval{\theta}, we obtain
     \newcommand{\RP}{\sumOverixe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
     \[
-        \RP \leq \Dparam\cdot
+        \RP \leq \DxPcond \cdot
     \]
-    Since this inequality holds for any $\paramValue$, the maximum of the right-hand side
-    is also greater than or equal to the maximum of the left-hand side w.r.t. $\paramValue$:
+    Since this inequality holds for any $\paramValue$, the maximum of the right-hand side w.r.t. $\paramValue$
+    is also greater than or equal to the maximum of the left-hand side:
     \begin{equation}
         \tmax \RP \leq \tmax \DxPcond \cdot
         \label{eq:ineq-theorem1}
     \end{equation}
 
     \Mt is a parametric model and $\paramDist[R]{\xe}$, where $r(\paramValue)$ is
-    a probability distribution.
-    Clearly, for every $\paramValue$ we have
+    a prior probability distribution.
+    Trivially, for every $\paramValue$ we have
     \[
         \RP \leq \tmax \RP\cdot
     \]
     Since $r$ is a distribution and is non-negative, we can multiply this inequality
     by $r(\paramValue)$ and integrate.
-    Notice that the right hand side is not a function of $\paramValue$ and it will remain unchanged
+    Notice that the right hand side is not a function of $\paramValue$ and it remains unchanged
     because $\int \dt[r] = 1$:
     \[
         \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \RP\cdot
@@ -216,7 +217,7 @@ of the divergence measure.
 
 \begin{theorem}
     \label{th:Dx_parametric_form}
-    Let \pmodel be a parametric model, and $\Xpairs$ be a set of pairs of discrete random variables in \Mt.
+    Let \pmodel be a parametric model, and $\Xpairs$ be a query set in \Mt.
     If for every value of $\paramValue$ there is a distribution $R \in \set{P}$ such that
     $R(\rval[]{s}) = \pi(\rval[]{s} \mid \paramValue)$ for every $\rval[]{s} \in \set{S}$,
     then for any $P \in \set{P}$ we have:
@@ -230,18 +231,19 @@ of the divergence measure.
 \begin{proof}
     For an arbitrary distribution $P \in \set{P}$, we let
     \[
-        \paramValue^* = \arg\tmax \DExparam\cdot
+        \paramValue^* = \arg\tmax \DxPcond \cdot
     \]
     In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\rval[]{s} \mid \paramValue^*)$
-    for every $\rval[]{s} \in \set{S}$, and therefore defines the same distribution for any random variable:
-    \[
-        \Ex{R}{\sum_i \Dcond[R]} = \DExparam[\paramValue^*]\cdot
-    \]
-    On the other hand, we see
+    for every $\rval[]{s} \in \set{S}$, and therefore it defines the same distribution for any random variable:
+    \begin{align*}
+        \Ex{R}{\sum_i \Dcond[R]} &= \DExparam[\paramValue^*] \\
+        &= \tmax \DxPcond \cdot
+    \end{align*}
+    On the other hand, clearly
     \[
         \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond} \geq \Ex{R}{\sum_i \Dcond[R]}\cdot
     \]
-    Thus,
+    Notice that the left hand side is $\DxP$, and
     \[
         \DxP \geq \tmax \DxPcond\cdot
     \]
@@ -505,6 +507,11 @@ While each \rv{x} remains unchanged, we need to represent each \rv{e} as a vecto
 \]
 where each \rv{y'} represents the least significant digit of the dice outcome.
 We denote this new query set with \set{x'}.
+
+Following similar steps we did for the query set \set{x}, we can show that \set{x'} also has a more compact counterpart,
+containing a single pair $(\rvec{x}, \rvec{e'})$, where \rvec{x} is the vector $(\seqRv{n})$, and \rvec{e'} is
+the vector
+$(\seqRv[y']{n})$.
 
 \emph{explain how the central distribution for this version is different...}
 

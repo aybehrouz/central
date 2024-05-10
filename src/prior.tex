@@ -6,10 +6,10 @@ chosen a distribution $P$ from our model.
 We ask an expert---a person familiar with the environment---to evaluate our distribution $P$.
 Presumably, that expert has his own beliefs about the environment and thinks we should use a different
 distribution $Q$, instead of $P$.
-Consequently, for evaluating $P$, he would try to measure how bad using the wrong distribution $P(\XIe[])$ is, while he
-thinks the true distribution is $Q$.
+Consequently, when evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\XIe[])$,
+while believing that the correct distribution is $Q$.
 
-Let's assume that a real number can be used to measure this concept, and denote it as $\D[{\XIe[]}]$.
+Let's assume that a real number can be used to measure this loss, and denote it as $\D[{\XIe[]}]$.
 It seems reasonable as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
 Therefore, $\D[]$ effectively is a measure of the divergence of $P$ from $Q$, when $Q$ is the true distribution.
 
@@ -357,9 +357,10 @@ of the divergence measure.
 \begin{theorem}
     \label{th:lambda}
     Under the assumptions of Theorem~\ref{th:central_by_max}, the central distribution for \set{X} satisfies:
-    \[
-        \Dparam[\Cx] = \lambda,
-    \]
+    \begin{equation}
+        \DxPcond[\Cx] = \lambda,
+        \label{eq:lambda}
+    \end{equation}
     where $\lambda$ is a constant.
 \end{theorem}
 \begin{proof}
@@ -424,7 +425,7 @@ For example, if we roll the dice for three times before making our prediction,
 we will need $P(\rv[4]{x} \mid \rv[1]{x},\rv[2]{x},\rv[3]{x})$, where \rv{x} denotes the outcome
 of the $i$-th dice roll.
 
-Thus, one natural way for defining a query set $\Xpairs$ for this problem is to let each \rv{x} be the outcome of
+Thus, one natural way for defining a query set $\Xpairs$ is to let each \rv{x} be the outcome of
 the $i$-th dice roll, and define each \rv{e} as a vector of the previous dice outcomes $(\seqRv{i-1})$.
 
 Now let us calculate the conditional divergence measure for \set{x} as defined in Definition~\ref{def:cond_divergence}:
@@ -436,7 +437,7 @@ Now let us calculate the conditional divergence measure for \set{x} as defined i
     &+ \ \cdots \\
     &+ \KLcond{\rval[n]{x}}{\seqRval{n-1}}\cdot
 \end{align*}
-We factor out $\pi(\seqRval{n} \mid \paramValue)$ from every term, then we can use the chain rule for conditional
+After factoring out $\pi(\seqRval{n} \mid \paramValue)$ from every term, we use the chain rule for conditional
 probability:
 \begin{align*}
     \DxPcond &=
@@ -457,17 +458,18 @@ By Equation~\ref{eq:Cx_by_max}, for the central distribution we have
 That implies, the central distribution for our problem is the same as the distribution we obtain when using the
 reference prior~\cite{BERNARDO200517} for our main parameter.
 
-Now, imagine playing a game of chance involving our four-sided dice.
+Imagine playing a game of chance involving our four-sided dice.
 After rolling the dice, we input the outcome into a mysterious machine.
 The machine then announces whether we have won or lost the game.
-We have no clue how the machine works, we are not even sure if the dice outcome truly affects the machine’s output.
-We just know that the machine is memory-less, and the result of each game is independent.
+We have no clue how the machine works. We are not even sure if the dice outcome truly affects the machine’s output.
+All we know is that the machine is memory-less, and the result of each game is independent.
 
-Through experimentation, we want to learn how that machine works, so that by observing the dice outcome we can predict
-whether we will win the game.
+Our goal is to learn how the machine operates through experimentation.
+We aim to be able to predict whether we will win the game after observing the dice outcome.
+
 We assume that, first, we roll the dice $n$ times, and record each outcome.
-Next, we input a number of these dice outcomes into the machine and observe the result of each game.
-As we will see, this assumption is important for easier derivation of the central distribution.
+Next, we input some of these dice outcomes into the machine and observe the result of each game.
+As we will see, this assumption is important for deriving the central distribution more easily.
 
 Let us define a query set for this problem.
 We denote this set as $\Xpairs$, where each \rv{x} is the result of the $i$-th game, and the evidence \rv{e} is a
@@ -489,9 +491,26 @@ After using the chain rule for conditional probability the right hand side simpl
     \KLcond{\seqRval{n}}{\seqRval[y]{n}} \cdot
 \end{align*}
 
-This implies that an alternative way for defining our query set is to define it as a single
+Consequently, an alternative way for defining our query set is to define it as a single
 pair $\left\{(\rvec{x}, \rvec{e})\right\}$, where \rvec{x} is the vector of $n$ game's result, and \rvec{e} is the vector of $n$
 dice outcome.
+
+Using the new definition for \set{x}, by Equation~\ref{eq:lambda} we have:
+\begin{equation*}
+    \KLcond[\Cx]{\vval{x}}{\vval{e}} = \lambda
+\end{equation*}
+\emph{derive a $\paramValue = (\paramA, \paramB)$ closed form for central dist...}
+
+\[
+    \frac{\pi(\vval{x} \mid \vval{e}, \paramValue)}{\Cx(\vval{x} \mid \vval{e})}
+    = \frac{\pi(\paramValue \mid \vval{x}, \vval{e})}{\Cx(\paramValue \mid \vval{e})}
+\]
+
+sdfd
+
+\[
+    \KLabVec
+\]
 
 Assume that we decide to simplify our learning task.
 We choose to consider only the least significant digit of the dice outcome and ignore the other digit.
@@ -506,21 +525,22 @@ While each \rv{x} remains unchanged, we need to represent each \rv{e} as a vecto
     (\seqRv{i-1}, \seqRv[y']{n}),
 \]
 where each \rv{y'} represents the least significant digit of the dice outcome.
-We denote this new query set with \set{x'}.
+We denote this new query set as \set{x'} and the previous query set as \set{x}.
 
-Following similar steps we did for the query set \set{x}, we can show that \set{x'} also has a more compact counterpart,
-containing a single pair $(\rvec{x}, \rvec{e'})$, where \rvec{x} is the vector $(\seqRv{n})$, and \rvec{e'} is
+Following similar steps as we did for \set{x}, we can show that \set{x'} also has a more compact counterpart,
+which includes a single pair $(\rvec{x}, \rvec{e'})$, where \rvec{x} is the vector $(\seqRv{n})$, and \rvec{e'} is
 the vector
 $(\seqRv[y']{n})$.
 
 \emph{explain how the central distribution for this version is different...}
 
 When we have a lot of learning data, there is no point in using this simpler version of our learning task.
-However, when there is not much data available, the simpler version can still produce some meaningful results,
+However, when the available data is not enough for the more complex version, the simpler version can still produce
+relatively meaningful results,
 while the data is too small for the more complex version.
 
 Is it possible to have a probabilistic inference framework that is able to automatically choose between these two
-versions of the problem based on the data that is observed?
+versions of the problem based on the quality and amount of available data?
 It seems that the central distributing has this ability.
 For that, we need to use the central distribution for the query set $\set{x} \cup \set{x'}$.
 This seems reasonable, since when we want our probabilistic inference framework to choose between two versions of

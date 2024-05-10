@@ -58,7 +58,7 @@
 
 
 \newcommand{\DxP}{\measure{D}_\set{X}\left[ P \right]}
-\newcommand{\DxPcond}{\measure{D}_\set{X}\left[ P \mid \paramValue \right]}
+\newcommand{\DxPcond}[1][P]{\measure{D}_\set{X}\left[ #1 \mid \paramValue \right]}
 \newcommand{\sumOverxe}{\sum_{\rval{x}, \rval{e}}}
 \newcommand{\sumOverixe}{\sum_i \sumOverxe}
 \newcommand{\sumOverix}{\sum_i \sum_{\rval{x}}}
@@ -125,11 +125,9 @@
 }
 
 \newcommand{\Dparam}[1][P]{
-    \sumOverixe \pi(\xeIt) \ln \frac{\pi(\xIet)}{#1(\xIe)}
+    \sum_{i}\KLcond[#1]{\rval{x}}{\rval{e}}
 }
-\newcommand{\DparamX}[1][P]{
-    \sum_i \sum_{\rval{x}} \pi(\rval{x} \mid \rval{\paramValue}) \ln \frac{\pi(\xIet)}{#1(\xIe)}
-}
+
 \newcommand{\Dminimax}[1][P]{\int \sumOverixe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
 
 \newcommand{\KLcond}[3][P]{
@@ -143,6 +141,12 @@
         \ln \frac{\pi\left(#2 \mid #3,\paramValue \right)} {#1\left(#2 \mid #3\right)}
     }
 }
+
+\newcommand{\KLab}[4]{
+    \sum_{#1, #2} \pi(#1, #2 \mid #3, #4) \ln \frac{\cMass(#4 \mid #1, #2)}{\cMass(#4 \mid #3)}
+}
+
+\newcommand{\KLabVec}{\KLab{\vval{x}}{\vval{e}}{\alpha}{\beta}}
 
 \newcommand{\Lagr}[1][\epsilon]{\mathcal{L} \left[#1, \lambda\right]}
 

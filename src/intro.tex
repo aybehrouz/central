@@ -5,21 +5,19 @@
 %        \item Set \set{A}, and a measure \measure{M}.
 %    \end{itemize}
 
-\newcommand{\util}{U(a, x)}
+\newcommand{\util}{U(\rval[]{a}, \rval[]{x})}
 \newcommand{\envDist}{P^*}
-\newcommand{\post}{\pi(x_i \mid \paramValue)}
-
+\newcommand{\post}{\pi(\rval{x} \mid \paramValue)}
 
 Consider an environment where an agent must select an action from a set of available actions. The utility of each
 action for the agent can be expressed as a real-valued function, which depends on the unknown state of the environment.
-Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the environment state. The utility
+Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the unknown environment state. The utility
 function  $\util$ quantifies the desirability of each action.
 Additionally, we assume that an evidence \rval[]{e} of the environment state exists, and our agent can leverage this
 evidence to determine the optimal action.
 
 According to Bayesian decision theory, the optimal action, when evidence $e$ is observed, is the one
 that maximizes the expected utility conditioned on $e$:
-
 \begin{equation*}
     a_{\text{optimal}} = \arg\max_a \Ex{\envDist}{\util \mid e} = \arg\max_a\sumx \util \envDist(x \mid e).
 \end{equation*}
@@ -34,8 +32,8 @@ Bayesian decision-making framework to ensure we stay consistent with our assumpt
 
 Considering the subjective viewpoint, the determination of $\envDist$ relies on one’s prior knowledge and
 assumptions.
-When we do not have any assumptions and lack prior knowledge, the set of candidate distributions for $\envDist$ simply
-encompasses all possible probability distributions.
+When we have no assumptions and no prior knowledge, the set of candidate distributions for $\envDist$ simply
+consists of all possible probability distributions.
 As we make assumptions or obtain some prior knowledge, the probability distributions that do not align
 with our assumptions or knowledge are eliminated from this set.
 Consequently, the set of acceptable probability distributions becomes more refined. We refer to this refined
@@ -58,7 +56,6 @@ of 1s and 0s, and the specific order in which these variables appear becomes irr
 
 When a sequence of random variables is exchangeable, de Finetti's theorem states that their joint probability has a
 special representation:
-
 \begin{equation*}
     P(\seqRvalInf) = \int \prod_i\post \dt.
 \end{equation*}
@@ -75,7 +72,8 @@ then to fully determine $\envDist$, we only need to establish the prior probabil
 \begin{definition}[Parametric Model]
     \label{def:param-model}
     Let $\param$ be a random vector.
-    A parametric model is a probabilistic model \pmodel, where for every $P \in \set{P}$ there is a prior probability
+    A \emph{parametric model} is a probabilistic model \pmodel, where for every $P \in \set{P}$ there is a prior
+    probability
     distribution $p$, such that for every $\rval[]{s} \in \set{s}$
     \begin{equation}
         \paramDist{\rval[]{s}},

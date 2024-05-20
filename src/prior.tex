@@ -99,36 +99,280 @@ In that way, every expert would agree that our distribution is a good choice.
 Interestingly, this relates to the concept of Bayesian convergence, where the posterior probability converges to the
 same distribution regardless of the prior distribution.
 
-\begin{definition}[Query Set]
-    A \emph{query set} is a set of pairs of discrete random variables, all defined on the same sample space.
-\end{definition}
+\begin{definition}[$\epsilon$-convergence]
+    In a probabilistic model \model, let \Qvar be a discrete random variable, and \Eset be a countable set of
+    discrete random variables, all defined on \set{s}.
+    We refer to \Qvar as the \emph{query variable}, and \Eset as the \emph{evidence set}.
 
-\begin{definition}
-    Let $\Xpairs$, be a query set in a probabilistic model \model.
-    We define the \emph{divergence measure of $P \in \set{P}$ for \set{X}} as follows:
-    \begin{equation}
-        \DxP = \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond},
-        \label{eq:div_measure}
-    \end{equation}
-    where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and each $\Dcond$ is the Kullback-Leibler divergence
+    We say $\QvarIEset$ (\Qvar conditioned on \Eset) \emph{\econverges by $P \in \set{p}$},
+    if for any random variable $\rv{e} \in \Eset$ and any probability measure $Q \in \set{p}$ we have:
+    \begin{equation*}
+        \Ex{Q}{\Dcond} < \epsilon,
+    \end{equation*}
+    where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and $\Dcond$ is the Kullback-Leibler divergence
     between $P(\XIe)$ and $Q(\XIe)$:
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]
 \end{definition}
 
+When \set{e} contains a single random variable, like \rv{e}, we simplify our notation.
+Instead of writing $\Qvar|\{\rv{e}\}$ we simply use $\Qvar|\rv{e}$.
+
+\begin{definition}[Divergence Measure]
+    Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
+    We define the \emph{divergence measure of $P \in \set{P}$ for $\QvarIEset$} as follows:
+    \begin{align}
+        \label{eq:div-def}
+        \DxP &= \maxQ \maxE \Ex{Q}{\Dcond} \\
+        &= \maxQ \maxE \sumOverxe Q(\assign{x} , \assign{e}) \ln
+        \frac{Q(\assign{x} \mid \assign{e})}{P(\assign{x} \mid \assign{e})} \cdot
+    \end{align}
+\end{definition}
+
+Note that we usually simplify our notation and instead of writing the full assignment to a random variable, we only
+write the assigned value.
+For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
 
 \begin{proposition}
-    Using the linearity of expectation, we have
+    $\QvarIEset$ \econverges by $P$, if and only if:
     \begin{equation*}
-        \DxP = \max_{Q \in \set{P}} \sumOverixe Q(\xe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
-        \label{eq:div_measure_full}
+        \DxP < \epsilon \cdot
     \end{equation*}
 \end{proposition}
 
+\begin{definition}[Central Distribution]
+    In a model \model, we define the \emph{central distribution} for a query variable \Qvar, conditioned on the
+    evidence set \Eset, to be a distribution $\central \in \set{P}$ which minimizes the divergence measure
+    for $\QvarIEset$:
+    \begin{equation*}
+        \central = \arg\pmin \DxP\cdot
+        \label{eq:center}
+    \end{equation*}
+\end{definition}
+
+\begin{definition}[Aggregator]
+    Consider two probabilistic models \model and \aggmodel.
+    Let \Qvar be a query variable and $\Eset = \{\seqRvInf[e]\}$ be an evidence set in \M.
+    Also, let \agg{\rv{e}}, \agg{\Qvar}, and \rv{i} be random variables defined on \agg{\set{s}} in \Magg.
+    We refer to \agg{\rv{x}}, \agg{\rv{e}} as the \emph{aggregated} query and evidence variables, and \rv{i} as the
+    \emph{selector} variable.
+
+    Suppose that, for a probability measure $P \in \set{P}$, there is a probability measure
+    $\agg{P} \in \agg{\set{P}}$, such that for any index \rval{i}, and every values \QvarVal, and \rval[i]{e}
+    there is some \agg{\QvarVal}, and \agg{\rval{e}}, where we have
+    \begin{equation*}
+        P(\Qvar = \QvarVal, \rv[i]{e} = \rval[i]{e}) =
+        \agg{P}(\agg{\Qvar} = \agg{\QvarVal}, \assign{\agg{e}} \mid \assign{I}) \cdot
+        \label{eq:th1-1}
+    \end{equation*}
+
+    In addition, in \agg{P}, \agg{\Qvar} and \rv{I} are conditionally independent given \agg{\rv{E}}:
+    \begin{equation*}
+        \agg{P}(\agg{\Qvar} \mid \agg{\rv{E}}, \rv{I}) = \agg{P}(\agg{\Qvar} \mid \agg{\rv{E}}) \cdot
+    \end{equation*}
+
+    We call \agg{P} an \emph{aggregator of $P$ with respect to $\QvarIEset$}.
+
+\end{definition}
+
+\begin{definition}[Aggregate Model]
+    \label{def:aggregate-model}
+    Consider a probabilistic model \model.
+    Let \Qvar be a query variable, and \Eset be an evidence set in \M.
+    We say a model \aggmodel is the \emph{aggregate model} of \M with respect to $\QvarIEset$,
+    If every probability measure in \Magg is the aggregator of a probability measure in \M with respect to $\QvarIEset$.
+    %, and every probability measure in \M has at least one aggregator in \Magg with respect to $\QvarIEset$.
+\end{definition}
+
+\begin{definition}[Selective Aggregate Model]
+    Let \Qvar be a query variable, and \Eset be an evidence set in \model.
+    We say that \Magg, an aggregate model of \M with respect to $\QvarIEset$, is \emph{selective}, if for
+    every $P \in \set{P}$ and any value \rval{i} of the selector variable \rv{I}, there is an aggregator of
+    $P$ in \Magg, such that $\agg{P}(i) = 1$.
+
+\end{definition}
+
+
+\begin{theorem}
+    Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
+    Suppose that \aggmodel is a selective aggregate model of \M with respect to $\QvarIEset$.
+    Let \agg{\rv{x}}, \agg{\rv{e}} be the aggregated query and evidence variables in \Magg.
+    If $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$,
+    with respect to $\QvarIEset$, then we have
+    \begin{equation*}
+        \DxP = \aggDxP \cdot
+    \end{equation*}
+
+    In addition, the central distribution for $\agg{\Qvar}|\agg{\rv{e}}$ is an aggregator of the central
+    distribution for $\QvarIEset$.
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\aggExpKL}[1]{\ExpKL[\agg{\rval{x}}][\agg{\rval{e}}][\agg{#1}][\agg{P}]}
+    \newcommand{\aggxe}{\agg{\QvarVal}, \agg{\rval{e}}}
+    \newcommand{\aggxIe}{\agg{\QvarVal} \mid \agg{\rval{e}}}
+    \newcommand{\aggXIE}{\agg{\Qvar} \mid \agg{\rv{e}}}
+    Let
+    \begin{equation*}
+        \agg{R} = \arg\max_{\agg{Q} \in \agg{\set{P}}} \aggExpKL{Q}.
+    \end{equation*}
+    Since \Magg is an aggregate model, $\agg{R}$ must be an aggregator of some probability measure $R \in \set{P}$.
+    It follows that
+    \begin{align*}
+        \aggDxP
+        &= \aggExpKL{R} \\
+        &= \sum_i \agg{R}(\rval{i}) \ExpKL[][{\rval[i]{e}}][R] \\
+        &\leq \max_i \ExpKL[][{\rval[i]{e}}][R] \cdot
+    \end{align*}
+    This implies
+    \begin{equation}
+        \aggDxP \leq \DxP \cdot
+        \label{eq:th-2-proof-1}
+    \end{equation}
+
+    Similarly, let
+    \begin{equation*}
+    (R,k)
+        = \arg\max_{(Q,i)} \ExpKL[][{\rval[i]{e}}] \cdot
+    \end{equation*}
+    \Magg is a selective aggregate model.
+    This means that $R$ must have an aggregator \agg{R} in \Magg, which selects $k$ by assigning it a
+    probability of 1: $\agg{R}(k) = 1$.
+    Therefore,
+    \begin{align*}
+        \DxP
+        &= \ExpKL[][{\rval[k]{e}}][R] \\
+        &= \sum_{\aggxe} \agg{R}(\aggxe \mid k) \ln\frac{\agg{R}(\aggxIe, k)}{\agg{P}(\aggxIe, k)} \\
+        &= \aggExpKL{R} \\
+        &\leq \aggDxP \cdot
+    \end{align*}
+    By Equation~\ref{eq:th-2-proof-1}, we conclude that
+    \begin{equation*}
+        \DxP = \aggDxP \cdot
+    \end{equation*}
+
+    To prove the second part of the theorem, let \central[\aggXIE] be a central distribution
+    for $\agg{\Qvar}|\agg{\rv{e}}$.
+    Since \Magg is an aggregate model for \M, \central[\aggXIE] must be an aggregator for a probability
+    measure $\central \in \agg{\set{P}}$.
+    If we assume, by contradiction, that \central is not a central distribution for $\QvarIEset$ in \M, then there must
+    be a probability
+    measure $R \in \set{P}$ such that:
+    \begin{equation*}
+        \DxP[R] < \DxP[\central] = \aggDxP[C_{\aggXIE}] \cdot
+    \end{equation*}
+    On the other hand, since \Magg is a selective model, $R$ must have an aggregator $\agg{R} \in \agg{\set{P}}$,
+    and we have
+    \begin{equation*}
+        \DxP[R] = \aggDxP[R] > \aggDxP[{C_{\aggXIE}}],
+    \end{equation*}
+    which is a contradiction.
+\end{proof}
+
+\begin{proposition}
+    The central distribution for $\agg{\Qvar}|\agg{\rv{e}}$ is an aggregator of the central distribution
+    for $\QvarIEset$.
+\end{proposition}
+
+\begin{theorem}[Aggregate Model]
+    Consider two parametric probabilistic models \pmodel and \aggmodel.
+    Let \Qvar be a query variable and $\Eset = \{\seqRvInf[e]\}$ be an evidence set in \Mt.
+    Also, let \agg{\rv{e}}, \agg{\Qvar}, \aggParam, and \rv{i} be random variables defined
+    on \agg{\set{s}} in \Magg.
+
+    Suppose that for any \rval{i}, and every values \QvarVal, \rval[i]{e}, and \paramValue, there is some
+    \agg{\QvarVal}, \agg{\rval{e}}, and \aggParamVal, such that we have
+    \begin{equation*}
+        \pi(\Qvar = \QvarVal, \rv[i]{e} = \rval[i]{e}  \mid \param = \paramValue) =
+        \agg{\pi}(\agg{\Qvar} = \agg{\QvarVal}, \assign{\agg{e}}
+        \mid \aggParam = \aggParamVal, \assign{I}),
+        \label{eq:th1-1}
+    \end{equation*}
+    where $\pi$ is the likelihood distribution in \Mt, and $\agg{\pi}$ is the likelihood distribution in \Magg.
+
+    In addition, in every probability measure $\agg{P} \in \agg{\set{P}}$, \aggParam and $\rv{i}$ are independent:
+    \begin{equation*}
+        \agg{p}(\aggParam \mid \rv{I}) = \agg{p}(\aggParam),
+    \end{equation*}
+    while the prior distribution $\agg{p}(\aggParam)$, is the same as the prior distribution
+    of \param induced by some probability measure $P \in \set{P}$:
+    \begin{equation*}
+        p(\param = \paramValue) = \agg{p}(\aggParam = \aggParamVal)\cdot
+    \end{equation*}
+    Also, \agg{\Qvar} and \rv{I} are conditionally independent given \agg{\rv{E}}:
+    \begin{equation*}
+        \agg{P}(\agg{\Qvar} \mid \agg{\rv{E}}, \rv{I}) = \agg{P}(\agg{\Qvar} \mid \agg{\rv{E}})
+    \end{equation*}
+
+    On the other hand, for every probability measure $P \in \set{P}$, and any arbitrary distribution $Q$,
+    there is a $\agg{P} \in \agg{\set{P}}$ such that for every \rval{i}, and \paramValue there exists a \aggParamVal
+    such that
+    \begin{equation*}
+        \agg{p}(\aggParamVal, \rval{I}) = p(\paramValue)Q(\rval{I})\cdot
+    \end{equation*}
+    We refer to \Magg as the aggregate model of \Mt for $\QvarIEset$.
+
+    If these conditions hold, then for any $P \in \set{P}$, there is a $\agg{P} \in \agg{\set{P}}$ such that we have
+    \begin{equation*}
+        \DxP = \aggDxP,
+    \end{equation*}
+    and vice versa.
+\end{theorem}
+\begin{proof}
+    sdfsfs
+\end{proof}
+\begin{proposition}
+    sdfs
+\end{proposition}
+\begin{theorem}
+
+    If these conditions hold, then for any $P \in \set{P}$ and $\agg{P} \in \agg{\set{P}}$ we have
+    \begin{equation*}
+        \DxP = \measure{D}_{\agg{\Qvar} \mid \agg{\rv{e}}} \left[ \agg{P} \right] \cdot
+    \end{equation*}
+    We refer to \Magg as the aggregate of \Mt for $\QvarIEset$.
+    \begin{equation*}
+        \agg{P}(\agg{\Qvar} \mid \agg{\rv{e}}) = \agg{P}(\agg{\Qvar} \mid \agg{\rv{e}}, \rv{i})\cdot
+        \label{eq:th1-2}
+    \end{equation*}
+    Then for every $P \in \set{P}$:
+    \begin{equation*}
+        \DxP = \measure{D}_{\agg{\Qvar} \mid \{\agg{\rv{e}} \}} \left[ \agg{P} \right] \cdot
+    \end{equation*}
+\end{theorem}
+
+\begin{proof}
+    Let $Q_m$ be the distribution, and $\rv[m]{e}$ be the evidence that maximizes $\Ex{Q}{\Dcond}$.
+    Therefore, by Equation~\ref{eq:div-def} we have
+    \begin{equation*}
+        \DxP = \ExpKL[][e_m][Q_m]\cdot
+    \end{equation*}
+
+    The definition of $\DxP$ involves
+    maximizing with respect to
+    Assume, by contradiction, that $\given{S}{\Eset}$ does not $\epsilon$-converge by $P$ in $\M$.
+    Therefore, there must exist $Q$ and $E_i \in \Eset$ in $\M$ such that:
+
+
+\end{proof}
+
+
+\begin{definition}[Conditional Divergence Measure]
+    \label{def:cond_divergence}
+    Assume that \pmodel is a parametric model.
+    Let \Qvar be a query variable and \Eset be an evidence set in \Mt.
+    We define the \emph{divergence measure of $P \in \set{P}$ given $\paramValue$ for $\QvarIEset$} as follows:
+    \begin{align}
+        \DxPcond &= \maxE \DExparam \\
+        &= \maxE \Dparam \cdot
+        \label{eq:cond_div_measure}
+    \end{align}
+\end{definition}
+
 In this definition, the query set $\Xpairs$ plays a crucial role.
 Specifically, \set{x} defines the set of random variables for which we are interested in their distributions.
-Each \rv{x} represents a random variable whose distribution is important to us, and each \rv{e} corresponds to the
+Each \Qvar represents a random variable whose distribution is important to us, and each \rv{e} corresponds to the
 evidence that is available for that variable.
 
 For a parametric model (as defined in Definition~\ref{def:param-model}), it seems reasonable to define a conditional
@@ -138,28 +382,8 @@ To do so, in Equation~\ref{eq:div_measure}, we replace normal expectation with c
 There will be no longer a need to maximize over different distributions, since in a parametric model the parameter
 fully determines the distribution of the sample space.
 
-\begin{definition}[Conditional Divergence Measure]
-    \label{def:cond_divergence}
-    Assume that \pmodel is a parametric model, and $\Xpairs$ is a query set.
-    We define the \emph{divergence measure of $P \in \set{P}$ given $\paramValue$ for \set{X}} as follows:
-    \begin{align}
-        \DxPcond &= \DExparam \\
-        &= \Dparam \cdot
-        \label{eq:cond_div_measure}
-    \end{align}
-\end{definition}
-
 Even if we cannot find a distribution that has a small divergence from every distribution, still using the distribution
 that minimizes the maximum divergence seems a reasonable choice.
-
-\begin{definition}[Central Distribution]
-    In a model \model, we define the \emph{central distribution} for a query set \set{X} to be a distribution
-    $C_\set{X} \in \set{P} $ which minimizes the divergence measure for \set{X}:
-    \begin{equation}
-        \Cx = \arg\pmin \DxP\cdot
-        \label{eq:center}
-    \end{equation}
-\end{definition}
 
 In a parametric model, the maximum of divergence happens for a prior distribution
 that is concentrated at a single value of the parameter $\paramValue$.
@@ -170,7 +394,7 @@ of the divergence measure.
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
     Assume that \pmodel is a parametric model.
-    Let $\Xpairs$ be a query set in \Mt.
+    Let \Qvar be a query variable and \Eset be an evidence set in \Mt.
     For every $P \in \set{P}$ we have
     \begin{equation*}
         \DxP \leq \tmax \DxPcond
@@ -178,46 +402,52 @@ of the divergence measure.
 \end{lemma}
 
 \begin{proof}
-    Let $R$ be an arbitrary distribution in \Mt, since the Kullback-Leibler divergence is positive,
-    its expected value is also positive, and for every parameter value $\paramValue$ we have
+    Since the Kullback-Leibler divergence is positive, its expected value is also positive, and for any arbitrary
+    $R \in \set{P}$, $\rv{E} \in \Eset$, and parameter value $\paramValue$ we have
     \[
-        \Dparam[R] \geq 0\ \cdot
+        \DExparam[][R] = \Dparam[R] \geq 0\ \cdot
     \]
-    Using this, for every distribution $P$ and every \vval{\theta}, we obtain
-    \newcommand{\RP}{\sumOverixe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
+    Using this, for every distribution $P$, we obtain
+    \newcommand{\RP}{\sumOverxe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
     \[
-        \RP \leq \DxPcond \cdot
+        \RP \leq \Dparam \cdot
     \]
-    Since this inequality holds for any $\paramValue$, the maximum of the right-hand side w.r.t. $\paramValue$
-    is also greater than or equal to the maximum of the left-hand side:
+    Since this inequality holds for any $\paramValue$ and any $\rv{e} \in \Eset$, the maximum of the right-hand side
+    w.r.t. $\paramValue$ and $\rv{e}$ is also greater than or equal to the maximum of the left-hand side:
     \begin{equation}
-        \tmax \RP \leq \tmax \DxPcond \cdot
+        \tmax \maxE \RP \leq \tmax \DxPcond \cdot
         \label{eq:ineq-theorem1}
     \end{equation}
 
     \Mt is a parametric model and $\paramDist[R]{\xe}$, where $r(\paramValue)$ is
     a prior probability distribution.
-    Trivially, for every $\paramValue$ we have
+    Trivially, we have
     \[
         \RP \leq \tmax \RP\cdot
     \]
-    Since $r$ is a distribution and is non-negative, we can multiply this inequality
-    by $r(\paramValue)$ and integrate.
+    This inequality holds for every value of \paramValue.
+    Therefore, we can multiply this inequality by $r(\paramValue)$, which is non-negative, and integrate.
     Notice that the right hand side is not a function of $\paramValue$ and it remains unchanged
     because $\int \dt[r] = 1$:
     \[
-        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \RP\cdot
+        \Ex{R}{\Dcond[R]} \leq \tmax \RP\cdot
     \]
-    Now from Inequality~\ref{eq:ineq-theorem1}, for \emph{any} distribution $P$ and $R$ in \Mt, it follows that
+    For any random variable $\rv{e} \in \Eset$, this inequality holds.
+    That implies
     \[
-        \Ex{R}{\sum_i \Dcond[R]} \leq \tmax \DxPcond,
+        \maxE \Ex{R}{\Dcond[R]} \leq \maxE \tmax \RP\cdot
+    \]
+    Now from Inequality~\ref{eq:ineq-theorem1}, for \emph{any} distribution $P$ and $R$ in \Mt, we have
+    \[
+        \Ex{R}{\Dcond[R]} \leq \tmax \DxPcond,
     \]
     which proves the lemma.
 \end{proof}
 
 \begin{theorem}
     \label{th:Dx_parametric_form}
-    Let \pmodel be a parametric model, and $\Xpairs$ be a query set in \Mt.
+    Suppose \pmodel is a parametric model.
+    Let \Qvar be a query variable, and \Eset be an evidence set in \Mt.
     If for every value of $\paramValue$ there is a distribution $R \in \set{P}$ such that
     $R(\rval[]{s}) = \pi(\rval[]{s} \mid \paramValue)$ for every $\rval[]{s} \in \set{S}$,
     then for any $P \in \set{P}$ we have:
@@ -234,18 +464,19 @@ of the divergence measure.
         \paramValue^* = \arg\tmax \DxPcond \cdot
     \]
     In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\rval[]{s} \mid \paramValue^*)$
-    for every $\rval[]{s} \in \set{S}$, and therefore it defines the same distribution for any random variable:
-    \begin{align*}
-        \Ex{R}{\sum_i \Dcond[R]} &= \DExparam[\paramValue^*] \\
-        &= \tmax \DxPcond \cdot
-    \end{align*}
+    for every $\rval[]{s} \in \set{S}$, and therefore it defines the same distribution for any random variable.
+    It follows that for every $\rv{e} \in \Eset$, and every $P \in \set{p}$
+    \begin{equation}
+        \label{eq:th1}
+        \Ex{R}{\Dcond[R]} = \DExparam[\paramValue^*] \cdot
+    \end{equation}
     On the other hand, clearly
     \[
-        \max_{Q \in \set{P}} \Ex{Q}{\sum_i \Dcond} \geq \Ex{R}{\sum_i \Dcond[R]}\cdot
+        \maxQ \maxE \Ex{Q}{\Dcond} \geq \maxE \Ex{R}{\Dcond[R]}\cdot
     \]
-    Notice that the left hand side is $\DxP$, and
+    Notice that the left hand side is $\DxP$, and by Equation~\ref{eq:th1}
     \[
-        \DxP \geq \tmax \DxPcond\cdot
+        \DxP \geq \maxE \tmax \DExparam\cdot
     \]
     This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
@@ -290,8 +521,8 @@ of the divergence measure.
     \end{equation}
     In this model, the central distribution for $\set{X}$ can be obtained by:
     \begin{align}
-        \Cx &= \arg\pmax \int \DxPcond \dt\\
-        &= \arg\pmax \Dminimax,
+        \central &= \arg\maxP \int \DxPcond \dt\\
+        &= \arg\maxP \Dminimax,
         \label{eq:Cx_by_max}
     \end{align}
     where $\paramDist[p]{\rval[]{s}}$, for every $\rval[]{s} \in \set{s}$.
@@ -305,15 +536,15 @@ of the divergence measure.
         \f = \int \DExparam \dt[r],
     \end{equation*}
     where $r(\paramValue)$ is an arbitrary probability distribution, and $P \in \set{P}$.
-    Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is like maximizing
+    Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is similar to maximizing
     with respect to $\paramValue$, and we have
     \[
-        \Cx = \arg\pmin \max_{r} \f\cdot
+        \central = \arg\pmin \max_{r} \f\cdot
     \]
 
     The domain of $r$ is the set of all probability distributions, which is a compact convex set.
     Moreover, from Equation~\ref{eq:convex_dist_set}, it follows that the set of probability distributions for
-    $\rv{X}|\rv{E}$ in \Mt is also a compact convex set.
+    $\Qvar|\rv{E}$ in \Mt is also a compact convex set.
     Thus, the domain of $\f$ is a compact convex set.
 
     For a fixed $P_{\XIE}$, $\f[\cdot]$ is a linear function, which is both concave and convex.
@@ -332,7 +563,7 @@ of the divergence measure.
     \end{equation}
     From Equation~\ref{eq:max_for_P} we can see that for an arbitrary fixed $r$ we have
     \[
-        \pmin \f = \pmax \sumOverixe R(\xe) \ln P(\xIe)\cdot
+        \pmin \f = \maxP \sumOverixe R(\xe) \ln P(\xIe)\cdot
     \]
 
     We know that the Kullback–Leibler divergence, and therefore its expected value, is non-negative:
@@ -350,7 +581,7 @@ of the divergence measure.
     \]
     By Equation~\ref{eq:divergence_minmax} we conclude
     \[
-        \Cx = \arg\max_{R \in \set{R}} \int \DExparam[][R] \dt[r]\cdot \qedhere
+        \central = \arg\max_{R \in \set{R}} \int \DExparam[][R] \dt[r]\cdot \qedhere
     \]
 \end{proof}
 
@@ -358,7 +589,7 @@ of the divergence measure.
     \label{th:lambda}
     Under the assumptions of Theorem~\ref{th:central_by_max}, the central distribution for \set{X} satisfies:
     \begin{equation}
-        \DxPcond[\Cx] = \lambda,
+        \DxPcond[\central] = \lambda,
         \label{eq:lambda}
     \end{equation}
     where $\lambda$ is a constant.
@@ -376,7 +607,7 @@ of the divergence measure.
     \[
         \Lagr[p(\paramValue)] = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
     \]
-    Let us denote the prior distribution corresponding to the central distribution \Cx by $\cPrior$.
+    Let us denote the prior distribution corresponding to the central distribution \central by $\cPrior$.
     Let $p(\paramValue) = \cPrior + \epsilon \eta(\paramValue)$ be a variation of $\cPrior$, where $\eta(\paramValue)$ is
     a continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
 
@@ -406,7 +637,7 @@ of the divergence measure.
     Since $\eta(\paramValue)$ is an arbitrary function, by applying the fundamental lemma of the calculus of
     variations and letting $\epsilon = 0$, for every value of $\paramValue$ we have
     \[
-        \Dparam[\Cx] = \lambda\cdot \qedhere
+        \Dparam[\central] = \lambda\cdot \qedhere
     \]
 \end{proof}
 
@@ -422,10 +653,10 @@ The first step in this process is to establish our query set $\Xpairs$.
 In a prediction problem, we are interested in the distribution of the random variable we want to predict,
 conditioned on the observed data.
 For example, if we roll the dice for three times before making our prediction,
-we will need $P(\rv[4]{x} \mid \rv[1]{x},\rv[2]{x},\rv[3]{x})$, where \rv{x} denotes the outcome
+we will need $P(\rv[4]{x} \mid \rv[1]{x},\rv[2]{x},\rv[3]{x})$, where \Qvar denotes the outcome
 of the $i$-th dice roll.
 
-Thus, one natural way for defining a query set $\Xpairs$ is to let each \rv{x} be the outcome of
+Thus, one natural way for defining a query set $\Xpairs$ is to let each \Qvar be the outcome of
 the $i$-th dice roll, and define each \rv{e} as a vector of the previous dice outcomes $(\seqRv{i-1})$.
 
 Now let us calculate the conditional divergence measure for \set{x} as defined in Definition~\ref{def:cond_divergence}:
@@ -450,7 +681,7 @@ probability:
 \end{align*}
 By Equation~\ref{eq:Cx_by_max}, for the central distribution we have
 \begin{align*}
-    \Cx &= \arg\max_{P} \int \left(\KLcond{\seqRval{n}}{}\right) \dt \\
+    \central &= \arg\max_{P} \int \left(\KLcond{\seqRval{n}}{}\right) \dt \\
     &= \arg\max_{P} \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
     \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
 \end{align*}
@@ -472,7 +703,7 @@ Next, we input some of these dice outcomes into the machine and observe the resu
 As we will see, this assumption is important for deriving the central distribution more easily.
 
 Let us define a query set for this problem.
-We denote this set as $\Xpairs$, where each \rv{x} is the result of the $i$-th game, and the evidence \rv{e} is a
+We denote this set as $\Xpairs$, where each \Qvar is the result of the $i$-th game, and the evidence \rv{e} is a
 vector
 \[
     (\seqRv{i-1}, \seqRv[y]{n}),
@@ -497,13 +728,13 @@ dice outcome.
 
 Using the new definition for \set{x}, by Equation~\ref{eq:lambda} we have:
 \begin{equation*}
-    \KLcond[\Cx]{\vval{x}}{\vval{e}} = \lambda
+    \KLcond[\central]{\vval{x}}{\vval{e}} = \lambda
 \end{equation*}
 \emph{derive a $\paramValue = (\paramA, \paramB)$ closed form for central dist...}
 
 \[
-    \frac{\pi(\vval{x} \mid \vval{e}, \paramValue)}{\Cx(\vval{x} \mid \vval{e})}
-    = \frac{\pi(\paramValue \mid \vval{x}, \vval{e})}{\Cx(\paramValue \mid \vval{e})}
+    \frac{\pi(\vval{x} \mid \vval{e}, \paramValue)}{\central(\vval{x} \mid \vval{e})}
+    = \frac{\pi(\paramValue \mid \vval{x}, \vval{e})}{\central(\paramValue \mid \vval{e})}
 \]
 
 sdfd
@@ -520,7 +751,7 @@ However, it also reduces our ability to predict the game’s result accurately.
 
 In order to find a central distribution for this version of our game, we should slightly modify the definition of the
 query set.
-While each \rv{x} remains unchanged, we need to represent each \rv{e} as a vector
+While each \Qvar remains unchanged, we need to represent each \rv{e} as a vector
 \[
     (\seqRv{i-1}, \seqRv[y']{n}),
 \]
@@ -548,7 +779,7 @@ our problem, our query set should include random variables of both versions.
 
 \begin{theorem}
     Let \pmodel be a generic parametric model, and $\Xsingles$ be a set of random variables in \Mt.
-    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \rv{X},
+    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \Qvar,
     so that for $\paramFuncValue = \paramFunc(\paramValue)$ we have:
     \begin{equation}
         \pi(\xIt) = \pi \left( \rval{x} \mid \paramFuncValue \right)\cdot
@@ -568,7 +799,7 @@ our problem, our query set should include random variables of both versions.
 \end{theorem}
 
 \begin{proof}
-    First, we show that the set of distributions of each \rv{X} is a convex set.
+    First, we show that the set of distributions of each \Qvar is a convex set.
     Let $Q^*(\rval{x}) = \convexCond{\rval{x}}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
     arbitrary $i, \rval{x}$.
 
@@ -583,13 +814,13 @@ our problem, our query set should include random variables of both versions.
 
     Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies
     \begin{equation}
-        \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\Cx(\rval{x})} = \lambda\cdot
+        \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\central(\rval{x})} = \lambda\cdot
         \label{eq:lambda_th_proof}
     \end{equation}
     Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
     \begin{align*}
-        \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\Cx(\rval{x})}
-        &= \sumOverix \pi(\xIw) \ln \frac{\pi(\xIw)}{\Cx(\rval{x})}\\
+        \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\central(\rval{x})}
+        &= \sumOverix \pi(\xIw) \ln \frac{\pi(\xIw)}{\central(\rval{x})}\\
         &= \sumOverix \pi(\xIw) \ln \frac{\cMass{\wIx}}{\cPrior[(\paramFuncValue)]}\\
         &= \sum_i \ln \frac{\rhoPrior}{\cPrior[(\paramFuncValue])}\cdot
     \end{align*}
@@ -609,7 +840,7 @@ our problem, our query set should include random variables of both versions.
 
 \begin{theorem}
     Let \pmodel be a generic parametric model, and $\Xpairs$ be a set of random variables in \Mt.
-    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \rv{X},
+    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \Qvar,
     so that for $\paramFuncValue = \paramFunc(\paramValue)$ we have:
     \begin{equation}
         \pi(\xIt) = \pi \left( \rval{x} \mid \paramFuncValue \right)\cdot
@@ -629,7 +860,7 @@ our problem, our query set should include random variables of both versions.
 \end{theorem}
 
 \begin{proof}
-    First, we show that the set of distributions of each \rv{X} is a convex set.
+    First, we show that the set of distributions of each \Qvar is a convex set.
     Let $Q^*(\xIe) = \convexCond{\xIe}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
     arbitrary $i, \xe$.
 
@@ -644,14 +875,14 @@ our problem, our query set should include random variables of both versions.
 
     Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies
     \begin{equation}
-        \Dparam[\Cx] = \lambda\cdot
+        \Dparam[\central] = \lambda\cdot
         \label{eq:lambda_th_proof}
     \end{equation}
     Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
     \begin{align*}
         \lambda
-        &= \Dparam[\Cx]\\
-        &= \sumOverixe \xeIba \ln \frac{\xIeb}{\Cx(\xIe)} \\
+        &= \Dparam[\central]\\
+        &= \sumOverixe \xeIba \ln \frac{\xIeb}{\central(\xIe)} \\
         &= \sumOverixe \xeIba \ln \frac{\bIxe}{\cMass(\paramB \mid \rval{e})} \\
         &= \sum_i \ln \frac{\rhoPrior}{\bIa}\cdot
     \end{align*}

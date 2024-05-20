@@ -22,21 +22,21 @@ that maximizes the expected utility conditioned on $e$:
     a_{\text{optimal}} = \arg\max_a \Ex{\envDist}{\util \mid e} = \arg\max_a\sumx \util \envDist(x \mid e).
 \end{equation*}
 Here $\envDist(\XIe[])$ is the probability distribution of the environment state given the evidence.
-However, how can we obtain this distribution?
+However, a fundamental question arises: How do we obtain this distribution?
 Is there an objective distribution inherent in the environment that we need to somehow discover?
 
-From the subjective perspective on probability, the answer is negative.
+Answering this question is not straightforward. From a subjective perspective on probability, the answer is negative.
 There is no such objective distribution, and $\envDist$ exists only in our minds.
 It serves as a tool that helps us regulate our reasoning---an intermediate measure created within the
 Bayesian decision-making framework to ensure we stay consistent with our assumptions and common sense principles.
 
 Considering the subjective viewpoint, the determination of $\envDist$ relies on one’s prior knowledge and
 assumptions.
-When we have no assumptions and no prior knowledge, the set of candidate distributions for $\envDist$ simply
-consists of all possible probability distributions.
-As we make assumptions or obtain some prior knowledge, the probability distributions that do not align
+When we have no assumptions and no prior knowledge, the set of candidate probabilities for $\envDist$ simply
+consists of all possible probability measures.
+As we make assumptions or obtain some prior knowledge, the probability measures that do not align
 with our assumptions or knowledge are eliminated from this set.
-Consequently, the set of acceptable probability distributions becomes more refined. We refer to this refined
+Consequently, the set of acceptable probability measures becomes more refined. We refer to this refined
 set as a probabilistic model:
 
 \begin{definition}[Probabilistic Model]
@@ -71,7 +71,7 @@ then to fully determine $\envDist$, we only need to establish the prior probabil
 
 \begin{definition}[Parametric Model]
     \label{def:param-model}
-    Let $\param$ be a random vector.
+    Let $\param$ be a random variable.
     A \emph{parametric model} is a probabilistic model \pmodel, where for every $P \in \set{P}$ there is a prior
     probability
     distribution $p$, such that for every $\rval[]{s} \in \set{s}$
@@ -80,6 +80,7 @@ then to fully determine $\envDist$, we only need to establish the prior probabil
         \label{eq:parametric}
     \end{equation}
     while $\pi$ is a known probability distribution.
+    We refer to $\pi$ as the \emph{likelihood} distribution.
 \end{definition}
 
 Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on prior knowledge about the

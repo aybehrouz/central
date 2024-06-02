@@ -5,27 +5,35 @@
 %        \item Set \set{A}, and a measure \measure{M}.
 %    \end{itemize}
 
-\newcommand{\util}{U(\rval[]{a}, \rval[]{x})}
+\newcommand{\util}[1][{\rval[]{a}}]{U(#1, \rval[]{x})}
 \newcommand{\envDist}{P^*}
-\newcommand{\post}{\pi(\rval{x} \mid \paramValue)}
+\newcommand{\post}{\pi(\rval[i]{x} \mid \paramValue)}
 
-Consider an environment where an agent must select an action from a set of available actions. The utility of each
-action for the agent can be expressed as a real-valued function, which depends on the unknown state of the environment.
-Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the unknown environment state. The utility
-function  $\util$ quantifies the desirability of each action.
-Additionally, we assume that an evidence \rval[]{e} of the environment state exists, and our agent can leverage this
-evidence to determine the optimal action.
+We begin by revisiting a fundamental decision-making problem, and how it is treated within the framework of Bayesian
+decision theory.
 
-According to Bayesian decision theory, the optimal action, when evidence $e$ is observed, is the one
-that maximizes the expected utility conditioned on $e$:
+Consider an environment where an agent must select an action from a set of available actions.
+The utility of each action can be quantified by a real number, which depends on the unknown state of the
+environment.
+Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the unknown environment state.
+The utility function  $\util$ quantifies the desirability of each action.
+
+Moreover, an evidence \rval[]{e} of this unknown environment state exists, and our agent can leverage this
+evidence to determine the best action.
+In other words, the agent aims to find the optimal strategy, where a strategy defines the distribution of each
+action conditioned on the evidence.
+
+According to Bayesian decision theory, the optimal strategy is the one that maximizes the expected utility:
 \begin{equation*}
-    a_{\text{optimal}} = \arg\max_a \Ex{\envDist}{\util \mid e} = \arg\max_a\sumx \util \envDist(x \mid e).
+    S_{\text{optimal}} = \arg\max_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
 \end{equation*}
-Here $\envDist(\XIe[])$ is the probability distribution of the environment state given the evidence.
+
+Here $\envDist(\XE)$ is the joint probability distribution of the environment state and the evidence.
 However, a fundamental question arises: How do we obtain this distribution?
 Is there an objective distribution inherent in the environment that we need to somehow discover?
 
-Answering this question is not straightforward. From a subjective perspective on probability, the answer is negative.
+Answering this question is not straightforward.
+From a subjective perspective on probability, the answer is negative.
 There is no such objective distribution, and $\envDist$ exists only in our minds.
 It serves as a tool that helps us regulate our reasoning---an intermediate measure created within the
 Bayesian decision-making framework to ensure we stay consistent with our assumptions and common sense principles.
@@ -34,7 +42,7 @@ Considering the subjective viewpoint, the determination of $\envDist$ relies on 
 assumptions.
 When we have no assumptions and no prior knowledge, the set of candidate probabilities for $\envDist$ simply
 consists of all possible probability measures.
-As we make assumptions or obtain some prior knowledge, the probability measures that do not align
+As we make assumptions or obtain some prior knowledge, those probability measures that do not align
 with our assumptions or knowledge are eliminated from this set.
 Consequently, the set of acceptable probability measures becomes more refined. We refer to this refined
 set as a probabilistic model:
@@ -44,14 +52,14 @@ set as a probabilistic model:
     space, and \set{P} is a set of acceptable probability measures on \set{S}.
 \end{definition}
 
-One of the most commonly used assumptions in the statistical modeling is the exchangeability assumption.
+One of the most commonly used assumptions of this kind in the statistical modeling is the exchangeability assumption.
 We say a sequence of random variables $\seqRvInf$ is exchangeable if the ordering of variables does not provide any
 useful information.
-In other words, for an exchangeable sequence of random variables, the joint probability is the same
+Or in other words, for an exchangeable sequence of random variables, the joint probability is the same
 for any permutation of variables.
 This property holds true for every subset of the sequence.
 
-For instance, if each \rv{x} represents a binary variable, the joint probability depends solely on the total count
+For instance, if each \rv[i]{x} represents a binary variable, the joint probability depends solely on the total count
 of 1s and 0s, and the specific order in which these variables appear becomes irrelevant.
 
 When a sequence of random variables is exchangeable, de Finetti's theorem states that their joint probability has a
@@ -61,13 +69,9 @@ special representation:
 \end{equation*}
 This means, exchangeable observations are conditionally independent relative to some latent parameter $\paramValue$.
 
-Moreover, the theorem states that if each \rv{x} is discrete, the distribution $\post$ corresponds to the multinomial
+Moreover, the theorem states that if each \rv[i]{x} is discrete, the distribution $\post$ corresponds to the multinomial
 distribution.
 
-Now, consider our decision-making problem: Suppose the evidence \rval[]{e} consists of a sequence of previous experiences
-of the environment.
-If we assume that our environment remains unchanged over time (making this sequence exchangeable),
-then to fully determine $\envDist$, we only need to establish the prior probability of our latent parameter $\prior$.
 
 \begin{definition}[Parametric Model]
     \label{def:param-model}
@@ -83,6 +87,11 @@ then to fully determine $\envDist$, we only need to establish the prior probabil
     We refer to $\pi$ as the \emph{likelihood} distribution.
 \end{definition}
 
+Now, consider our decision-making problem: Suppose the evidence \rval[]{e} consists of a sequence of previous experiences
+of the environment.
+If we assume that our environment remains unchanged over time (making this sequence exchangeable),
+then to fully determine $\envDist$, we only need to determine the prior probability of our latent parameter $\prior$.
+
 Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on prior knowledge about the
 environment.
 However, what if such knowledge is unavailable?
@@ -94,7 +103,58 @@ excluded values.
 Unfortunately, arguments like this one can only rule out a small portion of the potential distributions for $\prior$,
 leaving us with numerous options and an unclear path for selection.
 
-In this discussion, we will explore a new approach for choosing an appropriate prior distribution when prior
-knowledge about the environment is lacking.
+For now, let's assume that we have somehow determined $\envDist$, and shift our focus to finding the optimal strategy.
 
+It can be shown that there always exists a deterministic optimal strategy.
+That means, we can consider a strategy is a function of the evidence, rather than a conditional distribution:
+\[
+    S_{\text{optimal}} = \arg\max_S \sum_{x,e} \util[S(e)] \envDist(x, e).
+\]
 
+It is not difficult to show that the optimal strategy, for each evidence $\rval{e}$, chooses the action that
+maximizes the expected utility conditioned on $e$:
+\begin{align*}
+    a_{\text{optimal}} &= \arg\max_a \Ex{\envDist}{\util \mid e} \\
+    &= \arg\max_a\sumx \util \envDist(x \mid e) \cdot
+\end{align*}
+This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
+The value of the expected utility depends on $\envDist(\rv{E})$, but the actions that construct the optimal
+strategy are not affected by $\envDist(\rv{E})$.
+
+Suppose we decide to use a different evidence, denoted as \rv{E'}, instead of \rv{E}.
+Could this choice potentially improve our strategy?
+Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
+By comparing the expected utility of the strategies, we can determine which is superior.
+The strategy with the higher expected utility is the better one.
+
+Note that in reality, we cannot freely choose any evidence we want.
+The availability of evidence depends on the environment.
+We can only choose evidence that is a function of the evidence provided by the environment,
+so that its value can always be determined from the original evidence.
+
+Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
+For instance, in a learning task where our evidence is an image, we might substitute it with the first
+three coefficients of its Fourier transform.
+Naturally, these coefficients are a function of the original evidence.
+
+Interestingly, if we assume $\rv{E'} = f(\rv{E})$, it turns out
+that, according to our Bayesian decision framework, the optimal strategy based on \rv{E} is always
+better than every strategy that uses \rv{E'}.
+Hence, at first glance, it appears that Bayesian decision theory does not favor feature selection.
+
+From a certain perspective, it could be argued that adopting a strategy that uses simpler evidence leads to ignoring
+some parts of available information, and therefore can not be justified by Bayesian decision theory.
+However, in practice, we have to utilize feature selection because the original learning task requires
+impractical large datasets.
+
+The key point here is that the space of strategies using \rv{E'} is a subset of strategies that are functions
+of \rv{E}.
+When we are searching for the best strategy for \rv{E} we are implicitly evaluating all simpler forms as well.
+Hence, we believe that if we choose an appropriate probability measure $\envDist$, feature selection will
+automatically be performed when we are finding the optimal Bayesian strategy.
+
+Recall that in parametric models $\envDist$ is determined by the prior distribution of the model parameter.
+Unfortunately, many commonly used priors in statistics, such as the flat prior, do not exhibit feature selection
+characteristics.
+In this discussion, we will explore an approach for choosing an appropriate prior distribution, when prior
+knowledge about the environment is lacking, which also has some interesting feature selection properties.

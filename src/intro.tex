@@ -18,17 +18,17 @@ environment.
 Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the unknown environment state.
 The utility function  $\util$ quantifies the desirability of each action.
 
-Moreover, an evidence \rval[]{e} of this unknown environment state exists, and our agent can leverage this
+Moreover, an evidence \rval[]{e} of this unknown environment state exists, and the agent can leverage this
 evidence to determine the best action.
-In other words, the agent aims to find the optimal strategy, where a strategy defines the distribution of each
-action conditioned on the evidence.
+In other words, our agent aims to find the optimal strategy, where a strategy defines the distribution of each
+action conditioned on the observed evidence.
 
 According to Bayesian decision theory, the optimal strategy is the one that maximizes the expected utility:
 \begin{equation*}
-    S_{\text{optimal}} = \arg\max_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
+    S_{\text{opt}} = \arg\max_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
 \end{equation*}
 
-Here $\envDist(\XE)$ is the joint probability distribution of the environment state and the evidence.
+Here, $\envDist(\XE)$ is the joint probability distribution of the environment state and the evidence.
 However, a fundamental question arises: How do we obtain this distribution?
 Is there an objective distribution inherent in the environment that we need to somehow discover?
 
@@ -59,7 +59,7 @@ Or in other words, for an exchangeable sequence of random variables, the joint p
 for any permutation of variables.
 This property holds true for every subset of the sequence.
 
-For instance, if each \rv[i]{x} represents a binary variable, the joint probability depends solely on the total count
+For example, if each \rv[i]{x} represents a binary variable, the joint probability depends solely on the total count
 of 1s and 0s, and the specific order in which these variables appear becomes irrelevant.
 
 When a sequence of random variables is exchangeable, de Finetti's theorem states that their joint probability has a
@@ -90,50 +90,52 @@ distribution.
 Now, consider our decision-making problem: Suppose the evidence \rval[]{e} consists of a sequence of previous experiences
 of the environment.
 If we assume that our environment remains unchanged over time (making this sequence exchangeable),
-then to fully determine $\envDist$, we only need to determine the prior probability of our latent parameter $\prior$.
+to fully determine $\envDist$, we only need to determine the prior probability of the latent parameter $\prior$.
 
-Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on prior knowledge about the
+Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on our prior knowledge about the
 environment.
 However, what if such knowledge is unavailable?
 
-It is not difficult to identify some distributions that are not good choices for $\prior$.
+Even without prior knowledge, it is not difficult to identify some distributions that are unsuitable choices
+for $\prior$.
 For instance, any distribution that assigns zero probabilities to certain values of $\paramValue$ is not a good choice.
 If we use such a prior, no evidence can convince us that the value of $\paramValue$ lies within those
 excluded values.
+
 Unfortunately, arguments like this one can only rule out a small portion of the potential distributions for $\prior$,
 leaving us with numerous options and an unclear path for selection.
 
 For now, let's assume that we have somehow determined $\envDist$, and shift our focus to finding the optimal strategy.
 
 It can be shown that there always exists a deterministic optimal strategy.
-That means, we can consider a strategy is a function of the evidence, rather than a conditional distribution:
+That means, we can consider a strategy as a function of the evidence, rather than a conditional distribution:
 \[
-    S_{\text{optimal}} = \arg\max_S \sum_{x,e} \util[S(e)] \envDist(x, e).
+    S_{\text{opt}} = \arg\max_S \sum_{x,e} \util[S(e)] \envDist(x, e).
 \]
 
-It is not difficult to show that the optimal strategy, for each evidence $\rval{e}$, chooses the action that
-maximizes the expected utility conditioned on $e$:
+We can easily verify that the optimal strategy, for each evidence \rval{e}, chooses the action that
+maximizes the expected utility conditioned on \rval{e}:
 \begin{align*}
-    a_{\text{optimal}} &= \arg\max_a \Ex{\envDist}{\util \mid e} \\
+    S_{\text{opt}}(e) &= \arg\max_a \Ex{\envDist}{\util \mid e} \\
     &= \arg\max_a\sumx \util \envDist(x \mid e) \cdot
 \end{align*}
 This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
-The value of the expected utility depends on $\envDist(\rv{E})$, but the actions that construct the optimal
+Note that the value of the expected utility depends on $\envDist(\rv{E})$, but the actions that construct the optimal
 strategy are not affected by $\envDist(\rv{E})$.
 
 Suppose we decide to use a different evidence, denoted as \rv{E'}, instead of \rv{E}.
-Could this choice potentially improve our strategy?
+Could this change potentially improve our strategy?
 Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
-By comparing the expected utility of the strategies, we can determine which is superior.
-The strategy with the higher expected utility is the better one.
+To compare any two strategies, we can simply compare their expected utilities.
+The strategy with the greater expected utility is the better one.
 
 Note that in reality, we cannot freely choose any evidence we want.
 The availability of evidence depends on the environment.
 We can only choose evidence that is a function of the evidence provided by the environment,
-so that its value can always be determined from the original evidence.
+allowing us to determine its value by observing the original evidence.
 
 Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
-For instance, in a learning task where our evidence is an image, we might substitute it with the first
+For instance, in a learning task where our evidence is an image, we might substitute the image with the first
 three coefficients of its Fourier transform.
 Naturally, these coefficients are a function of the original evidence.
 
@@ -144,17 +146,17 @@ Hence, at first glance, it appears that Bayesian decision theory does not favor 
 
 From a certain perspective, it could be argued that adopting a strategy that uses simpler evidence leads to ignoring
 some parts of available information, and therefore can not be justified by Bayesian decision theory.
-However, in practice, we have to utilize feature selection because the original learning task requires
+However, in practice, we have to use feature selection because usually the original learning task requires
 impractical large datasets.
 
-The key point here is that the space of strategies using \rv{E'} is a subset of strategies that are functions
-of \rv{E}.
-When we are searching for the best strategy for \rv{E} we are implicitly evaluating all simpler forms as well.
-Hence, we believe that if we choose an appropriate probability measure $\envDist$, feature selection will
-automatically be performed when we are finding the optimal Bayesian strategy.
+The key point here is that the space of strategies using \rv{E'} is a subset of strategies that use \rv{E}.
+When we are searching for the best strategy for \rv{E}, we are implicitly evaluating all simpler forms as well.
+Hence, we believe if we choose an appropriate probability measure $\envDist$, feature selection should
+be performed automatically when we are finding the optimal Bayesian strategy.
 
-Recall that in parametric models $\envDist$ is determined by the prior distribution of the model parameter.
+Recall that, in parametric models, $\envDist$ is determined by the prior distribution of the model parameter.
 Unfortunately, many commonly used priors in statistics, such as the flat prior, do not exhibit feature selection
 characteristics.
 In this discussion, we will explore an approach for choosing an appropriate prior distribution, when prior
-knowledge about the environment is lacking, which also has some interesting feature selection properties.
+knowledge about the environment is lacking.
+This prior also has some interesting feature selection properties.

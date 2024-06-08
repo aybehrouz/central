@@ -1,17 +1,17 @@
-Assume that in an environment we are interested in the probability of a random variable \rv[]{X}
-conditioned on an observed evidence \rval[]{e}.
+Assume that in an environment we are interested in the probability of a random variable \rv[]{X}.
 We have decided on a probabilistic model \M for the environment, and without any particular prior knowledge, we have
 chosen a distribution $P$ from our model.
 
 We ask an expert---a person familiar with the environment---to evaluate our distribution $P$.
-Presumably, that expert has his own beliefs about the environment and thinks we should use a different
-distribution $Q$, instead of $P$.
-Consequently, when evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\XIe[])$,
+Presumably, instead of $P$, that expert has his own beliefs about the environment and thinks we should use a different
+distribution $Q$.
+Consequently, when evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\rv{X})$,
 while believing that the correct distribution is $Q$.
 
-Let's assume that a real number can be used to measure this loss, and denote it as $\D[{\XIe[]}]$.
+Let's assume that a real number can be used to measure this loss, and denote it as $\D[\rv{X}]$.
 It seems reasonable as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
-Therefore, $\D[]$ effectively is a measure of the divergence of $P$ from $Q$, when $Q$ is the true distribution.
+Therefore, $\D[\rv{X}]$ effectively is a measure of the divergence of $P$ from $Q$, when $Q$ is the believed true
+distribution.
 
 Interestingly, if we make certain assumptions about the properties of this divergence measure,
 it turns out that---up to a constant factor---it must be equal to the Kullback–Leibler (KL) divergence.
@@ -20,18 +20,22 @@ measure of the uncertainty of a distribution, we should also consider KL diverge
 measuring divergence between distributions.
 
 \begin{theorem}
-    Suppose that $\D[]$ is a divergence measure, defined for probability distributions $Q$ and $P$,
-    which satisfies the following properties:
+    Let \rv{X} be a discrete random variable.
+    Suppose that $\D[\rv{X}]$ is a divergence measure that quantifies the divergence of $P(\rv{X})$ from $Q(\rv{X})$.
+    Consider the following properties:
     \begin{description}
-        \item[Consistency with entropy] If $U$ is the uniform distribution with the same support
-        as $Q$, then $\D[][Q][U] = \entropy{U}{} - \entropy{Q}{}$, where $\entropy{}{}$ denotes Shannon's
-        entropy.
+        \item[Consistency with entropy] Let $\varOmega$ be a random variable. If $U(\varOmega)$ is the uniform distribution
+        with the same support as $Q(\varOmega)$, then we have
+        \[
+            \D[\varOmega][Q][U] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
+        \]
+        where $\entropy{}{}$ denotes Shannon's entropy.
         \item[Additivity] For any two random variables $\XY$
         \[
             \D[\XY] = \D + \sumx \D[\YIx]Q(\rval[]{x})\cdot
         \]
     \end{description}
-    Then, $\D[]$ is the Kullback-Leibler divergence.
+    If \measure{D} satisfies these properties, then it is the Kullback-Leibler divergence.
 \end{theorem}
 
 \begin{proof}
@@ -44,9 +48,8 @@ measuring divergence between distributions.
     \newcommand{\tent}[1]{\int q(#1) \ln q(#1) d\t}
 
     \newcommand{\Qx}{Q(\rval[]{x})}
-    Let \rv[]{X} be a discrete random variable, and $P(\rv[]{X})$ and $Q(\rv[]{X})$ be two arbitrary distributions
-    for \rv[]{X}.
-    We define a new continuous random variable $\T$ and define
+    Let $P(\rv[]{X})$ and $Q(\rv[]{X})$ be two arbitrary distributions for \rv[]{X}.
+    We define a new continuous random variable $\T$ and let
     \begin{equation*}
         p(\T = \t \mid \rvEq) =
         \begin{cases}
@@ -79,12 +82,12 @@ measuring divergence between distributions.
     \end{align*}
 \end{proof}
 
-In this theorem, the first property simply states that the entropy of a distribution is related to the divergence of
-the uniform distribution.
-The more the divergence is, the less the entropy should be.
+In this theorem, the first property simply states that the entropy of a distribution should be related to the
+divergence of the uniform distribution from it.
+The more the divergence is, the less the entropy must be.
 
 The second property tells us that the divergence is an additive quantity.
-We know that the divergence of $P(\XY)$ from $Q(\XY)$ is actually a measure of the generic loss of using $P(\XY)$
+We know that the divergence of $P(\XY)$ from $Q(\XY)$ is a measure of the generic loss of using $P(\XY)$
 when we believe $Q(\XY)$ is the true distribution.
 To calculate this loss, we can assume that \rv[]{X} happens before \rv[]{Y}.
 In that way, this loss would include the loss of using $P(\rv[]{X})$, and then, if we observe
@@ -92,10 +95,24 @@ $\rv[]{X} = \rval[]{x}$, which can happen with probability $Q(\rval[]{x})$, it w
 using $P(\YIx)$.
 This property indicates that for combining these individual terms we should use addition.
 
-Returning to our earlier discussion, this implies that to evaluate $P$ our expert should use the KL divergence
-between $P$ and $Q$.
-What if we find a distribution $C$ that has a small KL divergence from any other distribution in our model?
-In that way, every expert would agree that our distribution is a good choice.
+Returning to our earlier discussion, this implies that to evaluate $P$ in regard to some random variable \rv{X}, our
+expert should use the KL divergence of $P(\rv{X})$ from $Q(\rv{X})$.
+
+In the context of Bayesian decision theory, for evaluating a probability measure $P$, It appears reasonable to focus
+primarily on the optimal Bayesian strategy that is obtained when using $P$.
+We may limit the scope of strategies to those that use an evidence from a specific set of random variables \set{E}.
+Our evaluation measure should not depend on the utility function, since that would imply that our belief about the
+environment is a function of our benefit.
+
+From Equation~\ref{eq:bayes-action}, we know that the optimal strategy for evidence \rv{e} depends only on $P(\XIE)$.
+Hence, given an observed value \rval{e} of the evidence, we may calculate the
+KL-divergence of $P(\XIe)$ from $Q(\XIe)$.
+To obtain a measure that is not conditioned on a specific value of the evidence, we should calculate the expected value
+of this KL divergence with respect to $Q$, which represents our expert's belief about the environment.
+
+Now that we have a divergence measure to evaluate a distribution, what if we find a probability measure $C$ that
+has a small divergence from any other distribution in our model?
+That way, every expert would agree that our probability measure is a good choice.
 Interestingly, this relates to the concept of Bayesian convergence, where the posterior probability converges to the
 same distribution regardless of the prior distribution.
 
@@ -114,17 +131,17 @@ same distribution regardless of the prior distribution.
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]
-\end{definition}
 
-When \set{e} contains a single random variable, like \rv{e}, we simplify our notation.
-Instead of writing $\Qvar|\{\rv{e}\}$ we simply use $\Qvar|\rv{e}$.
+    When \set{e} contains a single random variable \rv{e}, We refer to \rv{e} as the \emph{evidence variable}.
+    We also simplify our notation and instead of writing $\Qvar|\{\rv{e}\}$, we use $\Qvar|\rv{e}$.
+\end{definition}
 
 \begin{definition}[Divergence Measure]
     Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
     We define the \emph{divergence measure of $P \in \set{P}$ for $\QvarIEset$} as follows:
     \begin{align}
         \label{eq:div-def}
-        \DxP &= \maxQ \maxE \Ex{Q}{\Dcond} \\
+        \Dx &= \maxQ \maxE \Ex{Q}{\Dcond} \\
         &= \maxQ \maxE \sumOverxe Q(\assign{x} , \assign{e}) \ln
         \frac{Q(\assign{x} \mid \assign{e})}{P(\assign{x} \mid \assign{e})} \cdot
     \end{align}
@@ -137,7 +154,7 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
 \begin{proposition}
     $\QvarIEset$ \econverges by $P$, if and only if:
     \begin{equation*}
-        \DxP < \epsilon \cdot
+        \Dx < \epsilon \cdot
     \end{equation*}
 \end{proposition}
 
@@ -146,7 +163,7 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     evidence set \Eset, to be a distribution $\central \in \set{P}$ which minimizes the divergence measure
     for $\QvarIEset$:
     \begin{equation*}
-        \central = \arg\pmin \DxP\cdot
+        \central = \arg\pmin \Dx\cdot
         \label{eq:center}
     \end{equation*}
 \end{definition}
@@ -201,7 +218,7 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     If $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$,
     with respect to $\QvarIEset$, then we have
     \begin{equation*}
-        \DxP = \aggDxP \cdot
+        \Dx = \aggDxP \cdot
     \end{equation*}
 
     In addition, the central distribution for $\agg{\Qvar}|\agg{\rv{e}}$ is an aggregator of the central
@@ -227,7 +244,7 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     \end{align*}
     This implies
     \begin{equation}
-        \aggDxP \leq \DxP \cdot
+        \aggDxP \leq \Dx \cdot
         \label{eq:th-2-proof-1}
     \end{equation}
 
@@ -241,7 +258,7 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     probability of 1: $\agg{R}(k) = 1$.
     Therefore,
     \begin{align*}
-        \DxP
+        \Dx
         &= \ExpKL[][{\rval[k]{e}}][R] \\
         &= \sum_{\aggxe} \agg{R}(\aggxe \mid k) \ln\frac{\agg{R}(\aggxIe, k)}{\agg{P}(\aggxIe, k)} \\
         &= \aggExpKL{R} \\
@@ -249,7 +266,7 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     \end{align*}
     By Equation~\ref{eq:th-2-proof-1}, we conclude that
     \begin{equation*}
-        \DxP = \aggDxP \cdot
+        \Dx = \aggDxP \cdot
     \end{equation*}
 
     To prove the second part of the theorem, let \central[\aggXIE] be a central distribution
@@ -260,103 +277,15 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     be a probability
     measure $R \in \set{P}$ such that:
     \begin{equation*}
-        \DxP[R] < \DxP[\central] = \aggDxP[C_{\aggXIE}] \cdot
+        \Dx[R] < \Dx[\central] = \aggDxP[C_{\aggXIE}] \cdot
     \end{equation*}
     On the other hand, since \Magg is a selective model, $R$ must have an aggregator $\agg{R} \in \agg{\set{P}}$,
     and we have
     \begin{equation*}
-        \DxP[R] = \aggDxP[R] > \aggDxP[{C_{\aggXIE}}],
+        \Dx[R] = \aggDxP[R] > \aggDxP[{C_{\aggXIE}}],
     \end{equation*}
     which is a contradiction.
 \end{proof}
-
-\begin{proposition}
-    The central distribution for $\agg{\Qvar}|\agg{\rv{e}}$ is an aggregator of the central distribution
-    for $\QvarIEset$.
-\end{proposition}
-
-\begin{theorem}[Aggregate Model]
-    Consider two parametric probabilistic models \pmodel and \aggmodel.
-    Let \Qvar be a query variable and $\Eset = \{\seqRvInf[e]\}$ be an evidence set in \Mt.
-    Also, let \agg{\rv{e}}, \agg{\Qvar}, \aggParam, and \rv{i} be random variables defined
-    on \agg{\set{s}} in \Magg.
-
-    Suppose that for any \rval{i}, and every values \QvarVal, \rval[i]{e}, and \paramValue, there is some
-    \agg{\QvarVal}, \agg{\rval{e}}, and \aggParamVal, such that we have
-    \begin{equation*}
-        \pi(\Qvar = \QvarVal, \rv[i]{e} = \rval[i]{e}  \mid \param = \paramValue) =
-        \agg{\pi}(\agg{\Qvar} = \agg{\QvarVal}, \assign{\agg{e}}
-        \mid \aggParam = \aggParamVal, \assign{I}),
-        \label{eq:th1-1}
-    \end{equation*}
-    where $\pi$ is the likelihood distribution in \Mt, and $\agg{\pi}$ is the likelihood distribution in \Magg.
-
-    In addition, in every probability measure $\agg{P} \in \agg{\set{P}}$, \aggParam and $\rv{i}$ are independent:
-    \begin{equation*}
-        \agg{p}(\aggParam \mid \rv{I}) = \agg{p}(\aggParam),
-    \end{equation*}
-    while the prior distribution $\agg{p}(\aggParam)$, is the same as the prior distribution
-    of \param induced by some probability measure $P \in \set{P}$:
-    \begin{equation*}
-        p(\param = \paramValue) = \agg{p}(\aggParam = \aggParamVal)\cdot
-    \end{equation*}
-    Also, \agg{\Qvar} and \rv{I} are conditionally independent given \agg{\rv{E}}:
-    \begin{equation*}
-        \agg{P}(\agg{\Qvar} \mid \agg{\rv{E}}, \rv{I}) = \agg{P}(\agg{\Qvar} \mid \agg{\rv{E}})
-    \end{equation*}
-
-    On the other hand, for every probability measure $P \in \set{P}$, and any arbitrary distribution $Q$,
-    there is a $\agg{P} \in \agg{\set{P}}$ such that for every \rval{i}, and \paramValue there exists a \aggParamVal
-    such that
-    \begin{equation*}
-        \agg{p}(\aggParamVal, \rval{I}) = p(\paramValue)Q(\rval{I})\cdot
-    \end{equation*}
-    We refer to \Magg as the aggregate model of \Mt for $\QvarIEset$.
-
-    If these conditions hold, then for any $P \in \set{P}$, there is a $\agg{P} \in \agg{\set{P}}$ such that we have
-    \begin{equation*}
-        \DxP = \aggDxP,
-    \end{equation*}
-    and vice versa.
-\end{theorem}
-\begin{proof}
-    sdfsfs
-\end{proof}
-\begin{proposition}
-    sdfs
-\end{proposition}
-\begin{theorem}
-
-    If these conditions hold, then for any $P \in \set{P}$ and $\agg{P} \in \agg{\set{P}}$ we have
-    \begin{equation*}
-        \DxP = \measure{D}_{\agg{\Qvar} \mid \agg{\rv{e}}} \left[ \agg{P} \right] \cdot
-    \end{equation*}
-    We refer to \Magg as the aggregate of \Mt for $\QvarIEset$.
-    \begin{equation*}
-        \agg{P}(\agg{\Qvar} \mid \agg{\rv{e}}) = \agg{P}(\agg{\Qvar} \mid \agg{\rv{e}}, \rv{i})\cdot
-        \label{eq:th1-2}
-    \end{equation*}
-    Then for every $P \in \set{P}$:
-    \begin{equation*}
-        \DxP = \measure{D}_{\agg{\Qvar} \mid \{\agg{\rv{e}} \}} \left[ \agg{P} \right] \cdot
-    \end{equation*}
-\end{theorem}
-
-\begin{proof}
-    Let $Q_m$ be the distribution, and $\rv[m]{e}$ be the evidence that maximizes $\Ex{Q}{\Dcond}$.
-    Therefore, by Equation~\ref{eq:div-def} we have
-    \begin{equation*}
-        \DxP = \ExpKL[][e_m][Q_m]\cdot
-    \end{equation*}
-
-    The definition of $\DxP$ involves
-    maximizing with respect to
-    Assume, by contradiction, that $\given{S}{\Eset}$ does not $\epsilon$-converge by $P$ in $\M$.
-    Therefore, there must exist $Q$ and $E_i \in \Eset$ in $\M$ such that:
-
-
-\end{proof}
-
 
 \begin{definition}[Conditional Divergence Measure]
     \label{def:cond_divergence}
@@ -364,7 +293,7 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     Let \Qvar be a query variable and \Eset be an evidence set in \Mt.
     We define the \emph{divergence measure of $P \in \set{P}$ given $\paramValue$ for $\QvarIEset$} as follows:
     \begin{align}
-        \DxPcond &= \maxE \DExparam \\
+        \DxCond{P}{\Eset} &= \maxE \DExparam \\
         &= \maxE \Dparam \cdot
         \label{eq:cond_div_measure}
     \end{align}
@@ -394,28 +323,28 @@ of the divergence measure.
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
     Assume that \pmodel is a parametric model.
-    Let \Qvar be a query variable and \Eset be an evidence set in \Mt.
+    Let \Qvar be a query variable, and \Evar be an evidence variable in \Mt.
     For every $P \in \set{P}$ we have
     \begin{equation*}
-        \DxP \leq \tmax \DxPcond
+        \Dxe \leq \tmax \DxeCond
     \end{equation*}
 \end{lemma}
 
 \begin{proof}
     Since the Kullback-Leibler divergence is positive, its expected value is also positive, and for any arbitrary
-    $R \in \set{P}$, $\rv{E} \in \Eset$, and parameter value $\paramValue$ we have
+    $R \in \set{P}$, and parameter value $\paramValue$ we have
     \[
-        \DExparam[][R] = \Dparam[R] \geq 0\ \cdot
+        \DExparam[][R] = \Dparam[R] \geq 0\cdot
     \]
     Using this, for every distribution $P$, we obtain
     \newcommand{\RP}{\sumOverxe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
     \[
         \RP \leq \Dparam \cdot
     \]
-    Since this inequality holds for any $\paramValue$ and any $\rv{e} \in \Eset$, the maximum of the right-hand side
-    w.r.t. $\paramValue$ and $\rv{e}$ is also greater than or equal to the maximum of the left-hand side:
+    Since this inequality holds for any $\paramValue$, the maximum of the right-hand side
+    w.r.t. $\paramValue$ is also greater than or equal to the maximum of the left-hand side:
     \begin{equation}
-        \tmax \maxE \RP \leq \tmax \DxPcond \cdot
+        \tmax \RP \leq \tmax \DxeCond \cdot
         \label{eq:ineq-theorem1}
     \end{equation}
 
@@ -426,20 +355,15 @@ of the divergence measure.
         \RP \leq \tmax \RP\cdot
     \]
     This inequality holds for every value of \paramValue.
-    Therefore, we can multiply this inequality by $r(\paramValue)$, which is non-negative, and integrate.
+    Therefore, we can multiply this inequality by $r(\paramValue)$, and integrate.
     Notice that the right hand side is not a function of $\paramValue$ and it remains unchanged
     because $\int \dt[r] = 1$:
     \[
         \Ex{R}{\Dcond[R]} \leq \tmax \RP\cdot
     \]
-    For any random variable $\rv{e} \in \Eset$, this inequality holds.
-    That implies
-    \[
-        \maxE \Ex{R}{\Dcond[R]} \leq \maxE \tmax \RP\cdot
-    \]
     Now from Inequality~\ref{eq:ineq-theorem1}, for \emph{any} distribution $P$ and $R$ in \Mt, we have
     \[
-        \Ex{R}{\Dcond[R]} \leq \tmax \DxPcond,
+        \Ex{R}{\Dcond[R]} \leq \tmax \DxeCond,
     \]
     which proves the lemma.
 \end{proof}
@@ -447,12 +371,12 @@ of the divergence measure.
 \begin{theorem}
     \label{th:Dx_parametric_form}
     Suppose \pmodel is a parametric model.
-    Let \Qvar be a query variable, and \Eset be an evidence set in \Mt.
+    Let \Qvar be a query variable, and \Evar be an evidence variable in \Mt.
     If for every value of $\paramValue$ there is a distribution $R \in \set{P}$ such that
     $R(\rval[]{s}) = \pi(\rval[]{s} \mid \paramValue)$ for every $\rval[]{s} \in \set{S}$,
     then for any $P \in \set{P}$ we have:
     \begin{equation}
-        \DxP = \tmax \DxPcond\cdot
+        \Dxe = \tmax \DxeCond\cdot
         \label{eq:div_parametric}
     \end{equation}
     \label{th:div_for_parametric}
@@ -461,24 +385,112 @@ of the divergence measure.
 \begin{proof}
     For an arbitrary distribution $P \in \set{P}$, we let
     \[
-        \paramValue^* = \arg\tmax \DxPcond \cdot
+        \paramValue^* = \arg\tmax \DxeCond \cdot
     \]
     In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\rval[]{s} \mid \paramValue^*)$
-    for every $\rval[]{s} \in \set{S}$, and therefore it defines the same distribution for any random variable.
-    It follows that for every $\rv{e} \in \Eset$, and every $P \in \set{p}$
+    for every $\rval[]{s} \in \set{S}$.
+    Obviously, $R$ and $\pi(\cdot \mid \paramValue)$ define the same distribution for any random variable,
+    and we have
     \begin{equation}
         \label{eq:th1}
         \Ex{R}{\Dcond[R]} = \DExparam[\paramValue^*] \cdot
     \end{equation}
-    On the other hand, clearly
+    On the other hand
     \[
-        \maxQ \maxE \Ex{Q}{\Dcond} \geq \maxE \Ex{R}{\Dcond[R]}\cdot
+        \maxQ \Ex{Q}{\Dcond} \geq \Ex{R}{\Dcond[R]}\cdot
     \]
-    Notice that the left hand side is $\DxP$, and by Equation~\ref{eq:th1}
+    Notice that the left hand side is $\Dxe$, and by Equation~\ref{eq:th1}
     \[
-        \DxP \geq \maxE \tmax \DExparam\cdot
+        \Dxe \geq \tmax \DxeCond \cdot
     \]
     This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
+\end{proof}
+
+\begin{proposition}
+    Let \Qvar be a query variable, and \Eset be an evidence set in \Mt.
+    If the conditions of Theorem~\ref{th:div_for_parametric} holds, then for any $P \in \set{P}$ we have:
+    \[
+        \Dx = \tmax \DxCond{P}{\Eset} \cdot
+    \]
+\end{proposition}
+
+
+\begin{lemma}
+    Let $p$, and $q$ be two probability distributions for a random variable $\Theta$.
+    If for any $\theta$, and a constant $\lambda$, we have
+    \[
+        \ln \frac{p(\theta)}{q(\theta)} = \lambda
+    \]
+    then $\lambda = 0$.
+\end{lemma}
+
+\begin{proof}
+    Suppose, for the sake of contradiction, that $\lambda > 0$.
+    This implies for every $\theta$ we have
+    \[
+        \frac{p(\theta)}{q(\theta)} > 1 \cdot
+    \]
+    Since $q(\theta) > 0$, we can conclude that $p(\theta) > q(\theta)$.
+    This inequality holds for every $\theta$, and therefore
+    \[
+        \int \dt[p] > \int \dt[q],
+    \]
+    which is a contradiction.
+
+    If we assume $\lambda < 0$, similarly we can conclude $\int \dt[p] < \int \dt[q]$, which is a contradiction again.
+    Hence, $\lambda$ cannot be positive or negative and we must have $\lambda = 0$.
+\end{proof}
+
+\begin{theorem}
+    \label{th:lambda}
+    Let \Qvar be a query variable, and \Evar be an evidence variable in a parametric model \pmodel.
+    Assume that each value of the parameter \paramValue, can be represented as a pair $(\ab)$, and for
+    every
+    \paramA, \paramB, and \rval{e} we have
+    \begin{equation}
+        \label{eq:th-lambda-independece}
+        p(\bIa, \rval{e}) = p(\bIa) \cdot
+    \end{equation}
+
+    If for some probability measure $P \in \set{P}$, the conditional divergence of $P$ is a real valued function
+    of \paramA:
+    \begin{equation*}
+        \DxeCond = \lambda(\paramA),
+    \end{equation*}
+    then $P$ is the central distribution for $\QvarIE$, and
+    \begin{equation*}
+        \lambda(\paramA) = \ln \int \phiFunc d\paramB,
+    \end{equation*}
+    where
+    \begin{equation*}
+        \phiFunc = \phiExp \cdot
+    \end{equation*}
+
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\lambdaFunc}{\lambda(\paramA)}
+    By Bayes' theorem and Equation~\ref{eq:th-lambda-independece} we have
+    \begin{align*}
+        \frac{\pi(\xIet)}{P(\xIe)} &= \frac{p(\tIxe)}{p(\bIa, \rval{e})p(\paramA \mid \rval{e})} \\
+        &= \frac{p(\tIxe)}{p(\bIa)p(\paramA \mid \rval{e})} \cdot
+    \end{align*}
+    Now, by simple algebra we can verify that
+    \begin{equation*}
+        \DxeCond = \ln \frac{\phiFunc}{p(\bIa)}
+    \end{equation*}
+    We let
+    \begin{equation*}
+        \rhoFunc = \frac{\phiFunc}{\int \phiFunc d\paramB}
+    \end{equation*}
+    Therefore,
+    \begin{equation*}
+        \DxeCond = \lambdaFunc + \ln \frac{\rhoFunc}{p(\bIa)}
+    \end{equation*}
+    where
+    \[
+        \lambdaFunc =  \ln \int \phiFunc d\paramB
+    \]
 \end{proof}
 
 \begin{definition}[Generic Parametric Model]
@@ -509,19 +521,21 @@ of the divergence measure.
     \end{equation}
 \end{theorem}
 
+
 \begin{theorem}
     \label{th:central_by_max}
-    Consider a generic parametric model \pmodel,
-    and let $\Xpairs$ be a set of pairs of discrete random variables in \Mt.
-    Assume that for every $Q_1, Q_2 \in \set{P}$ and any real number $0 \leq \alpha \leq 1$, there is
-    a distribution $Q^* \in \set{P}$, such that for every $i, \xe$ we have
+    Consider a generic parametric model \pmodel, and let \Qvar be a query variable, and \Evar be an evidence
+    variable in \Mt.
+    Suppose that for every probability measures $Q_1, Q_2 \in \set{P}$, and any real number $0 \leq \alpha \leq 1$,
+    there is a $Q^* \in \set{P}$, such that for every $\xe$ we have
     \begin{equation}
         Q^*(\xIe) = \convexCond{\xIe}\cdot
         \label{eq:convex_dist_set}
     \end{equation}
-    In this model, the central distribution for $\set{X}$ can be obtained by:
+
+    In this model, the central distribution for $\QvarIE$ can be obtained by:
     \begin{align}
-        \central &= \arg\maxP \int \DxPcond \dt\\
+        \centralE &= \arg\maxP \int \DxeCond \dt\\
         &= \arg\maxP \Dminimax,
         \label{eq:Cx_by_max}
     \end{align}
@@ -535,69 +549,73 @@ of the divergence measure.
     \begin{equation*}
         \f = \int \DExparam \dt[r],
     \end{equation*}
-    where $r(\paramValue)$ is an arbitrary probability distribution, and $P \in \set{P}$.
+    where $r(\paramValue)$ is an arbitrary probability distribution, and $P_{\XIE}$ represents different
+    distributions of \Qvar given different values of \Evar, induced by a probability measure $P \in \set{P}$.
+
     Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is similar to maximizing
     with respect to $\paramValue$, and we have
     \[
-        \central = \arg\pmin \max_{r} \f\cdot
+        \centralE = \arg\pmin \max_{r} \f\cdot
     \]
 
     The domain of $r$ is the set of all probability distributions, which is a compact convex set.
-    Moreover, from Equation~\ref{eq:convex_dist_set}, it follows that the set of probability distributions for
-    $\Qvar|\rv{E}$ in \Mt is also a compact convex set.
-    Thus, the domain of $\f$ is a compact convex set.
+    Moreover, from Equation~\ref{eq:convex_dist_set}, it follows that the domain of $P_{\XIE}$ , which is a function
+    of both \Qvar and \Evar, is also a compact convex set.
+    Thus, the domain of the functional $\f$ is a compact convex set.
 
     For a fixed $P_{\XIE}$, $\f[\cdot]$ is a linear function, which is both concave and convex.
-    On the other hand, if we let $\paramDist[r]{\xe}$ for $\f[r][\cdot]$ we have
+
+    On the other hand, for a fixed $r$, if we let $\paramDist[r]{\xe}$ we have
     \begin{equation}
-        \f[r][\cdot] = c - \sumOverixe R(\xe) \ln P(\xIe)\cdot
+        \f[r][\cdot] = c - \sumOverxe R(\xe) \ln P(\xIe),
         \label{eq:max_for_P}
     \end{equation}
-    If we calculate the Hessian matrix of $\f[r][\cdot]$, we observe that the matrix is diagonal, and each element
-    of the main diagonal is $\frac{R(\xIe)}{P(\xIe)^2}$.
-    Thus, the hessian matrix of $\f[\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
-    Now, Theorem~\ref{th:minimax} implies
+    where $c$ is not a function of $P_{\XIE}$.
+    If we calculate the Hessian matrix of $\f[r][\cdot]$, with respect to $P_{\XIE}$, we observe that the matrix is
+    diagonal, and each element of the main diagonal is $\frac{R(\xIe)}{P(\xIe)^2}$.
+    Thus, the hessian matrix of $\f[r][\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
+    Consequently, by Theorem~\ref{th:minimax}
     \begin{equation}
         \pmin \max_{r} \f = \max_{r} \pmin \f\cdot
         \label{eq:divergence_minmax}
     \end{equation}
     From Equation~\ref{eq:max_for_P} we can see that for an arbitrary fixed $r$ we have
     \[
-        \pmin \f = \maxP \sumOverixe R(\xe) \ln P(\xIe)\cdot
+        \pmin \f = \maxP \sumOverxe R(\xe) \ln P(\xIe)\cdot
     \]
 
     We know that the Kullback–Leibler divergence, and therefore its expected value, is non-negative:
     \[
-        \Ex{R}{\sum_i \Dcond[R]} \geq 0\cdot
+        \Ex{R}{\Dcond[R]} \geq 0\cdot
     \]
     By simple algebra we get
     \[
-        \sumOverixe R(\xe) \ln P(\xIe) \leq \sumOverixe R(\xe) \ln R(\xIe)\cdot
+        \sumOverxe R(\xe) \ln P(\xIe) \leq \sumOverxe R(\xe) \ln R(\xIe)\cdot
     \]
-    Recall that \Mt is a generic parametric model, so $R \in \set{P}$, and we can reach this
-    upper bound by letting $P = R$:
+    Recall that \Mt is a generic parametric model.
+    That implies $R \in \set{P}$, and we can reach this upper bound by letting $P = R$:
     \[
         \pmin \f = \Dminimax[R]\cdot
     \]
-    By Equation~\ref{eq:divergence_minmax} we conclude
+    By Equation~\ref{eq:divergence_minmax}, we conclude
     \[
-        \central = \arg\max_{R \in \set{R}} \int \DExparam[][R] \dt[r]\cdot \qedhere
+        \centralE = \arg\max_{R \in \set{P}} \int \DxeCond[R] \dt[r] \cdot \qedhere
     \]
 \end{proof}
 
 \begin{theorem}
     \label{th:lambda}
-    Under the assumptions of Theorem~\ref{th:central_by_max}, the central distribution for \set{X} satisfies:
+    Under the assumptions of Theorem~\ref{th:central_by_max}, the central distribution for $\QvarIE$ satisfies:
     \begin{equation}
-        \DxPcond[\central] = \lambda,
+        \DxeCond[\centralE] = \lambda,
         \label{eq:lambda}
     \end{equation}
     where $\lambda$ is a constant.
 \end{theorem}
 \begin{proof}
-    By Theorem~\ref{th:central_by_max}, the central distribution for \set{X} maximizes
+    By Theorem~\ref{th:central_by_max}, the central distribution for $\QvarIE$ maximizes
     \[
-        \functional{p(\paramValue)} =\Dminimax,
+        \functional{p(\paramValue)} = \Dminimax,
     \]
     with respect to different choices of the prior distribution $p(\paramValue)$, subject to the
     constraint $\int \dt[p] = 1$.
@@ -607,7 +625,7 @@ of the divergence measure.
     \[
         \Lagr[p(\paramValue)] = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
     \]
-    Let us denote the prior distribution corresponding to the central distribution \central by $\cPrior$.
+    Let us denote the prior distribution corresponding to the central distribution \centralE by $\cPrior$.
     Let $p(\paramValue) = \cPrior + \epsilon \eta(\paramValue)$ be a variation of $\cPrior$, where $\eta(\paramValue)$ is
     a continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
 
@@ -622,14 +640,14 @@ of the divergence measure.
         \de{P(\xe)} &= \margDist[\eta]{\xe},\\
         \de{P(\rval{e})} &= \margDist[\eta]{\rval{e}}\cdot
     \end{align*}
-    Using the chain rule, we calculate the partial derivative of $\Lagr$ relative to $\epsilon$:
+    Using the chain rule of calculus, we calculate the partial derivative of $\Lagr$ relative to $\epsilon$:
     \begin{align*}
         \parDeriv\ =\ &\int \left( \Dparam  \right) \dt[\eta] \\
-        &- \int \left( \sumOverixe \pi(\xeIt) \frac{\margDist[\eta]{\xe}}{P(\xe)} \right) \dt \\
-        &+ \int \left( \sum_i \sum_{\rval{e}} \pi(\eIt) \frac{\margDist[\eta]{\rval{e}}}{P(\rval{e})} \right) \dt \\
+        &- \int \left( \sumOverxe \pi(\xeIt) \frac{\margDist[\eta]{\xe}}{P(\xe)} \right) \dt \\
+        &+ \int \left( \sum_{\rval{e}} \pi(\eIt) \frac{\margDist[\eta]{\rval{e}}}{P(\rval{e})} \right) \dt \\
         &- \int \lambda \dt[\eta]
     \end{align*}
-    Since $\paramDist{\xe}$ and $\paramDist{\rval{e}}$ we get
+    Since $\paramDist{\xe}$ and $\paramDist{\rval{e}}$, we get
     \begin{equation*}
         \parDeriv = \int \left(-\lambda + \Dparam \right) \dt[\eta]\cdot
     \end{equation*}
@@ -637,7 +655,7 @@ of the divergence measure.
     Since $\eta(\paramValue)$ is an arbitrary function, by applying the fundamental lemma of the calculus of
     variations and letting $\epsilon = 0$, for every value of $\paramValue$ we have
     \[
-        \Dparam[\central] = \lambda\cdot \qedhere
+        \Dparam[\centralE] = \lambda\cdot \qedhere
     \]
 \end{proof}
 
@@ -662,7 +680,7 @@ the $i$-th dice roll, and define each \rv{e} as a vector of the previous dice ou
 Now let us calculate the conditional divergence measure for \set{x} as defined in Definition~\ref{def:cond_divergence}:
 \newcommand{\seqvalxx}[1][x]{\rval[1]{#1}, \rval[2]{#1}}
 \begin{align*}
-    \DxPcond &= \KLcond{\rval[1]{x}}{} \\
+    \DxeCond &= \KLcond{\rval[1]{x}}{} \\
     &+ \KLcond{\rval[2]{x}}{\rval[1]{x}} \\
     &+ \KLcond{\rval[3]{x}}{\seqvalxx} \\
     &+ \ \cdots \\
@@ -671,7 +689,7 @@ Now let us calculate the conditional divergence measure for \set{x} as defined i
 After factoring out $\pi(\seqRval{n} \mid \paramValue)$ from every term, we use the chain rule for conditional
 probability:
 \begin{align*}
-    \DxPcond &=
+    \DxeCond &=
     \sum_{\seqRval{n}} \pi(\seqRval{n} \mid \paramValue) \ln
     \frac
     {\pi(\rval[1]{x} \mid \paramValue) \pi(\rval[2]{x} \mid \rval[1]{x}, \paramValue)
@@ -712,7 +730,7 @@ where each \rv{y} denotes the $i$-th dice outcome.
 
 The conditional divergence for \set{x} can be obtained by
 \begin{align*}
-    \DxPcond &= \KLcond{\rval[1]{x}}{\seqRval[y]{n}} \\
+    \DxeCond &= \KLcond{\rval[1]{x}}{\seqRval[y]{n}} \\
     &+ \KLcond{\rval[2]{x}}{\rval[1]{x},\seqRval[y]{n}} \\
     &+ \KLcond{\rval[3]{x}}{\seqvalxx, \seqRval[y]{n}} \\
     &+ \ \cdots \\
@@ -882,8 +900,8 @@ our problem, our query set should include random variables of both versions.
     \begin{align*}
         \lambda
         &= \Dparam[\central]\\
-        &= \sumOverixe \xeIba \ln \frac{\xIeb}{\central(\xIe)} \\
-        &= \sumOverixe \xeIba \ln \frac{\bIxe}{\cMass(\paramB \mid \rval{e})} \\
+        &= \sumOverxe \xeIba \ln \frac{\xIeb}{\central(\xIe)} \\
+        &= \sumOverxe \xeIba \ln \frac{\bIxe}{\cMass(\paramB \mid \rval{e})} \\
         &= \sum_i \ln \frac{\rhoPrior}{\bIa}\cdot
     \end{align*}
     Since each $\paramFunc$ is a function of $\param$, for $\paramFunc(\paramValue) = \paramFuncValue$

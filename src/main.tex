@@ -13,7 +13,8 @@
 \usepackage{xargs}
 \usepackage{xifthen}
 \usepackage{amssymb}
-\usepackage{xcolor} % should be the last import
+\usepackage{xcolor}
+\usepackage{stmaryrd} % should be the last import
 
 
 
@@ -39,7 +40,8 @@
 \newcommand{\rvec}[1]{\ensuremath{\mathbf{\uppercase{#1}}}\xspace}
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
 \newcommand{\central}[1][\Qvar \mid \Eset]{\ensuremath{C_{#1}}\xspace}
-\newcommand{\cPrior}[1][(\paramValue)]{c_\set{x}#1}
+\newcommand{\centralE}{\central[\QvarIE]}
+\newcommand{\cPrior}[1][(\paramValue)]{c#1}
 \newcommand{\prior}{p(\paramValue)}
 \newcommand{\cMass}{c_\set{X}}
 \newcommand{\rhoPrior}[1][(\paramB \mid \paramA)]{\rho#1}
@@ -59,16 +61,19 @@
 
 \newcommand{\Eset}{\set{e}}
 \newcommand{\Qvar}{\rv{x}}
+\newcommand{\Evar}{\rv{e}}
 \newcommand{\QvarVal}{\rval{x}}
 \newcommand{\QvarIEset}{\rv{x}|\set{e}}
+\newcommand{\QvarIE}{\Qvar|\Evar}
 \newcommand{\aggParam}{\agg{\varTheta}}
 \newcommand{\aggParamVal}{\agg{\theta}}
 \newcommand{\assign}[1]{\rv{#1} = \rval{#1}}
-\newcommand{\DxP}[1][P]{\measure{D}_{\Qvar \mid \Eset}\left[ #1 \right]}
+\newcommand{\Dx}[1][P]{\measure{D}_{\Qvar \mid \Eset}\left[ #1 \right]}
+\newcommand{\Dxe}[1][P]{\measure{D}_{\Qvar \mid \Evar}\left[ #1 \right]}
 \newcommand{\aggDxP}[1][P]{\measure{D}_{\agg{\Qvar} \mid \agg{\rv{e}}} \left[ \agg{#1} \right]}
-\newcommand{\DxPcond}[1][P]{\measure{D}_{\rv{x} \mid \set{e}}\left[ #1 \mid \paramValue \right]}
+\newcommand{\DxCond}[2]{\measure{D}_{\Qvar \mid #2}\left[ #1 \mid \paramValue \right]}
+\newcommand{\DxeCond}[1][P]{\DxCond{#1}{\Evar}}
 \newcommand{\sumOverxe}{\sum_{\rval{x}, \rval{e}}}
-\newcommand{\sumOverixe}{\sum_i \sumOverxe}
 \newcommand{\sumOverix}{\sum_i \sum_{\rval{x}}}
 \newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
@@ -94,11 +99,12 @@
 \newcommand{\wIx}{\paramFuncValue \mid \rval{x}}
 \newcommand{\paramB}{\rval{\beta}}
 \newcommand{\paramA}{\rval{\alpha}}
+\newcommand{\ab}{\paramA, \paramB}
+\newcommand{\bIa}{\paramB \mid \paramA}
 \newcommand{\xIeb}{\pi(\rval{x} \mid \rval{e}, \paramB)}
 \newcommand{\xIebFull}{\pi(\rval{x} \mid \rval{e}, \beta)}
 \newcommand{\xeIba}{\pi(\rval{x}, \rval{e} \mid \paramA, \paramB)}
 \newcommand{\bIxe}[1][\cMass]{#1(\paramB \mid \rval{x}, \rval{e})}
-\newcommand{\bIa}[1][\cMass]{#1(\paramB \mid \paramA)}
 \newcommand{\bIaRoot}[1][\cMass]{#1(\beta \mid \alpha)}
 \newcommand{\abIab}{\cMass(\alpha, \beta \mid \paramA, \paramB)}
 \newcommand{\aIa}{\cMass(\alpha \mid \paramA)}
@@ -135,11 +141,13 @@
     \sum_{#1, #2} #3(#1, #2) \ln \frac{#3(#1 \mid #2)}{#4(#1 \mid #2)}
 }
 
-\newcommand{\Dparam}[1][P]{
-    \KLcond[#1]{\rval{x}}{\rval{e}}
-}
+\newcommand{\phiExp}{\exp \left\{ \sumOverxe \pi(\xeIt) \ln \frac{p(\tIxe)}{p(\paramA \mid \rval{e})} \right\}}
+\newcommand{\phiFunc}{\phi(\ab)}
+\newcommand{\rhoFunc}{\rho(\paramB \mid \paramA)}
 
-\newcommand{\Dminimax}[1][P]{\int \sumOverixe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
+\newcommand{\Dparam}[1][P]{\KLcond[#1]}
+
+\newcommand{\Dminimax}[1][P]{\int \sumOverxe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
 
 \newcommandx{\KLcond}[5][1=P, 2=\rval{x}, 3=\rval{e}, 4=\pi, 5=\paramValue, usedefault]{
     \ifthenelse{\isempty{#3}}

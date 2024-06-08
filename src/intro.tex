@@ -96,7 +96,7 @@ Clearly, one approach to selecting a suitable prior distribution $\prior$ is to 
 environment.
 However, what if such knowledge is unavailable?
 
-Even without prior knowledge, it is not difficult to identify some distributions that are unsuitable choices
+Even without prior knowledge, it is not difficult to identify some distributions that are not suitable choices
 for $\prior$.
 For instance, any distribution that assigns zero probabilities to certain values of $\paramValue$ is not a good choice.
 If we use such a prior, no evidence can convince us that the value of $\paramValue$ lies within those
@@ -115,10 +115,11 @@ That means, we can consider a strategy as a function of the evidence, rather tha
 
 We can easily verify that the optimal strategy, for each evidence \rval{e}, chooses the action that
 maximizes the expected utility conditioned on \rval{e}:
-\begin{align*}
+\begin{align}
     S_{\text{opt}}(e) &= \arg\max_a \Ex{\envDist}{\util \mid e} \\
     &= \arg\max_a\sumx \util \envDist(x \mid e) \cdot
-\end{align*}
+    \label{eq:bayes-action}
+\end{align}
 This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
 Note that the value of the expected utility depends on $\envDist(\rv{E})$, but the actions that construct the optimal
 strategy are not affected by $\envDist(\rv{E})$.

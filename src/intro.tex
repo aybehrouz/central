@@ -44,8 +44,8 @@ When we have no assumptions and no prior knowledge, the set of candidate probabi
 consists of all possible probability measures.
 As we make assumptions or obtain some prior knowledge, those probability measures that do not align
 with our assumptions or knowledge are eliminated from this set.
-Consequently, the set of acceptable probability measures becomes more refined. We refer to this refined
-set as a probabilistic model:
+Consequently, the set of acceptable probability measures becomes more refined.
+We refer to this refined set as a probabilistic model:
 
 \begin{definition}[Probabilistic Model]
     We define a \emph{probabilistic model} \M as a pair $\left(\set{S}, \set{P}\right)$, where \set{S} is a sample
@@ -89,7 +89,7 @@ distribution.
 
 Now, consider our decision-making problem: Suppose the evidence \rval[]{e} consists of a sequence of previous experiences
 of the environment.
-If we assume that our environment remains unchanged over time (making this sequence exchangeable),
+If we assume that our environment remains unchanged over time so that this sequence is exchangeable,
 to fully determine $\envDist$, we only need to determine the prior probability of the latent parameter $\prior$.
 
 Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on our prior knowledge about the
@@ -121,19 +121,19 @@ maximizes the expected utility conditioned on \rval{e}:
     \label{eq:bayes-action}
 \end{align}
 This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
-Note that the value of the expected utility depends on $\envDist(\rv{E})$, but the actions that construct the optimal
-strategy are not affected by $\envDist(\rv{E})$.
+Note that the expected utility value of the strategy depends on $\envDist(\rv{E})$, but the actions that construct the
+optimal strategy are not affected by $\envDist(\rv{E})$.
 
-Suppose we decide to use a different evidence, denoted as \rv{E'}, instead of \rv{E}.
+Suppose that we decide to use a different evidence, denoted as \rv{E'}, instead of \rv{E}.
 Could this change potentially improve our strategy?
 Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
 To compare any two strategies, we can simply compare their expected utilities.
 The strategy with the greater expected utility is the better one.
 
-Note that in reality, we cannot freely choose any evidence we want.
+However, in reality we cannot freely choose any evidence we want.
 The availability of evidence depends on the environment.
 We can only choose evidence that is a function of the evidence provided by the environment,
-allowing us to determine its value by observing the original evidence.
+allowing us to determine its value after observing the original evidence.
 
 Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
 For instance, in a learning task where our evidence is an image, we might substitute the image with the first
@@ -142,18 +142,19 @@ Naturally, these coefficients are a function of the original evidence.
 
 Interestingly, if we assume $\rv{E'} = f(\rv{E})$, it turns out
 that, according to our Bayesian framework, the optimal strategy for \rv{E} is always
-better than every strategy that uses \rv{E'}.
+better than any strategy that uses \rv{E'}.
 Hence, at first glance, it appears that Bayesian decision theory does not favor feature selection.
 
-From a certain perspective, it could be argued that adopting a strategy that uses simpler evidence leads to ignoring
-some parts of available information, and therefore can not be justified by Bayesian decision theory.
+From a certain perspective, it could be argued that adopting a strategy which uses simpler evidence may lead to
+ignoring some parts of useful available information, and therefore can not be justified by Bayesian
+decision theory.
 However, in practice, we have to use feature selection because without it the original learning task requires
 impractical large datasets.
 
 The key point here is that the space of strategies using \rv{E'} is a subset of strategies that use \rv{E}.
 When we are searching for the best strategy for \rv{E}, we are implicitly evaluating all simpler forms as well.
 Hence, we believe if we choose an appropriate probability measure $\envDist$, feature selection should
-be performed automatically when we are finding the optimal Bayesian strategy.
+be performed automatically within the Bayesian framework when we are finding the optimal strategy.
 
 Recall that, in parametric models, the probability measure $\envDist$ is determined by the prior distribution of the
 model parameter.
@@ -164,9 +165,10 @@ This seems to come from the fact that in these commonly used probability measure
 the distribution of $\XIE'$ differs from what we intuitively estimate.
 This estimate tends to have a much higher entropy.
 As a result the optimal strategy for \rv{E'} is mostly ignored by the probability measure because for any value
-of the evidence it yields a relatively low expected utility.
+of the evidence it yields a poor expected utility.
 
 It is reasonable to consider that if we find a probability measure which has a closer estimate to our
-intuitive estimate for $\XIE'$, then it will show some interesting feature selection characteristics.
+intuitive estimate for $\XIE'$, automatic feature selection can be performed within the
+Bayesian framework.
 Throughout this discussion, we will further investigate this idea and try to formulate a systematic approach to
 determine such probability measures.

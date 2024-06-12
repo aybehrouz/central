@@ -3,10 +3,10 @@ We have decided on a probabilistic model \M for the environment, and without any
 chosen a distribution $P$ from our model.
 
 We ask an expert---a person familiar with the environment---to evaluate our distribution $P$.
-Presumably, instead of $P$, that expert has his own beliefs about the environment and thinks we should use a different
-distribution $Q$.
-Consequently, when evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\rv{X})$,
-while believing that the correct distribution is $Q$.
+Presumably, that expert has his own beliefs about the environment.
+Therefore, he thinks, instead of $P$, we should use a different distribution $Q$.
+When evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\rv{X})$,
+while believing the correct distribution is $Q(\rv{X})$.
 
 Let's assume that a real number can be used to measure this loss, and denote it as $\D[\rv{X}]$.
 It seems reasonable as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
@@ -15,6 +15,7 @@ distribution.
 
 Interestingly, if we make certain assumptions about the properties of this divergence measure,
 it turns out that---up to a constant factor---it must be equal to the Kullback–Leibler (KL) divergence.
+
 Alternatively, by adopting a more minimal set of properties, we can prove that if we accept Shannon’s entropy as a
 measure of the uncertainty of a distribution, we should also consider KL divergence as the appropriate method for
 measuring divergence between distributions.
@@ -117,11 +118,6 @@ Thus, every expert would agree that our probability measure is a good choice.
 Interestingly, this relates to the concept of Bayesian convergence, where the posterior probability converges to the
 same distribution regardless of the prior distribution.
 
-Let’s revisit our discussion from the previous section.
-We saw that in Bayesian framework when we have evidence \rv{e'}, such that $\rv{e'} = f(\rv{e})$, the
-optimal strategy for \rv{e} always has a greater expected utility than any strategy that uses \rv{e'}.
-We stated that we believe...
-
 \begin{definition}[$\epsilon$-convergence]
     In a probabilistic model \model, let \Qvar be a discrete random variable, and \Eset be a countable set of
     discrete random variables, all defined on \set{s}.
@@ -163,6 +159,11 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
         \Dx < \epsilon \cdot
     \end{equation*}
 \end{proposition}
+
+Let’s revisit our discussion from the previous section.
+We saw that in Bayesian framework when we have evidence \rv{e'}, such that $\rv{e'} = f(\rv{e})$, the
+optimal strategy for \rv{e} always has a greater expected utility than any strategy that uses \rv{e'}.
+We stated that we believe...
 
 \begin{definition}[Central Distribution]
     In a model \model, we define the \emph{central distribution} for a query variable \Qvar, conditioned on the

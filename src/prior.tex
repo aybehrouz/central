@@ -129,7 +129,7 @@ same distribution regardless of the prior distribution.
         \Ex{Q}{\Dcond} < \epsilon,
     \end{equation*}
     where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and $\Dcond$ is the Kullback-Leibler divergence
-    between $P(\XIe)$ and $Q(\XIe)$:
+    of $P(\XIe)$ from $Q(\XIe)$:
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]
@@ -182,23 +182,28 @@ We stated that we believe...
     We refer to \agg{\rv{x}}, \agg{\rv{e}} as the \emph{aggregated} query and evidence variables, and \rv{i} as the
     \emph{selector} variable.
 
-    Suppose that, for a probability measure $P \in \set{P}$, there is a probability measure
+    Suppose that for a probability measure $P \in \set{P}$ there exists a probability measure
     $\agg{P} \in \agg{\set{P}}$, such that for any index \rval{i}, and every values \QvarVal, and \rval[i]{e}
     there is some \agg{\QvarVal}, and \agg{\rval{e}}, where we have
-    \begin{equation*}
+    \begin{equation}
         P(\Qvar = \QvarVal, \rv[i]{e} = \rval[i]{e}) =
         \agg{P}(\agg{\Qvar} = \agg{\QvarVal}, \assign{\agg{e}} \mid \assign{I}) \cdot
         \label{eq:th1-1}
-    \end{equation*}
-
-    In addition, in \agg{P}, \agg{\Qvar} and \rv{I} are conditionally independent given \agg{\rv{E}}:
-    \begin{equation*}
-        \agg{P}(\agg{\Qvar} \mid \agg{\rv{E}}, \rv{I}) = \agg{P}(\agg{\Qvar} \mid \agg{\rv{E}}) \cdot
-    \end{equation*}
-
+    \end{equation}
+    Furthermore, \agg{\Qvar} and \rv{I} are conditionally independent given \agg{\rv{E}}:
+    \begin{equation}
+        \agg{P}(\aggXIE, \rv{I}) = \agg{P}(\aggXIE) \cdot
+        \label{eq:th1-2}
+    \end{equation}
     We call \agg{P} an \emph{aggregator of $P$ with respect to $\QvarIEset$}.
-
 \end{definition}
+
+\begin{proposition}
+    By Equations~\ref{eq:th1-1} and~\ref{eq:th1-2} we have
+    \begin{equation*}
+        P(\QvarVal \mid \rval[i]{e}) = \agg{P}(\aggxIe) \cdot
+    \end{equation*}
+\end{proposition}
 
 \begin{definition}[Aggregate Model]
     \label{def:aggregate-model}
@@ -211,9 +216,9 @@ We stated that we believe...
 
 \begin{definition}[Selective Aggregate Model]
     Let \Qvar be a query variable, and \Eset be an evidence set in \model.
-    We say that \Magg, an aggregate model of \M with respect to $\QvarIEset$, is \emph{selective}, if for
-    every $P \in \set{P}$ and any value \rval{i} of the selector variable \rv{I}, there is an aggregator of
-    $P$ in \Magg, such that $\agg{P}(i) = 1$.
+    Let \Magg be an aggregate model of \M with respect to $\QvarIEset$.
+    We say \Magg is \emph{selective}, if for every $P \in \set{P}$ and any value \rval{i} of the selector
+    variable \rv{I}, there is an aggregator of $P$ in \Magg, such that $\agg{P}(i) = 1$.
 
 \end{definition}
 
@@ -222,7 +227,7 @@ We stated that we believe...
     Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
     Suppose that \aggmodel is a selective aggregate model of \M with respect to $\QvarIEset$.
     Let \agg{\rv{x}}, \agg{\rv{e}} be the aggregated query and evidence variables in \Magg.
-    If $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$,
+    If $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$
     with respect to $\QvarIEset$, then we have
     \begin{equation*}
         \Dx = \aggDxP \cdot
@@ -234,9 +239,8 @@ We stated that we believe...
 
 \begin{proof}
     \newcommand{\aggExpKL}[1]{\ExpKL[\agg{\rval{x}}][\agg{\rval{e}}][\agg{#1}][\agg{P}]}
-    \newcommand{\aggxe}{\agg{\QvarVal}, \agg{\rval{e}}}
-    \newcommand{\aggxIe}{\agg{\QvarVal} \mid \agg{\rval{e}}}
-    \newcommand{\aggXIE}{\agg{\Qvar} \mid \agg{\rv{e}}}
+    Suppose $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$
+    with respect to $\QvarIEset$.
     Let
     \begin{equation*}
         \agg{R} = \arg\max_{\agg{Q} \in \agg{\set{P}}} \aggExpKL{Q}.
@@ -267,29 +271,29 @@ We stated that we believe...
     \begin{align*}
         \Dx
         &= \ExpKL[][{\rval[k]{e}}][R] \\
-        &= \sum_{\aggxe} \agg{R}(\aggxe \mid k) \ln\frac{\agg{R}(\aggxIe, k)}{\agg{P}(\aggxIe, k)} \\
+        &= \sum_{\aggxe} \agg{R}(\aggxe \mid k) \ln\frac{\agg{R}(\aggxIe)}{\agg{P}(\aggxIe)} \\
         &= \aggExpKL{R} \\
         &\leq \aggDxP \cdot
     \end{align*}
-    By Equation~\ref{eq:th-2-proof-1}, we conclude that
+    From this and Inequality~\ref{eq:th-2-proof-1}, we conclude that
     \begin{equation*}
         \Dx = \aggDxP \cdot
     \end{equation*}
 
-    To prove the second part of the theorem, let \central[\aggXIE] be a central distribution
+    To prove the second part of the theorem, let \agg{C} be a central distribution
     for $\agg{\Qvar}|\agg{\rv{e}}$.
-    Since \Magg is an aggregate model for \M, \central[\aggXIE] must be an aggregator for a probability
-    measure $\central \in \agg{\set{P}}$.
-    If we assume, by contradiction, that \central is not a central distribution for $\QvarIEset$ in \M, then there must
+    Since \Magg is an aggregate model for \M, \agg{C} must be an aggregator for some probability
+    measure $C \in \agg{\set{P}}$.
+    If we assume, by contradiction, that $C$ is not a central distribution for $\QvarIEset$ in \M, then there must
     be a probability
     measure $R \in \set{P}$ such that:
     \begin{equation*}
-        \Dx[R] < \Dx[\central] = \aggDxP[C_{\aggXIE}] \cdot
+        \Dx[R] < \Dx[C] = \aggDxP[C] \cdot
     \end{equation*}
     On the other hand, since \Magg is a selective model, $R$ must have an aggregator $\agg{R} \in \agg{\set{P}}$,
-    and we have
+    and since \agg{C} is a central distribution in \Magg, we have
     \begin{equation*}
-        \Dx[R] = \aggDxP[R] > \aggDxP[{C_{\aggXIE}}],
+        \Dx[R] = \aggDxP[R] \geq \aggDxP[C],
     \end{equation*}
     which is a contradiction.
 \end{proof}

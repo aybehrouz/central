@@ -13,8 +13,8 @@ We begin by revisiting a fundamental decision-making problem, and how it is trea
 decision theory.
 
 Consider an environment where an agent must select an action from a set of available actions.
-The utility of each action can be quantified by a real number, which depends on the unknown state of the
-environment.
+The utility of each action for the agent depends on the unknown state of the environment, and can be quantified by a
+real number.
 Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the unknown environment state.
 The utility function  $\util$ quantifies the desirability of each action.
 
@@ -83,58 +83,67 @@ distribution.
         \paramDist{\rval[]{s}},
         \label{eq:parametric}
     \end{equation}
-    while $\pi$ is a known probability distribution.
+    while $\pi$ is a fixed, known probability distribution.
     We refer to $\pi$ as the \emph{likelihood} distribution.
 \end{definition}
 
 Now, consider our decision-making problem: Suppose the evidence \rval[]{e} consists of a sequence of previous experiences
 of the environment.
 If we assume that our environment remains unchanged over time so that this sequence is exchangeable,
-to fully determine $\envDist$, we only need to determine the prior probability of the latent parameter $\prior$.
+to fully determine $\envDist$, we only need to determine the prior distribution of the latent parameter $\prior$.
 
 Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on our prior knowledge about the
 environment.
-However, what if such knowledge is unavailable?
+But what if such knowledge is unavailable?
+Finding an answer is not simple.
+In Bayesian statistics, this is where non-informative priors come into play.
+These priors are typically chosen to be uniform or to represent a state of ignorance about the parameters.
+However, these priors are not always ideal and can sometimes lead to misleading results.
 
-Even without prior knowledge, it is not difficult to identify some distributions that are not suitable choices
-for $\prior$.
+Even when we have no prior knowledge, it is not difficult to identify some distributions that are not suitable
+choices for $\prior$.
 For instance, any distribution that assigns zero probabilities to certain values of $\paramValue$ is not a good choice.
 If we use such a prior, no evidence can convince us that the value of $\paramValue$ lies within those
 excluded values.
 
-Unfortunately, arguments like this one can only rule out a small portion of the potential distributions for $\prior$,
-leaving us with numerous options and an unclear path for selection.
+We cannot assert objectively that there is some type of underlying process in the environment for generating different
+values of \paramValue that does not assign zero probability to any value of \paramValue.
+Here, our argument is subjective.
+We consider some priors to be unsafe because they have some characteristics that appear to be problematic:
+in the obtained posterior, some values of the parameter are excluded regardless of the evidence.
 
-For now, let's assume that we have somehow determined $\envDist$, and shift our focus to finding the optimal strategy.
+We can generalize this idea and use a similar subjective approach to determine a somewhat “safe”
+prior probability.
+Recall that our probabilistic model for the environment consists of a set of acceptable probability measures \set{P}.
+Suppose that we choose a probability measure $C \in \set{P}$, and determine the optimal Bayesian strategy in $C$.
+If the expected utility of this strategy in any other probability measure
+$P \in \set{P}$ is close to the optimal strategy, we can say that using $C$ is safe, in the
+sense that the optimal strategy obtained using $C$, is a near optimal strategy in any other acceptable probability
+measure in our model.
+Interestingly, this relates closely to the concept of Bayesian convergence, where the posterior probability converges
+to the same distribution regardless of the prior distribution.
 
-It can be shown that there always exists a deterministic optimal strategy.
-That means, we can consider a strategy as a function of the evidence, rather than a conditional distribution:
-\[
-    S_{\text{opt}} = \arg\max_S \sum_{x,e} \util[S(e)] \envDist(x, e).
-\]
+The probability measure that we choose represents our beliefs about the environment.
+This choice should not depend on our utility function, otherwise our beliefs about the environment would be a
+function of our benefits.
 
-We can easily verify that the optimal strategy, for each evidence \rval{e}, chooses the action that
-maximizes the expected utility conditioned on \rval{e}:
-\begin{align}
-    S_{\text{opt}}(e) &= \arg\max_a \Ex{\envDist}{\util \mid e} \\
-    &= \arg\max_a\sumx \util \envDist(x \mid e) \cdot
-    \label{eq:bayes-action}
-\end{align}
-This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
-Note that the expected utility value of the strategy depends on $\envDist(\rv{E})$, but the actions that construct the
-optimal strategy are not affected by $\envDist(\rv{E})$.
+Unfortunately, the expected utility of a strategy is a functional of the utility function.
+Therefore, we cannot directly use the expected utility of the optimal Bayesian strategy for evaluating
+different probability measures.
+We need a measure that quantifies the similarity between two probability measures while it ignores the
+specific utility function we are using.
 
-Suppose that we decide to use a different evidence, denoted as \rv{E'}, instead of \rv{E}.
+Additionally, there is another factor that can help us choose the appropriate probability measure from our model.
+Suppose that, instead of \rv{E}, we decide to use a different evidence, denoted as \rv{E'}.
 Could this change potentially improve our strategy?
 Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
 To compare any two strategies, we can simply compare their expected utilities.
 The strategy with the greater expected utility is the better one.
 
-However, in reality we cannot freely choose any evidence we want.
+Note that in reality we cannot freely choose any evidence we want.
 The availability of evidence depends on the environment.
 We can only choose evidence that is a function of the evidence provided by the environment,
 allowing us to determine its value after observing the original evidence.
-
 Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
 For instance, in a learning task where our evidence is an image, we might substitute the image with the first
 three coefficients of its Fourier transform.
@@ -143,31 +152,35 @@ Naturally, these coefficients are a function of the original evidence.
 Interestingly, if we assume $\rv{E'} = f(\rv{E})$, it turns out
 that, according to our Bayesian framework, the optimal strategy for \rv{E} is always
 better than any strategy that uses \rv{E'}.
-Hence, at first glance, it appears that Bayesian decision theory does not favor feature selection.
+Thus, at first glance, it appears that Bayesian decision theory does not favor feature selection.
 
+In practice, we have to use feature selection because without it the original learning task requires
+impractical large datasets.
 From a certain perspective, it could be argued that adopting a strategy which uses simpler evidence may lead to
 ignoring some parts of useful available information, and therefore can not be justified by Bayesian
 decision theory.
-However, in practice, we have to use feature selection because without it the original learning task requires
-impractical large datasets.
 
 The key point here is that the space of strategies using \rv{E'} is a subset of strategies that use \rv{E}.
-When we are searching for the best strategy for \rv{E}, we are implicitly evaluating all simpler forms as well.
+When we are searching for the best strategy based on \rv{E}, we are implicitly evaluating all simpler forms as well.
 Hence, we believe if we choose an appropriate probability measure $\envDist$, feature selection should
 be performed automatically within the Bayesian framework when we are finding the optimal strategy.
 
-Recall that, in parametric models, the probability measure $\envDist$ is determined by the prior distribution of the
-model parameter.
-Unfortunately, many commonly used priors in statistics, such as the flat prior, do not exhibit feature selection
-characteristics.
+Recall that, in parametric models (Definition~\ref{def:param-model}), choosing the probability measure $\envDist$ is
+equivalent to choosing a prior distribution for the model parameter.
+In Bayesian statistics when there is no prior knowledge we use non-informative priors.
+However, many commonly used non-informative priors, such as the flat prior, do not exhibit feature
+selection characteristics.
 
-This seems to come from the fact that in these commonly used probability measures, the estimate for
+This seems to come from the fact that when we use these priors, in the resulted probability measure the estimate for
 the distribution of $\XIE'$ differs from what we intuitively estimate.
 This estimate tends to have a much higher entropy.
-As a result the optimal strategy for \rv{E'} is mostly ignored by the probability measure because for any value
-of the evidence it yields a poor expected utility.
+As a result the optimal strategy for \rv{E'} is mostly ignored because for any value of the evidence it yields a
+poor expected utility.
 
 It is reasonable to consider that if we find a probability measure which has a closer estimate to our
-intuitive estimate for $\XIE'$, automatic feature selection will be performed within the Bayesian framework.
+intuitive estimate for $\XIE'$ distribution, automatic feature selection will be performed within the Bayesian
+framework.
+We believe that can be done by using a probability measure that is “safe” for $\XIE'$, in the sense we just described.
+
 Throughout this discussion, we will further investigate this idea and try to formulate a systematic approach to
 determine such probability measures.

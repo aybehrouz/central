@@ -96,27 +96,36 @@ $\rv[]{X} = \rval[]{x}$, which can happen with probability $Q(\rval[]{x})$, it w
 using $P(\YIx)$.
 This property indicates that for combining these individual terms we should use addition.
 
-Returning to our earlier discussion, this implies that to evaluate $P$ in regard to some random variable \rv{X}, our
-expert should use the KL divergence of $P(\rv{X})$ from $Q(\rv{X})$.
-
 In the context of Bayesian decision theory, for evaluating a probability measure $P$, it appears reasonable to focus
 primarily on the optimal Bayesian strategy that is obtained when using $P$.
 We may limit the scope of strategies to those that use an evidence from a specific set of random variables \set{E}.
 Our evaluation should not depend on the utility function, since that would imply that our belief about the
 environment is a function of our benefit.
 
-From Equation~\ref{eq:bayes-action}, we know that the optimal strategy for evidence \rv{e} depends only on $P(\XIE)$.
+It can be shown that there always exists a deterministic optimal strategy.
+That means, we can consider a strategy as a function of the evidence, rather than a conditional distribution:
+\[
+    S_{\text{opt}} = \arg\max_S \sum_{x,e} \util[S(e)] \envDist(x, e).
+\]
+
+We can easily verify that the optimal strategy, for each evidence \rval{e}, chooses the action that
+maximizes the expected utility conditioned on \rval{e}:
+\begin{align}
+    S_{\text{opt}}(e) &= \arg\max_a \Ex{\envDist}{\util \mid e} \\
+    &= \arg\max_a\sumx \util \envDist(x \mid e) \cdot
+    \label{eq:bayes-action}
+\end{align}
+This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
+Note that the value of the expected utility depends on $\envDist(\rv{E})$, but the actions that
+construct the optimal strategy are not affected by $\envDist(\rv{E})$.
 Hence, given an observed value \rval{e} of the evidence, we may calculate the
 KL-divergence of $P(\XIe)$ from $Q(\XIe)$.
 Then, to obtain a measure that is not conditioned on a specific value of the evidence, we should calculate the expected
 value of this KL divergence with respect to $Q$, which represents our expert's belief about the environment.
 
-This way, we will have a divergence measure for evaluating a distribution.
 What if we find a probability measure $C$ that
 has a small divergence from any other distribution in our model?
-Thus, every expert would agree that our probability measure is a good choice.
-Interestingly, this relates to the concept of Bayesian convergence, where the posterior probability converges to the
-same distribution regardless of the prior distribution.
+That way, every expert would agree our probability measure is a good choice.
 
 \begin{definition}[$\epsilon$-convergence]
     In a probabilistic model \model, let \Qvar be a discrete random variable, and \Eset be a countable set of
@@ -160,6 +169,17 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     \end{equation*}
 \end{proposition}
 
+
+\begin{definition}[Collective Divergence Measure]
+    \newcommand{\YIe}{\rv{Y} \mid \rval{e}}
+    Let \rv{x}, \rv{y} be two query variables, and \Eset be an evidence set in a probabilistic model \model.
+    We define the \emph{collective divergence measure} of $P \in \set{P}$ for $\QvarIEset$ and $\rv{Y}|\Eset$ as
+    follows:
+    \begin{equation*}
+        \measure{D}_{\QvarIEset, \rv{Y}|\Eset}[P] =
+        \maxQ \maxE \left\{ \Ex{Q}{\Dcond} + \Ex{Q}{\Dcond[][][\YIe][\YIe]} \right\} \cdot
+    \end{equation*}
+\end{definition}
 Let’s revisit our discussion from the previous section.
 We saw that in Bayesian framework when we have evidence \rv{e'}, such that $\rv{e'} = f(\rv{e})$, the
 optimal strategy for \rv{e} always has a greater expected utility than any strategy that uses \rv{e'}.
@@ -261,18 +281,18 @@ We stated that we believe...
 
     Similarly, let
     \begin{equation*}
-    (R,k)
+    (S,k)
         = \arg\max_{(Q,i)} \ExpKL[][{\rval[i]{e}}] \cdot
     \end{equation*}
     \Magg is a selective aggregate model.
-    This means that $R$ must have an aggregator \agg{R} in \Magg, which selects $k$ by assigning it a
-    probability of 1: $\agg{R}(k) = 1$.
+    This means that $S$ must have an aggregator \agg{S} in \Magg, which selects $k$ by assigning it a
+    probability of 1: $\agg{S}(k) = 1$.
     Therefore,
     \begin{align*}
         \Dx
-        &= \ExpKL[][{\rval[k]{e}}][R] \\
-        &= \sum_{\aggxe} \agg{R}(\aggxe \mid k) \ln\frac{\agg{R}(\aggxIe)}{\agg{P}(\aggxIe)} \\
-        &= \aggExpKL{R} \\
+        &= \ExpKL[][{\rval[k]{e}}][S] \\
+        &= \sum_{\aggxe} \agg{S}(\aggxe \mid k) \ln\frac{\agg{S}(\aggxIe)}{\agg{P}(\aggxIe)} \\
+        &= \aggExpKL{S} \\
         &\leq \aggDxP \cdot
     \end{align*}
     From this and Inequality~\ref{eq:th-2-proof-1}, we conclude that
@@ -416,6 +436,7 @@ of the divergence measure.
     \]
     This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
+
 
 \begin{proposition}
     Let \Qvar be a query variable, and \Eset be an evidence set in \Mt.
@@ -613,6 +634,13 @@ of the divergence measure.
         \centralE = \arg\max_{R \in \set{P}} \int \DxeCond[R] \dt[r] \cdot \qedhere
     \]
 \end{proof}
+
+Theorem~\ref{th:central_by_max} requires that in our model the set of acceptable distribution for $\QvarIE$ be a convex
+set.
+In most cases, this condition cannot be satisfied.
+However, if the distribution that is obtained by Equation~\ref{eq:Cx_by_max} is an acceptable distribution in our model,
+the theorem still implies that it is a central distribution in our model.
+Note that the set of probability distributions is convex.
 
 \begin{theorem}
     \label{th:lambda}

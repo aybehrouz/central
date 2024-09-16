@@ -1,17 +1,55 @@
-Assume that in an environment we are interested in the probability of a random variable \rv[]{X}.
-We have decided on a probabilistic model \M for the environment, and without any particular prior knowledge, we have
-chosen a distribution $P$ from our model.
+When we lack prior knowledge of an environment, it is still not difficult to identify some distributions that are
+not suitable choices for $\prior$.
+For instance, any distribution that assigns zero probabilities to certain values of $\paramValue$ is not a good choice.
+If we use such a prior, evidence can never convince us that the value of $\paramValue$ lies within those
+excluded values.
 
-We ask an expert---a person familiar with the environment---to evaluate our distribution $P$.
+We should note that, in this context, we cannot objectively assert that in the environment there is some type of
+underlying process for generating different values of \paramValue that does not assign zero probability to any
+value of \paramValue.
+Our argument is subjective.
+We consider some priors to be unsafe because they have some characteristics that appear to be problematic:
+in the obtained posterior, some values of the parameter are excluded regardless of the evidence.
+
+We can generalize this idea and use a similar subjective approach to determine a somewhat “safe”
+prior distribution.
+Recall that our probabilistic model for the environment consists of a set of acceptable probability measures \set{P}.
+Suppose that we choose a probability measure $C \in \set{P}$, and determine the optimal Bayesian strategy in $C$.
+If the expected utility of this strategy in any other probability measure
+$P \in \set{P}$ is close to the optimal strategy, we can say that using $C$ is safe, in the
+sense that the optimal strategy obtained using $C$, is a near optimal strategy in any other acceptable probability
+measure in our model.
+Interestingly, this relates closely to the concept of Bayesian convergence, where the posterior probability converges
+to the same distribution regardless of the prior distribution.
+
+The probability measure that we choose represents our beliefs about the environment.
+We believe that this choice must depend solely on the environment.
+As long as the environment is the same, we cannot change our choice.
+For example if our utility function changes, or if the evidence that we get from the environment becomes more or
+less informative, none of these can change our beliefs about the environment and therefore our chosen
+probability measure.
+We will use this principle several times in this discussion and refer to it as the \emph{principle of objectivity}.
+
+Unfortunately, the expected utility of a strategy is a functional of the utility function.
+Therefore, we cannot directly use the expected utility of the optimal Bayesian strategy for evaluating
+different probability measures.
+We need a measure that quantifies the similarity between two probability measures while it ignores the
+specific utility function we are using.
+
+Suppose that for an environment, we have decided on a probabilistic model \M, and without any particular prior
+knowledge, we have chosen a probability measure $P$ from our model.
+In particular, we are interested in the distribution of a random variable \rv[]{X}.
+
+We ask an expert---a person familiar with the environment---to evaluate our probability measure $P$.
 Presumably, that expert has his own beliefs about the environment.
-Therefore, he thinks, instead of $P$, we should use a different distribution $Q$.
+Therefore, he believes, instead of $P$, we should use a different probability measure $Q$.
 When evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\rv{X})$,
 while believing the correct distribution is $Q(\rv{X})$.
 
 Let's assume that a real number can be used to measure this loss, and denote it as $\D[\rv{X}]$.
-It seems reasonable as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
-Therefore, $\D[\rv{X}]$ effectively is a measure of the divergence of $P$ from $Q$, when $Q$ is the believed true
-distribution.
+It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
+Therefore, $\D[\rv{X}]$ effectively is a measure of the divergence of $P(\rv{X})$ from $Q(\rv{X})$, when $Q$ is
+the believed true probability measure.
 
 Interestingly, if we make certain assumptions about the properties of this divergence measure,
 it turns out that---up to a constant factor---it must be equal to the Kullback–Leibler (KL) divergence.
@@ -96,14 +134,11 @@ $\rv[]{X} = \rval[]{x}$, which can happen with probability $Q(\rval[]{x})$, it w
 using $P(\YIx)$.
 This property indicates that for combining these individual terms we should use addition.
 
-In the context of Bayesian decision theory, for evaluating a probability measure $P$, it appears reasonable to focus
-primarily on the optimal Bayesian strategy that is obtained when using $P$.
-We may limit the scope of strategies to those that use an evidence from a specific set of random variables \set{E}.
-Our evaluation should not depend on the utility function, since that would imply that our belief about the
-environment is a function of our benefit.
+In our earlier discussion, to assess the safety of a probability measure, we realized that we need to
+evaluate the optimal Bayesian strategy, in a generic way, non dependant to the utility function.
 
 It can be shown that there always exists a deterministic optimal strategy.
-That means, we can consider a strategy as a function of the evidence, rather than a conditional distribution:
+That is, we can consider a strategy as a function of the evidence, rather than a conditional distribution:
 \[
     S_{\text{opt}} = \arg\max_S \sum_{x,e} \util[S(e)] \envDist(x, e).
 \]
@@ -118,16 +153,13 @@ maximizes the expected utility conditioned on \rval{e}:
 This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
 Note that the value of the expected utility depends on $\envDist(\rv{E})$, but the actions that
 construct the optimal strategy are not affected by $\envDist(\rv{E})$.
-Hence, given an observed value \rval{e} of the evidence, we may calculate the
-KL-divergence of $P(\XIe)$ from $Q(\XIe)$.
-Then, to obtain a measure that is not conditioned on a specific value of the evidence, we should calculate the expected
-value of this KL divergence with respect to $Q$, which represents our expert's belief about the environment.
-
-What if we find a probability measure $C$ that
-has a small divergence from any other distribution in our model?
-That way, every expert would agree our probability measure is a good choice.
+Hence, to evaluate the optimal strategy obtained by $P$, when we believe $Q$ is the correct probability measure, we can
+calculate the expected value of the KL-divergence of $P(\XIe)$ from $Q(\XIe)$, with respect to $Q$.
+Notice that this approach does not work for suboptimal strategies. Because for a suboptimal strategy,
+$\envDist(\rv{E})$ plays a role and determines the importance of suboptimal actions.
 
 \begin{definition}[$\epsilon$-convergence]
+    \label{def:e-convergence}
     In a probabilistic model \model, let \Qvar be a discrete random variable, and \Eset be a countable set of
     discrete random variables, all defined on \set{s}.
     We refer to \Qvar as the \emph{query variable}, and \Eset as the \emph{evidence set}.
@@ -142,10 +174,109 @@ That way, every expert would agree our probability measure is a good choice.
     \[
         \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]
-
     When \set{e} contains a single random variable \rv{e}, We refer to \rv{e} as the \emph{evidence variable}.
     We also simplify our notation and instead of writing $\Qvar|\{\rv{e}\}$, we use $\Qvar|\rv{e}$.
 \end{definition}
+
+
+$\epsilon$-convergence is closely related to the concept of Bayesian convergence.
+An exchangeable sequence, i.e., an independent identically distributed sample set, \econverges when a sufficient
+number of samples are observed.
+
+As an example, consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is
+unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
+Before making our prediction, we can roll the dice for several times, and the dice rolls are independent.
+If we let \rv{e} be a vector representing the first 10 dice rolls and \rv{x} be the outcome of the next roll,
+$\rv{x}|\rv{e}$ \econverges by the probability measure obtained from assuming a
+uniform prior for the multinomial parameters when $\epsilon \geq 0.109$.
+If \rv{e} represents the first 20 outcomes, then we can let $\epsilon \geq 0.073$.
+
+Here, the chosen prior for the multinomial parameters affects the $\epsilon$-convergence.
+In other words, different probability measures in our model have different convergence properties.
+As we discussed earlier, the probability measure that gives the smallest possible $\epsilon$, is subjectively the safest
+choice.
+However, if during the process we choose a specific $\rv{x}|\rv{e}$ based on our experiment, we will violate the
+principle of objectivity.
+
+Thus, we need to define a set of query and evidence variables that reflect some assumptions about the
+environment, and do not depend on our experimental setup.
+One natural way for this is to let each \rv[i]{x} be the outcome of
+the $i$-th dice roll, and define each \rv[i]{e} as a vector of the previous dice outcomes $(\seqRv{i-1})$.
+Then, we will consider a sequence of conditionals of the form:
+$\rv[k]{x}|\rv[k]{e},\ \rv[k+1]{x}|\rv[k+1]{e},\ \rv[k+2]{x}|\rv[k+2]{e},\ \dots,\ \rv[n]{x}|\rv[n]{e}$.
+Here, the choice of $k$ and $n$ is based on our assumptions about the complexity of the problem: Only after seeing at
+least $k$ outcomes, convergence is meaningful and after $n$ outcomes it becomes trivial.
+
+We also need to determine how the divergence measures of these variables should be combined.
+Definition~\ref{def:e-convergence} already determines the measure for a single query variable with different evidence variables.
+However in this case we have different query variables.
+When we have different query variables, the incorrect prediction of each variable can incur a separate loss.
+Therefore, we believe that addition should be used.:
+\[
+    \sum_i \measure{D}
+\]
+which equals to
+\[
+    zhoom zhooom
+\]
+where x is the random vector and e is ...
+
+Additionally, there is another factor that can help us choose the appropriate probability measure from our model.
+Suppose that, instead of \rv{E}, we decide to use a different evidence, denoted as \rv{E'}.
+Could this change potentially improve our strategy?
+Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
+To compare any two strategies, we can simply compare their expected utilities.
+The strategy with the greater expected utility is the better one.
+
+Note that in reality we cannot freely choose any evidence we want.
+The availability of evidence depends on the environment.
+We can only choose evidence that is a function of the evidence provided by the environment,
+allowing us to determine its value after observing the original evidence.
+Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
+For instance, in a learning task where our evidence is an image, we might substitute the image with the first
+three coefficients of its Fourier transform.
+Naturally, these coefficients are a function of the original evidence.
+
+Interestingly, if we assume $\rv{E'} = f(\rv{E})$, it turns out
+that, according to our Bayesian framework, the optimal strategy for \rv{E} is always
+better than any strategy that uses \rv{E'}.
+Thus, at first glance, it appears that Bayesian decision theory does not favor feature selection.
+
+In practice, we have to use feature selection because without it the original learning task requires
+impractical large datasets.
+From a certain perspective, it could be argued that adopting a strategy which uses simpler evidence may lead to
+ignoring some parts of useful available information, and therefore can not be justified by Bayesian
+decision theory.
+
+The key point here is that the space of strategies using \rv{E'} is a subset of strategies that use \rv{E}.
+When we are searching for the best strategy based on \rv{E}, we are implicitly evaluating all simpler forms as well.
+Hence, we believe if we choose an appropriate probability measure $\envDist$, feature selection should
+be performed automatically within the Bayesian framework when we are finding the optimal strategy.
+
+Recall that, in parametric models (Definition~\ref{def:param-model}), choosing the probability measure $\envDist$ is
+equivalent to choosing a prior distribution for the model parameter.
+In Bayesian statistics when there is no prior knowledge we use non-informative priors.
+However, many commonly used non-informative priors, such as the flat prior, do not exhibit feature
+selection characteristics.
+
+This seems to come from the fact that when we use these priors, in the resulted probability measure the estimate for
+the distribution of $\XIE'$ differs from what we intuitively estimate.
+This estimate tends to have a much higher entropy.
+As a result the optimal strategy for \rv{E'} is mostly ignored because for any value of the evidence it yields a
+poor expected utility.
+
+It is reasonable to consider that if we find a probability measure which has a closer estimate to our
+intuitive estimate for $\XIE'$ distribution, automatic feature selection will be performed within the Bayesian
+framework.
+We believe that can be done by using a probability measure that is “safe” for $\XIE'$, in the sense we just described.
+
+Throughout this discussion, we will further investigate this idea and try to formulate a systematic approach to
+determine such probability measures.
+
+
+What if we find a probability measure $C$ that
+has a small divergence from any other distribution in our model?
+That way, every expert would agree our probability measure is a good choice.
 
 \begin{definition}[Divergence Measure]
     Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
@@ -169,15 +300,21 @@ For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
     \end{equation*}
 \end{proposition}
 
+When dealing with multiple query variables, the additivity property guides us in defining the appropriate divergence
+measure:
 
 \begin{definition}[Collective Divergence Measure]
-    \newcommand{\YIe}{\rv{Y} \mid \rval{e}}
-    Let \rv{x}, \rv{y} be two query variables, and \Eset be an evidence set in a probabilistic model \model.
-    We define the \emph{collective divergence measure} of $P \in \set{P}$ for $\QvarIEset$ and $\rv{Y}|\Eset$ as
+    \newcommand{\XIeX}[1]{\rv{#1} \mid e_{\rv{#1}}}
+    \newcommand{\EX}{\Eset_X}
+    \newcommand{\EY}{\Eset_Y}
+    Let \rv{x}, \rv{y} be two query variables, and $\EX$, $\EY$ be two evidence sets in a probabilistic
+    model \model.
+    We define the \emph{collective divergence measure} of $P \in \set{P}$ for $\rv{X}|\EX$ and $\rv{Y}|\EY$ as
     follows:
     \begin{equation*}
-        \measure{D}_{\QvarIEset, \rv{Y}|\Eset}[P] =
-        \maxQ \maxE \left\{ \Ex{Q}{\Dcond} + \Ex{Q}{\Dcond[][][\YIe][\YIe]} \right\} \cdot
+        \measure{D}_{X|\EX, Y|\EY}[P] =
+        \max_{Q \in \set{P}, E_X \in \EX, E_Y \in \EY} \left\{ \Ex{Q}{\Dcond[][][\XIeX{x}][\XIeX{x}]} +
+        \Ex{Q}{\Dcond[][][\XIeX{y}][\XIeX{y}]} \right\} \cdot
     \end{equation*}
 \end{definition}
 Let’s revisit our discussion from the previous section.

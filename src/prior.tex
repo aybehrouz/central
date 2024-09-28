@@ -1,12 +1,12 @@
 When we lack prior knowledge of an environment, it is still not difficult to identify some distributions that are
 not suitable choices for $\prior$.
-For instance, any distribution that assigns zero probabilities to certain values of $\paramValue$ is not a good choice.
+For instance, any distribution that assigns zero probability to certain values of $\paramValue$ is not a good choice.
 If we use such a prior, evidence can never convince us that the value of $\paramValue$ lies within those
 excluded values.
 
-We should note that, in this context, we cannot objectively assert that in the environment there is some type of
-underlying process for generating different values of \paramValue that does not assign zero probability to any
-value of \paramValue.
+We should note that, in this context, we cannot objectively assert that there is some type of
+underlying process in the environment for generating different values of \paramValue that does not consider zero
+probability for any value of \paramValue.
 Our argument is subjective.
 We consider some priors to be unsafe because they have some characteristics that appear to be problematic:
 in the obtained posterior, some values of the parameter are excluded regardless of the evidence.
@@ -15,26 +15,25 @@ We can generalize this idea and use a similar subjective approach to determine a
 prior distribution.
 Recall that our probabilistic model for the environment consists of a set of acceptable probability measures \set{P}.
 Suppose that we choose a probability measure $C \in \set{P}$, and determine the optimal Bayesian strategy in $C$.
-If the expected utility of this strategy in any other probability measure
+If the expected loss of this strategy in any other probability measure
 $P \in \set{P}$ is close to the optimal strategy, we can say that using $C$ is safe, in the
 sense that the optimal strategy obtained using $C$, is a near optimal strategy in any other acceptable probability
 measure in our model.
-Interestingly, this relates closely to the concept of Bayesian convergence, where the posterior probability converges
-to the same distribution regardless of the prior distribution.
+
 
 The probability measure that we choose represents our beliefs about the environment.
-We believe that this choice must depend solely on the environment.
-As long as the environment is the same, we cannot change our choice.
-For example if our utility function changes, or if the evidence that we get from the environment becomes more or
+It can be argued that this choice must depend solely on the environment.
+As long as the environment is the same, we should not change our choice.
+For example, if our loss function changes, or if the evidence that we get from the environment becomes more or
 less informative, none of these can change our beliefs about the environment and therefore our chosen
 probability measure.
 We will use this principle several times in this discussion and refer to it as the \emph{principle of objectivity}.
 
-Unfortunately, the expected utility of a strategy is a functional of the utility function.
-Therefore, we cannot directly use the expected utility of the optimal Bayesian strategy for evaluating
+Unfortunately, the expected loss of a strategy is a functional of the loss function.
+Therefore, we cannot directly use the expected loss of the optimal Bayesian strategy for evaluating
 different probability measures.
 We need a measure that quantifies the similarity between two probability measures while it ignores the
-specific utility function we are using.
+specific loss function we are using.
 
 Suppose that for an environment, we have decided on a probabilistic model \M, and without any particular prior
 knowledge, we have chosen a probability measure $P$ from our model.
@@ -44,7 +43,7 @@ We ask an expert---a person familiar with the environment---to evaluate our prob
 Presumably, that expert has his own beliefs about the environment.
 Therefore, he believes, instead of $P$, we should use a different probability measure $Q$.
 When evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\rv{X})$,
-while believing the correct distribution is $Q(\rv{X})$.
+while he believes the correct distribution is $Q(\rv{X})$.
 
 Let's assume that a real number can be used to measure this loss, and denote it as $\D[\rv{X}]$.
 It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
@@ -63,13 +62,14 @@ measuring divergence between distributions.
     Suppose that $\D[\rv{X}]$ is a divergence measure that quantifies the divergence of $P(\rv{X})$ from $Q(\rv{X})$.
     Consider the following properties:
     \begin{description}
-        \item[Consistency with entropy] Let $\varOmega$ be a random variable. If $U(\varOmega)$ is the uniform distribution
+        \item[Consistency with entropy] Let $\varOmega$ be a continuous random variable. If $U(\varOmega)$ is the
+        uniform distribution
         with the same support as $Q(\varOmega)$, then we have
         \[
             \D[\varOmega][Q][U] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
         \]
         where $\entropy{}{}$ denotes Shannon's entropy.
-        \item[Additivity] For any two random variables $\XY$
+        \item[Additivity] For any two discrete random variables $\XY$
         \[
             \D[\XY] = \D + \sumx \D[\YIx]Q(\rval[]{x})\cdot
         \]
@@ -87,7 +87,7 @@ measuring divergence between distributions.
     \newcommand{\tent}[1]{\int q(#1) \ln q(#1) d\t}
 
     \newcommand{\Qx}{Q(\rval[]{x})}
-    Let $P(\rv[]{X})$ and $Q(\rv[]{X})$ be two arbitrary distributions for \rv[]{X}.
+    Let $P(\rv[]{X})$ and $Q(\rv[]{X})$ be two arbitrary distributions for a discrete random variable \rv[]{X}.
     We define a new continuous random variable $\T$ and let
     \begin{equation*}
         p(\T = \t \mid \rvEq) =
@@ -134,29 +134,6 @@ $\rv[]{X} = \rval[]{x}$, which can happen with probability $Q(\rval[]{x})$, it w
 using $P(\YIx)$.
 This property indicates that for combining these individual terms we should use addition.
 
-In our earlier discussion, to assess the safety of a probability measure, we realized that we need to
-evaluate the optimal Bayesian strategy, in a generic way, non dependant to the utility function.
-
-It can be shown that there always exists a deterministic optimal strategy.
-That is, we can consider a strategy as a function of the evidence, rather than a conditional distribution:
-\[
-    S_{\text{opt}} = \arg\max_S \sum_{x,e} \util[S(e)] \envDist(x, e).
-\]
-
-We can easily verify that the optimal strategy, for each evidence \rval{e}, chooses the action that
-maximizes the expected utility conditioned on \rval{e}:
-\begin{align}
-    S_{\text{opt}}(e) &= \arg\max_a \Ex{\envDist}{\util \mid e} \\
-    &= \arg\max_a\sumx \util \envDist(x \mid e) \cdot
-    \label{eq:bayes-action}
-\end{align}
-This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
-Note that the value of the expected utility depends on $\envDist(\rv{E})$, but the actions that
-construct the optimal strategy are not affected by $\envDist(\rv{E})$.
-Hence, to evaluate the optimal strategy obtained by $P$, when we believe $Q$ is the correct probability measure, we can
-calculate the expected value of the KL-divergence of $P(\XIe)$ from $Q(\XIe)$, with respect to $Q$.
-Notice that this approach does not work for suboptimal strategies. Because for a suboptimal strategy,
-$\envDist(\rv{E})$ plays a role and determines the importance of suboptimal actions.
 
 \begin{definition}[$\epsilon$-convergence]
     \label{def:e-convergence}
@@ -178,10 +155,8 @@ $\envDist(\rv{E})$ plays a role and determines the importance of suboptimal acti
     We also simplify our notation and instead of writing $\Qvar|\{\rv{e}\}$, we use $\Qvar|\rv{e}$.
 \end{definition}
 
-
-$\epsilon$-convergence is closely related to the concept of Bayesian convergence.
-An exchangeable sequence, i.e., an independent identically distributed sample set, \econverges when a sufficient
-number of samples are observed.
+$\epsilon$-convergence is closely related to the concept of Bayesian convergence, where the posterior converges to
+the same distribution regardless of the prior distribution.
 
 As an example, consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is
 unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
@@ -193,71 +168,18 @@ If \rv{e} represents the first 20 outcomes, then we can let $\epsilon \geq 0.073
 
 Here, the chosen prior for the multinomial parameters affects the $\epsilon$-convergence.
 In other words, different probability measures in our model have different convergence properties.
-As we discussed earlier, the probability measure that gives the smallest possible $\epsilon$, is subjectively the safest
+As we discussed earlier, the probability measure that gives the smallest possible $\epsilon$ is subjectively the safest
 choice.
-However, if during the process we choose a specific $\rv{x}|\rv{e}$ based on our experiment, we will violate the
-principle of objectivity.
+However, if the query and evidence variables, $\rv{x}$ and $\rv{e}$, depend on our specific random experiment, we
+will violate the principle of objectivity.
+To avoid this, one natural solution is to let the query variable \Qvar correspond to the joint of several variables
+that can be used for calculating all probabilities that are relevant.
 
-Thus, we need to define a set of query and evidence variables that reflect some assumptions about the
-environment, and do not depend on our experimental setup.
-One natural way for this is to let each \rv[i]{x} be the outcome of
-the $i$-th dice roll, and define each \rv[i]{e} as a vector of the previous dice outcomes $(\seqRv{i-1})$.
-Then, we will consider a sequence of conditionals of the form:
-$\rv[k]{x}|\rv[k]{e},\ \rv[k+1]{x}|\rv[k+1]{e},\ \rv[k+2]{x}|\rv[k+2]{e},\ \dots,\ \rv[n]{x}|\rv[n]{e}$.
+In our example, we can let $\Qvar = (\rv[k+1]{x}, \rv[k+2]{x}, \dots, \rv[n]{x})$, representing all dice rolls from $k$
+to $n$.
+We then let \rv{e} be a random vector of the previous dice outcomes $(\seqRv{k})$.
 Here, the choice of $k$ and $n$ is based on our assumptions about the complexity of the problem: Only after seeing at
 least $k$ outcomes, convergence is meaningful and after $n$ outcomes it becomes trivial.
-
-We also need to determine how the divergence measures of these variables should be combined.
-Definition~\ref{def:e-convergence} already determines the measure for a single query variable with different evidence variables.
-However in this case we have different query variables.
-When we have different query variables, the incorrect prediction of each variable can incur a separate loss.
-Therefore, we believe that addition should be used.:
-\[
-    \sum_i \measure{D}
-\]
-which equals to
-\[
-    zhoom zhooom
-\]
-where x is the random vector and e is ...
-
-Additionally, there is another factor that can help us choose the appropriate probability measure from our model.
-Suppose that, instead of \rv{E}, we decide to use a different evidence, denoted as \rv{E'}.
-Could this change potentially improve our strategy?
-Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
-To compare any two strategies, we can simply compare their expected utilities.
-The strategy with the greater expected utility is the better one.
-
-Note that in reality we cannot freely choose any evidence we want.
-The availability of evidence depends on the environment.
-We can only choose evidence that is a function of the evidence provided by the environment,
-allowing us to determine its value after observing the original evidence.
-Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
-For instance, in a learning task where our evidence is an image, we might substitute the image with the first
-three coefficients of its Fourier transform.
-Naturally, these coefficients are a function of the original evidence.
-
-Interestingly, if we assume $\rv{E'} = f(\rv{E})$, it turns out
-that, according to our Bayesian framework, the optimal strategy for \rv{E} is always
-better than any strategy that uses \rv{E'}.
-Thus, at first glance, it appears that Bayesian decision theory does not favor feature selection.
-
-In practice, we have to use feature selection because without it the original learning task requires
-impractical large datasets.
-From a certain perspective, it could be argued that adopting a strategy which uses simpler evidence may lead to
-ignoring some parts of useful available information, and therefore can not be justified by Bayesian
-decision theory.
-
-The key point here is that the space of strategies using \rv{E'} is a subset of strategies that use \rv{E}.
-When we are searching for the best strategy based on \rv{E}, we are implicitly evaluating all simpler forms as well.
-Hence, we believe if we choose an appropriate probability measure $\envDist$, feature selection should
-be performed automatically within the Bayesian framework when we are finding the optimal strategy.
-
-Recall that, in parametric models (Definition~\ref{def:param-model}), choosing the probability measure $\envDist$ is
-equivalent to choosing a prior distribution for the model parameter.
-In Bayesian statistics when there is no prior knowledge we use non-informative priors.
-However, many commonly used non-informative priors, such as the flat prior, do not exhibit feature
-selection characteristics.
 
 This seems to come from the fact that when we use these priors, in the resulted probability measure the estimate for
 the distribution of $\XIE'$ differs from what we intuitively estimate.
@@ -272,6 +194,24 @@ We believe that can be done by using a probability measure that is “safe” fo
 
 Throughout this discussion, we will further investigate this idea and try to formulate a systematic approach to
 determine such probability measures.
+
+
+In our earlier discussion, to assess the safety of a probability measure, we realized that we need to
+evaluate the optimal Bayesian strategy in a generic way, independent of the utility function.
+We also need to determine how the divergence measures of these variables should be combined.
+Definition~\ref{def:e-convergence} already specifies the measure for a single query variable with different evidence
+variables.
+However, in this case, we have different query variables.
+When we have different query variables, the incorrect prediction of each variable can incur a separate loss.
+Therefore, we believe in this case addition should be used:
+\[
+    \sum_i \measure{D}
+\]
+which equals to
+\[
+    zhoom zhooom
+\]
+where x is the random vector and e is ...
 
 
 What if we find a probability measure $C$ that

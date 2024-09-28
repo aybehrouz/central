@@ -5,7 +5,7 @@
 %        \item Set \set{A}, and a measure \measure{M}.
 %    \end{itemize}
 
-\newcommand{\util}[1][{\rval[]{a}}]{U(#1, \rval[]{x})}
+\newcommand{\util}[1][{\rval[]{a}}]{\ell(#1, \rval[]{x})}
 \newcommand{\envDist}{P^*}
 \newcommand{\post}{\pi(\rval[i]{x} \mid \paramValue)}
 
@@ -13,23 +13,41 @@ We begin by revisiting a fundamental decision-making problem, and how it is trea
 decision theory.
 
 Consider an environment where an agent must select an action from a set of available actions.
-The utility of each action for the agent depends on the unknown state of the environment, and can be quantified by a
-real number.
+The loss associated with each action taken by the agent depends on the unknown state of the environment
+and can be quantified by a real number.
 Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the unknown environment state.
-The utility function  $\util$ quantifies the desirability of each action.
+The loss function  $\util$ quantifies the loss for each action.
 
-Moreover, an evidence \rval[]{e} of this unknown environment state exists, and the agent can leverage this
-evidence to determine the best action.
+Moreover, we assume that an evidence \rval[]{e} of this unknown environment state exists, and the agent can leverage
+this evidence to determine the best action.
 In other words, our agent aims to find the optimal strategy, where a strategy defines the distribution of each
 action conditioned on the observed evidence: $S(A \mid E)$.
 
-According to Bayesian decision theory, the optimal strategy is the one that maximizes the expected utility:
+According to Bayesian decision theory, the optimal strategy is the one that minimizes the expected loss:
 \begin{equation*}
-    S_{\text{opt}} = \arg\max_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
+    S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
 \end{equation*}
 
+It can be shown that there always exists a deterministic optimal strategy.
+That is, we can consider a strategy as a function of the evidence, rather than as a conditional distribution:
+\[
+    S_{\text{opt}} = \arg\min_S \sum_{x,e} \util[S(e)] \envDist(x, e).
+\]
+
+The optimal strategy, for each evidence \rval{e}, chooses the action that
+minimizes the expected loss conditioned on \rval{e}:
+\begin{align}
+    S_{\text{opt}}(e) &= \arg\min_a \Ex{\envDist}{\util \mid e} \\
+    &= \arg\min_a\sumx \util \envDist(x \mid e) \cdot
+    \label{eq:bayes-action}
+\end{align}
+This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
+Note that the value of the expected utility depends on $\envDist(\rv{E})$, but the actions that
+construct the optimal strategy are not affected by $\envDist(\rv{E})$.
+Only for suboptimal strategies $\envDist(\rv{E})$ plays a role and determines the importance of suboptimal actions.
+
 Here, $\envDist(\XE)$ is the joint probability distribution of the environment state and the evidence.
-However, a fundamental question arises: How do we obtain this distribution?
+However, how do we obtain this distribution?
 Is there an objective distribution inherent in the environment that we need to somehow discover?
 
 Answering this question is not straightforward.
@@ -43,17 +61,18 @@ assumptions.
 When we have no assumptions and no prior knowledge, the set of candidate probabilities for $\envDist$ simply
 consists of all possible probability measures.
 As we make assumptions or obtain some prior knowledge, those probability measures that do not align
-with our assumptions or knowledge are eliminated from this set.
+with our assumptions or knowledge are eliminated from the set.
 Consequently, the set of acceptable probability measures becomes more refined.
-We refer to this refined set as a probabilistic model:
+We will refer to this refined set as a probabilistic model:
 
 \begin{definition}[Probabilistic Model]
     We define a \emph{probabilistic model} \M as a pair $\left(\set{S}, \set{P}\right)$, where \set{S} is a sample
     space, and \set{P} is a set of acceptable probability measures on \set{S}.
 \end{definition}
 
-One of the most commonly used assumptions of this kind in the statistical modeling is the exchangeability assumption.
-We say a sequence of random variables $\seqRvInf$ is exchangeable if the ordering of variables does not provide any
+One of the most commonly used assumptions in the statistical modeling that determines the set of acceptable
+probability measures is the exchangeability assumption.
+We say a sequence of random variables $\seqRvInf$ is exchangeable, if the ordering of variables does not provide any
 useful information.
 In other words, for an exchangeable sequence of random variables, the joint probability is the same
 for any permutation of variables.
@@ -94,13 +113,47 @@ to fully determine $\envDist$, we only need to determine the prior distribution 
 
 Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on our prior knowledge about the
 environment.
-But what if such knowledge is unavailable?
-Finding an answer for this important question is not so simple.
+But, what if such knowledge is unavailable?
+Finding an answer to this important question is not simple.
 In Bayesian statistics, this is where non-informative priors come into play.
 These priors are typically chosen to be uniform or to represent a state of ignorance about the parameters.
 Unfortunately, these priors are not always ideal and can sometimes lead to misleading results.
 
-Throughout this discussion, we will explore a systematic approach for choosing an appropriate prior distribution when
+There is also another consideration that could play a role in choosing an appropriate prior distribution.
+Suppose that in our initial decision making problem, we choose to use a different
+evidence instead of \rv{E}, denoted as \rv{E'}.
+Could this change potentially improve our strategy?
+Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
+To compare any two strategies, we simply compare their expected loss.
+The strategy with the lower expected loss is the better one.
+
+Note that in reality we cannot freely choose any evidence we want.
+We can only choose evidence that is a function of the evidence provided by the environment,
+allowing us to determine its value after observing the original evidence.
+Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
+For instance, in a learning task where our evidence is an image, we might substitute the image with the first
+three coefficients of its Fourier transform.
+Naturally, these coefficients are a function of the original evidence.
+
+Interestingly, if we assume $\rv{E'} = f(\rv{E})$, it turns out
+that, according to our Bayesian framework, the optimal strategy for \rv{E} is always
+better than any strategy that uses \rv{E'}.
+Thus, at first glance, it appears that Bayesian decision theory does not favor feature selection.
+
+From a certain perspective, it could be argued that adopting a strategy which uses simpler evidence may lead to
+ignoring some parts of useful available information, and therefore is not justified by Bayesian
+decision theory.
+However, in practice we have to use feature selection because without it the original learning task requires
+impractical large datasets.
+
+The key point here is that the space of strategies using \rv{E'} is a subset of strategies that use \rv{E}.
+When we are searching for the best strategy based on \rv{E}, we are implicitly evaluating all simpler forms as well.
+For this reason, we believe if we choose an appropriate prior distribution, feature selection should be performed
+automatically within the Bayesian decision theory framework, when we are finding the optimal strategy.
+However, many commonly used non-informative priors, such as the flat prior, do not exhibit feature
+selection characteristics.
+
+Throughout this discussion, we will explore a systematic approach for choosing prior distributions when
 prior knowledge about the environment is lacking.
-As we will see, this prior exhibits some interesting characteristics.
+As we will see, these priors also exhibit some interesting feature selection characteristics.
 

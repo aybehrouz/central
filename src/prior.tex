@@ -131,9 +131,30 @@ when we believe $Q(\XY)$ is the true distribution.
 To calculate this loss, we can assume that \rv[]{X} happens before \rv[]{Y}.
 In that way, this loss would include the loss of using $P(\rv[]{X})$, and then, if we observe
 $\rv[]{X} = \rval[]{x}$, which can happen with probability $Q(\rval[]{x})$, it would also include the loss of
-using $P(\YIx)$.
+using $P(\rv{Y} \mid \assign{x})$.
 This property indicates that for combining these individual terms we should use addition.
 
+Thus, if $Q$ is the probability measure that represents our beliefs, we can use $\D[\rv{X}]$ to evaluate any other
+probability measure $P$, with respect to a random variable \rv{X}.
+In other words, we can say that we are evaluating $P(\rv{X})$.
+
+When we have two different random variables \rv{X} and \rv{Y}, there will be two distinct cases that should not be
+confused:
+We may want to evaluate $P(\XY)$, or may want to evaluate $P(\rv{X})$ and $P(\rv{Y})$.
+Evaluating the joint distribution $P(\XY)$ is straightforward and can be done by defining a new random variable
+$\rv{Z} = (\XY)$.
+However, the second case may present more challenges.
+Evaluating the marginal distributions $P(\rv{X})$ and $P(\rv{Y})$ separately is the same as evaluating $P(\XY)$ when \rv{X}
+and \rv{Y} are independent.
+Here, we can use a similar argument to what we used for the additive property:
+We want to evaluate the loss of $P(\XY)$, If \rv{X} happens first we will face the loss of $P(\rv{X})$,
+then when \rv{Y} happens we will face the loss of $P(\rv{Y})$ because \rv{X} and \rv{Y} are independent.
+Therefore we should use addition:
+\[
+    \D[\rv{X}] + \D[\rv{Y}].
+\]
+
+We may use the KL divergence to measure the agreement of a model about a specific distribution:
 
 \begin{definition}[$\epsilon$-convergence]
     \label{def:e-convergence}
@@ -160,23 +181,68 @@ the same distribution regardless of the prior distribution.
 
 As an example, consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is
 unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
-Before making our prediction, we can roll the dice for several times, and the dice rolls are independent.
+Before making our prediction, we can roll the dice multiple times, assuming that each roll is independent.
+
 If we let \rv{e} be a vector representing the first 10 dice rolls and \rv{x} be the outcome of the next roll,
-$\rv{x}|\rv{e}$ \econverges by the probability measure obtained from assuming a
-uniform prior for the multinomial parameters when $\epsilon \geq 0.109$.
-If \rv{e} represents the first 20 outcomes, then we can let $\epsilon \geq 0.073$.
+$\rv{x}|\rv{e}$ \econverges by $P_u$ for $\epsilon \geq 0.109$, where $P_u$ is the probability measure obtained from
+assuming a uniform prior for the multinomial parameters.
+If \rv{e} represents the first 20 outcomes, then we can choose any $\epsilon \geq 0.073$.
 
-Here, the chosen prior for the multinomial parameters affects the $\epsilon$-convergence.
+In our example, the chosen prior for the multinomial parameters affects the value of $\epsilon$.
 In other words, different probability measures in our model have different convergence properties.
-As we discussed earlier, the probability measure that gives the smallest possible $\epsilon$ is subjectively the safest
-choice.
-However, if the query and evidence variables, $\rv{x}$ and $\rv{e}$, depend on our specific random experiment, we
-will violate the principle of objectivity.
-To avoid this, one natural solution is to let the query variable \Qvar correspond to the joint of several variables
-that can be used for calculating all probabilities that are relevant.
+If there is a probability measure that provides $\epsilon$-convergence for a very small $\epsilon$, we can hardly
+justify using any other probability measure.
 
-In our example, we can let $\Qvar = (\rv[k+1]{x}, \rv[k+2]{x}, \dots, \rv[n]{x})$, representing all dice rolls from $k$
-to $n$.
+However, that probability measure may not always exist.
+Moreover, we are uncertain about what value of $\epsilon$ would be sufficiently small.
+This becomes more problematic when we need to consider more than one distribution.
+For example, suppose that we are interested in the distributions of both $\rv{X}|\rv[1]{E}$ and $\rv{X}|\rv[2]{E}$ .
+As we discussed earlier, when dealing with multiple distributions we should consider the sum of their KL divergences.
+That would make determining the appropriate value of $\epsilon$ even harder.
+
+\begin{definition}[Divergence Measure]
+    Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
+    We define the \emph{divergence measure of $P \in \set{P}$ for $\QvarIEset$} as follows:
+    \begin{align}
+        \label{eq:div-def}
+        \Dx &= \maxQ \maxE \Ex{Q}{\Dcond} \\
+        &= \maxQ \maxE \sumOverxe Q(\assign{x} , \assign{e}) \ln
+        \frac{Q(\assign{x} \mid \assign{e})}{P(\assign{x} \mid \assign{e})} \cdot
+    \end{align}
+\end{definition}
+
+Note that we usually simplify our notation and instead of writing the full assignment to a random variable, we only
+write the assigned value.
+For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
+
+\begin{proposition}
+    $\QvarIEset$ \econverges by $P$, if and only if:
+    \begin{equation*}
+        \Dx < \epsilon \cdot
+    \end{equation*}
+\end{proposition}
+
+We can avoid all these hurdles by simpling choosing the probability measure that has the smallest divergence measure.
+Subjectively, this probability measure is the safest choice in our model and it turns out that it behaves well even
+when the divergence measure is not very small.
+
+\begin{definition}[Central Distribution]
+    In a model \model, we define the \emph{central distribution} for a query variable \Qvar, conditioned on the
+    evidence set \Eset, to be a distribution $\central \in \set{P}$ which minimizes the divergence measure
+    for $\QvarIEset$:
+    \begin{equation*}
+        \central = \arg\pmin \Dx\cdot
+        \label{eq:center}
+    \end{equation*}
+\end{definition}
+
+When we need to choose one of the probability measures of our model, the central probability measure for a query set
+appears to be a reasonable and safe choice.
+However, if our query set depends on our specific experimental setup, we are violating the principle of objectivity.
+To avoid this, one natural solution is to let the query set include all conditional forms that are relevant.
+
+In our dice example, we can let $\Qvar = (\rv[k+1]{x}, \rv[k+2]{x}, \dots, \rv[n]{x})$, representing all
+dice rolls from $k$ to $n$.
 We then let \rv{e} be a random vector of the previous dice outcomes $(\seqRv{k})$.
 Here, the choice of $k$ and $n$ is based on our assumptions about the complexity of the problem: Only after seeing at
 least $k$ outcomes, convergence is meaningful and after $n$ outcomes it becomes trivial.
@@ -218,28 +284,6 @@ What if we find a probability measure $C$ that
 has a small divergence from any other distribution in our model?
 That way, every expert would agree our probability measure is a good choice.
 
-\begin{definition}[Divergence Measure]
-    Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
-    We define the \emph{divergence measure of $P \in \set{P}$ for $\QvarIEset$} as follows:
-    \begin{align}
-        \label{eq:div-def}
-        \Dx &= \maxQ \maxE \Ex{Q}{\Dcond} \\
-        &= \maxQ \maxE \sumOverxe Q(\assign{x} , \assign{e}) \ln
-        \frac{Q(\assign{x} \mid \assign{e})}{P(\assign{x} \mid \assign{e})} \cdot
-    \end{align}
-\end{definition}
-
-Note that we usually simplify our notation and instead of writing the full assignment to a random variable, we only
-write the assigned value.
-For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
-
-\begin{proposition}
-    $\QvarIEset$ \econverges by $P$, if and only if:
-    \begin{equation*}
-        \Dx < \epsilon \cdot
-    \end{equation*}
-\end{proposition}
-
 When dealing with multiple query variables, the additivity property guides us in defining the appropriate divergence
 measure:
 
@@ -262,15 +306,6 @@ We saw that in Bayesian framework when we have evidence \rv{e'}, such that $\rv{
 optimal strategy for \rv{e} always has a greater expected utility than any strategy that uses \rv{e'}.
 We stated that we believe...
 
-\begin{definition}[Central Distribution]
-    In a model \model, we define the \emph{central distribution} for a query variable \Qvar, conditioned on the
-    evidence set \Eset, to be a distribution $\central \in \set{P}$ which minimizes the divergence measure
-    for $\QvarIEset$:
-    \begin{equation*}
-        \central = \arg\pmin \Dx\cdot
-        \label{eq:center}
-    \end{equation*}
-\end{definition}
 
 \begin{definition}[Aggregator]
     Consider two probabilistic models \model and \aggmodel.

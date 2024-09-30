@@ -1,7 +1,7 @@
 When we lack prior knowledge of an environment, it is still not difficult to identify some distributions that are
-not suitable choices for $\prior$.
-For instance, any distribution that assigns zero probability to certain values of $\paramValue$ is not a good choice.
-If we use such a prior, evidence can never convince us that the value of $\paramValue$ lies within those
+not suitable choices for \prior.
+For instance, any distribution that assigns zero probability to certain values of \paramValue is not a good choice.
+If we use such a prior, evidence can never convince us that the value of \paramValue lies within those
 excluded values.
 
 We should note that, in this context, we cannot objectively assert that there is some type of
@@ -37,17 +37,17 @@ specific loss function we are using.
 
 Suppose that for an environment, we have decided on a probabilistic model \M, and without any particular prior
 knowledge, we have chosen a probability measure $P$ from our model.
-In particular, we are interested in the distribution of a random variable \rv[]{X}.
+In particular, we are interested in the distribution of a random variable \X.
 
 We ask an expert---a person familiar with the environment---to evaluate our probability measure $P$.
 Presumably, that expert has his own beliefs about the environment.
 Therefore, he believes, instead of $P$, we should use a different probability measure $Q$.
-When evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\rv{X})$,
-while he believes the correct distribution is $Q(\rv{X})$.
+When evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\X)$,
+while he believes the correct distribution is $Q(\X)$.
 
-Let's assume that a real number can be used to measure this loss, and denote it as $\D[\rv{X}]$.
+Let's assume that a real number can be used to measure this loss, and denote it as $\D[\X]$.
 It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
-Therefore, $\D[\rv{X}]$ effectively is a measure of the divergence of $P(\rv{X})$ from $Q(\rv{X})$, when $Q$ is
+Therefore, $\D$ effectively is a measure of the divergence of $P(\X)$ from $Q(\X)$, when $Q$ is
 the believed true probability measure.
 
 Interestingly, if we make certain assumptions about the properties of this divergence measure,
@@ -58,8 +58,8 @@ measure of the uncertainty of a distribution, we should also consider KL diverge
 measuring divergence between distributions.
 
 \begin{theorem}
-    Let \rv{X} be a discrete random variable.
-    Suppose that $\D[\rv{X}]$ is a divergence measure that quantifies the divergence of $P(\rv{X})$ from $Q(\rv{X})$.
+    Let \X be a discrete random variable.
+    Suppose that $\D[\X]$ is a divergence measure that quantifies the divergence of $P(\X)$ from $Q(\X)$.
     Consider the following properties:
     \begin{description}
         \item[Consistency with entropy] Let $\varOmega$ be a continuous random variable. If $U(\varOmega)$ is the
@@ -82,12 +82,12 @@ measuring divergence between distributions.
     \renewcommand{\t}{\omega}
     \newcommand{\tIx}{\t \mid \rval[]{x}}
     \newcommand{\TIx}{\T \mid \rval[]{x}}
-    \newcommand{\TX}{\T, \rv[]{x}}
+    \newcommand{\TX}{\T, \X}
     \newcommand{\tx}{\t, \rval[]{x}}
     \newcommand{\tent}[1]{\int q(#1) \ln q(#1) d\t}
 
     \newcommand{\Qx}{Q(\rval[]{x})}
-    Let $P(\rv[]{X})$ and $Q(\rv[]{X})$ be two arbitrary distributions for a discrete random variable \rv[]{X}.
+    Let $P(\X)$ and $Q(\X)$ be two arbitrary distributions for a discrete random variable \X.
     We define a new continuous random variable $\T$ and let
     \begin{equation*}
         p(\T = \t \mid \rvEq) =
@@ -96,20 +96,20 @@ measuring divergence between distributions.
             0 & \text{otherwise}\cdot
         \end{cases}
     \end{equation*}
-    Notice that both $P(\T \mid \rv[]{x})$ and $P(\TX)$ are uniform distributions, and
+    Notice that both $P(\T \mid \X)$ and $P(\TX)$ are uniform distributions, and
     $\entropy{P}{\TIx} = \ln P(\rval[]{x})$, $\entropy{P}{\TX} = 0$.
 
     We define $Q(\TIx)$ to be an arbitrary distribution that has the same support as $P(\TIx)$.
     This ensures that $Q(\TX)$ and $P(\TX)$ have the same support as well.
     Thus, we have
     \begin{align*}
-        \Dcond[][][\TX][\TX] &= \entropy{P}{\TX} - \entropy{Q}{\TX}\\
+        \D[\TX] &= \entropy{P}{\TX} - \entropy{Q}{\TX}\\
         &= \sumx \tent{\tx}\\
         &= \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
     \end{align*}
     and
     \begin{align*}
-        \Dcond[][][\TIx][\TIx] &= \entropy{P}{\TIx} - \entropy{Q}{\TIx}\\
+        \D[\TIx] &= \entropy{P}{\TIx} - \entropy{Q}{\TIx}\\
         &= \ln P(\rval[]{x}) + \tent{\tIx}\cdot
     \end{align*}
     Now, we use the additivity property to obtain a formula for our divergence measure:
@@ -128,52 +128,47 @@ The more the divergence is, the less the entropy must be.
 The second property tells us that the divergence is an additive quantity.
 We know that the divergence of $P(\XY)$ from $Q(\XY)$ is a measure of the generic loss of using $P(\XY)$
 when we believe $Q(\XY)$ is the true distribution.
-To calculate this loss, we can assume that \rv[]{X} happens before \rv[]{Y}.
-In that way, this loss would include the loss of using $P(\rv[]{X})$, and then, if we observe
-$\rv[]{X} = \rval[]{x}$, which can happen with probability $Q(\rval[]{x})$, it would also include the loss of
-using $P(\rv{Y} \mid \assign{x})$.
+To calculate this loss, we can assume that \X happens before \Y.
+In that way, this loss would include the loss of using $P(\X)$, and then, if we observe
+$\assign{X}$, which can happen with probability $Q(\rval[]{x})$, it would also include the loss of
+using $P(\Y \mid \assign{x})$.
 This property indicates that for combining these individual terms we should use addition.
 
-Thus, if $Q$ is the probability measure that represents our beliefs, we can use $\D[\rv{X}]$ to evaluate any other
-probability measure $P$, with respect to a random variable \rv{X}.
-In other words, we can say that we are evaluating $P(\rv{X})$.
+Thus, if $Q$ is the probability measure that represents our beliefs, we can use $\D$ to evaluate any other
+probability measure $P$, with respect to a random variable \X.
+In other words, we can say that we are evaluating $P(\X)$.
 
-When we have two different random variables \rv{X} and \rv{Y}, there will be two distinct cases that should not be
+When we have two different random variables \X and \Y, there will be two distinct cases that should not be
 confused:
-We may want to evaluate $P(\XY)$, or may want to evaluate $P(\rv{X})$ and $P(\rv{Y})$.
+We may want to evaluate $P(\XY)$, or may want to evaluate $P(\X)$ and $P(\Y)$.
 Evaluating the joint distribution $P(\XY)$ is straightforward and can be done by defining a new random variable
 $\rv{Z} = (\XY)$.
 However, the second case may present more challenges.
-Evaluating the marginal distributions $P(\rv{X})$ and $P(\rv{Y})$ separately is the same as evaluating $P(\XY)$ when \rv{X}
-and \rv{Y} are independent.
+Evaluating the marginal distributions $P(\X)$ and $P(\Y)$ separately is the same as evaluating $P(\XY)$ when \X
+and \Y are independent.
 Here, we can use a similar argument to what we used for the additive property:
-We want to evaluate the loss of $P(\XY)$, If \rv{X} happens first we will face the loss of $P(\rv{X})$,
-then when \rv{Y} happens we will face the loss of $P(\rv{Y})$ because \rv{X} and \rv{Y} are independent.
+We want to evaluate the loss of $P(\XY)$, If \X happens first we will face the loss of $P(\X)$,
+then when \Y happens we will face the loss of $P(\Y)$ because \X and \Y are independent.
 Therefore we should use addition:
 \[
-    \D[\rv{X}] + \D[\rv{Y}].
+    \D[\X] + \D[\Y].
 \]
 
 We may use the KL divergence to measure the agreement of a model about a specific distribution:
 
 \begin{definition}[$\epsilon$-convergence]
     \label{def:e-convergence}
-    In a probabilistic model \model, let \Qvar be a discrete random variable, and \Eset be a countable set of
-    discrete random variables, all defined on \set{s}.
-    We refer to \Qvar as the \emph{query variable}, and \Eset as the \emph{evidence set}.
-
-    We say $\QvarIEset$ (\Qvar conditioned on \Eset) \emph{\econverges by $P \in \set{p}$},
-    if for any random variable $\rv{e} \in \Eset$ and any probability measure $Q \in \set{p}$ we have:
+    In a probabilistic model \model, let \X and \E be discrete random variables.
+    We say $\XIE$ (\X conditioned on \E) \emph{\econverges by $P \in \set{p}$},
+    if for any probability measure $Q \in \set{p}$ we have:
     \begin{equation*}
-        \Ex{Q}{\Dcond} < \epsilon,
+        \Ex{Q}{\D[\XIe]} < \epsilon,
     \end{equation*}
-    where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and $\Dcond$ is the Kullback-Leibler divergence
+    where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and $\D[\XIe]$ is the Kullback-Leibler divergence
     of $P(\XIe)$ from $Q(\XIe)$:
     \[
-        \Dcond = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
+        \D[\XIe] = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
     \]
-    When \set{e} contains a single random variable \rv{e}, We refer to \rv{e} as the \emph{evidence variable}.
-    We also simplify our notation and instead of writing $\Qvar|\{\rv{e}\}$, we use $\Qvar|\rv{e}$.
 \end{definition}
 
 $\epsilon$-convergence is closely related to the concept of Bayesian convergence, where the posterior converges to
@@ -184,7 +179,7 @@ unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
 Before making our prediction, we can roll the dice multiple times, assuming that each roll is independent.
 
 If we let \rv{e} be a vector representing the first 10 dice rolls and \rv{x} be the outcome of the next roll,
-$\rv{x}|\rv{e}$ \econverges by $P_u$ for $\epsilon \geq 0.109$, where $P_u$ is the probability measure obtained from
+\XIE \econverges by $P_u$ for $\epsilon \geq 0.109$, where $P_u$ is the probability measure obtained from
 assuming a uniform prior for the multinomial parameters.
 If \rv{e} represents the first 20 outcomes, then we can choose any $\epsilon \geq 0.073$.
 
@@ -194,44 +189,46 @@ If there is a probability measure that provides $\epsilon$-convergence for a ver
 justify using any other probability measure.
 
 However, that probability measure may not always exist.
-Moreover, we are uncertain about what value of $\epsilon$ would be sufficiently small.
+Moreover, we are unsure of what value of $\epsilon$ would be sufficiently small.
 This becomes more problematic when we need to consider more than one distribution.
 For example, suppose that we are interested in the distributions of both $\rv{X}|\rv[1]{E}$ and $\rv{X}|\rv[2]{E}$ .
 As we discussed earlier, when dealing with multiple distributions we should consider the sum of their KL divergences.
-That would make determining the appropriate value of $\epsilon$ even harder.
+Unfortunately, that would make determining the appropriate value of $\epsilon$ even harder.
 
-\begin{definition}[Divergence Measure]
-    Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
-    We define the \emph{divergence measure of $P \in \set{P}$ for $\QvarIEset$} as follows:
+\begin{definition}[Query Set]
+    A \emph{query set} is a set of pairs of discrete random variables, all defined on the same sample space.
+\end{definition}
+
+\begin{definition}
+    Let \Xpairs, be a query set in a probabilistic model \model.
+    We define the \emph{divergence measure of $P \in \set{P}$ for \Qset} as follows:
     \begin{align}
         \label{eq:div-def}
-        \Dx &= \maxQ \maxE \Ex{Q}{\Dcond} \\
-        &= \maxQ \maxE \sumOverxe Q(\assign{x} , \assign{e}) \ln
-        \frac{Q(\assign{x} \mid \assign{e})}{P(\assign{x} \mid \assign{e})} \cdot
+        \Dx &= \max_{Q \in \set{P}} \DxExpand, \\
+        &= \maxQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
+        \frac{Q(\assign[i]{x} \mid \assign[i]{e})}{P(\assign[i]{x} \mid \assign[i]{e})} \cdot
+        \label{eq:div_measure}
     \end{align}
 \end{definition}
 
 Note that we usually simplify our notation and instead of writing the full assignment to a random variable, we only
 write the assigned value.
-For example, instead of $Q(\assign{x} , \assign{e})$ we write: $Q(\xe)$.
+For example, instead of $Q(\assign[i]{x} , \assign[i]{e})$ we write: $Q(\xe[i])$.
 
 \begin{proposition}
-    $\QvarIEset$ \econverges by $P$, if and only if:
-    \begin{equation*}
-        \Dx < \epsilon \cdot
-    \end{equation*}
+    \XIE \econverges by $P$, if and only if the divergence measure of $P$ for $\Qset = \{(\XE)\}$ is
+    less than $\epsilon$.
 \end{proposition}
 
 We can avoid all these hurdles by simpling choosing the probability measure that has the smallest divergence measure.
 Subjectively, this probability measure is the safest choice in our model and it turns out that it behaves well even
 when the divergence measure is not very small.
 
-\begin{definition}[Central Distribution]
-    In a model \model, we define the \emph{central distribution} for a query variable \Qvar, conditioned on the
-    evidence set \Eset, to be a distribution $\central \in \set{P}$ which minimizes the divergence measure
-    for $\QvarIEset$:
+\begin{definition}[Central Probability Measure]
+    In a model \model, we define the \emph{central probability measure} for a query set \Qset, to be a probability
+    measure $\central \in \set{P}$ which minimizes the divergence measure for \Qset:
     \begin{equation*}
-        \central = \arg\pmin \Dx\cdot
+        \central = \arg\minP \Dx\cdot
         \label{eq:center}
     \end{equation*}
 \end{definition}
@@ -241,7 +238,7 @@ appears to be a reasonable and safe choice.
 However, if our query set depends on our specific experimental setup, we are violating the principle of objectivity.
 To avoid this, one natural solution is to let the query set include all conditional forms that are relevant.
 
-In our dice example, we can let $\Qvar = (\rv[k+1]{x}, \rv[k+2]{x}, \dots, \rv[n]{x})$, representing all
+In our dice example, we can let $\Qvar = (\X[k+1], \rv[k+2]{x}, \dots, \rv[n]{x})$, representing all
 dice rolls from $k$ to $n$.
 We then let \rv{e} be a random vector of the previous dice outcomes $(\seqRv{k})$.
 Here, the choice of $k$ and $n$ is based on our assumptions about the complexity of the problem: Only after seeing at
@@ -280,168 +277,6 @@ which equals to
 where x is the random vector and e is ...
 
 
-What if we find a probability measure $C$ that
-has a small divergence from any other distribution in our model?
-That way, every expert would agree our probability measure is a good choice.
-
-When dealing with multiple query variables, the additivity property guides us in defining the appropriate divergence
-measure:
-
-\begin{definition}[Collective Divergence Measure]
-    \newcommand{\XIeX}[1]{\rv{#1} \mid e_{\rv{#1}}}
-    \newcommand{\EX}{\Eset_X}
-    \newcommand{\EY}{\Eset_Y}
-    Let \rv{x}, \rv{y} be two query variables, and $\EX$, $\EY$ be two evidence sets in a probabilistic
-    model \model.
-    We define the \emph{collective divergence measure} of $P \in \set{P}$ for $\rv{X}|\EX$ and $\rv{Y}|\EY$ as
-    follows:
-    \begin{equation*}
-        \measure{D}_{X|\EX, Y|\EY}[P] =
-        \max_{Q \in \set{P}, E_X \in \EX, E_Y \in \EY} \left\{ \Ex{Q}{\Dcond[][][\XIeX{x}][\XIeX{x}]} +
-        \Ex{Q}{\Dcond[][][\XIeX{y}][\XIeX{y}]} \right\} \cdot
-    \end{equation*}
-\end{definition}
-Let’s revisit our discussion from the previous section.
-We saw that in Bayesian framework when we have evidence \rv{e'}, such that $\rv{e'} = f(\rv{e})$, the
-optimal strategy for \rv{e} always has a greater expected utility than any strategy that uses \rv{e'}.
-We stated that we believe...
-
-
-\begin{definition}[Aggregator]
-    Consider two probabilistic models \model and \aggmodel.
-    Let \Qvar be a query variable and $\Eset = \{\seqRvInf[e]\}$ be an evidence set in \M.
-    Also, let \agg{\rv{e}}, \agg{\Qvar}, and \rv{i} be random variables defined on \agg{\set{s}} in \Magg.
-    We refer to \agg{\rv{x}}, \agg{\rv{e}} as the \emph{aggregated} query and evidence variables, and \rv{i} as the
-    \emph{selector} variable.
-
-    Suppose that for a probability measure $P \in \set{P}$ there exists a probability measure
-    $\agg{P} \in \agg{\set{P}}$, such that for any index \rval{i}, and every values \QvarVal, and \rval[i]{e}
-    there is some \agg{\QvarVal}, and \agg{\rval{e}}, where we have
-    \begin{equation}
-        P(\Qvar = \QvarVal, \rv[i]{e} = \rval[i]{e}) =
-        \agg{P}(\agg{\Qvar} = \agg{\QvarVal}, \assign{\agg{e}} \mid \assign{I}) \cdot
-        \label{eq:th1-1}
-    \end{equation}
-    Furthermore, \agg{\Qvar} and \rv{I} are conditionally independent given \agg{\rv{E}}:
-    \begin{equation}
-        \agg{P}(\aggXIE, \rv{I}) = \agg{P}(\aggXIE) \cdot
-        \label{eq:th1-2}
-    \end{equation}
-    We call \agg{P} an \emph{aggregator of $P$ with respect to $\QvarIEset$}.
-\end{definition}
-
-\begin{proposition}
-    By Equations~\ref{eq:th1-1} and~\ref{eq:th1-2} we have
-    \begin{equation*}
-        P(\QvarVal \mid \rval[i]{e}) = \agg{P}(\aggxIe) \cdot
-    \end{equation*}
-\end{proposition}
-
-\begin{definition}[Aggregate Model]
-    \label{def:aggregate-model}
-    Consider a probabilistic model \model.
-    Let \Qvar be a query variable, and \Eset be an evidence set in \M.
-    We say a model \aggmodel is the \emph{aggregate model} of \M with respect to $\QvarIEset$,
-    If every probability measure in \Magg is the aggregator of a probability measure in \M with respect to $\QvarIEset$.
-    %, and every probability measure in \M has at least one aggregator in \Magg with respect to $\QvarIEset$.
-\end{definition}
-
-\begin{definition}[Selective Aggregate Model]
-    Let \Qvar be a query variable, and \Eset be an evidence set in \model.
-    Let \Magg be an aggregate model of \M with respect to $\QvarIEset$.
-    We say \Magg is \emph{selective}, if for every $P \in \set{P}$ and any value \rval{i} of the selector
-    variable \rv{I}, there is an aggregator of $P$ in \Magg, such that $\agg{P}(i) = 1$.
-
-\end{definition}
-
-
-\begin{theorem}
-    Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
-    Suppose that \aggmodel is a selective aggregate model of \M with respect to $\QvarIEset$.
-    Let \agg{\rv{x}}, \agg{\rv{e}} be the aggregated query and evidence variables in \Magg.
-    If $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$
-    with respect to $\QvarIEset$, then we have
-    \begin{equation*}
-        \Dx = \aggDxP \cdot
-    \end{equation*}
-
-    In addition, the central distribution for $\agg{\Qvar}|\agg{\rv{e}}$ is an aggregator of the central
-    distribution for $\QvarIEset$.
-\end{theorem}
-
-\begin{proof}
-    \newcommand{\aggExpKL}[1]{\ExpKL[\agg{\rval{x}}][\agg{\rval{e}}][\agg{#1}][\agg{P}]}
-    Suppose $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$
-    with respect to $\QvarIEset$.
-    Let
-    \begin{equation*}
-        \agg{R} = \arg\max_{\agg{Q} \in \agg{\set{P}}} \aggExpKL{Q}.
-    \end{equation*}
-    Since \Magg is an aggregate model, $\agg{R}$ must be an aggregator of some probability measure $R \in \set{P}$.
-    It follows that
-    \begin{align*}
-        \aggDxP
-        &= \aggExpKL{R} \\
-        &= \sum_i \agg{R}(\rval{i}) \ExpKL[][{\rval[i]{e}}][R] \\
-        &\leq \max_i \ExpKL[][{\rval[i]{e}}][R] \cdot
-    \end{align*}
-    This implies
-    \begin{equation}
-        \aggDxP \leq \Dx \cdot
-        \label{eq:th-2-proof-1}
-    \end{equation}
-
-    Similarly, let
-    \begin{equation*}
-    (S,k)
-        = \arg\max_{(Q,i)} \ExpKL[][{\rval[i]{e}}] \cdot
-    \end{equation*}
-    \Magg is a selective aggregate model.
-    This means that $S$ must have an aggregator \agg{S} in \Magg, which selects $k$ by assigning it a
-    probability of 1: $\agg{S}(k) = 1$.
-    Therefore,
-    \begin{align*}
-        \Dx
-        &= \ExpKL[][{\rval[k]{e}}][S] \\
-        &= \sum_{\aggxe} \agg{S}(\aggxe \mid k) \ln\frac{\agg{S}(\aggxIe)}{\agg{P}(\aggxIe)} \\
-        &= \aggExpKL{S} \\
-        &\leq \aggDxP \cdot
-    \end{align*}
-    From this and Inequality~\ref{eq:th-2-proof-1}, we conclude that
-    \begin{equation*}
-        \Dx = \aggDxP \cdot
-    \end{equation*}
-
-    To prove the second part of the theorem, let \agg{C} be a central distribution
-    for $\agg{\Qvar}|\agg{\rv{e}}$.
-    Since \Magg is an aggregate model for \M, \agg{C} must be an aggregator for some probability
-    measure $C \in \agg{\set{P}}$.
-    If we assume, by contradiction, that $C$ is not a central distribution for $\QvarIEset$ in \M, then there must
-    be a probability
-    measure $R \in \set{P}$ such that:
-    \begin{equation*}
-        \Dx[R] < \Dx[C] = \aggDxP[C] \cdot
-    \end{equation*}
-    On the other hand, since \Magg is a selective model, $R$ must have an aggregator $\agg{R} \in \agg{\set{P}}$,
-    and since \agg{C} is a central distribution in \Magg, we have
-    \begin{equation*}
-        \Dx[R] = \aggDxP[R] \geq \aggDxP[C],
-    \end{equation*}
-    which is a contradiction.
-\end{proof}
-
-\begin{definition}[Conditional Divergence Measure]
-    \label{def:cond_divergence}
-    Assume that \pmodel is a parametric model.
-    Let \Qvar be a query variable and \Eset be an evidence set in \Mt.
-    We define the \emph{divergence measure of $P \in \set{P}$ given $\paramValue$ for $\QvarIEset$} as follows:
-    \begin{align}
-        \DxCond{P}{\Eset} &= \maxE \DExparam \\
-        &= \maxE \Dparam \cdot
-        \label{eq:cond_div_measure}
-    \end{align}
-\end{definition}
-
 In this definition, the query set $\Xpairs$ plays a crucial role.
 Specifically, \set{x} defines the set of random variables for which we are interested in their distributions.
 Each \Qvar represents a random variable whose distribution is important to us, and each \rv{e} corresponds to the
@@ -453,6 +288,17 @@ form of our divergence measure, conditioned on the value of the parameter.
 To do so, in Equation~\ref{eq:div_measure}, we replace normal expectation with conditional expectation.
 There will be no longer a need to maximize over different distributions, since in a parametric model the parameter
 fully determines the distribution of the sample space.
+
+\begin{definition}[Conditional Divergence Measure]
+    \label{def:cond_divergence}
+    Assume that \pmodel is a parametric model, and $\Xpairs$ is a query set.
+    We define the \emph{divergence measure of $P \in \set{P}$ given $\paramValue$ for \Qset} as follows:
+    \begin{align}
+        \DxCond &= \DxCondExpand \\
+        &= \DxCondExpandFull \cdot
+        \label{eq:cond_div_measure}
+    \end{align}
+\end{definition}
 
 Even if we cannot find a distribution that has a small divergence from every distribution, still using the distribution
 that minimizes the maximum divergence seems a reasonable choice.
@@ -477,10 +323,10 @@ of the divergence measure.
     Since the Kullback-Leibler divergence is positive, its expected value is also positive, and for any arbitrary
     $R \in \set{P}$, and parameter value $\paramValue$ we have
     \[
-        \DExparam[][R] = \Dparam[R] \geq 0\cdot
+        \DxCondExpand[][R] = \Dparam[R] \geq 0\cdot
     \]
     Using this, for every distribution $P$, we obtain
-    \newcommand{\RP}{\sumOverxe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
+    \newcommand{\RP}{\sumxe \pi(\xeIt) \ln \frac{R(\xIe)}{P(\xIe)}}
     \[
         \RP \leq \Dparam \cdot
     \]
@@ -536,7 +382,7 @@ of the divergence measure.
     and we have
     \begin{equation}
         \label{eq:th1}
-        \Ex{R}{\Dcond[R]} = \DExparam[\paramValue^*] \cdot
+        \Ex{R}{\Dcond[R]} = \DxCondExpand[\paramValue^*] \cdot
     \end{equation}
     On the other hand
     \[
@@ -691,7 +537,7 @@ of the divergence measure.
     We prove this theorem using the Minimax theorem.
     For that, we define a functional as follows:
     \begin{equation*}
-        \f = \int \DExparam \dt[r],
+        \f = \int \DxCondExpand \dt[r],
     \end{equation*}
     where $r(\paramValue)$ is an arbitrary probability distribution, and $P_{\XIE}$ represents different
     distributions of \Qvar given different values of \Evar, induced by a probability measure $P \in \set{P}$.
@@ -699,7 +545,7 @@ of the divergence measure.
     Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is similar to maximizing
     with respect to $\paramValue$, and we have
     \[
-        \centralE = \arg\pmin \max_{r} \f\cdot
+        \centralE = \arg\minP \max_{r} \f\cdot
     \]
 
     The domain of $r$ is the set of all probability distributions, which is a compact convex set.
@@ -711,7 +557,7 @@ of the divergence measure.
 
     On the other hand, for a fixed $r$, if we let $\paramDist[r]{\xe}$ we have
     \begin{equation}
-        \f[r][\cdot] = c - \sumOverxe R(\xe) \ln P(\xIe),
+        \f[r][\cdot] = c - \sumxe R(\xe) \ln P(\xIe),
         \label{eq:max_for_P}
     \end{equation}
     where $c$ is not a function of $P_{\XIE}$.
@@ -720,12 +566,12 @@ of the divergence measure.
     Thus, the hessian matrix of $\f[r][\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
     Consequently, by Theorem~\ref{th:minimax}
     \begin{equation}
-        \pmin \max_{r} \f = \max_{r} \pmin \f\cdot
+        \minP \max_{r} \f = \max_{r} \minP \f\cdot
         \label{eq:divergence_minmax}
     \end{equation}
     From Equation~\ref{eq:max_for_P} we can see that for an arbitrary fixed $r$ we have
     \[
-        \pmin \f = \maxP \sumOverxe R(\xe) \ln P(\xIe)\cdot
+        \minP \f = \maxP \sumxe R(\xe) \ln P(\xIe)\cdot
     \]
 
     We know that the Kullback–Leibler divergence, and therefore its expected value, is non-negative:
@@ -734,12 +580,12 @@ of the divergence measure.
     \]
     By simple algebra we get
     \[
-        \sumOverxe R(\xe) \ln P(\xIe) \leq \sumOverxe R(\xe) \ln R(\xIe)\cdot
+        \sumxe R(\xe) \ln P(\xIe) \leq \sumxe R(\xe) \ln R(\xIe)\cdot
     \]
     Recall that \Mt is a generic parametric model.
     That implies $R \in \set{P}$, and we can reach this upper bound by letting $P = R$:
     \[
-        \pmin \f = \Dminimax[R]\cdot
+        \minP \f = \Dminimax[R]\cdot
     \]
     By Equation~\ref{eq:divergence_minmax}, we conclude
     \[
@@ -794,7 +640,7 @@ Note that the set of probability distributions is convex.
     Using the chain rule of calculus, we calculate the partial derivative of $\Lagr$ relative to $\epsilon$:
     \begin{align*}
         \parDeriv\ =\ &\int \left( \Dparam  \right) \dt[\eta] \\
-        &- \int \left( \sumOverxe \pi(\xeIt) \frac{\margDist[\eta]{\xe}}{P(\xe)} \right) \dt \\
+        &- \int \left( \sumxe \pi(\xeIt) \frac{\margDist[\eta]{\xe}}{P(\xe)} \right) \dt \\
         &+ \int \left( \sum_{\rval{e}} \pi(\eIt) \frac{\margDist[\eta]{\rval{e}}}{P(\rval{e})} \right) \dt \\
         &- \int \lambda \dt[\eta]
     \end{align*}
@@ -1023,7 +869,7 @@ our problem, our query set should include random variables of both versions.
     \end{equation}
     where
     \[
-        \rhoPrior \propto \exp \left\{ \sumOverxe \xeIba \ln \bIxe \right\} \cdot
+        \rhoPrior \propto \exp \left\{ \sumxe \xeIba \ln \bIxe \right\} \cdot
     \]
 
 \end{theorem}
@@ -1051,8 +897,8 @@ our problem, our query set should include random variables of both versions.
     \begin{align*}
         \lambda
         &= \Dparam[\central]\\
-        &= \sumOverxe \xeIba \ln \frac{\xIeb}{\central(\xIe)} \\
-        &= \sumOverxe \xeIba \ln \frac{\bIxe}{\cMass(\paramB \mid \rval{e})} \\
+        &= \sumxe \xeIba \ln \frac{\xIeb}{\central(\xIe)} \\
+        &= \sumxe \xeIba \ln \frac{\bIxe}{\cMass(\paramB \mid \rval{e})} \\
         &= \sum_i \ln \frac{\rhoPrior}{\bIa}\cdot
     \end{align*}
     Since each $\paramFunc$ is a function of $\param$, for $\paramFunc(\paramValue) = \paramFuncValue$
@@ -1078,6 +924,143 @@ our problem, our query set should include random variables of both versions.
         \qedhere
     \end{align*}
 \end{proof}
+
+
+
+
+
+
+Let’s revisit our discussion from the previous section.
+We saw that in Bayesian framework when we have evidence \rv{e'}, such that $\rv{e'} = f(\rv{e})$, the
+optimal strategy for \rv{e} always has a greater expected utility than any strategy that uses \rv{e'}.
+We stated that we believe...
+
+
+\begin{definition}[Aggregator]
+    Consider two probabilistic models \model and \aggmodel.
+    Let \Qvar be a query variable and $\Eset = \{\seqRvInf[e]\}$ be an evidence set in \M.
+    Also, let \agg{\rv{e}}, \agg{\Qvar}, and \rv{i} be random variables defined on \agg{\set{s}} in \Magg.
+    We refer to \agg{\rv{x}}, \agg{\rv{e}} as the \emph{aggregated} query and evidence variables, and \rv{i} as the
+    \emph{selector} variable.
+
+    Suppose that for a probability measure $P \in \set{P}$ there exists a probability measure
+    $\agg{P} \in \agg{\set{P}}$, such that for any index \rval{i}, and every values \QvarVal, and \rval[i]{e}
+    there is some \agg{\QvarVal}, and \agg{\rval{e}}, where we have
+    \begin{equation}
+        P(\Qvar = \QvarVal, \rv[i]{e} = \rval[i]{e}) =
+        \agg{P}(\agg{\Qvar} = \agg{\QvarVal}, \assign{\agg{e}} \mid \assign{I}) \cdot
+        \label{eq:th1-1}
+    \end{equation}
+    Furthermore, \agg{\Qvar} and \rv{I} are conditionally independent given \agg{\rv{E}}:
+    \begin{equation}
+        \agg{P}(\aggXIE, \rv{I}) = \agg{P}(\aggXIE) \cdot
+        \label{eq:th1-2}
+    \end{equation}
+    We call \agg{P} an \emph{aggregator of $P$ with respect to $\QvarIEset$}.
+\end{definition}
+
+\begin{proposition}
+    By Equations~\ref{eq:th1-1} and~\ref{eq:th1-2} we have
+    \begin{equation*}
+        P(\QvarVal \mid \rval[i]{e}) = \agg{P}(\aggxIe) \cdot
+    \end{equation*}
+\end{proposition}
+
+\begin{definition}[Aggregate Model]
+    \label{def:aggregate-model}
+    Consider a probabilistic model \model.
+    Let \Qvar be a query variable, and \Eset be an evidence set in \M.
+    We say a model \aggmodel is the \emph{aggregate model} of \M with respect to $\QvarIEset$,
+    If every probability measure in \Magg is the aggregator of a probability measure in \M with respect to $\QvarIEset$.
+    %, and every probability measure in \M has at least one aggregator in \Magg with respect to $\QvarIEset$.
+\end{definition}
+
+\begin{definition}[Selective Aggregate Model]
+    Let \Qvar be a query variable, and \Eset be an evidence set in \model.
+    Let \Magg be an aggregate model of \M with respect to $\QvarIEset$.
+    We say \Magg is \emph{selective}, if for every $P \in \set{P}$ and any value \rval{i} of the selector
+    variable \rv{I}, there is an aggregator of $P$ in \Magg, such that $\agg{P}(i) = 1$.
+
+\end{definition}
+
+
+\begin{theorem}
+    Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
+    Suppose that \aggmodel is a selective aggregate model of \M with respect to $\QvarIEset$.
+    Let \agg{\rv{x}}, \agg{\rv{e}} be the aggregated query and evidence variables in \Magg.
+    If $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$
+    with respect to $\QvarIEset$, then we have
+    \begin{equation*}
+        \Dx = \aggDxP \cdot
+    \end{equation*}
+
+    In addition, the central distribution for $\agg{\Qvar}|\agg{\rv{e}}$ is an aggregator of the central
+    distribution for $\QvarIEset$.
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\aggExpKL}[1]{\ExpKL[\agg{\rval{x}}][\agg{\rval{e}}][\agg{#1}][\agg{P}]}
+    Suppose $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$
+    with respect to $\QvarIEset$.
+    Let
+    \begin{equation*}
+        \agg{R} = \arg\max_{\agg{Q} \in \agg{\set{P}}} \aggExpKL{Q}.
+    \end{equation*}
+    Since \Magg is an aggregate model, $\agg{R}$ must be an aggregator of some probability measure $R \in \set{P}$.
+    It follows that
+    \begin{align*}
+        \aggDxP
+        &= \aggExpKL{R} \\
+        &= \sum_i \agg{R}(\rval{i}) \ExpKL[][{\rval[i]{e}}][R] \\
+        &\leq \max_i \ExpKL[][{\rval[i]{e}}][R] \cdot
+    \end{align*}
+    This implies
+    \begin{equation}
+        \aggDxP \leq \Dx \cdot
+        \label{eq:th-2-proof-1}
+    \end{equation}
+
+    Similarly, let
+    \begin{equation*}
+    (S,k)
+        = \arg\max_{(Q,i)} \ExpKL[][{\rval[i]{e}}] \cdot
+    \end{equation*}
+    \Magg is a selective aggregate model.
+    This means that $S$ must have an aggregator \agg{S} in \Magg, which selects $k$ by assigning it a
+    probability of 1: $\agg{S}(k) = 1$.
+    Therefore,
+    \begin{align*}
+        \Dx
+        &= \ExpKL[][{\rval[k]{e}}][S] \\
+        &= \sum_{\aggxe} \agg{S}(\aggxe \mid k) \ln\frac{\agg{S}(\aggxIe)}{\agg{P}(\aggxIe)} \\
+        &= \aggExpKL{S} \\
+        &\leq \aggDxP \cdot
+    \end{align*}
+    From this and Inequality~\ref{eq:th-2-proof-1}, we conclude that
+    \begin{equation*}
+        \Dx = \aggDxP \cdot
+    \end{equation*}
+
+    To prove the second part of the theorem, let \agg{C} be a central distribution
+    for $\agg{\Qvar}|\agg{\rv{e}}$.
+    Since \Magg is an aggregate model for \M, \agg{C} must be an aggregator for some probability
+    measure $C \in \agg{\set{P}}$.
+    If we assume, by contradiction, that $C$ is not a central distribution for $\QvarIEset$ in \M, then there must
+    be a probability
+    measure $R \in \set{P}$ such that:
+    \begin{equation*}
+        \Dx[R] < \Dx[C] = \aggDxP[C] \cdot
+    \end{equation*}
+    On the other hand, since \Magg is a selective model, $R$ must have an aggregator $\agg{R} \in \agg{\set{P}}$,
+    and since \agg{C} is a central distribution in \Magg, we have
+    \begin{equation*}
+        \Dx[R] = \aggDxP[R] \geq \aggDxP[C],
+    \end{equation*}
+    which is a contradiction.
+\end{proof}
+
+
+
 
 \bibliography{main}
 \bibliographystyle{plain}

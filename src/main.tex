@@ -25,8 +25,57 @@
 \newtheorem{definition}{Definition}
 \newtheorem*{proposition}{Proposition}
 
-\newcommand{\set}[1]{\ensuremath{\mathcal{\uppercase{#1}}}\xspace}
 
+% Primitive
+\newcommand{\mathFix}[1]{\ensuremath{#1}\xspace}
+\newcommand{\set}[1]{\mathFix{\mathcal{\uppercase{#1}}}}
+\newcommand{\rv}[2][]{\mathFix{\uppercase\expandafter{#2}_{#1}}}
+\newcommand{\rval}[2][]{\mathFix{\lowercase\expandafter{#2}_{#1}}}
+
+% Shortcut
+\newcommand{\prior}{\mathFix{p(\paramValue)}}
+\newcommand{\paramValue}{\rval{\theta}}
+\newcommand{\Qset}{\set{x}}
+\newcommand{\central}[1][\Qset]{\mathFix{C_{#1}}}
+\newcommand{\Xpairs}{\mathFix{\set{X} = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
+\newcommand{\X}[1][]{\rv[#1]{x}}
+\newcommand{\Y}[1][]{\rv[#1]{y}}
+\newcommand{\E}[1][]{\rv[#1]{e}}
+\newcommand{\XIE}[1][]{\mathFix{\rv[#1]{x} | \rv[#1]{e}}}
+\newcommand{\XE}[1][]{\rv[#1]{x}, \rv[#1]{e}}
+\newcommand{\XIe}[1][]{\rv[#1]{x} \mid \rval[#1]{e}}
+\newcommand{\xe}[1][]{\rval[#1]{x}, \rval[#1]{e}}
+\newcommand{\xIe}[1][]{\rval[#1]{x} \mid \rval[#1]{e}}
+\newcommand{\minP}{\min_{P \in \set{P}}}
+
+% Formula
+\newcommand{\assign}[2][]{\rv[#1]{#2} = \rval[#1]{#2}}
+
+\newcommand{\Dx}[1][P]{\measure{D}_{\Qset}\left[ #1 \right]}
+\newcommandx{\DxExpand}[2][1=Q, 2=P, usedefault]{
+    \Ex{#1}{\sum_i \measure{D}\left( #1_{\XIe[i]} \parallel #2_{\XIe[i]} \right)}
+}
+
+\newcommand{\DxCond}[1][P]{\measure{D}_{\Qset}\left[ #1 \mid \paramValue \right]}
+\newcommandx{\DxCondExpand}[2][1=\paramValue, 2=P, usedefault]{
+    \Ex{\pi}{\sum_i \measure{D}\left( \pi_{\XIe[i], #1} \parallel #2_{\XIe[i]} \right) \;\middle|\;#1}
+}
+\newcommandx{\DxCondExpandFull}[2][1=\paramValue, 2=P, usedefault]{
+    \sumixe \pi(\xe[i] \mid #1) \ln \frac{\pi(\xIe[i], #1)}{#2(\xIe[i])}
+}
+
+\newcommand{\sumxe}{\sum_{\rval{x}, \rval{e}}}
+\newcommand{\sumixe}{\sum_i \sum_{\rval[i]{x}, \rval[i]{e}}}
+
+\newcommandx{\D}[3][1={\X}, 2=Q, 3=P]{
+    \measure{D}\left( #2_{#1} \parallel #3_{#1} \right)
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\Dxe}[1][P]{\measure{D}_{\Qvar \mid \Evar}\left[ #1 \right]}
 \newcommand{\functional}[2][F]{
     \mathcal{#1}\ifthenelse{\isempty{#2}}{}{\left[#2\right]}
 }
@@ -34,15 +83,16 @@
 \newcommandx{\entropy}[2]{
     \measure{H}\ifthenelse{\isempty{#1}}{}{\left[#1_{#2}\right]}
 }
-\newcommand{\rv}[2][]{\ensuremath{\uppercase\expandafter{#2}_{#1}}\xspace}
+
 \newcommand{\agg}[1]{\ensuremath{#1^*}\xspace}
-\newcommand{\rval}[2][]{\ensuremath{\lowercase\expandafter{#2}_{#1}}\xspace}
+
+
 \newcommand{\rvec}[1]{\ensuremath{\mathbf{\uppercase{#1}}}\xspace}
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
-\newcommand{\central}[1][\Qvar \mid \Eset]{\ensuremath{C_{#1}}\xspace}
+
 \newcommand{\centralE}{\central[\QvarIE]}
 \newcommand{\cPrior}[1][(\paramValue)]{c#1}
-\newcommand{\prior}{p(\paramValue)}
+
 \newcommand{\cMass}{c_\set{X}}
 \newcommand{\rhoPrior}[1][(\paramB \mid \paramA)]{\rho#1}
 \newcommand{\econverges}{$\epsilon$-converges }
@@ -51,7 +101,7 @@
 \newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\param}{\rv{\varTheta}}
 \newcommand{\paramFunc}[1][i]{\Omega_{#1}}
-\newcommand{\paramValue}{\rval{\theta}}
+
 \newcommand{\paramFuncValue}[1][i]{\omega_{#1}}
 \newcommand{\paramRange}{\theta}
 \newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
@@ -61,28 +111,23 @@
 
 \newcommand{\Eset}{\set{e}}
 \newcommand{\Qvar}{\rv{x}}
+
 \newcommand{\Evar}{\rv{e}}
 \newcommand{\QvarVal}{\rval{x}}
 \newcommand{\QvarIEset}{\rv{x}|\set{e}}
 \newcommand{\QvarIE}{\Qvar|\Evar}
 \newcommand{\aggParam}{\agg{\varTheta}}
 \newcommand{\aggParamVal}{\agg{\theta}}
-\newcommand{\assign}[1]{\rv{#1} = \rval{#1}}
-\newcommand{\Dx}[1][P]{\measure{D}_{\Qvar \mid \Eset}\left[ #1 \right]}
-\newcommand{\Dxe}[1][P]{\measure{D}_{\Qvar \mid \Evar}\left[ #1 \right]}
+
 \newcommand{\aggDxP}[1][P]{\measure{D}_{\agg{\Qvar} \mid \agg{\rv{e}}} \left[ \agg{#1} \right]}
-\newcommand{\DxCond}[2]{\measure{D}_{\Qvar \mid #2}\left[ #1 \mid \paramValue \right]}
+
 \newcommand{\DxeCond}[1][P]{\DxCond{#1}{\Evar}}
-\newcommand{\sumOverxe}{\sum_{\rval{x}, \rval{e}}}
-\newcommand{\sumOverix}{\sum_i \sum_{\rval{x}}}
+
+\newcommand{\sumOverix}{\sum_i \sum_{\rval[i]{x}}}
 \newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
-\newcommand{\XE}[1][]{\rv[#1]{x}, \rv[#1]{e}}
-\newcommand{\xe}[1][]{\rval[#1]{x}, \rval[#1]{e}}
 
-\newcommand{\XIE}[1][]{\rv[#1]{x} \mid \rv[#1]{e}}
-\newcommand{\XIe}[1][]{\rv[#1]{x} \mid \rval[#1]{e}}
-\newcommand{\xIe}[1][]{\rval[#1]{x} \mid \rval[#1]{e}}
+
 
 \newcommand{\XY}{\rv[]{X}, \rv[]{Y}}
 \newcommand{\YIx}{\rv[]{Y} \mid \rval[]{x}}
@@ -117,9 +162,7 @@
 \newcommand{\seqRvalInf}[1][x]{\rval[1]{#1}, \rval[2]{#1}, \ldots}
 \newcommand{\seqRvInf}[1][x]{\rv[1]{#1}, \rv[2]{#1}, \ldots}
 \newcommand{\rvEq}[1][x]{\rv[]{#1} = \rval[]{#1}}
-\newcommand{\Xpairs}{
-    \set{X} = \left\{(\XE[1]), (\XE[2]), \ldots \right\}
-}
+
 \newcommand{\Xsingles}{
     \set{X} = \left\{\rv[1]{X}, \rv[2]{X}, \rv[3]{X}, \ldots \right\}
 }
@@ -132,25 +175,19 @@
 \newcommandx{\Dcond}[4][1=Q, 2=P, 3={\rv{x} \mid \rval{e}}, 4={\rv{x} \mid \rval{e}}, usedefault]{
     \measure{D}\left( #1_{#3} \parallel #2_{#4} \right)
 }
-\newcommandx{\D}[3][1={\rv[]{x}}, 2=Q, 3=P]{
-    \measure{D}\left( #2_{#1} \parallel #3_{#1} \right)
-}
 
-\newcommandx{\DExparam}[2][1=\paramValue, 2=P, usedefault]{
-    \Ex{\pi}{\Dcond[\pi][#2][\rv{x} \mid \rval{e}, #1]\;\middle|\;#1}
-}
 
 \newcommandx{\ExpKL}[4][1=x, 2=e, 3=Q, 4=P, usedefault]{
     \sum_{#1, #2} #3(#1, #2) \ln \frac{#3(#1 \mid #2)}{#4(#1 \mid #2)}
 }
 
-\newcommand{\phiExp}{\exp \left\{ \sumOverxe \pi(\xeIt) \ln \frac{p(\tIxe)}{p(\paramA \mid \rval{e})} \right\}}
+\newcommand{\phiExp}{\exp \left\{ \sumxe \pi(\xeIt) \ln \frac{p(\tIxe)}{p(\paramA \mid \rval{e})} \right\}}
 \newcommand{\phiFunc}{\phi(\ab)}
 \newcommand{\rhoFunc}{\rho(\paramB \mid \paramA)}
 
 \newcommand{\Dparam}[1][P]{\KLcond[#1]}
 
-\newcommand{\Dminimax}[1][P]{\int \sumOverxe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
+\newcommand{\Dminimax}[1][P]{\int \sumxe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
 
 \newcommandx{\KLcond}[5][1=P, 2=\rval{x}, 3=\rval{e}, 4=\pi, 5=\paramValue, usedefault]{
     \ifthenelse{\isempty{#3}}
@@ -187,7 +224,7 @@
 \newcommand{\aggmodel}{\ensuremath{\Magg \equiv \left(\agg{\set{S}}, \agg{\set{P}}\right)}
 \xspace}
 \newcommand{\tmax}{\max_{\vval{\theta} \in \Theta}}
-\newcommand{\pmin}{\min_{P \in \set{P}}}
+
 \newcommand{\maxP}{\max_{P \in \set{P}}}
 \newcommand{\maxE}{\max_{\rv{E} \in \set{E}}}
 \newcommand{\maxQ}{\max_{Q \in \set{P}}}

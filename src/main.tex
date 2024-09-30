@@ -31,10 +31,16 @@
 \newcommand{\set}[1]{\mathFix{\mathcal{\uppercase{#1}}}}
 \newcommand{\rv}[2][]{\mathFix{\uppercase\expandafter{#2}_{#1}}}
 \newcommand{\rval}[2][]{\mathFix{\lowercase\expandafter{#2}_{#1}}}
+\newcommand{\measure}[1]{\mathFix{\mathbb{#1}}}
 
 % Shortcut
+\newcommand{\Mt}{\mathFix{\M_{\param}}}
+\newcommand{\M}{\mathFix{\mathcal{M}}}
+\newcommand{\econverges}{$\epsilon$-converges}
 \newcommand{\prior}{\mathFix{p(\paramValue)}}
+\newcommand{\param}{\rv{\varTheta}}
 \newcommand{\paramValue}{\rval{\theta}}
+\newcommand{\paramRange}{\Theta}
 \newcommand{\Qset}{\set{x}}
 \newcommand{\central}[1][\Qset]{\mathFix{C_{#1}}}
 \newcommand{\Xpairs}{\mathFix{\set{X} = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
@@ -46,7 +52,9 @@
 \newcommand{\XIe}[1][]{\rv[#1]{x} \mid \rval[#1]{e}}
 \newcommand{\xe}[1][]{\rval[#1]{x}, \rval[#1]{e}}
 \newcommand{\xIe}[1][]{\rval[#1]{x} \mid \rval[#1]{e}}
+\newcommand{\xeIt}[1][]{\xe[#1] \mid  \paramValue}
 \newcommand{\minP}{\min_{P \in \set{P}}}
+\newcommand{\maxParam}{\max_{\paramValue \in \paramRange}}
 
 % Formula
 \newcommand{\assign}[2][]{\rv[#1]{#2} = \rval[#1]{#2}}
@@ -57,8 +65,8 @@
 }
 
 \newcommand{\DxCond}[1][P]{\measure{D}_{\Qset}\left[ #1 \mid \paramValue \right]}
-\newcommandx{\DxCondExpand}[2][1=\paramValue, 2=P, usedefault]{
-    \Ex{\pi}{\sum_i \measure{D}\left( \pi_{\XIe[i], #1} \parallel #2_{\XIe[i]} \right) \;\middle|\;#1}
+\newcommandx{\DxCondExpand}[2][1=P, 2=\paramValue, usedefault]{
+    \Ex{\pi}{\sum_i \measure{D}\left( \pi_{\XIe[i], #2} \parallel #1_{\XIe[i]} \right) \;\middle|\;#2}
 }
 \newcommandx{\DxCondExpandFull}[2][1=\paramValue, 2=P, usedefault]{
     \sumixe \pi(\xe[i] \mid #1) \ln \frac{\pi(\xIe[i], #1)}{#2(\xIe[i])}
@@ -69,6 +77,11 @@
 
 \newcommandx{\D}[3][1={\X}, 2=Q, 3=P]{
     \measure{D}\left( #2_{#1} \parallel #3_{#1} \right)
+}
+
+\newcommand{\marginal}[2][p]{\int \pi(#2 \mid \paramValue) \dt[#1]}
+\newcommand{\marginalEq}[2][P]{
+    \uppercase{#1}(#2) = \marginal[\lowercase{#1}]{#2}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,15 +108,15 @@
 
 \newcommand{\cMass}{c_\set{X}}
 \newcommand{\rhoPrior}[1][(\paramB \mid \paramA)]{\rho#1}
-\newcommand{\econverges}{$\epsilon$-converges }
+
 
 \newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
-\newcommand{\param}{\rv{\varTheta}}
+
 \newcommand{\paramFunc}[1][i]{\Omega_{#1}}
 
 \newcommand{\paramFuncValue}[1][i]{\omega_{#1}}
-\newcommand{\paramRange}{\theta}
+
 \newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
 \newcommand{\prob}[2][P]{#1(\vval{#2})}
 \newcommand{\Ex}[2]{\measure{E}_{#1} \left[ #2 \right]}
@@ -118,7 +131,7 @@
 \newcommand{\QvarIE}{\Qvar|\Evar}
 \newcommand{\aggParam}{\agg{\varTheta}}
 \newcommand{\aggParamVal}{\agg{\theta}}
-
+\newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
 \newcommand{\aggDxP}[1][P]{\measure{D}_{\agg{\Qvar} \mid \agg{\rv{e}}} \left[ \agg{#1} \right]}
 
 \newcommand{\DxeCond}[1][P]{\DxCond{#1}{\Evar}}
@@ -135,7 +148,7 @@
 \newcommand{\xIt}{\rval{x} \mid \paramValue}
 \newcommand{\xet}{\rval{x}, \rval{e}, \paramValue}
 \newcommand{\xIet}{\rval{x} \mid \rval{e},  \paramValue}
-\newcommand{\xeIt}{\rval{x}, \rval{e} \mid  \paramValue}
+
 \newcommand{\tIxe}{\paramValue \mid \rval{x}, \rval{e}}
 \newcommand{\tIe}{\paramValue \mid \rval{e}}
 \newcommand{\tIw}{\paramValue \mid \paramFuncValue}
@@ -166,11 +179,9 @@
 \newcommand{\Xsingles}{
     \set{X} = \left\{\rv[1]{X}, \rv[2]{X}, \rv[3]{X}, \ldots \right\}
 }
-\newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
-\newcommand{\margDist}[2][p]{\int \pi(#2 \mid \paramValue) \dt[#1]}
-\newcommand{\paramDist}[2][P]{
-    \uppercase{#1}(#2) =\margDist[\lowercase{#1}]{#2}
-}
+
+
+
 
 \newcommandx{\Dcond}[4][1=Q, 2=P, 3={\rv{x} \mid \rval{e}}, 4={\rv{x} \mid \rval{e}}, usedefault]{
     \measure{D}\left( #1_{#3} \parallel #2_{#4} \right)
@@ -214,16 +225,14 @@
 \newcommandx{\parDerivAt}[3][1=\mathcal{L}, 2=\epsilon, 3={\epsilon=0}]{
     \left. \frac{\partial{#1}}{\partial{#2}} \right|_{#3}
 }
-\newcommand{\measure}[1]{\ensuremath{\mathbb{#1}}\xspace}
-\newcommand{\given}[2]{#1|#2}
-\newcommand{\Mt}{\ensuremath{\M_{\param}}\xspace}
 \newcommand{\Magg}{\agg{\M}}
-\newcommand{\M}{\ensuremath{\mathcal{M}}\xspace}
+\newcommand{\given}[2]{#1|#2}
+
 \newcommand{\pmodel}{\ensuremath{\Mt \equiv \left(\set{S}, \set{P}\right)}\xspace}
 \newcommand{\model}{\ensuremath{\M \equiv \left(\set{S}, \set{P}\right)}\xspace}
 \newcommand{\aggmodel}{\ensuremath{\Magg \equiv \left(\agg{\set{S}}, \agg{\set{P}}\right)}
 \xspace}
-\newcommand{\tmax}{\max_{\vval{\theta} \in \Theta}}
+
 
 \newcommand{\maxP}{\max_{P \in \set{P}}}
 \newcommand{\maxE}{\max_{\rv{E} \in \set{E}}}

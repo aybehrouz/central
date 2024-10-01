@@ -130,31 +130,31 @@ We know that the divergence of $P(\XY)$ from $Q(\XY)$ is a measure of the generi
 when we believe $Q(\XY)$ is the true distribution.
 To calculate this loss, we can assume that \X happens before \Y.
 In that way, this loss would include the loss of using $P(\X)$, and then, if we observe
-$\assign{X}$, which can happen with probability $Q(\rval[]{x})$, it would also include the loss of
+$\assign{X}$, which can happen with probability $Q(\x)$, it would also include the loss of
 using $P(\Y \mid \assign{x})$.
 This property indicates that for combining these individual terms we should use addition.
 
 Thus, if $Q$ is the probability measure that represents our beliefs, we can use $\D$ to evaluate any other
 probability measure $P$, with respect to a random variable \X.
-In other words, we can say that we are evaluating $P(\X)$.
+In other words, we evaluate $P(\X)$ by $Q(\X)$.
 
-When we have two different random variables \X and \Y, there will be two distinct cases that should not be
+When we have two random variables \X and \Y, there are two distinct cases that should not be
 confused:
-We may want to evaluate $P(\XY)$, or may want to evaluate $P(\X)$ and $P(\Y)$.
+We may want to evaluate $P(\XY)$, or we may want to evaluate $P(\X)$ and $P(\Y)$ separately.
 Evaluating the joint distribution $P(\XY)$ is straightforward and can be done by defining a new random variable
 $\rv{Z} = (\XY)$.
-However, the second case may present more challenges.
-Evaluating the marginal distributions $P(\X)$ and $P(\Y)$ separately is the same as evaluating $P(\XY)$ when \X
-and \Y are independent.
-Here, we can use a similar argument to what we used for the additive property:
-We want to evaluate the loss of $P(\XY)$, If \X happens first we will face the loss of $P(\X)$,
-then when \Y happens we will face the loss of $P(\Y)$ because \X and \Y are independent.
-Therefore we should use addition:
+
+However, the correct approach for handling the second case is not obvious.
+We could use a similar argument to what we used for the additive property.
+When we want to evaluate the loss of $P(\XY)$, If \X happens first we will face the loss of $P(\X)$,
+then when \Y happens, we will face the loss of $P(\Y)$ only if \X and \Y are independent.
+Therefore, evaluating the marginal distributions $P(\X)$ and $P(\Y)$ appears to be the same as evaluating $P(\XY)$
+when \X and \Y are independent, and we can use addition:
 \[
     \D[\X] + \D[\Y].
 \]
 
-We may use the KL divergence to measure the agreement of a model about a specific distribution:
+The KL divergence provides us a method for measuring the agreement of a model about a specific distribution:
 
 \begin{definition}[$\epsilon$-convergence]
     \label{def:e-convergence}
@@ -176,24 +176,28 @@ the same distribution regardless of the prior distribution.
 
 As an example, consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is
 unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
-Before making our prediction, we can roll the dice multiple times, assuming that each roll is independent.
+Before making our prediction, we can roll the dice multiple times, with each roll being independent.
 
-If we let \rv{e} be a vector representing the first 10 dice rolls and \rv{x} be the outcome of the next roll,
+If we let \E be a vector representing the first 10 dice rolls and \X be the outcome of the next roll,
 \XIE \econverges by $P_u$ for $\epsilon \geq 0.109$, where $P_u$ is the probability measure obtained from
 assuming a uniform prior for the multinomial parameters.
-If \rv{e} represents the first 20 outcomes, then we can choose any $\epsilon \geq 0.073$.
+If \E represents the first 20 outcomes, then we can choose any $\epsilon \geq 0.073$.
 
-In our example, the chosen prior for the multinomial parameters affects the value of $\epsilon$.
+Here, the chosen prior for the multinomial parameters affects the value of $\epsilon$.
 In other words, different probability measures in our model have different convergence properties.
+
 If there is a probability measure that provides $\epsilon$-convergence for a very small $\epsilon$, we can hardly
 justify using any other probability measure.
-
 However, that probability measure may not always exist.
 Moreover, we are unsure of what value of $\epsilon$ would be sufficiently small.
 This becomes more problematic when we need to consider more than one distribution.
-For example, suppose that we are interested in the distributions of both $\rv{X}|\rv[1]{E}$ and $\rv{X}|\rv[2]{E}$ .
+For example, suppose that we are interested in the distributions of both $\X|\E[1]$ and $\X|\E[2]$.
 As we discussed earlier, when dealing with multiple distributions we should consider the sum of their KL divergences.
 Unfortunately, that would make determining the appropriate value of $\epsilon$ even harder.
+
+We could avoid all these hurdles by simpling choosing the probability measure that gives the smallest $\epsilon$.
+Subjectively, this probability measure is the ``safest'' choice in our model and it turns out that it behaves well even
+when the minimum achievable value of $\epsilon$ is not very small.
 
 \begin{definition}[Query Set]
     A \emph{query set} is a set of pairs of discrete random variables, all defined on the same sample space.
@@ -203,11 +207,10 @@ Unfortunately, that would make determining the appropriate value of $\epsilon$ e
     Let \Xpairs, be a query set in a probabilistic model \model.
     We define the \emph{divergence measure of $P \in \set{P}$ for \Qset} as follows:
     \begin{align}
-        \label{eq:div-def}
+        \label{eq:div_def}
         \Dx &= \max_{Q \in \set{P}} \DxExpand, \\
         &= \maxQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
         \frac{Q(\assign[i]{x} \mid \assign[i]{e})}{P(\assign[i]{x} \mid \assign[i]{e})} \cdot
-        \label{eq:div_measure}
     \end{align}
 \end{definition}
 
@@ -216,13 +219,29 @@ write the assigned value.
 For example, instead of $Q(\assign[i]{x} , \assign[i]{e})$ we write: $Q(\xe[i])$.
 
 \begin{proposition}
-    \XIE \econverges by $P$, if and only if the divergence measure of $P$ for $\Qset = \{(\XE)\}$ is
-    less than $\epsilon$.
+    \XIE \econverges by $P$, if and only if \[\Dx < \epsilon,\] where $\Qset = \{(\XE)\}$.
 \end{proposition}
 
-We can avoid all these hurdles by simpling choosing the probability measure that has the smallest divergence measure.
-Subjectively, this probability measure is the safest choice in our model and it turns out that it behaves well even
-when the divergence measure is not very small.
+For a parametric model (as defined in Definition~\ref{def:param-model}), it seems reasonable to define a conditional
+form of our divergence measure, conditioned on the value of the parameter.
+
+To do so, in Equation~\ref{eq:div_def}, we replace normal expectation with conditional expectation.
+There will be no longer a need to maximize over different distributions, since in a parametric model the parameter
+fully determines the distribution of the sample space.
+
+\begin{definition}[Conditional Divergence Measure]
+    \label{def:cond_divergence}
+    Assume that \pmodel is a parametric model, and $\Xpairs$ is a query set.
+    We define the \emph{divergence measure of $P \in \set{P}$ for \Qset given $\paramValue$} as follows:
+    \begin{align}
+        \DxCond &= \DxCondExpand \\
+        &= \DxCondExpandFull \cdot
+        \label{eq:cond_div_measure}
+    \end{align}
+\end{definition}
+
+Now that we have developed a divergence measure, we are ready to provide a formal definition for the probability
+measure that we consider the ``safest'' choice in a model.
 
 \begin{definition}[Central Probability Measure]
     In a model \model, we define the \emph{central probability measure} for a query set \Qset, to be a probability
@@ -233,83 +252,53 @@ when the divergence measure is not very small.
     \end{equation*}
 \end{definition}
 
-When we need to choose one of the probability measures of our model, the central probability measure for a query set
-appears to be a reasonable and safe choice.
-However, if our query set depends on our specific experimental setup, we are violating the principle of objectivity.
-To avoid this, one natural solution is to let the query set include all conditional forms that are relevant.
+In this definition, the query set \Qset plays a crucial role.
+Specifically, \Qset defines the set of random variables in which we are interested.
+Each \X[i] represents a random variable whose distribution is important to us, and each \E[i] corresponds to the
+evidence that is available for that variable.
 
-In our dice example, we can let $\Qvar = (\X[k+1], \rv[k+2]{x}, \dots, \rv[n]{x})$, representing all
-dice rolls from $k$ to $n$.
-We then let \rv{e} be a random vector of the previous dice outcomes $(\seqRv{k})$.
+However, if our query set depends on our specific experimental setup, we will violate the principle of objectivity.
+It is important that we use the same query set for any problem that can be defined within the same environment.
+
+One natural way to do this is to let the query set include all conditional forms that are relevant.
+For example, in our dice problem, we might let each \X[i] be the outcome of the $i$-th dice roll, and define each \E[i]
+as a vector of the previous dice outcomes: $\E[i] = (\seqRv{i-1})$.
+
+Now let us calculate the conditional divergence measure for \set{x} as defined in Definition~\ref{def:cond_divergence}:
+\begin{align*}
+    \DxCond &= \KlCond[][{\x[1]}][ ] \\
+    &+ \KlCond[][{\x[2]}][{\x[1]}] \\
+    &+ \KlCond[][{\x[3]}][{\x[1], \x[2]}] \\
+    &+ \ \cdots \\
+    &+ \KlCond[][{\x[n]}][\seqRval{n-1}]\cdot
+\end{align*}
+After factoring out $\pi(\seqRval{n} \mid \paramValue)$ from every term:
+\[
+    \sum_{\seqRval{n}} \pi(\seqRval{n} \mid \paramValue) \ln
+    \frac
+    {\pi(\rval[1]{x} \mid \paramValue) \pi(\rval[2]{x} \mid \rval[1]{x}, \paramValue)
+    \cdots \pi(\rval[n]{x} \mid \seqRval{n-1}, \paramValue)}
+    {P(\rval[1]{x}) P(\rval[2]{x} \mid \rval[1]{x}) \cdots P(\rval[n]{x} \mid \seqRval{n-1})},
+\]
+we use the chain rule for conditional probability:
+\begin{equation}
+    \DxCond = \KlCond[][\seqRval{n}][ ] \cdot
+    \label{eq:joint_form}
+\end{equation}
+
+This implies that we could have defined our query set as a single random variable \X, representing the vector of $n$
+dice rolls: $\X = (\seqRv{n})$.
+This is not surprising.
+This vector corresponds to the entire sample set for $n$ dice rolls.
 Here, the choice of $k$ and $n$ is based on our assumptions about the complexity of the problem: Only after seeing at
 least $k$ outcomes, convergence is meaningful and after $n$ outcomes it becomes trivial.
 
-This seems to come from the fact that when we use these priors, in the resulted probability measure the estimate for
-the distribution of $\XIE'$ differs from what we intuitively estimate.
-This estimate tends to have a much higher entropy.
-As a result the optimal strategy for \rv{E'} is mostly ignored because for any value of the evidence it yields a
-poor expected utility.
-
-It is reasonable to consider that if we find a probability measure which has a closer estimate to our
-intuitive estimate for $\XIE'$ distribution, automatic feature selection will be performed within the Bayesian
-framework.
-We believe that can be done by using a probability measure that is “safe” for $\XIE'$, in the sense we just described.
-
-Throughout this discussion, we will further investigate this idea and try to formulate a systematic approach to
-determine such probability measures.
-
-
-In our earlier discussion, to assess the safety of a probability measure, we realized that we need to
-evaluate the optimal Bayesian strategy in a generic way, independent of the utility function.
-We also need to determine how the divergence measures of these variables should be combined.
-Definition~\ref{def:e-convergence} already specifies the measure for a single query variable with different evidence
-variables.
-However, in this case, we have different query variables.
-When we have different query variables, the incorrect prediction of each variable can incur a separate loss.
-Therefore, we believe in this case addition should be used:
-\[
-    \sum_i \measure{D}
-\]
-which equals to
-\[
-    zhoom zhooom
-\]
-where x is the random vector and e is ...
-
-
-In this definition, the query set $\Xpairs$ plays a crucial role.
-Specifically, \set{x} defines the set of random variables for which we are interested in their distributions.
-Each \Qvar represents a random variable whose distribution is important to us, and each \rv{e} corresponds to the
-evidence that is available for that variable.
-
-For a parametric model (as defined in Definition~\ref{def:param-model}), it seems reasonable to define a conditional
-form of our divergence measure, conditioned on the value of the parameter.
-
-To do so, in Equation~\ref{eq:div_measure}, we replace normal expectation with conditional expectation.
-There will be no longer a need to maximize over different distributions, since in a parametric model the parameter
-fully determines the distribution of the sample space.
-
-\begin{definition}[Conditional Divergence Measure]
-    \label{def:cond_divergence}
-    Assume that \pmodel is a parametric model, and $\Xpairs$ is a query set.
-    We define the \emph{divergence measure of $P \in \set{P}$ given $\paramValue$ for \Qset} as follows:
-    \begin{align}
-        \DxCond &= \DxCondExpand \\
-        &= \DxCondExpandFull \cdot
-        \label{eq:cond_div_measure}
-    \end{align}
-\end{definition}
-
-Even if we cannot find a distribution that has a small divergence from every distribution, still using the distribution
-that minimizes the maximum divergence seems a reasonable choice.
 
 In a parametric model, the maximum of divergence happens for a prior distribution
 that is concentrated at a single value of the parameter $\paramValue$.
 That means, for a parametric model which allows any high peak prior, instead of maximizing over the set of
 all acceptable distributions, we can simply maximize over the parameter space, using the conditional version
 of the divergence measure.
-
-
 
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
@@ -361,16 +350,14 @@ of the divergence measure.
     which proves the lemma.
 \end{proof}
 
-
 \begin{theorem}
     \label{th:Dx_parametric_form}
-    Suppose \pmodel is a parametric model.
-    Let \Qvar be a query variable, and \Evar be an evidence variable in \Mt.
+    Suppose \pmodel is a parametric model, and let $\Xpairs$ be a query set in \Mt.
     If for every value of $\paramValue$ there is a distribution $R \in \set{P}$ such that
     $R(\rval[]{s}) = \pi(\rval[]{s} \mid \paramValue)$ for every $\rval[]{s} \in \set{S}$,
     then for any $P \in \set{P}$ we have:
     \begin{equation}
-        \Dxe = \maxParam \DxeCond\cdot
+        \Dx = \maxParam \DxCond  \cdot
         \label{eq:div_parametric}
     \end{equation}
     \label{th:div_for_parametric}
@@ -379,26 +366,95 @@ of the divergence measure.
 \begin{proof}
     For an arbitrary distribution $P \in \set{P}$, we let
     \[
-        \paramValue^* = \arg\maxParam \DxeCond \cdot
+        \paramValue^* = \arg\maxParam \DxCond \cdot
     \]
     In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\rval[]{s} \mid \paramValue^*)$
     for every $\rval[]{s} \in \set{S}$.
-    Obviously, $R$ and $\pi(\cdot \mid \paramValue)$ define the same distribution for any random variable,
+    Obviously, $R$ and $\pi(\cdot \mid \paramValue^*)$ define the same distribution for any random variable,
     and we have
-    \begin{equation}
-        \label{eq:th1}
-        \Ex{R}{\Dcond[R]} = \DxCondExpand[][\paramValue^*] \cdot
-    \end{equation}
-    On the other hand
+
+    \begin{align*}
+        \DxExpand[R] &= \DxCondExpand[][\paramValue^*] \\
+        &= \maxParam \DxCond \cdot
+    \end{align*}
+    On the other hand, clearly
     \[
-        \maxQ \Ex{Q}{\Dcond} \geq \Ex{R}{\Dcond[R]}\cdot
+        \maxQ \DxExpand[Q] \geq \DxExpand[R] \cdot
     \]
-    Notice that the left hand side is $\Dxe$, and by Equation~\ref{eq:th1}
+    Notice that the left hand side is $\Dx$, and hence
     \[
-        \Dxe \geq \maxParam \DxeCond \cdot
+        \Dx \geq \maxParam \DxCond \cdot
     \]
     This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+By Equation~\ref{eq:Cx_by_max}, for the central distribution we have
+\begin{align*}
+    \central &= \arg\max_{P} \int \left(\KlCond{\seqRval{n}}{}\right) \dt \\
+    &= \arg\max_{P} \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
+    \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
+\end{align*}
+
+That implies, the central distribution for our problem is the same as the distribution we obtain when using the
+reference prior~\cite{BERNARDO200517} for our main parameter.
+
+
+
+In our dice example, we can let $\Qvar = (\X[k+1], \rv[k+2]{x}, \dots, \rv[n]{x})$, representing all
+dice rolls from $k$ to $n$.
+We then let \rv{e} be a random vector of the previous dice outcomes $(\seqRv{k})$.
+
+This seems to come from the fact that when we use these priors, in the resulted probability measure the estimate for
+the distribution of $\XIE'$ differs from what we intuitively estimate.
+This estimate tends to have a much higher entropy.
+As a result the optimal strategy for \rv{E'} is mostly ignored because for any value of the evidence it yields a
+poor expected utility.
+
+It is reasonable to consider that if we find a probability measure which has a closer estimate to our
+intuitive estimate for $\XIE'$ distribution, automatic feature selection will be performed within the Bayesian
+framework.
+We believe that can be done by using a probability measure that is “safe” for $\XIE'$, in the sense we just described.
+
+Throughout this discussion, we will further investigate this idea and try to formulate a systematic approach to
+determine such probability measures.
+
+
+In our earlier discussion, to assess the safety of a probability measure, we realized that we need to
+evaluate the optimal Bayesian strategy in a generic way, independent of the utility function.
+We also need to determine how the divergence measures of these variables should be combined.
+Definition~\ref{def:e-convergence} already specifies the measure for a single query variable with different evidence
+variables.
+However, in this case, we have different query variables.
+When we have different query variables, the incorrect prediction of each variable can incur a separate loss.
+Therefore, we believe in this case addition should be used:
+\[
+    \sum_i \measure{D}
+\]
+which equals to
+\[
+    zhoom zhooom
+\]
+where x is the random vector and e is ...
+
+
+
+Even if we cannot find a distribution that has a small divergence from every distribution, still using the distribution
+that minimizes the maximum divergence seems a reasonable choice.
 
 
 \begin{proposition}
@@ -676,39 +732,6 @@ For example, if we roll the dice for three times before making our prediction,
 we will need $P(\rv[4]{x} \mid \rv[1]{x},\rv[2]{x},\rv[3]{x})$, where \Qvar denotes the outcome
 of the $i$-th dice roll.
 
-Thus, one natural way for defining a query set $\Xpairs$ is to let each \Qvar be the outcome of
-the $i$-th dice roll, and define each \rv{e} as a vector of the previous dice outcomes $(\seqRv{i-1})$.
-
-Now let us calculate the conditional divergence measure for \set{x} as defined in Definition~\ref{def:cond_divergence}:
-\newcommand{\seqvalxx}[1][x]{\rval[1]{#1}, \rval[2]{#1}}
-\begin{align*}
-    \DxeCond &= \KLcond{\rval[1]{x}}{} \\
-    &+ \KLcond{\rval[2]{x}}{\rval[1]{x}} \\
-    &+ \KLcond{\rval[3]{x}}{\seqvalxx} \\
-    &+ \ \cdots \\
-    &+ \KLcond{\rval[n]{x}}{\seqRval{n-1}}\cdot
-\end{align*}
-After factoring out $\pi(\seqRval{n} \mid \paramValue)$ from every term, we use the chain rule for conditional
-probability:
-\begin{align*}
-    \DxeCond &=
-    \sum_{\seqRval{n}} \pi(\seqRval{n} \mid \paramValue) \ln
-    \frac
-    {\pi(\rval[1]{x} \mid \paramValue) \pi(\rval[2]{x} \mid \rval[1]{x}, \paramValue)
-    \cdots \pi(\rval[n]{x} \mid \seqRval{n-1}, \paramValue)}
-    {P(\rval[1]{x}) P(\rval[2]{x} \mid \rval[1]{x}) \cdots P(\rval[n]{x} \mid \seqRval{n-1})} \\
-    &= \KLcond{\seqRval{n}}{} \cdot
-\end{align*}
-By Equation~\ref{eq:Cx_by_max}, for the central distribution we have
-\begin{align*}
-    \central &= \arg\max_{P} \int \left(\KLcond{\seqRval{n}}{}\right) \dt \\
-    &= \arg\max_{P} \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
-    \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
-\end{align*}
-
-That implies, the central distribution for our problem is the same as the distribution we obtain when using the
-reference prior~\cite{BERNARDO200517} for our main parameter.
-
 Imagine playing a game of chance involving our four-sided dice.
 After rolling the dice, we input the outcome into a mysterious machine.
 The machine then announces whether we have won or lost the game.
@@ -732,14 +755,14 @@ where each \rv{y} denotes the $i$-th dice outcome.
 
 The conditional divergence for \set{x} can be obtained by
 \begin{align*}
-    \DxeCond &= \KLcond{\rval[1]{x}}{\seqRval[y]{n}} \\
-    &+ \KLcond{\rval[2]{x}}{\rval[1]{x},\seqRval[y]{n}} \\
-    &+ \KLcond{\rval[3]{x}}{\seqvalxx, \seqRval[y]{n}} \\
+    \DxeCond &= \KlCond{\rval[1]{x}}{\seqRval[y]{n}} \\
+    &+ \KlCond{\rval[2]{x}}{\rval[1]{x},\seqRval[y]{n}} \\
+    &+ \KlCond{\rval[3]{x}}{x1, x2, \seqRval[y]{n}} \\
     &+ \ \cdots \\
 \end{align*}
 After using the chain rule for conditional probability the right hand side simplifies to
 \begin{align*}
-    \KLcond{\seqRval{n}}{\seqRval[y]{n}} \cdot
+    \KlCond{\seqRval{n}}{\seqRval[y]{n}} \cdot
 \end{align*}
 
 Consequently, an alternative way for defining our query set is to define it as a single
@@ -748,7 +771,7 @@ dice outcome.
 
 Using the new definition for \set{x}, by Equation~\ref{eq:lambda} we have:
 \begin{equation*}
-    \KLcond[\central]{\vval{x}}{\vval{e}} = \lambda
+    \KlCond[\central]{\vval{x}}{\vval{e}} = \lambda
 \end{equation*}
 \emph{derive a $\paramValue = (\paramA, \paramB)$ closed form for central dist...}
 

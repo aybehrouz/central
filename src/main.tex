@@ -36,7 +36,7 @@
 % Shortcut
 \newcommand{\Mt}{\mathFix{\M_{\param}}}
 \newcommand{\M}{\mathFix{\mathcal{M}}}
-\newcommand{\econverges}{$\epsilon$-converges}
+\newcommand{\econverges}{$\epsilon$-converges }
 \newcommand{\prior}{\mathFix{p(\paramValue)}}
 \newcommand{\param}{\rv{\varTheta}}
 \newcommand{\paramValue}{\rval{\theta}}
@@ -45,6 +45,7 @@
 \newcommand{\central}[1][\Qset]{\mathFix{C_{#1}}}
 \newcommand{\Xpairs}{\mathFix{\set{X} = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
 \newcommand{\X}[1][]{\rv[#1]{x}}
+\newcommand{\x}[1][]{\rval[#1]{x}}
 \newcommand{\Y}[1][]{\rv[#1]{y}}
 \newcommand{\E}[1][]{\rv[#1]{e}}
 \newcommand{\XIE}[1][]{\mathFix{\rv[#1]{x} | \rv[#1]{e}}}
@@ -54,10 +55,22 @@
 \newcommand{\xIe}[1][]{\rval[#1]{x} \mid \rval[#1]{e}}
 \newcommand{\xeIt}[1][]{\xe[#1] \mid  \paramValue}
 \newcommand{\minP}{\min_{P \in \set{P}}}
+\newcommand{\maxQ}{\max_{Q \in \set{P}}}
 \newcommand{\maxParam}{\max_{\paramValue \in \paramRange}}
-
+\newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots, \rv[{#2}]{#1}}
+\newcommand{\seqRval}[2][x]{\rval[1]{#1}, \ldots, \rval[{#2}]{#1}}
 % Formula
 \newcommand{\assign}[2][]{\rv[#1]{#2} = \rval[#1]{#2}}
+
+\newcommandx{\KlCond}[5][1=P, 2={\rval[i]{x}}, 3={\rval[i]{e}}, 4=\pi, 5=\paramValue, usedefault]{
+    \ifthenelse{\isempty{#3}}
+    {
+        \sum_{#2} #4(#2 \mid #5) \ln \frac{#4(#2 \mid #5)}{#1(#2)}
+    }
+    {
+        \sum_{#2, #3} #4(#2, #3 \mid #5) \ln \frac{#4\left(#2 \mid #3, #5 \right)} {#1\left(#2 \mid #3\right)}
+    }
+}
 
 \newcommand{\Dx}[1][P]{\measure{D}_{\Qset}\left[ #1 \right]}
 \newcommandx{\DxExpand}[2][1=Q, 2=P, usedefault]{
@@ -68,15 +81,20 @@
 \newcommandx{\DxCondExpand}[2][1=P, 2=\paramValue, usedefault]{
     \Ex{\pi}{\sum_i \measure{D}\left( \pi_{\XIe[i], #2} \parallel #1_{\XIe[i]} \right) \;\middle|\;#2}
 }
-\newcommandx{\DxCondExpandFull}[2][1=\paramValue, 2=P, usedefault]{
-    \sumixe \pi(\xe[i] \mid #1) \ln \frac{\pi(\xIe[i], #1)}{#2(\xIe[i])}
+\newcommandx{\DxCondExpandFull}[2][1=P, 2=\paramValue, usedefault]{
+    \sum_{i} \KlCond[#1][][][][#2]
 }
 
+\newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\sumxe}{\sum_{\rval{x}, \rval{e}}}
 \newcommand{\sumixe}{\sum_i \sum_{\rval[i]{x}, \rval[i]{e}}}
 
 \newcommandx{\D}[3][1={\X}, 2=Q, 3=P]{
     \measure{D}\left( #2_{#1} \parallel #3_{#1} \right)
+}
+
+\newcommandx{\entropy}[2]{
+    \measure{H}\ifthenelse{\isempty{#1}}{}{\left[#1_{#2}\right]}
 }
 
 \newcommand{\marginal}[2][p]{\int \pi(#2 \mid \paramValue) \dt[#1]}
@@ -93,9 +111,6 @@
     \mathcal{#1}\ifthenelse{\isempty{#2}}{}{\left[#2\right]}
 }
 
-\newcommandx{\entropy}[2]{
-    \measure{H}\ifthenelse{\isempty{#1}}{}{\left[#1_{#2}\right]}
-}
 
 \newcommand{\agg}[1]{\ensuremath{#1^*}\xspace}
 
@@ -137,7 +152,7 @@
 \newcommand{\DxeCond}[1][P]{\DxCond{#1}{\Evar}}
 
 \newcommand{\sumOverix}{\sum_i \sum_{\rval[i]{x}}}
-\newcommand{\sumx}{\sum_{\rval[]{x}}}
+
 \newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
 
 
@@ -170,8 +185,8 @@
 \newcommand{\aggxIe}{\agg{\QvarVal} \mid \agg{\rval{e}}}
 \newcommand{\aggXIE}{\agg{\Qvar} \mid \agg{\rv{e}}}
 
-\newcommand{\seqRval}[2][x]{\rval[1]{#1}, \ldots, \rval[{#2}]{#1}}
-\newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots, \rv[{#2}]{#1}}
+
+
 \newcommand{\seqRvalInf}[1][x]{\rval[1]{#1}, \rval[2]{#1}, \ldots}
 \newcommand{\seqRvInf}[1][x]{\rv[1]{#1}, \rv[2]{#1}, \ldots}
 \newcommand{\rvEq}[1][x]{\rv[]{#1} = \rval[]{#1}}
@@ -196,21 +211,10 @@
 \newcommand{\phiFunc}{\phi(\ab)}
 \newcommand{\rhoFunc}{\rho(\paramB \mid \paramA)}
 
-\newcommand{\Dparam}[1][P]{\KLcond[#1]}
+\newcommand{\Dparam}[1][P]{\KlCond[#1]}
 
 \newcommand{\Dminimax}[1][P]{\int \sumxe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
 
-\newcommandx{\KLcond}[5][1=P, 2=\rval{x}, 3=\rval{e}, 4=\pi, 5=\paramValue, usedefault]{
-    \ifthenelse{\isempty{#3}}
-    {
-        \sum_{#2} #4(#2 \mid #5) \ln \frac{#4(#2 \mid #5)}{#1(#2)}
-    }
-    {
-        \sum_{#2, #3}
-        #4(#2, #3 \mid #5)
-        \ln \frac{#4\left(#2 \mid #3, #5 \right)} {#1\left(#2 \mid #3\right)}
-    }
-}
 
 \newcommand{\KLab}[4]{
     \sum_{#1, #2} \pi(#1, #2 \mid #3, #4) \ln \frac{\cMass(#4 \mid #1, #2)}{\cMass(#4 \mid #3)}
@@ -236,9 +240,6 @@
 
 \newcommand{\maxP}{\max_{P \in \set{P}}}
 \newcommand{\maxE}{\max_{\rv{E} \in \set{E}}}
-\newcommand{\maxQ}{\max_{Q \in \set{P}}}
-
-
 
 
 % Document

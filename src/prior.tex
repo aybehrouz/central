@@ -268,7 +268,6 @@ Now let us calculate the conditional divergence measure for \set{x} as defined i
 \begin{align*}
     \DxCond &= \KlCond[][{\x[1]}][ ] \\
     &+ \KlCond[][{\x[2]}][{\x[1]}] \\
-    &+ \KlCond[][{\x[3]}][{\x[1], \x[2]}] \\
     &+ \ \cdots \\
     &+ \KlCond[][{\x[n]}][\seqRval{n-1}]\cdot
 \end{align*}
@@ -286,12 +285,36 @@ we use the chain rule for conditional probability:
     \label{eq:joint_form}
 \end{equation}
 
-This implies that we could have defined our query set as a single random variable \X, representing the vector of $n$
-dice rolls: $\X = (\seqRv{n})$.
-This is not surprising.
-This vector corresponds to the entire sample set for $n$ dice rolls.
-Here, the choice of $k$ and $n$ is based on our assumptions about the complexity of the problem: Only after seeing at
-least $k$ outcomes, convergence is meaningful and after $n$ outcomes it becomes trivial.
+This implies that we could define our query set as a set containing a single pair $\Qset = \{ (\X,\E) \}$,
+where \X represents the vector of $n$ dice rolls $\X = (\seqRv{n})$, and \E is a certain event $P(E) = 1$.
+We can simplify our notation by omitting certain events:  $\Qset = \{\X\}$.
+This query set essentially corresponds to the entire sample set for $n$ dice rolls.
+Here, the choice of $n$ should be based on our assumptions about the complexity of the problem.
+It shows where we think the convergence becomes trivial and, if necessary, could approach infinity.
+
+The fact that our query set includes the entire sample set does not necessarily mean its central probability
+measure has good convergence properties for every definable random variable.
+Back to our dice example, suppose we are interested in the probability of observing an odd or even binary number.
+Let \Y[i] represent the least significant bit of the $i$-th dice roll, indicating whether the number is odd or even.
+If we want our central probability measure to exhibit good convergence properties for  $P(\Y[i] \mid \seqRv[Y]{i-1})$,
+we need to explicitly include these conditionals in our query set, in the same way we did for \X[i].
+Therefore, we should define a new set $\Qset' = \{\X, \Y\}$, where $\Y = (\seqRv[Y]{n})$ and $\X = (\seqRv{n})$.
+
+% alternative form
+The central probability measure for $\Qset = \{ \X \}$ tends to yield relatively high entropy estimates
+for $P(\Y[i] \mid \seqRv[Y]{i-1})$, for small values of $i$.
+\footnote{The situtation is not different
+if we use a flat prior for our paprameters.}
+We believe this comes from the fact that \X implicitly includes all its functions.
+The central prob for x tries to have a good estimate for all these at the same time.
+To see this note that $P(\X, f(\X)) = P(\X \mid f(\X))P(f(\X))$ that implies
+\[
+    \Dx[P][\X] \geq \Dx[P][f(\X)]
+\]
+If we want to obtain probabilities that align more closely with our intuition, we should include these random
+variables in our query set.
+We can let $\Qset = \{\X, \Y\}$, where $\Y = (\seqRv[Y]{n})$ and each \Y[i] represents the least significant bit of
+the i-th dice roll.
 
 
 In a parametric model, the maximum of divergence happens for a prior distribution
@@ -1089,6 +1112,3 @@ We stated that we believe...
 
 
 
-
-\bibliography{main}
-\bibliographystyle{plain}

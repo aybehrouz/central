@@ -72,7 +72,7 @@
     }
 }
 
-\newcommand{\Dx}[1][P]{\measure{D}_{\Qset}\left[ #1 \right]}
+\newcommandx{\Dx}[2][1=P, 2=\Qset]{\measure{D}_{#2}\left[ #1 \right]}
 \newcommandx{\DxExpand}[2][1=Q, 2=P, usedefault]{
     \Ex{#1}{\sum_i \measure{D}\left( #1_{\XIe[i]} \parallel #2_{\XIe[i]} \right)}
 }
@@ -252,7 +252,12 @@
     %\section{Making Decisions under Uncertainty}\label{sec:uncertainty}
 
 
-    \section{Central Distribution}\label{sec:prior}
+    \section{Central Probability Measure}\label{sec:prior}
+
     \input{prior}
 
+
+
+    \bibliography{main}
+    \bibliographystyle{plain}
 \end{document}

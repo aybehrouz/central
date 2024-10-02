@@ -61,8 +61,8 @@ measuring divergence between distributions.
     \begin{equation*}
         p(\T = \t \mid \rvEq) =
         \begin{cases}
-            \frac{1}{P(\rval[]{x})} & 0 \leq \t \leq P(\rvEq),\\
-            0 & \text{otherwise}\cdot
+            \frac{1}{P(\rval[]{x})} & 0 \leq \t \leq P(\rvEq), \\
+            0                       & \text{otherwise}\cdot
         \end{cases}
     \end{equation*}
     Notice that both $P(\T \mid \X)$ and $P(\TX)$ are uniform distributions, and
@@ -72,21 +72,21 @@ measuring divergence between distributions.
     This ensures that $Q(\TX)$ and $P(\TX)$ have the same support as well.
     Thus, we have
     \begin{align*}
-        \D[\TX] &= \entropy{P}{\TX} - \entropy{Q}{\TX}\\
-        &= \sumx \tent{\tx}\\
-        &= \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
+        \D[\TX] & = \entropy{P}{\TX} - \entropy{Q}{\TX}    \\
+        & = \sumx \tent{\tx}                       \\
+        & = \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
     \end{align*}
     and
     \begin{align*}
-        \D[\TIx] &= \entropy{P}{\TIx} - \entropy{Q}{\TIx}\\
-        &= \ln P(\rval[]{x}) + \tent{\tIx}\cdot
+        \D[\TIx] & = \entropy{P}{\TIx} - \entropy{Q}{\TIx} \\
+        & = \ln P(\rval[]{x}) + \tent{\tIx}\cdot
     \end{align*}
     Now, we use the additivity property to obtain a formula for our divergence measure:
     \begin{align*}
-        \D &= \D[\TX] - \sumx \D[\TIx]\Qx \\
-        &= \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(\rval[]{x}) \right)\\
-        &= \sumx \Qx  \left( \ln \Qx \int q(\tIx) d\t - \ln P(\rval[]{x}) \right)\\
-        &= \sumx \Qx \ln \frac{\Qx}{P(\rval[]{x})}\cdot \qedhere
+        \D & = \D[\TX] - \sumx \D[\TIx]\Qx                                                              \\
+        & = \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(\rval[]{x}) \right) \\
+        & = \sumx \Qx  \left( \ln \Qx \int q(\tIx) d\t - \ln P(\rval[]{x}) \right)                   \\
+        & = \sumx \Qx \ln \frac{\Qx}{P(\rval[]{x})}\cdot \qedhere
     \end{align*}
 \end{proof}
 
@@ -177,8 +177,8 @@ when the minimum achievable value of $\epsilon$ is not very small.
     We define the \emph{divergence measure of $P \in \set{P}$ for \Qset} as follows:
     \begin{align}
         \label{eq:div_def}
-        \Dx &= \max_{Q \in \set{P}} \DxExpand, \\
-        &= \maxQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
+        \Dx & = \max_{Q \in \set{P}} \DxExpand,                    \\
+        & = \maxQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
         \frac{Q(\assign[i]{x} \mid \assign[i]{e})}{P(\assign[i]{x} \mid \assign[i]{e})} \cdot
     \end{align}
 \end{definition}
@@ -203,8 +203,8 @@ fully determines the distribution of the sample space.
     Assume that \pmodel is a parametric model, and $\Xpairs$ is a query set.
     We define the \emph{divergence measure of $P \in \set{P}$ for \Qset given $\paramValue$} as follows:
     \begin{align}
-        \DxCond &= \DxCondExpand \\
-        &= \DxCondExpandFull \cdot
+        \DxCond & = \DxCondExpand           \\
+        & = \DxCondExpandFull \cdot
         \label{eq:cond_div_measure}
     \end{align}
 \end{definition}
@@ -221,24 +221,29 @@ measure that we consider the ``safest'' choice in a model.
     \end{equation*}
 \end{definition}
 
-In this definition, the query set \Qset plays a crucial role.
+In this definition, the query set \Xpairs plays a crucial role.
 Specifically, \Qset defines the set of random variables in which we are interested.
 Each \X[i] represents a random variable whose distribution is important to us, and each \E[i] corresponds to the
 evidence that is available for that variable.
 
-However, if our query set depends on our specific experimental setup, we will violate the principle of objectivity.
+However, if we choose our query set based on our specific experimental setup, we will violate the
+principle of objectivity.
 It is important that we use the same query set for any problem that can be defined within the same environment.
 
-One natural way to do this is to let the query set include all conditional forms that are relevant.
+One natural way to do this is to let the query set include all potentially relevant conditional pairs.
 For example, in our dice problem, we might let each \X[i] be the outcome of the $i$-th dice roll, and define each \E[i]
 as a vector of the previous dice outcomes: $\E[i] = (\seqRv{i-1})$.
+We may assume that our set contains $n$ pairs.
+The choice of $n$ should be based on our assumptions about the complexity of the problem.
+It shows where we think the convergence becomes trivial and, if necessary, could approach infinity.
+
 
 Now let us calculate the conditional divergence measure for \set{x} as defined in Definition~\ref{def:cond_divergence}:
 \begin{align*}
-    \DxCond &= \KlCond[][{\x[1]}][ ] \\
-    &+ \KlCond[][{\x[2]}][{\x[1]}] \\
-    &+ \ \cdots \\
-    &+ \KlCond[][{\x[n]}][\seqRval{n-1}]\cdot
+    \DxCond & = \KlCond[][{\x[1]}][ ]                  \\
+    & + \KlCond[][{\x[2]}][{\x[1]}]            \\
+    & + \ \cdots                               \\
+    & + \KlCond[][{\x[n]}][\seqRval{n-1}]\cdot
 \end{align*}
 After factoring out $\pi(\seqRval{n} \mid \paramValue)$ from every term:
 \[
@@ -254,33 +259,42 @@ we use the chain rule for conditional probability:
     \label{eq:joint_form}
 \end{equation}
 
-This implies that we could define our query set as a set containing a single pair $\Qset = \{ (\X,\E) \}$,
-where \X represents the vector of $n$ dice rolls $\X = (\seqRv{n})$, and \E is a certain event $P(E) = 1$.
-We can simplify our notation by omitting certain events:  $\Qset = \{\X\}$.
+This implies that we could alternatively define our query set as a set containing a single pair $\Qset = \{ (\X,\E) \}$,
+where \X represents the vector of $n$ dice rolls $\X = (\seqRv{n})$, and \E is a dummy certain event with $P(E) = 1$.
 This query set essentially corresponds to the entire sample set for $n$ dice rolls.
-Here, the choice of $n$ should be based on our assumptions about the complexity of the problem.
-It shows where we think the convergence becomes trivial and, if necessary, could approach infinity.
+We usually simplify our notation and omit dummy events: $\Qset = \{\X\}$.
 
 The fact that our query set includes the entire sample set does not necessarily mean its central probability
 measure has good convergence properties for every definable random variable.
-Back to our dice example, suppose we are interested in the probability of observing an odd or even binary number.
+Back to our dice example, suppose we are interested in predicting the next dice outcome based on the number of previous
+odd and even outcomes.
 Let \Y[i] represent the least significant bit of the $i$-th dice roll, indicating whether the number is odd or even.
-If we want our central probability measure to exhibit good convergence properties for  $P(\Y[i] \mid \seqRv[Y]{i-1})$,
-we need to explicitly include these conditionals in our query set, in the same way we did for \X[i].
-Therefore, we should define a new set $\Qset' = \{\X, \Y\}$, where $\Y = (\seqRv[Y]{n})$ and $\X = (\seqRv{n})$.
+If we want our central probability measure to exhibit good convergence properties for  $P(\X[i] \mid \seqRv[Y]{i-1})$,
+we need to explicitly include these conditional pairs in our query set, in the same way we did for $\X[i]|\seqRv{i-1}$.
 
-% alternative form
-The central probability measure for $\Qset = \{ \X \}$ tends to yield relatively high entropy estimates
-for $P(\Y[i] \mid \seqRv[Y]{i-1})$, for small values of $i$.
-\footnote{The situtation is not different
-if we use a flat prior for our paprameters.}
-We believe this comes from the fact that \X implicitly includes all its functions.
-The central prob for x tries to have a good estimate for all these at the same time.
-To see this note that $P(\X, f(\X)) = P(\X \mid f(\X))P(f(\X))$ that implies
-\[
-    \Dx[P][\X] \geq \Dx[P][f(\X)]
-\]
-If we want to obtain probabilities that align more closely with our intuition, we should include these random
-variables in our query set.
-We can let $\Qset = \{\X, \Y\}$, where $\Y = (\seqRv[Y]{n})$ and each \Y[i] represents the least significant bit of
-the i-th dice roll.
+After adding these pairs, the central probability measure for this new query set shows some interesting feature
+selection capabilities.
+In this probability measure, for smaller values of $i$, $P(\X[i] \mid \seqRv{i-1})$
+tends to get somewhat combined with $P(\X[i] \mid \seqRv[Y]{i-1})$.
+For example when $i = 2$, if the single observed dice roll is $01$, the posterior probabilities of
+$00,10$ and $11$ are not equal, and $P(11 \mid 01)$ is slighty higher than $P(00 \mid 01)$ and $P(10 \mid 01)$.
+That is to say this central probability measure detects that $01$ and $11$ are both odd numbers.
+
+
+%Therefore, we should define a new set $\Qset' = \{\X, \Y\}$, where $\Y = (\seqRv[Y]{n})$ and $\X = (\seqRv{n})$.
+%
+%% alternative form
+%The central probability measure for $\Qset = \{ \X \}$ tends to yield relatively high entropy estimates
+%for $P(\Y[i] \mid \seqRv[Y]{i-1})$, for small values of $i$.
+%\footnote{The situtation is not different
+%if we use a flat prior for our paprameters.}
+%We believe this comes from the fact that \X implicitly includes all its functions.
+%The central prob for x tries to have a good estimate for all these at the same time.
+%To see this note that $P(\X, f(\X)) = P(\X \mid f(\X))P(f(\X))$ that implies
+%\[
+%    \Dx[P][\X] \geq \Dx[P][f(\X)]
+%\]
+%If we want to obtain probabilities that align more closely with our intuition, we should include these random
+%variables in our query set.
+%We can let $\Qset = \{\X, \Y\}$, where $\Y = (\seqRv[Y]{n})$ and each \Y[i] represents the least significant bit of
+%the i-th dice roll.

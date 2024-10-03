@@ -1,6 +1,7 @@
+
 In a parametric model, the maximum of divergence happens for a prior distribution
 that is concentrated at a single value of the parameter $\paramValue$.
-That means, for a parametric model allowing any high peak prior, instead of maximizing over the set of
+That means, for a parametric model, which allows any high peak prior, instead of maximizing over the set of
 all acceptable distributions, we can simply maximize over the parameter space, using the conditional version
 of the divergence measure.
 
@@ -92,160 +93,6 @@ of the divergence measure.
     This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-By Equation~\ref{eq:Cx_by_max}, for the central distribution we have
-\begin{align*}
-    \central &= \arg\max_{P} \int \left(\KlCond{\seqRval{n}}{}\right) \dt \\
-    &= \arg\max_{P} \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
-    \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
-\end{align*}
-
-That implies, the central distribution for our problem is the same as the distribution we obtain when using the
-reference prior~\cite{BERNARDO200517} for our main parameter.
-
-
-In our dice example, we can let $\Qvar = (\X[k+1], \rv[k+2]{x}, \dots, \rv[n]{x})$, representing all
-dice rolls from $k$ to $n$.
-We then let \rv{e} be a random vector of the previous dice outcomes $(\seqRv{k})$.
-
-This seems to come from the fact that when we use these priors, in the resulted probability measure the estimate for
-the distribution of $\XIE'$ differs from what we intuitively estimate.
-This estimate tends to have a much higher entropy.
-As a result the optimal strategy for \rv{E'} is mostly ignored because for any value of the evidence it yields a
-poor expected utility.
-
-It is reasonable to consider that if we find a probability measure which has a closer estimate to our
-intuitive estimate for $\XIE'$ distribution, automatic feature selection will be performed within the Bayesian
-framework.
-We believe that can be done by using a probability measure that is “safe” for $\XIE'$, in the sense we just described.
-
-Throughout this discussion, we will further investigate this idea and try to formulate a systematic approach to
-determine such probability measures.
-
-
-In our earlier discussion, to assess the safety of a probability measure, we realized that we need to
-evaluate the optimal Bayesian strategy in a generic way, independent of the utility function.
-We also need to determine how the divergence measures of these variables should be combined.
-Definition~\ref{def:e-convergence} already specifies the measure for a single query variable with different evidence
-variables.
-However, in this case, we have different query variables.
-When we have different query variables, the incorrect prediction of each variable can incur a separate loss.
-Therefore, we believe in this case addition should be used:
-\[
-    \sum_i \measure{D}
-\]
-which equals to
-\[
-    zhoom zhooom
-\]
-where x is the random vector and e is ...
-
-
-Even if we cannot find a distribution that has a small divergence from every distribution, still using the distribution
-that minimizes the maximum divergence seems a reasonable choice.
-
-
-\begin{proposition}
-    Let \Qvar be a query variable, and \Eset be an evidence set in \Mt.
-    If the conditions of Theorem~\ref{th:div_for_parametric} holds, then for any $P \in \set{P}$ we have:
-    \[
-        \Dx = \maxParam \DxCond{P}{\Eset} \cdot
-    \]
-\end{proposition}
-
-
-\begin{lemma}
-    Let $p$, and $q$ be two probability distributions for a random variable $\Theta$.
-    If for any $\theta$, and a constant $\lambda$, we have
-    \[
-        \ln \frac{p(\theta)}{q(\theta)} = \lambda
-    \]
-    then $\lambda = 0$.
-\end{lemma}
-
-\begin{proof}
-    Suppose, for the sake of contradiction, that $\lambda > 0$.
-    This implies for every $\theta$ we have
-    \[
-        \frac{p(\theta)}{q(\theta)} > 1 \cdot
-    \]
-    Since $q(\theta) > 0$, we can conclude that $p(\theta) > q(\theta)$.
-    This inequality holds for every $\theta$, and therefore
-    \[
-        \int \dt[p] > \int \dt[q],
-    \]
-    which is a contradiction.
-
-    If we assume $\lambda < 0$, similarly we can conclude $\int \dt[p] < \int \dt[q]$, which is a contradiction again.
-    Hence, $\lambda$ cannot be positive or negative and we must have $\lambda = 0$.
-\end{proof}
-
-\begin{theorem}
-    \label{th:lambda}
-    Let \Qvar be a query variable, and \Evar be an evidence variable in a parametric model \pmodel.
-    Assume that each value of the parameter \paramValue, can be represented as a pair $(\ab)$, and for
-    every
-    \paramA, \paramB, and \rval{e} we have
-    \begin{equation}
-        \label{eq:th-lambda-independece}
-        p(\bIa, \rval{e}) = p(\bIa) \cdot
-    \end{equation}
-
-    If for some probability measure $P \in \set{P}$, the conditional divergence of $P$ is a real valued function
-    of \paramA:
-    \begin{equation*}
-        \DxeCond = \lambda(\paramA),
-    \end{equation*}
-    then $P$ is the central distribution for $\QvarIE$, and
-    \begin{equation*}
-        \lambda(\paramA) = \ln \int \phiFunc d\paramB,
-    \end{equation*}
-    where
-    \begin{equation*}
-        \phiFunc = \phiExp \cdot
-    \end{equation*}
-
-\end{theorem}
-
-\begin{proof}
-    \newcommand{\lambdaFunc}{\lambda(\paramA)}
-    By Bayes' theorem and Equation~\ref{eq:th-lambda-independece} we have
-    \begin{align*}
-        \frac{\pi(\xIet)}{P(\xIe)} &= \frac{p(\tIxe)}{p(\bIa, \rval{e})p(\paramA \mid \rval{e})} \\
-        &= \frac{p(\tIxe)}{p(\bIa)p(\paramA \mid \rval{e})} \cdot
-    \end{align*}
-    Now, by simple algebra we can verify that
-    \begin{equation*}
-        \DxeCond = \ln \frac{\phiFunc}{p(\bIa)}
-    \end{equation*}
-    We let
-    \begin{equation*}
-        \rhoFunc = \frac{\phiFunc}{\int \phiFunc d\paramB}
-    \end{equation*}
-    Therefore,
-    \begin{equation*}
-        \DxeCond = \lambdaFunc + \ln \frac{\rhoFunc}{p(\bIa)}
-    \end{equation*}
-    where
-    \[
-        \lambdaFunc =  \ln \int \phiFunc d\paramB
-    \]
-\end{proof}
-
 \begin{definition}[Generic Parametric Model]
     We say a parametric model \pmodel is \emph{generic}, if for any arbitrary probability distribution $r$,
     there is a probability measure $R \in \set{P}$, such that for every $\rval[]{s} \in \set{s}$
@@ -257,6 +104,15 @@ that minimizes the maximum divergence seems a reasonable choice.
 \begin{proposition}
     A generic parametric model satisfies the conditions of Theorem~\ref{th:Dx_parametric_form}.
 \end{proposition}
+
+This implies that in a generic parametric model, we can obtain the central probability measure by:
+\begin{equation*}
+    \central = \arg\minP \maxParam \DxCond  \cdot
+\end{equation*}
+
+This is a challenging minimax problem that cannot be easily solved directly.
+However, by using the minimax theorem we can convert it into a more conventional maximization problem which can be
+solved by variational methods.
 
 \begin{theorem}[Minimax theorem~\cite{Du1995}]
     \label{th:minimax}
@@ -274,100 +130,104 @@ that minimizes the maximum divergence seems a reasonable choice.
     \end{equation}
 \end{theorem}
 
+A vector in $R^n$ shares many properties with a real function.
+We sometimes assume that a real function is a real vector, and vice versa.
+In the next theorem we will use this theorem, assuming $x$ is a real function.
 
 \begin{theorem}
     \label{th:central_by_max}
-    Consider a generic parametric model \pmodel, and let \Qvar be a query variable, and \Evar be an evidence
-    variable in \Mt.
-    Suppose that for every probability measures $Q_1, Q_2 \in \set{P}$, and any real number $0 \leq \alpha \leq 1$,
-    there is a $Q^* \in \set{P}$, such that for every $\xe$ we have
+    Consider a generic parametric model \pmodel,
+    and let $\Xpairs$ be a query set in \Mt.
+    Assume that for every $Q_1, Q_2 \in \set{P}$ and any real number $0 \leq \alpha \leq 1$, there is
+    a distribution $Q^* \in \set{P}$, such that for every $i, \xe[i]$ we have
     \begin{equation}
-        Q^*(\xIe) = \convexCond{\xIe}\cdot
+        Q^*(\xIe[i]) = \convexCond{Q}{\xIe[i]}\cdot
         \label{eq:convex_dist_set}
     \end{equation}
-
-    In this model, the central distribution for $\QvarIE$ can be obtained by:
+    Then, the central distribution for $\set{X}$ can be obtained by:
     \begin{align}
-        \centralE &= \arg\maxP \int \DxeCond \dt\\
-        &= \arg\maxP \Dminimax,
+        \central  &= \arg\maxP \int \DxCond \dt
         \label{eq:Cx_by_max}
     \end{align}
-    where $\marginalEq[p]{\rval[]{s}}$, for every $\rval[]{s} \in \set{s}$.
 \end{theorem}
 
 \begin{proof}
-    \newcommandx{\f}[2][1 = r, 2 = P_{\XIE}]{ f(#1, #2)}
+    \newcommandx{\f}[2][1 = r, 2 = P_{\XIE[i]}]{ f(#1, #2)}
     We prove this theorem using the Minimax theorem.
-    For that, we define a functional as follows:
+    To do so, we define a functional as follows:
     \begin{equation*}
-        \f = \int \DxCondExpand \dt[r],
+        \f = \int \DxCondExpand \dt[r] \cdot
     \end{equation*}
-    where $r(\paramValue)$ is an arbitrary probability distribution, and $P_{\XIE}$ represents different
-    distributions of \Qvar given different values of \Evar, induced by a probability measure $P \in \set{P}$.
+    Here, $r(\paramValue)$ is an arbitrary probability distribution, and $P_{\XIE[i]}$ is a vector that includes
+    all values of $P(\assign[i]{x} \mid \assign[i]{e})$ for every $i, \xe[i]$, where $P \in \set{P}$.
 
     Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is similar to maximizing
     with respect to $\paramValue$, and we have
     \[
-        \centralE = \arg\minP \max_{r} \f\cdot
+        \central = \arg\minP \max_{r} \f\cdot
     \]
 
     The domain of $r$ is the set of all probability distributions, which is a compact convex set.
-    Moreover, from Equation~\ref{eq:convex_dist_set}, it follows that the domain of $P_{\XIE}$ , which is a function
-    of both \Qvar and \Evar, is also a compact convex set.
-    Thus, the domain of the functional $\f$ is a compact convex set.
+    Moreover, from Equation~\ref{eq:convex_dist_set}, it follows that the domain of $P_{\XIE[i]}$ vectors is also a
+    compact convex set.
 
-    For a fixed $P_{\XIE}$, $\f[\cdot]$ is a linear function, which is both concave and convex.
+    For a fixed $P_{\XIE[i]}$, $\f[\cdot]$ is a linear function, which is both concave and convex.
 
-    On the other hand, for a fixed $r$, if we let $\marginalEq[r]{\xe}$ we have
+    On the other hand, for a fixed $r$, if we let $\marginalEq[r]{\xe[i]}$ we have
     \begin{equation}
-        \f[r][\cdot] = c - \sumxe R(\xe) \ln P(\xIe),
+        \f[r][\cdot] = c - \sumixe R(\xe[i]) \ln P(\xIe[i]),
         \label{eq:max_for_P}
     \end{equation}
-    where $c$ is not a function of $P_{\XIE}$.
-    If we calculate the Hessian matrix of $\f[r][\cdot]$, with respect to $P_{\XIE}$, we observe that the matrix is
-    diagonal, and each element of the main diagonal is $\frac{R(\xIe)}{P(\xIe)^2}$.
+    where $c$ is not a function of $P_{\XIE[i]}$.
+
+    If we calculate the Hessian matrix of $\f[r][\cdot]$, we observe that the matrix is
+    diagonal, and each element of the main diagonal is $\frac{R(\xIe[i])}{P(\xIe[i])^2}$.
     Thus, the hessian matrix of $\f[r][\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
-    Consequently, by Theorem~\ref{th:minimax}
+    Therefore, we can use Theorem~\ref{th:minimax}
     \begin{equation}
         \minP \max_{r} \f = \max_{r} \minP \f\cdot
         \label{eq:divergence_minmax}
     \end{equation}
     From Equation~\ref{eq:max_for_P} we can see that for an arbitrary fixed $r$ we have
     \[
-        \minP \f = \maxP \sumxe R(\xe) \ln P(\xIe)\cdot
+        \minP \f = \maxP \sumixe R(\xe[i]) \ln P(\xIe[i])\cdot
     \]
 
-    We know that the Kullback–Leibler divergence, and therefore its expected value, is non-negative:
+    We know that the Kullback–Leibler divergence, and therefore its expected value, is non-negative.
+    Consequently:
     \[
-        \Ex{R}{\Dcond[R]} \geq 0\cdot
+        \DxExpand[R] \geq 0\cdot
     \]
     By simple algebra we get
     \[
-        \sumxe R(\xe) \ln P(\xIe) \leq \sumxe R(\xe) \ln R(\xIe)\cdot
+        \sumixe R(\xe[i]) \ln P(\xIe[i]) \leq \sumixe R(\xe[i]) \ln R(\xIe[i])\cdot
     \]
     Recall that \Mt is a generic parametric model.
-    That implies $R \in \set{P}$, and we can reach this upper bound by letting $P = R$:
+    That implies $R \in \set{P}$, and we can reach this upper bound by letting $P = R$.
+    Hence, for a fixed $r$
     \[
-        \minP \f = \Dminimax[R]\cdot
+        \minP \f = \int \DxCondExpand[R] \dt[r] \cdot
     \]
     By Equation~\ref{eq:divergence_minmax}, we conclude
     \[
-        \centralE = \arg\max_{R \in \set{P}} \int \DxeCond[R] \dt[r] \cdot \qedhere
+        \central = \arg\max_{R \in \set{P}} \int \DxCond[R] \dt[r] \cdot \qedhere
     \]
 \end{proof}
 
-Theorem~\ref{th:central_by_max} requires that in our model the set of acceptable distribution for $\QvarIE$ be a convex
-set.
-In most cases, this condition cannot be satisfied.
-However, if the distribution that is obtained by Equation~\ref{eq:Cx_by_max} is an acceptable distribution in our model,
-the theorem still implies that it is a central distribution in our model.
-Note that the set of probability distributions is convex.
+Now, let's use this theorem for our dice example and rewrite Equation~\ref{eq:joint_form}:
+\begin{align*}
+    \central = \arg\max_{p} \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
+    \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
+\end{align*}
+This means that the central distribution for our dice example, when we consider a query set equivalent to the
+sample space, is the probability measure that is obtained by using the Reference prior~\cite{BERNARDO200517} for
+the multinomial parameters.
 
 \begin{theorem}
     \label{th:lambda}
-    Under the assumptions of Theorem~\ref{th:central_by_max}, the central distribution for $\QvarIE$ satisfies:
+    Under the assumptions of Theorem~\ref{th:central_by_max}, the central probability measure for \Qset satisfies:
     \begin{equation}
-        \DxeCond[\centralE] = \lambda,
+        \DxCond[\central] = \lambda,
         \label{eq:lambda}
     \end{equation}
     where $\lambda$ is a constant.
@@ -385,7 +245,7 @@ Note that the set of probability distributions is convex.
     \[
         \Lagr[p(\paramValue)] = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
     \]
-    Let us denote the prior distribution corresponding to the central distribution \centralE by $\cPrior$.
+    Let's denote the prior distribution corresponding to the central distribution \central by $\cPrior$.
     Let $p(\paramValue) = \cPrior + \epsilon \eta(\paramValue)$ be a variation of $\cPrior$, where $\eta(\paramValue)$ is
     a continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
 
@@ -397,27 +257,29 @@ Note that the set of probability distributions is convex.
     Note that
     \begin{align*}
         \de{p(\paramValue)} &= \eta(\paramValue),\\
-        \de{P(\xe)} &= \marginal[\eta]{\xe},\\
-        \de{P(\rval{e})} &= \marginal[\eta]{\rval{e}}\cdot
+        \de{P(\xe[i])} &= \marginal[\eta]{\xe[i]},\\
+        \de{P(\e[i])} &= \marginal[\eta]{\e[i]}\cdot
     \end{align*}
     Using the chain rule of calculus, we calculate the partial derivative of $\Lagr$ relative to $\epsilon$:
     \begin{align*}
-        \parDeriv\ =\ &\int \left( \Dparam  \right) \dt[\eta] \\
-        &- \int \left( \sumxe \pi(\xeIt) \frac{\marginal[\eta]{\xe}}{P(\xe)} \right) \dt \\
-        &+ \int \left( \sum_{\rval{e}} \pi(\eIt) \frac{\marginal[\eta]{\rval{e}}}{P(\rval{e})} \right) \dt \\
+        \parDeriv\ =\ &\int \left( \DxCondExpandFull  \right) \dt[\eta] \\
+        &- \int \left( \sumixe \pi(\xeIt[i]) \frac{\marginal[\eta]{\xe[i]}}{P(\xe[i])} \right) \dt \\
+        &+ \int \left( \sum_i \sum_{\e[i]} \pi(\e[i] \mid \paramValue) \frac{\marginal[\eta]{\e[i]}}{P(\e[i])} \right) \dt \\
         &- \int \lambda \dt[\eta]
     \end{align*}
-    Since $\marginalEq{\xe}$ and $\marginalEq{\rval{e}}$, we get
+    Since $\marginalEq{\xe[i]}$ and $\marginalEq{\e[i]}$, we get
     \begin{equation*}
-        \parDeriv = \int \left(-\lambda + \Dparam \right) \dt[\eta]\cdot
+        \parDeriv = \int \left(-\lambda + \DxCondExpandFull \right) \dt[\eta]\cdot
     \end{equation*}
     We let $ \parDerivAt = 0$.
     Since $\eta(\paramValue)$ is an arbitrary function, by applying the fundamental lemma of the calculus of
     variations and letting $\epsilon = 0$, for every value of $\paramValue$ we have
     \[
-        \Dparam[\centralE] = \lambda\cdot \qedhere
+        \DxCondExpandFull[\central] = \lambda\cdot \qedhere
     \]
 \end{proof}
+
+This theorem gives a necessary condition for the central probability measure in the general case.
 
 Consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is unfair, with each
 face marked by a binary number: $00$, $01$, $10$, and $11$.
@@ -545,16 +407,16 @@ our problem, our query set should include random variables of both versions.
 
 \begin{proof}
     First, we show that the set of distributions of each \Qvar is a convex set.
-    Let $Q^*(\rval{x}) = \convexCond{\rval{x}}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
+    Let $Q^*(\rval{x}) = \convexCond{Q}{\rval{x}}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
     arbitrary $i, \rval{x}$.
 
     \Mt is a parametric model.
     Therefore,
     \begin{align*}
         Q^*(\rval{x}) &= \alpha \marginal[q_1]{\rval{x}} + (1 - \alpha) \marginal[q_2]{\rval{x}}\\
-        &= \int \pi(\xIt) (\convexCond[q]{\paramValue}) d\paramValue\cdot
+        &= \int \pi(\xIt) (\convexCond{q}{\paramValue}) d\paramValue\cdot
     \end{align*}
-    $\convexCond[q]{\paramValue}$ is a valid prior distribution and \Mt is a generic parametric model.
+    $\convexCond{q}{\paramValue}$ is a valid prior distribution and \Mt is a generic parametric model.
     That implies $Q^* \in \set{P}$.
 
     Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies
@@ -606,16 +468,16 @@ our problem, our query set should include random variables of both versions.
 
 \begin{proof}
     First, we show that the set of distributions of each \Qvar is a convex set.
-    Let $Q^*(\xIe) = \convexCond{\xIe}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
+    Let $Q^*(\xIe) = \convexCond{Q}{\xIe}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
     arbitrary $i, \xe$.
 
     \Mt is a parametric model.
     Therefore,
     \begin{align*}
         Q^*(\xIe) &= \alpha \int \xIebFull q_1(\beta \mid \rval {e}) d\beta + (1 - \alpha) \marginal[q_2]{\rval{x}}\\
-        &= \int \pi(\xIt) (\convexCond[q]{\paramValue}) d\paramValue\cdot
+        &= \int \pi(\xIt) (\convexCond{q}{\paramValue}) d\paramValue\cdot
     \end{align*}
-    $\convexCond[q]{\paramValue}$ is a valid prior distribution and \Mt is a generic parametric model.
+    $\convexCond{q}{\paramValue}$ is a valid prior distribution and \Mt is a generic parametric model.
     That implies $Q^* \in \set{P}$.
 
     Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies
@@ -788,4 +650,3 @@ We stated that we believe...
     \end{equation*}
     which is a contradiction.
 \end{proof}
-

@@ -43,17 +43,24 @@
 \newcommand{\paramRange}{\Theta}
 \newcommand{\Qset}{\set{x}}
 \newcommand{\central}[1][\Qset]{\mathFix{C_{#1}}}
+\newcommand{\cPrior}[1][(\paramValue)]{c_\Qset#1}
+
 \newcommand{\Xpairs}{\mathFix{\set{X} = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
+
 \newcommand{\X}[1][]{\rv[#1]{x}}
 \newcommand{\x}[1][]{\rval[#1]{x}}
 \newcommand{\Y}[1][]{\rv[#1]{y}}
 \newcommand{\E}[1][]{\rv[#1]{e}}
+\newcommand{\e}[1][]{\rval[#1]{e}}
 \newcommand{\XIE}[1][]{\mathFix{\rv[#1]{x} | \rv[#1]{e}}}
 \newcommand{\XE}[1][]{\rv[#1]{x}, \rv[#1]{e}}
 \newcommand{\XIe}[1][]{\rv[#1]{x} \mid \rval[#1]{e}}
 \newcommand{\xe}[1][]{\rval[#1]{x}, \rval[#1]{e}}
 \newcommand{\xIe}[1][]{\rval[#1]{x} \mid \rval[#1]{e}}
 \newcommand{\xeIt}[1][]{\xe[#1] \mid  \paramValue}
+\newcommand{\xet}[1][]{\xe[#1], \paramValue}
+\newcommand{\xIet}[1][]{\rval[#1]{x} \mid \rval[#1]{e},  \paramValue}
+
 \newcommand{\minP}{\min_{P \in \set{P}}}
 \newcommand{\maxQ}{\max_{Q \in \set{P}}}
 \newcommand{\maxParam}{\max_{\paramValue \in \paramRange}}
@@ -85,6 +92,9 @@
     \sum_{i} \KlCond[#1][][][][#2]
 }
 
+\newcommand{\Dminimax}[1][P]{\int \sumixe \lowercase{#1}(\xet[i]) \ln \frac{\pi(\xIet[i])}{#1(\xIe[i])} d\paramValue}
+
+
 \newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\sumxe}{\sum_{\rval{x}, \rval{e}}}
 \newcommand{\sumixe}{\sum_i \sum_{\rval[i]{x}, \rval[i]{e}}}
@@ -102,6 +112,12 @@
     \uppercase{#1}(#2) = \marginal[\lowercase{#1}]{#2}
 }
 
+\newcommand{\convexCond}[2]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
+\newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
+\newcommandx{\parDeriv}[2][1=\mathcal{L}, 2=\epsilon]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommandx{\parDerivAt}[3][1=\mathcal{L}, 2=\epsilon, 3={\epsilon=0}]{
+    \left. \frac{\partial{#1}}{\partial{#2}} \right|_{#3}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -119,7 +135,7 @@
 \newcommand{\vval}[1]{\ensuremath{\mathbf{\lowercase{#1}}}\xspace}
 
 \newcommand{\centralE}{\central[\QvarIE]}
-\newcommand{\cPrior}[1][(\paramValue)]{c#1}
+
 
 \newcommand{\cMass}{c_\set{X}}
 \newcommand{\rhoPrior}[1][(\paramB \mid \paramA)]{\rho#1}
@@ -146,14 +162,11 @@
 \newcommand{\QvarIE}{\Qvar|\Evar}
 \newcommand{\aggParam}{\agg{\varTheta}}
 \newcommand{\aggParamVal}{\agg{\theta}}
-\newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
 \newcommand{\aggDxP}[1][P]{\measure{D}_{\agg{\Qvar} \mid \agg{\rv{e}}} \left[ \agg{#1} \right]}
 
 \newcommand{\DxeCond}[1][P]{\DxCond{#1}{\Evar}}
 
 \newcommand{\sumOverix}{\sum_i \sum_{\rval[i]{x}}}
-
-\newcommand{\convexCond}[2][Q]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
 
 
 
@@ -161,8 +174,6 @@
 \newcommand{\YIx}{\rv[]{Y} \mid \rval[]{x}}
 
 \newcommand{\xIt}{\rval{x} \mid \paramValue}
-\newcommand{\xet}{\rval{x}, \rval{e}, \paramValue}
-\newcommand{\xIet}{\rval{x} \mid \rval{e},  \paramValue}
 
 \newcommand{\tIxe}{\paramValue \mid \rval{x}, \rval{e}}
 \newcommand{\tIe}{\paramValue \mid \rval{e}}
@@ -213,8 +224,6 @@
 
 \newcommand{\Dparam}[1][P]{\KlCond[#1]}
 
-\newcommand{\Dminimax}[1][P]{\int \sumxe \lowercase{#1}(\xet) \ln \frac{\pi(\xIet)}{#1(\xIe)} d\paramValue}
-
 
 \newcommand{\KLab}[4]{
     \sum_{#1, #2} \pi(#1, #2 \mid #3, #4) \ln \frac{\cMass(#4 \mid #1, #2)}{\cMass(#4 \mid #3)}
@@ -225,10 +234,7 @@
 \newcommand{\Lagr}[1][\epsilon]{\mathcal{L} \left[#1, \lambda\right]}
 
 \newcommand{\de}[2][\epsilon]{\frac{d#2}{d#1}}
-\newcommandx{\parDeriv}[2][1=\mathcal{L}, 2=\epsilon]{\frac{\partial{#1}}{\partial{#2}}}
-\newcommandx{\parDerivAt}[3][1=\mathcal{L}, 2=\epsilon, 3={\epsilon=0}]{
-    \left. \frac{\partial{#1}}{\partial{#2}} \right|_{#3}
-}
+
 \newcommand{\Magg}{\agg{\M}}
 \newcommand{\given}[2]{#1|#2}
 

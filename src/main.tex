@@ -40,12 +40,16 @@
 \newcommand{\prior}{\mathFix{p(\paramValue)}}
 \newcommand{\param}{\rv{\varTheta}}
 \newcommand{\paramValue}{\rval{\theta}}
+\newcommand{\paramFunc}[1][]{\Omega_{#1}}
+\newcommand{\paramFuncValue}[1][]{\omega_{#1}}
 \newcommand{\paramRange}{\Theta}
 \newcommand{\Qset}{\set{x}}
 \newcommand{\central}[1][\Qset]{\mathFix{C_{#1}}}
-\newcommand{\cPrior}[1][(\paramValue)]{c_\Qset#1}
+\newcommand{\cPrior}[1][(\paramValue)]{\mathFix{c_{\Qset}#1}}
+\newcommand{\cMass}[1]{c_{\Qset}(#1)}
+\newcommand{\rhoMass}{\phi(\paramFuncValue[i])}
 
-\newcommand{\Xpairs}{\mathFix{\set{X} = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
+\newcommand{\Xpairs}{\mathFix{\Qset = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
 
 \newcommand{\X}[1][]{\rv[#1]{x}}
 \newcommand{\x}[1][]{\rval[#1]{x}}
@@ -58,13 +62,17 @@
 \newcommand{\xe}[1][]{\rval[#1]{x}, \rval[#1]{e}}
 \newcommand{\xIe}[1][]{\rval[#1]{x} \mid \rval[#1]{e}}
 \newcommand{\xeIt}[1][]{\xe[#1] \mid  \paramValue}
+\newcommand{\xIt}[1][]{\x[#1] \mid \paramValue}
 \newcommand{\xet}[1][]{\xe[#1], \paramValue}
 \newcommand{\xIet}[1][]{\rval[#1]{x} \mid \rval[#1]{e},  \paramValue}
+\newcommand{\tIw}[1][]{\paramValue \mid \paramFuncValue[#1]}
+\newcommand{\xIw}[1][]{\x[#1] \mid \paramFuncValue[#1]}
+\newcommand{\wIx}[1][]{\paramFuncValue[#1] \mid \x[#1]}
 
 \newcommand{\minP}{\min_{P \in \set{P}}}
 \newcommand{\maxQ}{\max_{Q \in \set{P}}}
 \newcommand{\maxParam}{\max_{\paramValue \in \paramRange}}
-\newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots, \rv[{#2}]{#1}}
+\newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots \ifthenelse{\isempty{#2}}{}{, \rv[{#2}]{#1}}}
 \newcommand{\seqRval}[2][x]{\rval[1]{#1}, \ldots, \rval[{#2}]{#1}}
 % Formula
 \newcommand{\assign}[2][]{\rv[#1]{#2} = \rval[#1]{#2}}
@@ -88,8 +96,8 @@
 \newcommandx{\DxCondExpand}[2][1=P, 2=\paramValue, usedefault]{
     \Ex{\pi}{\sum_i \measure{D}\left( \pi_{\XIe[i], #2} \parallel #1_{\XIe[i]} \right) \;\middle|\;#2}
 }
-\newcommandx{\DxCondExpandFull}[2][1=P, 2=\paramValue, usedefault]{
-    \sum_{i} \KlCond[#1][][][][#2]
+\newcommandx{\DxCondExpandFull}[3][1=P, 2=\paramValue, 3=, usedefault]{
+    \sum_{i} \KlCond[{#1}][][{#3}][][{#2}]
 }
 
 \newcommand{\Dminimax}[1][P]{\int \sumixe \lowercase{#1}(\xet[i]) \ln \frac{\pi(\xIet[i])}{#1(\xIe[i])} d\paramValue}
@@ -97,6 +105,7 @@
 
 \newcommand{\sumx}{\sum_{\rval[]{x}}}
 \newcommand{\sumxe}{\sum_{\rval{x}, \rval{e}}}
+\newcommand{\sumix}{\sum_i \sum_{\x[i]}}
 \newcommand{\sumixe}{\sum_i \sum_{\rval[i]{x}, \rval[i]{e}}}
 
 \newcommandx{\D}[3][1={\X}, 2=Q, 3=P]{
@@ -137,16 +146,8 @@
 \newcommand{\centralE}{\central[\QvarIE]}
 
 
-\newcommand{\cMass}{c_\set{X}}
-\newcommand{\rhoPrior}[1][(\paramB \mid \paramA)]{\rho#1}
-
-
 \newcommand{\range}[1]{\mathcal{\uppercase{#1}}}
 \newcommand{\vrange}[1]{\mathcal{\uppercase{#1}}}
-
-\newcommand{\paramFunc}[1][i]{\Omega_{#1}}
-
-\newcommand{\paramFuncValue}[1][i]{\omega_{#1}}
 
 \newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
 \newcommand{\prob}[2][P]{#1(\vval{#2})}
@@ -166,21 +167,21 @@
 
 \newcommand{\DxeCond}[1][P]{\DxCond{#1}{\Evar}}
 
-\newcommand{\sumOverix}{\sum_i \sum_{\rval[i]{x}}}
+
 
 
 
 \newcommand{\XY}{\rv[]{X}, \rv[]{Y}}
 \newcommand{\YIx}{\rv[]{Y} \mid \rval[]{x}}
 
-\newcommand{\xIt}{\rval{x} \mid \paramValue}
+
 
 \newcommand{\tIxe}{\paramValue \mid \rval{x}, \rval{e}}
 \newcommand{\tIe}{\paramValue \mid \rval{e}}
-\newcommand{\tIw}{\paramValue \mid \paramFuncValue}
+
 \newcommand{\eIt}{\rval{e} \mid \paramValue}
-\newcommand{\xIw}{\rval{x} \mid \paramFuncValue}
-\newcommand{\wIx}{\paramFuncValue \mid \rval{x}}
+
+
 \newcommand{\paramB}{\rval{\beta}}
 \newcommand{\paramA}{\rval{\alpha}}
 \newcommand{\ab}{\paramA, \paramB}
@@ -201,10 +202,6 @@
 \newcommand{\seqRvalInf}[1][x]{\rval[1]{#1}, \rval[2]{#1}, \ldots}
 \newcommand{\seqRvInf}[1][x]{\rv[1]{#1}, \rv[2]{#1}, \ldots}
 \newcommand{\rvEq}[1][x]{\rv[]{#1} = \rval[]{#1}}
-
-\newcommand{\Xsingles}{
-    \set{X} = \left\{\rv[1]{X}, \rv[2]{X}, \rv[3]{X}, \ldots \right\}
-}
 
 
 
@@ -242,7 +239,7 @@
 \newcommand{\model}{\ensuremath{\M \equiv \left(\set{S}, \set{P}\right)}\xspace}
 \newcommand{\aggmodel}{\ensuremath{\Magg \equiv \left(\agg{\set{S}}, \agg{\set{P}}\right)}
 \xspace}
-
+\newcommand{\sumOverix}{dff}
 
 \newcommand{\maxP}{\max_{P \in \set{P}}}
 \newcommand{\maxE}{\max_{\rv{E} \in \set{E}}}

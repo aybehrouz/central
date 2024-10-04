@@ -281,6 +281,74 @@ the multinomial parameters.
 
 This theorem gives a necessary condition for the central probability measure in the general case.
 
+
+\begin{theorem}
+    Assume \pmodel is a generic parametric model, and $\Qset = \{\seqRv{}\}$ is a query set in \Mt.
+    Let $\paramFunc[i]$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \X[i],
+    so that for $\paramFuncValue[i] = \paramFunc[i](\paramValue)$ we have:
+    \begin{equation}
+        \pi(\xIt[i]) = \pi \left( \xIw[i] \right)\cdot
+        \label{eq:func_of_theta}
+    \end{equation}
+    We define a functional $\functional{}$ of an unnormalized probability measure $\rho$ as
+    follows:
+    \begin{equation}
+        \functional{\rho} = \left( \prod_i p(\tIw[i]) \rhoMass \right)^{\frac{1}{|\Qset|}},
+        \label{eq:fixed_point_cx}
+    \end{equation}
+    where $p$ is the normalized probability measure obtained from $\rho$, and
+    \[
+        \rhoMass = \exp \left\{\sum_{\x[i]} \pi(\xIw[i]) \ln p(\wIx[i]) \right\}\cdot
+    \]
+    If \cPrior is the prior distribution corresponding to the central probability measure for \Qset in \Mt,
+    then $\mu \cPrior$ is a fixed point for $\functional{}$, where
+    \[
+        \mu = \exp \left\{\frac{1}{|\Qset|}\int \DxCond[\central] \dt[\cPrior[]] \right\} \cdot
+    \]
+\end{theorem}
+
+\begin{proof}
+    First, we show that the set of distributions of each \X[i] is a convex set.
+
+    Let $Q^*(\x[i]) = \convexCond{Q}{\x[i]}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
+    arbitrary $i, \x[i]$.
+    \Mt is a parametric model:
+    \begin{align*}
+        Q^*(\x[i]) &= \alpha \marginal[q_1]{\x[i]} + (1 - \alpha) \marginal[q_2]{\x[i]}\\
+        &= \int \pi(\xIt[i]) (\convexCond{q}{\paramValue}) d\paramValue\cdot
+    \end{align*}
+    $\convexCond{q}{\paramValue}$ is a valid probability distribution and \Mt is a generic parametric model.
+    That implies $Q^* \in \set{P}$.
+
+    Thus, the conditions of Theorem~\ref{th:lambda} holds and the central distribution of \Qset satisfies
+    \begin{equation*}
+        \DxCond[\central ] = \lambda \cdot \\
+    \end{equation*}
+    Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
+    \begin{align*}
+        \DxCond[\central] &= \DxCondExpandFull[\central][][ ] \\
+        &= \DxCondExpandFull[\central][{\paramFuncValue[i]}][ ] \\
+        &= \sumix \pi(\xIw[i]) \ln \frac{\cMass{\wIx[i]}}{\cMass{\paramFuncValue[i]}}\\
+        &= \sum_i \ln \frac{\rhoMass}{\cMass{\paramFuncValue[i]}}\cdot
+    \end{align*}
+    That implies
+    \begin{equation}
+        \label{eq:fixed_point_proof}
+        \sum_i \ln \cMass{\paramFuncValue[i]} = \sum_i \ln \rhoMass - \lambda \cdot
+    \end{equation}
+    For $\paramFunc[i](\paramValue) = \paramFuncValue[i]$, we have $\cMass{\paramValue, \paramFuncValue[i]}=\cPrior$.
+    Therefore,
+    \begin{equation*}
+        \cMass{\paramFuncValue[i]} = \frac{\cPrior}{\cMass{\tIw[i]}}\cdot
+    \end{equation*}
+    We substitute this equation into Equation~\ref{eq:fixed_point_proof}:
+    \begin{align*}
+        e^{\frac{\lambda}{|\Qset|}} \cPrior &= \left( \prod_i \cMass{\tIw[i]} \rhoMass \right)^{
+            \frac{1}{|\Qset|}},
+    \end{align*}
+    where $|\Qset|$ is the number of elements of \Qset. \qedhere
+\end{proof}
+
 Consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is unfair, with each
 face marked by a binary number: $00$, $01$, $10$, and $11$.
 Before making our prediction, we can roll the dice for several times and use the results to learn the associated
@@ -384,65 +452,6 @@ For that, we need to use the central distribution for the query set $\set{x} \cu
 This seems reasonable, since when we want our probabilistic inference framework to choose between two versions of
 our problem, our query set should include random variables of both versions.
 
-\begin{theorem}
-    Let \pmodel be a generic parametric model, and $\Xsingles$ be a set of random variables in \Mt.
-    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \Qvar,
-    so that for $\paramFuncValue = \paramFunc(\paramValue)$ we have:
-    \begin{equation}
-        \pi(\xIt) = \pi \left( \rval{x} \mid \paramFuncValue \right)\cdot
-        \label{eq:func_of_theta}
-    \end{equation}
-    The prior distribution corresponding to the central distribution for \set{X} in \Mt can be characterized
-    by the following fixed point equation:
-    \begin{equation}
-        \cPrior \propto \left( \prod_i \cMass{\tIw} \rhoPrior \right)^{\frac{1}{|\set{x}|}},
-        \label{eq:fixed_point_cx}
-    \end{equation}
-    where
-    \[
-        \rhoPrior \propto \exp \left\{\sum_{\rval{x}} \pi(\xIw) \ln \cMass{\wIx} \right\}\cdot
-    \]
-
-\end{theorem}
-
-\begin{proof}
-    First, we show that the set of distributions of each \Qvar is a convex set.
-    Let $Q^*(\rval{x}) = \convexCond{Q}{\rval{x}}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
-    arbitrary $i, \rval{x}$.
-
-    \Mt is a parametric model.
-    Therefore,
-    \begin{align*}
-        Q^*(\rval{x}) &= \alpha \marginal[q_1]{\rval{x}} + (1 - \alpha) \marginal[q_2]{\rval{x}}\\
-        &= \int \pi(\xIt) (\convexCond{q}{\paramValue}) d\paramValue\cdot
-    \end{align*}
-    $\convexCond{q}{\paramValue}$ is a valid prior distribution and \Mt is a generic parametric model.
-    That implies $Q^* \in \set{P}$.
-
-    Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies
-    \begin{equation}
-        \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\central(\rval{x})} = \lambda\cdot
-        \label{eq:lambda_th_proof}
-    \end{equation}
-    Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
-    \begin{align*}
-        \sumOverix \pi(\xIt) \ln \frac{\pi(\xIt)}{\central(\rval{x})}
-        &= \sumOverix \pi(\xIw) \ln \frac{\pi(\xIw)}{\central(\rval{x})}\\
-        &= \sumOverix \pi(\xIw) \ln \frac{\cMass{\wIx}}{\cPrior[(\paramFuncValue)]}\\
-        &= \sum_i \ln \frac{\rhoPrior}{\cPrior[(\paramFuncValue])}\cdot
-    \end{align*}
-    Since each $\paramFunc$ is a function of $\param$, for $\paramFunc(\paramValue) = \paramFuncValue$
-    we have $\cMass{\paramValue, \paramFuncValue}=\cPrior$.
-    Therefore,
-    \begin{equation*}
-        \cPrior[(\paramFuncValue)] = \frac{\cPrior}{\cMass{\tIw}}\cdot
-    \end{equation*}
-    Now we rewrite Equation~\ref{eq:lambda_th_proof}:
-    \begin{align*}
-        |\set{X}| \ln \cPrior &= \sum_i \ln \left(\cMass{\tIw} \rhoPrior \right) - \lambda\\
-        \cPrior &= \left( e^{-\lambda} \prod_i \cMass{\tIw} \rhoPrior \right)^{\frac{1}{|\set{x}|}} \qedhere
-    \end{align*}
-\end{proof}
 
 
 \begin{theorem}
@@ -451,17 +460,17 @@ our problem, our query set should include random variables of both versions.
     so that for $\paramFuncValue = \paramFunc(\paramValue)$ we have:
     \begin{equation}
         \pi(\xIt) = \pi \left( \rval{x} \mid \paramFuncValue \right)\cdot
-        \label{eq:func_of_theta}
+        \label{eq:func_of_theta2}
     \end{equation}
     The prior distribution corresponding to the central distribution for \set{X} in \Mt can be characterized
     by the following fixed point equation:
     \begin{equation}
-        \bIaRoot \propto \left( \prod_i \frac{\abIab \rhoPrior}{\aIa} \right)^{\frac{1}{|\set{x}|}},
-        \label{eq:fixed_point_cx}
+        \bIaRoot \propto \left( \prod_i \frac{\abIab \rhoMass}{\aIa} \right)^{\frac{1}{|\set{x}|}},
+        \label{eq:fixed_point_cx2}
     \end{equation}
     where
     \[
-        \rhoPrior \propto \exp \left\{ \sumxe \xeIba \ln \bIxe \right\} \cdot
+        \rhoMass \propto \exp \left\{ \sumxe \xeIba \ln \bIxe \right\} \cdot
     \]
 
 \end{theorem}
@@ -491,7 +500,7 @@ our problem, our query set should include random variables of both versions.
         &= \Dparam[\central]\\
         &= \sumxe \xeIba \ln \frac{\xIeb}{\central(\xIe)} \\
         &= \sumxe \xeIba \ln \frac{\bIxe}{\cMass(\paramB \mid \rval{e})} \\
-        &= \sum_i \ln \frac{\rhoPrior}{\bIa}\cdot
+        &= \sum_i \ln \frac{\rhoMass}{\bIa}\cdot
     \end{align*}
     Since each $\paramFunc$ is a function of $\param$, for $\paramFunc(\paramValue) = \paramFuncValue$
     we have $\cMass{\paramValue, \paramA, \paramB}=\cPrior$ $\cMass{\alpha , \paramA} = \cMass{\alpha}$.
@@ -501,16 +510,16 @@ our problem, our query set should include random variables of both versions.
     \end{equation*}
     Now we rewrite Equation~\ref{eq:lambda_th_proof}:
     \[
-        |\set{X}| \ln \bIaRoot = -\lambda + \sum_i \ln \frac{\abIab \rhoPrior}{\aIa}
+        |\set{X}| \ln \bIaRoot = -\lambda + \sum_i \ln \frac{\abIab \rhoMass}{\aIa}
     \]
     Then:
     \begin{align*}
         \bIaRoot
-        &= \left( e^{-\lambda} \prod_i \frac{\abIab \rhoPrior}{\aIa} \right)^{\frac{1}{|\set{x}|}} \\
-        &= \left( e^{-\lambda} \prod_i \frac{\bIaRoot \rhoPrior}{\bIa} \right)^{\frac{1}{|\set{x}|}} \\
-        &= \bIaRoot \left( \prod_i \frac{ \rhoPrior}{\bIa} \right)^{\frac{1}{|\set{x}|}} \\
+        &= \left( e^{-\lambda} \prod_i \frac{\abIab \rhoMass}{\aIa} \right)^{\frac{1}{|\set{x}|}} \\
+        &= \left( e^{-\lambda} \prod_i \frac{\bIaRoot \rhoMass}{\bIa} \right)^{\frac{1}{|\set{x}|}} \\
+        &= \bIaRoot \left( \prod_i \frac{ \rhoMass}{\bIa} \right)^{\frac{1}{|\set{x}|}} \\
         &= \bIaRoot \left(e^{-\lambda} \prod_i
-        \frac{\rhoPrior[(\paramA, \paramB) \cMass(\paramA)]}{\cMass(\paramA, \paramB) \rhoPrior[(\paramA)] } \right)
+        \frac{\rhoMass[(\paramA, \paramB) \cMass(\paramA)]}{\cMass(\paramA, \paramB) \rhoMass[(\paramA)] } \right)
         ^{\frac{1
         }{|\set{x}|}}
         \qedhere

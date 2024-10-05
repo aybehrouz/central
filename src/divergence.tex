@@ -31,14 +31,14 @@ measuring divergence between distributions.
     Suppose that $\D[\X]$ is a divergence measure that quantifies the divergence of $P(\X)$ from $Q(\X)$.
     Consider the following properties:
     \begin{description}
-        \item[Consistency with entropy] Let $\varOmega$ be a continuous random variable. If $U(\varOmega)$ is the
-        uniform distribution
-        with the same support as $Q(\varOmega)$, then we have
+        \item[Consistency with entropy] Let $\varOmega$ be a continuous random variable, and $Q$ be a probability
+        measure.
+        If $U(\varOmega)$ is the uniform distribution with the same support as $Q(\varOmega)$, then we have
         \[
             \D[\varOmega][Q][U] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
         \]
         where $\entropy{}{}$ denotes Shannon's entropy.
-        \item[Additivity] For any two discrete random variables $\XY$
+        \item[Additivity] For any two discrete random variables $\XY$, and probability measures $P,Q$
         \[
             \D[\XY] = \D + \sumx \D[\YIx]Q(\rval[]{x})\cdot
         \]
@@ -107,14 +107,14 @@ Thus, if $Q$ is the probability measure that represents our beliefs, we can use 
 probability measure $P$, with respect to a random variable \X.
 In other words, we evaluate $P(\X)$ by $Q(\X)$.
 
-When we have two random variables \X and \Y, there are two distinct cases that should not be
+If we have two random variables, \X and \Y, there would be two distinct cases that should not be
 confused:
 We may want to evaluate $P(\XY)$, or we may want to evaluate $P(\X)$ and $P(\Y)$ separately.
 Evaluating the joint distribution $P(\XY)$ is straightforward and can be done by defining a new random variable
 $\rv{Z} = (\XY)$.
 
 However, the correct approach for handling the second case is not obvious.
-We could use a similar argument to what we used for the additive property.
+Here, we may use a similar argument to what we used for the additive property.
 When we want to evaluate the loss of $P(\XY)$, If \X happens first we will face the loss of $P(\X)$,
 then when \Y happens, we will face the loss of $P(\Y)$ only if \X and \Y are independent.
 Therefore, evaluating the marginal distributions $P(\X)$ and $P(\Y)$ appears to be the same as evaluating $P(\XY)$
@@ -122,8 +122,11 @@ when \X and \Y are independent, and we can use addition:
 \[
     \D[\X] + \D[\Y].
 \]
+Separate evaluation of random variable distributions is essential for the divergence measure that we will define
+shortly.
 
-The KL divergence provides us a method for measuring the agreement of a model about a specific distribution:
+The KL divergence provides a method for measuring the agreement of a model about a specific distribution.
+This agreement can be called convergence.
 
 \begin{definition}[$\epsilon$-convergence]
     \label{def:e-convergence}
@@ -143,8 +146,8 @@ The KL divergence provides us a method for measuring the agreement of a model ab
 $\epsilon$-convergence is closely related to the concept of Bayesian convergence, where the posterior converges to
 the same distribution regardless of the prior distribution.
 
-As an example, consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is
-unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
+As an example, consider a scenario where we are trying to predict the outcome of a four-sided dice.
+This dice is unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
 Before making our prediction, we can roll the dice multiple times, with each roll being independent.
 
 If we let \E be a vector representing the first 10 dice rolls and \X be the outcome of the next roll,
@@ -158,15 +161,17 @@ In other words, different probability measures in our model have different conve
 If there is a probability measure that provides $\epsilon$-convergence for a very small $\epsilon$, we can hardly
 justify using any other probability measure.
 However, that probability measure may not always exist.
-Moreover, we are unsure of what value of $\epsilon$ would be sufficiently small.
+Furthermore, we cannot determine what value of $\epsilon$ would be small enough.
 This becomes more problematic when we need to consider more than one distribution.
 For example, suppose that we are interested in the distributions of both $\X|\E[1]$ and $\X|\E[2]$.
 As we discussed earlier, when dealing with multiple distributions we should consider the sum of their KL divergences.
-Unfortunately, that would make determining the appropriate value of $\epsilon$ even harder.
+Unfortunately, that would make determining the appropriate value of $\epsilon$ even harder because that naturally
+increases the value of $\epsilon$.
 
-We could avoid all these hurdles by simpling choosing the probability measure that gives the smallest $\epsilon$.
-Subjectively, this probability measure is the ``safest'' choice in our model and it turns out that it behaves well even
-when the minimum achievable value of $\epsilon$ is not very small.
+We could avoid all these hurdles by simpling choosing the probability measure that gives the smallest
+possible $\epsilon$.
+Subjectively, this probability measure is the ``safest'' choice in our model and it turns out that it performs well
+even when the minimum achievable value of $\epsilon$ is not very small.
 
 \begin{definition}[Query Set]
     A \emph{query set} is a set of pairs of discrete random variables, all defined on the same sample space.
@@ -209,7 +214,7 @@ fully determines the distribution of the sample space.
     \end{align}
 \end{definition}
 
-Now that we have developed a divergence measure, we are ready to provide a formal definition for the probability
+Now that we have established a divergence measure, we are ready to provide a formal definition for the probability
 measure that we consider the ``safest'' choice in a model.
 
 \begin{definition}[Central Probability Measure]
@@ -249,9 +254,9 @@ After factoring out $\pi(\seqRval{n} \mid \paramValue)$ from every term:
 \[
     \sum_{\seqRval{n}} \pi(\seqRval{n} \mid \paramValue) \ln
     \frac
-    {\pi(\rval[1]{x} \mid \paramValue) \pi(\rval[2]{x} \mid \rval[1]{x}, \paramValue)
-    \cdots \pi(\rval[n]{x} \mid \seqRval{n-1}, \paramValue)}
-    {P(\rval[1]{x}) P(\rval[2]{x} \mid \rval[1]{x}) \cdots P(\rval[n]{x} \mid \seqRval{n-1})},
+    {\pi(\xIt[1]) \pi(\x[2] \mid \x[1], \paramValue)
+    \ldots \pi(\x[n] \mid \seqRval{n-1}, \paramValue)}
+    {P(\x[1]) P(\x[2] \mid \x[1]) \ldots P(\x[n] \mid \seqRval{n-1})},
 \]
 we use the chain rule for conditional probability:
 \begin{equation}
@@ -259,8 +264,8 @@ we use the chain rule for conditional probability:
     \label{eq:joint_form}
 \end{equation}
 
-This implies that we could alternatively define our query set as a set containing a single pair $\Qset = \{ (\X,\E) \}$,
-where \X represents the vector of $n$ dice rolls $\X = (\seqRv{n})$, and \E is a dummy certain event with $P(E) = 1$.
+This implies that we could alternatively define our query set as a set containing a single pair $\Qset = \{ (\XE) \}$,
+where \X represents the vector of $n$ dice rolls $\X = (\seqRv{n})$, and \E is a dummy certain event with $P(\E) = 1$.
 This query set essentially corresponds to the entire sample set for $n$ dice rolls.
 We usually simplify our notation and omit dummy events: $\Qset = \{\X\}$.
 
@@ -277,24 +282,6 @@ selection capabilities.
 In this probability measure, for smaller values of $i$, $P(\X[i] \mid \seqRv{i-1})$
 tends to get somewhat combined with $P(\X[i] \mid \seqRv[Y]{i-1})$.
 For example when $i = 2$, if the single observed dice roll is $01$, the posterior probabilities of
-$00,10$ and $11$ are not equal, and $P(11 \mid 01)$ is slighty higher than $P(00 \mid 01)$ and $P(10 \mid 01)$.
-That is to say this central probability measure detects that $01$ and $11$ are both odd numbers.
-
-
-%Therefore, we should define a new set $\Qset' = \{\X, \Y\}$, where $\Y = (\seqRv[Y]{n})$ and $\X = (\seqRv{n})$.
-%
-%% alternative form
-%The central probability measure for $\Qset = \{ \X \}$ tends to yield relatively high entropy estimates
-%for $P(\Y[i] \mid \seqRv[Y]{i-1})$, for small values of $i$.
-%\footnote{The situtation is not different
-%if we use a flat prior for our paprameters.}
-%We believe this comes from the fact that \X implicitly includes all its functions.
-%The central prob for x tries to have a good estimate for all these at the same time.
-%To see this note that $P(\X, f(\X)) = P(\X \mid f(\X))P(f(\X))$ that implies
-%\[
-%    \Dx[P][\X] \geq \Dx[P][f(\X)]
-%\]
-%If we want to obtain probabilities that align more closely with our intuition, we should include these random
-%variables in our query set.
-%We can let $\Qset = \{\X, \Y\}$, where $\Y = (\seqRv[Y]{n})$ and each \Y[i] represents the least significant bit of
-%the i-th dice roll.
+$00,10$ and $11$ are not equal, and $P(11 \mid 01) = 0.158$ is slightly higher than
+$P(00 \mid 01) = P(10 \mid 01) = 0.133$.
+It can be said that this central probability measure detects $01$ and $11$ are both odd numbers.

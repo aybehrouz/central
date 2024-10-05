@@ -42,9 +42,9 @@ minimizes the expected loss conditioned on \rval{e}:
     \label{eq:bayes-action}
 \end{align}
 This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
-Note that the value of the expected utility depends on $\envDist(\rv{E})$, but the actions that
-construct the optimal strategy are not affected by $\envDist(\rv{E})$.
-Only for suboptimal strategies $\envDist(\rv{E})$ plays a role and determines the importance of suboptimal actions.
+Note that the value of the expected loss depends on $\envDist(\E)$, but the actions that
+construct the optimal strategy are not affected by $\envDist(\E)$.
+Only for suboptimal strategies $\envDist(\E)$ plays a role and determines the importance of suboptimal actions.
 
 Here, $\envDist(\XE)$ is the joint probability distribution of the environment state and the evidence.
 However, how do we obtain this distribution?
@@ -70,8 +70,8 @@ We will refer to this refined set as a probabilistic model:
     space, and \set{P} is a set of acceptable probability measures on \set{S}.
 \end{definition}
 
-One of the most commonly used assumptions in the statistical modeling that determines the set of acceptable
-probability measures is the exchangeability assumption.
+In the statistical modeling, one of the most commonly used assumptions, that determines the set of acceptable
+probability measures, is the exchangeability assumption.
 We say a sequence of random variables $\seqRvInf$ is exchangeable, if the ordering of variables does not provide any
 useful information.
 In other words, for an exchangeable sequence of random variables, the joint probability is the same
@@ -102,7 +102,7 @@ distribution.
         \marginalEq{\rval[]{s}},
         \label{eq:parametric}
     \end{equation}
-    while $\pi$ is a fixed, known probability distribution.
+    where $\pi$ is a fixed, known probability distribution.
     We refer to $\pi$ as the \emph{likelihood} distribution.
 \end{definition}
 
@@ -114,14 +114,13 @@ to fully determine $\envDist$, we only need to determine the prior distribution 
 Clearly, one approach to selecting a suitable prior distribution $\prior$ is to rely on our prior knowledge about the
 environment.
 But, what if such knowledge is unavailable?
-Finding an answer to this important question is not simple.
+This is a crucial question.
 In Bayesian statistics, this is where non-informative priors come into play.
 These priors are typically chosen to be uniform or to represent a state of ignorance about the parameters.
-Unfortunately, these priors are not always ideal and can sometimes lead to misleading results.
 
 There is also another consideration that could play a role in choosing an appropriate prior distribution.
 Suppose that in our initial decision making problem, we choose to use a different
-evidence instead of \rv{E}, denoted as \rv{E'}.
+evidence $\E'$ instead of \E.
 Could this change potentially improve our strategy?
 Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
 To compare any two strategies, we simply compare their expected loss.
@@ -148,8 +147,8 @@ impractical large datasets.
 
 The key point here is that the space of strategies using \rv{E'} is a subset of strategies that use \rv{E}.
 When we are searching for the best strategy based on \rv{E}, we are implicitly evaluating all simpler forms as well.
-For this reason, we believe if we choose an appropriate prior distribution, feature selection should be performed
-automatically within the Bayesian decision theory framework, when we are finding the optimal strategy.
+For this reason, we believe if we choose an appropriate prior distribution, when we are finding the optimal
+strategy, feature selection should be performed automatically within the Bayesian decision theory framework,.
 However, many commonly used non-informative priors, such as the flat prior, do not exhibit feature
 selection characteristics.
 

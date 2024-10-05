@@ -50,7 +50,7 @@
 \newcommand{\rhoMass}{\phi(\paramFuncValue[i])}
 
 \newcommand{\Xpairs}{\mathFix{\Qset = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
-
+\newcommand{\inP}[1]{\mathFix{\uppercase{#1} \in \set{P}}}
 \newcommand{\X}[1][]{\rv[#1]{x}}
 \newcommand{\x}[1][]{\rval[#1]{x}}
 \newcommand{\Y}[1][]{\rv[#1]{y}}
@@ -70,6 +70,7 @@
 \newcommand{\wIx}[1][]{\paramFuncValue[#1] \mid \x[#1]}
 
 \newcommand{\minP}{\min_{P \in \set{P}}}
+\newcommand{\maxP}{\max_{P \in \set{P}}}
 \newcommand{\maxQ}{\max_{Q \in \set{P}}}
 \newcommand{\maxParam}{\max_{\paramValue \in \paramRange}}
 \newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots \ifthenelse{\isempty{#2}}{}{, \rv[{#2}]{#1}}}
@@ -123,10 +124,11 @@
 
 \newcommand{\convexCond}[2]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
 \newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
-\newcommandx{\parDeriv}[2][1=\mathcal{L}, 2=\epsilon]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommandx{\parDeriv}[2][1=\mathcal{L}, 2=\epsilon, usedefault]{\frac{\partial{#1}}{\partial{#2}}}
 \newcommandx{\parDerivAt}[3][1=\mathcal{L}, 2=\epsilon, 3={\epsilon=0}]{
     \left. \frac{\partial{#1}}{\partial{#2}} \right|_{#3}
 }
+\newcommand{\de}[2][\epsilon]{\frac{d#2}{d#1}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -230,7 +232,7 @@
 
 \newcommand{\Lagr}[1][\epsilon]{\mathcal{L} \left[#1, \lambda\right]}
 
-\newcommand{\de}[2][\epsilon]{\frac{d#2}{d#1}}
+
 
 \newcommand{\Magg}{\agg{\M}}
 \newcommand{\given}[2]{#1|#2}
@@ -241,7 +243,7 @@
 \xspace}
 \newcommand{\sumOverix}{dff}
 
-\newcommand{\maxP}{\max_{P \in \set{P}}}
+
 \newcommand{\maxE}{\max_{\rv{E} \in \set{E}}}
 
 

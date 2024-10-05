@@ -5,6 +5,14 @@ That means, for a parametric model, which allows any high peak prior, instead of
 all acceptable distributions, we can simply maximize over the parameter space, using the conditional version
 of the divergence measure.
 
+\begin{definition}[Generic Parametric Model]
+    We say a parametric model \pmodel is \emph{generic}, if for any arbitrary probability distribution $r$,
+    there is a probability measure $R \in \set{P}$, such that for every $\rval[]{s} \in \set{s}$
+    \[
+        \marginalEq[r]{\rval[]{s}}\cdot
+    \]
+\end{definition}
+
 \begin{lemma}
     \label{lm:DxP_uppper_bound}
     Assume that \pmodel is a parametric model.
@@ -19,28 +27,28 @@ of the divergence measure.
     \newcommand{\RP}{\sumixe \pi(\xeIt[i]) \ln \frac{R(\xIe[i])}{P(\xIe[i])}}
 
     Let $R$ and $P$ be two arbitrary probability measures in \Mt.
-    For every parameter value \paramValue we have:
+    For any parameter value \paramValue we have:
     \[
         \DxCond[P] - \DxCond[R] = \RP \cdot
     \]
-    Conditional divergence is always positive and we have
+    The conditional divergence is non-negative and we have
     \[
         \RP \leq \DxCond \cdot
     \]
-    This inequality holds for any \paramValue.
+    This inequality holds for every \paramValue.
     Therefore, the maximum of the right-hand side w.r.t. \paramValue is also greater than or equal to the
     maximum of the left-hand side:
     \begin{equation}
         \maxParam \RP \leq \maxParam \DxCond \cdot
         \label{eq:ineq-theorem1}
     \end{equation}
-    Trivially, for every \paramValue we have
+    Trivially, for any \paramValue we have
     \[
         \RP \leq \maxParam \RP \cdot
     \]
     \Mt is a parametric model and $\marginalEq[R]{\xe[i]}$, where $r(\paramValue)$ is
     a prior probability distribution.
-    Since this inequality holds for every value of \paramValue and $r(\paramValue) \geq 0$, we can multiply both
+    Since the above inequality holds for every value of \paramValue and $r(\paramValue) \geq 0$, we can multiply both
     sides by $r(\paramValue)$, and integrate.
     Notice that the right hand side is not a function of $\paramValue$ and it remains unchanged
     because $\int \dt[r] = 1$:
@@ -69,7 +77,7 @@ of the divergence measure.
 \end{theorem}
 
 \begin{proof}
-    For an arbitrary distribution $P \in \set{P}$, we let
+    For an arbitrary distribution \inP{P}, we let
     \[
         \paramValue^* = \arg\maxParam \DxCond \cdot
     \]
@@ -93,28 +101,21 @@ of the divergence measure.
     This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
 
-\begin{definition}[Generic Parametric Model]
-    We say a parametric model \pmodel is \emph{generic}, if for any arbitrary probability distribution $r$,
-    there is a probability measure $R \in \set{P}$, such that for every $\rval[]{s} \in \set{s}$
-    \[
-        \marginalEq[r]{\rval[]{s}}\cdot
-    \]
-\end{definition}
-
 \begin{proposition}
     A generic parametric model satisfies the conditions of Theorem~\ref{th:Dx_parametric_form}.
 \end{proposition}
 
-This implies that in a generic parametric model, we can obtain the central probability measure by:
+Theorem~\ref{th:Dx_parametric_form} implies that in a generic parametric model, we can obtain the central
+probability measure by:
 \begin{equation*}
     \central = \arg\minP \maxParam \DxCond  \cdot
 \end{equation*}
 
-This is a challenging minimax problem that cannot be easily solved directly.
-However, by using the minimax theorem we can convert it into a more conventional maximization problem which can be
+This is a challenging minimax problem that cannot be easily solved.
+However, by using the minimax theorem we can convert it into a more convenient maximization problem which can be
 solved by variational methods.
 
-\begin{theorem}[Minimax theorem~\cite{Du1995}]
+\begin{theorem}[Minimax~\cite{Du1995}]
     \label{th:minimax}
     Let $\set{X} \subset \mathbb {R}^{n}$ and $\set{Y} \subset \mathbb {R}^{m}$ be compact convex sets.
     If $f:\set{X}\times \set{Y}\rightarrow \mathbb {R}$ is a continuous function that is concave-convex, i.e.
@@ -130,21 +131,21 @@ solved by variational methods.
     \end{equation}
 \end{theorem}
 
-A vector in $R^n$ shares many properties with a real function.
+A vector in $\mathbb {R}^{n}$ shares many properties with a real function.
 We sometimes assume that a real function is a real vector, and vice versa.
-In the next theorem we will use this theorem, assuming $x$ is a real function.
+In the next theorem we will use the minimax theorem, assuming $x$ is a real function.
 
 \begin{theorem}
     \label{th:central_by_max}
     Consider a generic parametric model \pmodel,
     and let $\Xpairs$ be a query set in \Mt.
-    Assume that for every $Q_1, Q_2 \in \set{P}$ and any real number $0 \leq \alpha \leq 1$, there is
-    a distribution $Q^* \in \set{P}$, such that for every $i, \xe[i]$ we have
+    Assume that for every \inP{Q_1, Q_2} and any real number $0 \leq \alpha \leq 1$, there is
+    a distribution \inP{Q^*}, such that for every $i, \xe[i]$ we have
     \begin{equation}
         Q^*(\xIe[i]) = \convexCond{Q}{\xIe[i]}\cdot
         \label{eq:convex_dist_set}
     \end{equation}
-    Then, the central distribution for $\set{X}$ can be obtained by:
+    Then, the central distribution for \Qset can be obtained by:
     \begin{align}
         \central  &= \arg\maxP \int \DxCond \dt
         \label{eq:Cx_by_max}
@@ -153,13 +154,13 @@ In the next theorem we will use this theorem, assuming $x$ is a real function.
 
 \begin{proof}
     \newcommandx{\f}[2][1 = r, 2 = P_{\XIE[i]}]{ f(#1, #2)}
-    We prove this theorem using the Minimax theorem.
-    To do so, we define a functional as follows:
+    We prove this theorem using the minimax theorem.
+    To do so, we define a function as follows:
     \begin{equation*}
         \f = \int \DxCondExpand \dt[r] \cdot
     \end{equation*}
     Here, $r(\paramValue)$ is an arbitrary probability distribution, and $P_{\XIE[i]}$ is a vector that includes
-    all values of $P(\assign[i]{x} \mid \assign[i]{e})$ for every $i, \xe[i]$, where $P \in \set{P}$.
+    all values of $P(\assign[i]{x} \mid \assign[i]{e})$ for every $i, \xe[i]$.
 
     Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is similar to maximizing
     with respect to $\paramValue$, and we have
@@ -167,11 +168,9 @@ In the next theorem we will use this theorem, assuming $x$ is a real function.
         \central = \arg\minP \max_{r} \f\cdot
     \]
 
-    The domain of $r$ is the set of all probability distributions, which is a compact convex set.
-    Moreover, from Equation~\ref{eq:convex_dist_set}, it follows that the domain of $P_{\XIE[i]}$ vectors is also a
-    compact convex set.
-
-    For a fixed $P_{\XIE[i]}$, $\f[\cdot]$ is a linear function, which is both concave and convex.
+    For a fixed $P_{\XIE[i]}$, $\f[\cdot]$ is a linear function.
+    The domain of this function is the set of all probability distributions, which is a compact convex set,
+    and this function is both concave and convex.
 
     On the other hand, for a fixed $r$, if we let $\marginalEq[r]{\xe[i]}$ we have
     \begin{equation}
@@ -179,11 +178,13 @@ In the next theorem we will use this theorem, assuming $x$ is a real function.
         \label{eq:max_for_P}
     \end{equation}
     where $c$ is not a function of $P_{\XIE[i]}$.
-
+    From Equation~\ref{eq:convex_dist_set}, it follows that the domain of the $P_{\XIE[i]}$-vectors is also a
+    compact convex set.
     If we calculate the Hessian matrix of $\f[r][\cdot]$, we observe that the matrix is
     diagonal, and each element of the main diagonal is $\frac{R(\xIe[i])}{P(\xIe[i])^2}$.
     Thus, the hessian matrix of $\f[r][\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
-    Therefore, we can use Theorem~\ref{th:minimax}
+
+    Hence, we can use Theorem~\ref{th:minimax}
     \begin{equation}
         \minP \max_{r} \f = \max_{r} \minP \f\cdot
         \label{eq:divergence_minmax}
@@ -203,20 +204,21 @@ In the next theorem we will use this theorem, assuming $x$ is a real function.
         \sumixe R(\xe[i]) \ln P(\xIe[i]) \leq \sumixe R(\xe[i]) \ln R(\xIe[i])\cdot
     \]
     Recall that \Mt is a generic parametric model.
-    That implies $R \in \set{P}$, and we can reach this upper bound by letting $P = R$.
+    That implies \inP{R}, and we can reach this upper bound by letting $P = R$.
     Hence, for a fixed $r$
     \[
         \minP \f = \int \DxCondExpand[R] \dt[r] \cdot
     \]
     By Equation~\ref{eq:divergence_minmax}, we conclude
     \[
-        \central = \arg\max_{R \in \set{P}} \int \DxCond[R] \dt[r] \cdot \qedhere
+        \central = \arg\max_{\inP{R}} \int \DxCond[R] \dt[r] \cdot \qedhere
     \]
 \end{proof}
 
 Now, let's use this theorem for our dice example and rewrite Equation~\ref{eq:joint_form}:
 \begin{align*}
-    \central = \arg\max_{p} \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
+    \central &= \arg\maxP \int \KlCond[][\seqRval{n}][ ] \dt \\
+    &= \arg\maxP \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
     \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
 \end{align*}
 This means that the central distribution for our dice example, when we consider a query set equivalent to the
@@ -260,12 +262,13 @@ the multinomial parameters.
         \de{P(\xe[i])} &= \marginal[\eta]{\xe[i]},\\
         \de{P(\e[i])} &= \marginal[\eta]{\e[i]}\cdot
     \end{align*}
-    Using the chain rule of calculus, we calculate the partial derivative of $\Lagr$ relative to $\epsilon$:
+    By the generalized chain rule of calculus, for the partial derivative of $\Lagr$ relative to $\epsilon$ we have
     \begin{align*}
-        \parDeriv\ =\ &\int \left( \DxCondExpandFull  \right) \dt[\eta] \\
-        &- \int \left( \sumixe \pi(\xeIt[i]) \frac{\marginal[\eta]{\xe[i]}}{P(\xe[i])} \right) \dt \\
-        &+ \int \left( \sum_i \sum_{\e[i]} \pi(\e[i] \mid \paramValue) \frac{\marginal[\eta]{\e[i]}}{P(\e[i])} \right) \dt \\
-        &- \int \lambda \dt[\eta]
+        \parDeriv &= \int \parDeriv[][p(\paramValue)] \de{p(\paramValue)} d\paramValue +
+        \sumixe \left( \parDeriv[][{P(\xe[i])}] \de{P(\xe[i])} + \parDeriv[][{P(\e[i])}] \de{P(\e[i])} \right) \\
+        &= \int \left(-\lambda + \DxCondExpandFull  \right) \dt[\eta] \\
+        &- \sumixe \left(\frac{1}{P(\xe[i])} \marginal{\xe[i]} \marginal[\eta]{\xe[i]} \right) \\
+        &+ \sum_i \sum_{\e[i]} \left(\frac{1}{P(\e[i])} \marginal{\e[i]} \marginal[\eta]{\e[i]} \right) \cdot
     \end{align*}
     Since $\marginalEq{\xe[i]}$ and $\marginalEq{\e[i]}$, we get
     \begin{equation*}
@@ -309,16 +312,16 @@ This theorem gives a necessary condition for the central probability measure in 
 
 \begin{proof}
     First, we show that the set of distributions of each \X[i] is a convex set.
-
-    Let $Q^*(\x[i]) = \convexCond{Q}{\x[i]}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
+    Let $Q^*(\x[i]) = \convexCond{Q}{\x[i]}$, for some \inP{Q_1, Q_2}, $0 \leq \alpha \leq 1$ and
     arbitrary $i, \x[i]$.
-    \Mt is a parametric model:
+    \Mt is a parametric model.
+    Therefore:
     \begin{align*}
         Q^*(\x[i]) &= \alpha \marginal[q_1]{\x[i]} + (1 - \alpha) \marginal[q_2]{\x[i]}\\
         &= \int \pi(\xIt[i]) (\convexCond{q}{\paramValue}) d\paramValue\cdot
     \end{align*}
     $\convexCond{q}{\paramValue}$ is a valid probability distribution and \Mt is a generic parametric model.
-    That implies $Q^* \in \set{P}$.
+    That implies \inP{Q^*}.
 
     Thus, the conditions of Theorem~\ref{th:lambda} holds and the central distribution of \Qset satisfies
     \begin{equation*}
@@ -337,7 +340,7 @@ This theorem gives a necessary condition for the central probability measure in 
         \sum_i \ln \cMass{\paramFuncValue[i]} = \sum_i \ln \rhoMass - \lambda \cdot
     \end{equation}
     For $\paramFunc[i](\paramValue) = \paramFuncValue[i]$, we have $\cMass{\paramValue, \paramFuncValue[i]}=\cPrior$.
-    Therefore,
+    Hence,
     \begin{equation*}
         \cMass{\paramFuncValue[i]} = \frac{\cPrior}{\cMass{\tIw[i]}}\cdot
     \end{equation*}

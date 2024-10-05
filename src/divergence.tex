@@ -177,7 +177,7 @@ even when the minimum achievable value of $\epsilon$ is not very small.
     A \emph{query set} is a set of pairs of discrete random variables, all defined on the same sample space.
 \end{definition}
 
-\begin{definition}
+\begin{definition}[Divergence Measure]
     Let \Xpairs, be a query set in a probabilistic model \model.
     We define the \emph{divergence measure of $P \in \set{P}$ for \Qset} as follows:
     \begin{align}
@@ -213,6 +213,10 @@ fully determines the distribution of the sample space.
         \label{eq:cond_div_measure}
     \end{align}
 \end{definition}
+
+\begin{proposition}
+    For any value of \paramValue, the conditional divergence is non-negative.
+\end{proposition}
 
 Now that we have established a divergence measure, we are ready to provide a formal definition for the probability
 measure that we consider the ``safest'' choice in a model.
@@ -284,4 +288,4 @@ tends to get somewhat combined with $P(\X[i] \mid \seqRv[Y]{i-1})$.
 For example when $i = 2$, if the single observed dice roll is $01$, the posterior probabilities of
 $00,10$ and $11$ are not equal, and $P(11 \mid 01) = 0.158$ is slightly higher than
 $P(00 \mid 01) = P(10 \mid 01) = 0.133$.
-It can be said that this central probability measure detects $01$ and $11$ are both odd numbers.
+It can be said that this central probability measure identifies that $01$ and $11$ are both odd numbers.

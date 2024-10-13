@@ -262,13 +262,12 @@ the multinomial parameters.
         \de{P(\xe[i])} &= \marginal[\eta]{\xe[i]},\\
         \de{P(\e[i])} &= \marginal[\eta]{\e[i]}\cdot
     \end{align*}
-    By the generalized chain rule of calculus, for the partial derivative of $\Lagr$ relative to $\epsilon$ we have
+    Using the chain rule of calculus, we calculate the partial derivative of $\Lagr$ relative to $\epsilon$:
     \begin{align*}
-        \parDeriv &= \int \parDeriv[][p(\paramValue)] \de{p(\paramValue)} d\paramValue +
-        \sumixe \left( \parDeriv[][{P(\xe[i])}] \de{P(\xe[i])} + \parDeriv[][{P(\e[i])}] \de{P(\e[i])} \right) \\
-        &= \int \left(-\lambda + \DxCondExpandFull  \right) \dt[\eta] \\
-        &- \sumixe \left(\frac{1}{P(\xe[i])} \marginal{\xe[i]} \marginal[\eta]{\xe[i]} \right) \\
-        &+ \sum_i \sum_{\e[i]} \left(\frac{1}{P(\e[i])} \marginal{\e[i]} \marginal[\eta]{\e[i]} \right) \cdot
+        \parDeriv\ =\ &\int \left( \DxCondExpandFull  \right) \dt[\eta] \\
+        &- \int \left( \sumixe \pi(\xeIt[i]) \frac{\marginal[\eta]{\xe[i]}}{P(\xe[i])} \right) \dt \\
+        &+ \int \left( \sum_i \sum_{\e[i]} \pi(\e[i] \mid \paramValue) \frac{\marginal[\eta]{\e[i]}}{P(\e[i])} \right) \dt \\
+        &- \int \lambda \dt[\eta]
     \end{align*}
     Since $\marginalEq{\xe[i]}$ and $\marginalEq{\e[i]}$, we get
     \begin{equation*}
@@ -352,8 +351,85 @@ This theorem gives a necessary condition for the central probability measure in 
     where $|\Qset|$ is the number of elements of \Qset. \qedhere
 \end{proof}
 
-Consider a scenario where we are trying to predict the outcome of a four-sided dice. This dice is unfair, with each
-face marked by a binary number: $00$, $01$, $10$, and $11$.
+A sample space, denoted by \set{s}, is the set of all possible outcomes of a random experiment.
+This set should be minimal and non redundant.
+That means if we believe two outcomes are not different, we should have a single member in \set{S}
+representing both outcomes.
+
+\begin{definition}
+    Let \set{s} be a sample space.
+    The action space of \set{s}, denoted by \A{s}, is the set of all functions from \set{S} to \field{R}, where \field{R}
+    is the field of real numbers.
+\end{definition}
+
+\begin{proposition}
+    The action space equals $\field{R}^{\set{S}}$, and is a vector space.
+\end{proposition}
+
+We can think of the members of \A{s} as hypothetical actions or gambles.
+Each action associates an amount of loss with every \inS.
+This loss is quantified by a real number.
+A negative loss indicates profit.
+
+\begin{definition} [Sure Thing, Sure Failure]
+    The \emph{sure thing} is a function \inA{\sure} such that for every \inS we have $\sure(s) = c$.
+    The \emph{sure failure} is a function \inA{\sureF} such that for every \inS we have $\sureF(s) > 0$
+\end{definition}
+
+\begin{definition}
+    Let \set{V} be a vector space over a field \field{F}.
+    A linear functional on \set{V} is a linear map from \set{V} to \field{F}.
+\end{definition}
+
+\begin{definition} [Expectation]
+    An \emph{expectation} for \set{s} is a linear functional on \A{s}, denoted by $\Ex{\set{s}}{\cdot}$, with the
+    following
+    properties:
+    \begin{itemize}
+        \item For a sure thing \sure, we have $\Ex{\set{s}}{\sure} = c$.
+        \item For a sure failure $\sureF$, we have $\Ex{\set{s}}{\sureF} > 0$.
+    \end{itemize}
+\end{definition}
+
+\begin{definition} [Conditional Expectation]
+    conditional expectation
+\end{definition}
+
+We do not need to explicitly define probability.
+
+\begin{definition} [Probability]
+    \renewcommand{\l}{\ell_{\event}}
+    \newcommand{\event}{\set{e}}
+    Let $\event \subseteq \set{s}$, and \inA{\l}, such that
+    \[
+        \l(s) =
+        \begin{cases}
+            1       & s \in \event, \\
+            0       & s \in \set{s} - \event \cdot
+        \end{cases}
+    \]
+    We define the probability of $\event$ as follows:
+    \[
+        P(\event) = \Ex{\set{s}}{\l} \cdot
+    \]
+\end{definition}
+
+\begin{definition} [Dual Map]
+    Let \set{a} and \set{b} be two sets.
+    Suppose $\maps{a}{b}$ is a map from \set{a} to \set{b}.
+    The dual map of $M$ is the map $\mapsDual{b}{a}$, defined for each $f \in \field{R}^{\set{b}}$ and
+    $a \in \set{a}$ by
+    \begin{equation*}
+        \dualMap(f) = f(M(a)) \cdot
+    \end{equation*}
+\end{definition}
+
+\begin{proposition}
+    The dual map is a linear map.
+\end{proposition}
+
+Consider a scenario where we are trying to predict the outcome of a four-sided dice.
+This dice is unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
 Before making our prediction, we can roll the dice for several times and use the results to learn the associated
 probabilities.
 We assume that the dice rolls are independent.
@@ -370,7 +446,8 @@ of the $i$-th dice roll.
 Imagine playing a game of chance involving our four-sided dice.
 After rolling the dice, we input the outcome into a mysterious machine.
 The machine then announces whether we have won or lost the game.
-We have no clue how the machine works. We are not even sure if the dice outcome truly affects the machine’s output.
+We have no clue how the machine works.
+We are not even sure if the dice outcome truly affects the machine’s output.
 All we know is that the machine is memory-less, and the result of each game is independent.
 
 Our goal is to learn how the machine operates through experimentation.
@@ -537,7 +614,7 @@ our problem, our query set should include random variables of both versions.
 Let’s revisit our discussion from the previous section.
 We saw that in Bayesian framework when we have evidence \rv{e'}, such that $\rv{e'} = f(\rv{e})$, the
 optimal strategy for \rv{e} always has a greater expected utility than any strategy that uses \rv{e'}.
-We stated that we believe...
+We stated that we believe
 
 
 \begin{definition}[Aggregator]

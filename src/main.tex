@@ -34,6 +34,8 @@
 \newcommand{\measure}[1]{\mathFix{\mathbb{#1}}}
 
 % Shortcut
+\newcommand{\A}[1]{\mathFix{\mathcal{A_{\mathcal{\uppercase{#1}}}}}}
+\newcommand{\field}[1]{\mathFix{\mathbb{#1}}}
 \newcommand{\Mt}{\mathFix{\M_{\param}}}
 \newcommand{\M}{\mathFix{\mathcal{M}}}
 \newcommand{\econverges}{$\epsilon$-converges }
@@ -51,6 +53,14 @@
 
 \newcommand{\Xpairs}{\mathFix{\Qset = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
 \newcommand{\inP}[1]{\mathFix{\uppercase{#1} \in \set{P}}}
+\newcommand{\inA}[1]{\mathFix{#1 \in \A{s}}}
+\newcommand{\inS}{\mathFix{s \in \set{s}}}
+\newcommand{\Ex}[2]{\measure{E}_{#1} \left[ #2 \right]}
+\newcommand{\maps}[3][M]{#1 : \set{#2} \to \set{#3}}
+\newcommand{\mapsDual}[2]{\maps[{\dualMap}]{\field{R}^{#1}}{\field{R}^{#2}}}
+\newcommand{\dualMap}[1][M]{\mathFix{{#1}^*}}
+\newcommand{\sure}{\mathFix{\ell_c}}
+\newcommand{\sureF}{\ell_f}
 \newcommand{\X}[1][]{\rv[#1]{x}}
 \newcommand{\x}[1][]{\rval[#1]{x}}
 \newcommand{\Y}[1][]{\rv[#1]{y}}
@@ -153,7 +163,7 @@
 
 \newcommand{\pcond}[3][P]{#1(\vval{#2} \mid \vval{#3})}
 \newcommand{\prob}[2][P]{#1(\vval{#2})}
-\newcommand{\Ex}[2]{\measure{E}_{#1} \left[ #2 \right]}
+
 \newcommandx{\Pcond}[3][1=P, 2=\rval{x}_i, 3=\rval{e}_i]{#1 \left(#2 \mid #3 \right)}
 
 \newcommand{\Eset}{\set{e}}
@@ -250,7 +260,7 @@
 % Document
 \begin{document}
 
-    \section{Introduction}
+    \section{Introduction}\label{sec:introduction}
     \input{intro}
 
 

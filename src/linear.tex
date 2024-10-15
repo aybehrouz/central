@@ -1,0 +1,162 @@
+\newcommand{\F}[1][]{\mathFix{\functional[F]{#1}}}
+\newcommand{\G}[1][]{\mathFix{\functional[G]{#1}}}
+\newcommand{\Es}[1][]{\mathFix{\Ex{\set{s}}{#1}}}
+\newcommand{\EsIe}[1][]{\mathFix{\Ex{\set{s} \mid \event}{#1}}}
+\newcommand{\event}{\set{e}}
+\newcommand{\eventInS}{\mathFix{\event \subseteq \set{s}}}
+\newcommand{\act}[1][\cap \event]{\mathFix{\ell_{#1}}}
+\newcommand{\sure}[1][\cap \event]{\mathFix{c_{#1}}}
+
+\subsection{Probability as a Linear Map}\label{subsec:probability-as-a-linear-map}
+
+A sample space, denoted by \set{s}, is the set of all possible outcomes of a random experiment.
+This set should be minimal and non redundant.
+That means if we believe two outcomes are not different, we should have a single member in \set{S}
+representing both outcomes.
+
+\begin{definition} [Action Space]
+    Let \set{s} be a sample space.
+    The action space of \set{s}, denoted by \A{s}, is the set of all functions from \set{S} to \field{R}, where \field{R}
+    is the field of real numbers.
+\end{definition}
+
+\begin{proposition}
+    The action space equals $\field{R}^{\set{S}}$, and is a vector space.
+\end{proposition}
+
+We can think of the members of \A{s} as hypothetical actions or gambles.
+Each action associates an amount of loss with every outcome \inS.
+This loss is quantified by a real number.
+A negative loss indicates profit.
+
+\begin{definition} [Sure Thing]
+    The \emph{sure thing}, denoted by \sure[], is a member of \A{s} such that for every \inS we have
+    $\sure[](s) = 1$.
+\end{definition}
+
+\begin{definition}
+    Let \inA{\act[]} and let \eventInS.
+    The restriction of \act[] to \event, denoted by \act, is a member of \A{s} such that
+    \[
+        \act(s) =
+        \begin{cases}
+            \act[](s)       & s \in \event, \\
+            0       & s \in \set{s} - \event \cdot
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{definition} [Linear Functional]
+    Let \set{V} be a vector space over a field \field{F}.
+    A linear functional on \set{V} is a linear map from \set{V} to \field{F}.
+\end{definition}
+
+\begin{definition} [Expectation]
+    An \emph{expectation} for \set{s} is a linear functional on \A{s}, denoted by \Es, with the
+    following properties:
+    \begin{itemize}
+        \item For the sure thing \sure[], we have $\Es[{\sure[]}] = 1$.
+        \item For the restriction of the sure thing to \eventInS, we have $\Es[\sure] \geq 0$.
+    \end{itemize}
+\end{definition}
+
+\begin{definition} [Conditional Expectation]
+    Let \Es be an expectation for \set{s} and let $\event \subseteq \set{s}$.
+    \Es conditioned on \event, denoted by \EsIe, is a linear map on \set{s} with the following properties:
+    \begin{itemize}
+        \item For the sure thing \sure[], we have $\EsIe[{\sure[]}] = 1$.
+        \item For any \inA{\act[]}, and the restriction of \act[] to \eventInS,
+        we have $\EsIe[{\act[]}] = 0$ if and only if $\Es[\act] = 0$.
+    \end{itemize}
+\end{definition}
+
+At this point, we have a complete framework for decision-making under uncertainty.
+Interestingly, we do not need to explicitly define probability.
+However, in order to present a more familiar framework, we provide a definition of conventional probability.
+
+\begin{definition} [Probability]
+    Let $\event \subseteq \set{s}$, and \sure be the restricted sure thing on \event.
+    We define the probability of $\event$ as follows:
+    \[
+        P(\event) = \Es[\sure] \cdot
+    \]
+\end{definition}
+
+We now will establish the familiar relationship between conditional expectation and normal expectation.
+
+\begin{lemma}
+    \label{lm:scale}
+    Let \F and \G be two linear functionals defined on a vector space \set{V}.
+    \F and \G have the same null space if and only if $\F = \lambda \G$ for some $\lambda \neq 0$.
+\end{lemma}
+
+\begin{proof}
+    If $\F = \lambda \G$, clearly $\F[v] = 0$ if and only if $\G[v] = 0$.
+    This proves the if part.
+
+    We prove the only if part by contradiction.
+    Assume $\F \neq \lambda \G$.
+    Then there exist $u,v \in \set{v}$ such that
+    \begin{equation*}
+        \F[u] \G[v] - \F[v] \G[u] \neq 0 \cdot
+    \end{equation*}
+    Let $w = \F[u]v - \F[v]u$.
+    Since \set{V} is a vector space $w \in \set{V}$.
+    \F and \G are linear.
+    Hence, $\F[w] = 0$ and $\G[w] = \F[u] \G[v] - \F[v] \G[u] \neq 0$ and the null spaces of \F and \G are not
+    equal.
+    This contradiction completes the proof.
+\end{proof}
+
+\begin{theorem}
+    Let \inA{\act[]} and $\event \subseteq \set{s}$, where \set{s} is a sample space.
+    If \act is the restriction of \act[] to \event, then we have
+    \begin{equation*}
+        \EsIe[{\act[]}] = \frac{\Es[\act]}{P(\event)} \cdot
+    \end{equation*}
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\Ae}{\A{s \cap \event}}
+    For an arbitrary \inA{\act[]}, let $\act[]' = \act[] - \act$.
+    Clearly, the restriction of $\act[]'$ to \event is the zero function, and therefore $\Es[\act'] = 0$.
+    Since \A{s} is a vector space we have \inA{\act[]'}, and the definition of conditional expectation
+    implies $\EsIe[{\act[]'}] = 0$.
+    Therefore
+    \begin{equation}
+        \EsIe[{\act[]}] - \EsIe[{\act}] = 0 \cdot
+        \label{eq:exp_cond_theorem}
+    \end{equation}
+
+    Consider \Ae is the set of all restricted actions to \event.
+    \Ae is a subspace of \A{s}.
+    By the definition of conditional expectation, the restrictions of \Es and \EsIe to \Ae have the same null space.
+    That implies by Lemma~\ref{lm:scale} for every $\act \in \Ae$ we have
+    \begin{equation*}
+        \EsIe[\act] = \lambda \Es[\act] \cdot
+    \end{equation*}
+    Thus, by Equation~\ref{eq:exp_cond_theorem}
+    \begin{equation*}
+        \EsIe[{\act[]}] = \lambda \Es[\act] \cdot
+    \end{equation*}
+
+    On the other hand, for the sure thing \sure[], we have
+    \begin{equation*}
+        \lambda = \frac{\EsIe[{\sure[]}]}{\Es[\sure]} = \frac{1}{P(\event)} \cdot
+    \end{equation*}
+    This proves the theorem.
+\end{proof}
+
+\begin{definition} [Dual Map]
+    Let \set{a} and \set{b} be two sets.
+    Suppose $\maps{a}{b}$ is a map from \set{a} to \set{b}.
+    The dual map of $M$ is the map $\mapsDual{b}{a}$, defined for each $f \in \field{R}^{\set{b}}$ and
+    $a \in \set{a}$ by
+    \begin{equation*}
+        \dualMap(f) = f(M(a)) \cdot
+    \end{equation*}
+\end{definition}
+
+\begin{proposition}
+    The dual map is a linear map.
+\end{proposition}

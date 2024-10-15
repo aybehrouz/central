@@ -7,7 +7,7 @@
 \newcommand{\act}[1][\cap \event]{\mathFix{\ell_{#1}}}
 \newcommand{\sure}[1][\cap \event]{\mathFix{c_{#1}}}
 
-\subsection{Probability as a Linear Map}\label{subsec:probability-as-a-linear-map}
+\subsection{Expectation as a Linear Map}\label{subsec:probability-as-a-linear-map}
 
 A sample space, denoted by \set{s}, is the set of all possible outcomes of a random experiment.
 This set should be minimal and non redundant.
@@ -30,13 +30,13 @@ This loss is quantified by a real number.
 A negative loss indicates profit.
 
 \begin{definition} [Sure Thing]
-    The \emph{sure thing}, denoted by \sure[], is a member of \A{s} such that for every \inS we have
+    The \emph{sure thing}, denoted by \sure[], is an element of \A{s} such that for every \inS we have
     $\sure[](s) = 1$.
 \end{definition}
 
 \begin{definition}
     Let \inA{\act[]} and let \eventInS.
-    The restriction of \act[] to \event, denoted by \act, is a member of \A{s} such that
+    The restriction of \act[] to \event, denoted by \act, is an element of \A{s} such that
     \[
         \act(s) =
         \begin{cases}
@@ -56,7 +56,7 @@ A negative loss indicates profit.
     following properties:
     \begin{itemize}
         \item For the sure thing \sure[], we have $\Es[{\sure[]}] = 1$.
-        \item For the restriction of the sure thing to \eventInS, we have $\Es[\sure] \geq 0$.
+        \item For the sure thing restricted to \eventInS, we have $\Es[\sure] \geq 0$.
     \end{itemize}
 \end{definition}
 
@@ -65,7 +65,7 @@ A negative loss indicates profit.
     \Es conditioned on \event, denoted by \EsIe, is a linear map on \set{s} with the following properties:
     \begin{itemize}
         \item For the sure thing \sure[], we have $\EsIe[{\sure[]}] = 1$.
-        \item For any \inA{\act[]}, and the restriction of \act[] to \eventInS,
+        \item For any \inA{\act[]}, and \act, the restriction of \act[] to \eventInS,
         we have $\EsIe[{\act[]}] = 0$ if and only if $\Es[\act] = 0$.
     \end{itemize}
 \end{definition}
@@ -75,7 +75,7 @@ Interestingly, we do not need to explicitly define probability.
 However, in order to present a more familiar framework, we provide a definition of conventional probability.
 
 \begin{definition} [Probability]
-    Let $\event \subseteq \set{s}$, and \sure be the restricted sure thing on \event.
+    Let $\event \subseteq \set{s}$, and \sure be the sure thing restricted to \event.
     We define the probability of $\event$ as follows:
     \[
         P(\event) = \Es[\sure] \cdot
@@ -91,7 +91,7 @@ We now will establish the familiar relationship between conditional expectation 
 \end{lemma}
 
 \begin{proof}
-    If $\F = \lambda \G$, clearly $\F[v] = 0$ if and only if $\G[v] = 0$.
+    If $\F = \lambda \G$, $\F[v] = 0$ if and only if $\G[v] = 0$ for every $v \in \set{V}$.
     This proves the if part.
 
     We prove the only if part by contradiction.
@@ -119,7 +119,7 @@ We now will establish the familiar relationship between conditional expectation 
 \begin{proof}
     \newcommand{\Ae}{\A{s \cap \event}}
     For an arbitrary \inA{\act[]}, let $\act[]' = \act[] - \act$.
-    Clearly, the restriction of $\act[]'$ to \event is the zero function, and therefore $\Es[\act'] = 0$.
+    Clearly, $\act[]'$ restricted to \event is the zero function, and therefore $\Es[\act'] = 0$.
     Since \A{s} is a vector space we have \inA{\act[]'}, and the definition of conditional expectation
     implies $\EsIe[{\act[]'}] = 0$.
     Therefore
@@ -128,7 +128,7 @@ We now will establish the familiar relationship between conditional expectation 
         \label{eq:exp_cond_theorem}
     \end{equation}
 
-    Consider \Ae is the set of all restricted actions to \event.
+    Let \Ae represent the set of all restricted actions to \event.
     \Ae is a subspace of \A{s}.
     By the definition of conditional expectation, the restrictions of \Es and \EsIe to \Ae have the same null space.
     That implies by Lemma~\ref{lm:scale} for every $\act \in \Ae$ we have

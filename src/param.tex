@@ -351,6 +351,16 @@ This theorem gives a necessary condition for the central probability measure in 
     where $|\Qset|$ is the number of elements of \Qset. \qedhere
 \end{proof}
 
+
+\newcommand{\F}[1][]{\mathFix{\functional[F]{#1}}}
+\newcommand{\G}[1][]{\mathFix{\functional[G]{#1}}}
+\newcommand{\Es}[1][]{\mathFix{\Ex{\set{s}}{#1}}}
+\newcommand{\EsIe}[1][]{\mathFix{\Ex{\set{s} \mid \event}{#1}}}
+\newcommand{\event}{\set{e}}
+\newcommand{\act}[1][\cap \event]{\mathFix{\ell_{#1}}}
+\newcommand{\sure}[1][\set{s}]{\mathFix{c_{#1}}}
+\newcommand{\sureF}{\ell_f}
+
 A sample space, denoted by \set{s}, is the set of all possible outcomes of a random experiment.
 This set should be minimal and non redundant.
 That means if we believe two outcomes are not different, we should have a single member in \set{S}
@@ -367,7 +377,7 @@ representing both outcomes.
 \end{proposition}
 
 We can think of the members of \A{s} as hypothetical actions or gambles.
-Each action associates an amount of loss with every \inS.
+Each action associates an amount of loss with every outcome \inS.
 This loss is quantified by a real number.
 A negative loss indicates profit.
 
@@ -376,33 +386,26 @@ A negative loss indicates profit.
     The \emph{sure failure} is a function \inA{\sureF} such that for every \inS we have $\sureF(s) > 0$
 \end{definition}
 
-\begin{definition}
+\begin{definition} [Linear Functional]
     Let \set{V} be a vector space over a field \field{F}.
     A linear functional on \set{V} is a linear map from \set{V} to \field{F}.
 \end{definition}
 
 \begin{definition} [Expectation]
-    An \emph{expectation} for \set{s} is a linear functional on \A{s}, denoted by $\Ex{\set{s}}{\cdot}$, with the
-    following
-    properties:
+    An \emph{expectation} for \set{s} is a linear functional on \A{s}, denoted by \Es, with the
+    following properties:
     \begin{itemize}
         \item For a sure thing \sure, we have $\Ex{\set{s}}{\sure} = c$.
         \item For a sure failure $\sureF$, we have $\Ex{\set{s}}{\sureF} > 0$.
     \end{itemize}
 \end{definition}
 
-\begin{definition} [Conditional Expectation]
-    conditional expectation
-\end{definition}
-
 We do not need to explicitly define probability.
 
 \begin{definition} [Probability]
-    \renewcommand{\l}{\ell_{\event}}
-    \newcommand{\event}{\set{e}}
-    Let $\event \subseteq \set{s}$, and \inA{\l}, such that
+    Let $\event \subseteq \set{s}$, and \inA{\act} be a restricted action on \event, such that
     \[
-        \l(s) =
+        \act(s) =
         \begin{cases}
             1       & s \in \event, \\
             0       & s \in \set{s} - \event \cdot
@@ -410,7 +413,7 @@ We do not need to explicitly define probability.
     \]
     We define the probability of $\event$ as follows:
     \[
-        P(\event) = \Ex{\set{s}}{\l} \cdot
+        P(\event) = \Ex{\set{s}}{\act} \cdot
     \]
 \end{definition}
 
@@ -427,6 +430,74 @@ We do not need to explicitly define probability.
 \begin{proposition}
     The dual map is a linear map.
 \end{proposition}
+
+\begin{definition}
+    The conditional operator of is a linear operator on \A{s} such that
+\end{definition}
+\begin{definition} [Conditional Expectation]
+    is a linear functional where is a restricted action.
+\end{definition}
+
+
+\begin{lemma}
+    \label{lm:scale}
+    Let \F and \G be two linear functionals defined on a vector space \set{V}.
+    \F and \G have the same null space if and only if $\F = \lambda \G$ for some $\lambda \neq 0$.
+\end{lemma}
+
+\begin{proof}
+    If $\F = \lambda \G$, clearly $\F[v] = 0$ if and only if $\G[v] = 0$.
+    This proves the if part.
+
+    We prove the only if part by contradiction.
+    Assume $\F \neq \lambda \G$.
+    Then there exist $u,v \in \set{v}$ such that
+    \begin{equation*}
+        \F[u] \G[v] - \F[v] \G[u] \neq 0 \cdot
+    \end{equation*}
+    Let $w = \F[u]v - \F[v]u$.
+    Since \set{V} is a vector space $w \in \set{V}$.
+    \F and \G are linear.
+    Hence, $\F[w] = 0$ and $\G[w] = \F[u] \G[v] - \F[v] \G[u] \neq 0$ and the null spaces of \F and \G are not
+    equal.
+    This contradiction completes the proof.
+\end{proof}
+
+\begin{definition}[Restricted Action]
+    A \emph{restricted action} to $\event \subseteq \set{S}$, denoted by \act, is a member of \A{s} such that $\act(s) = 0
+    $ for any $s \notin \event$.
+\end{definition}
+
+\begin{definition} [Conditional Expectation]
+    Let \Es be an expectation for the sample space \set{s} and $\event \subseteq \set{s}$.
+    \Es conditioned on \event, denoted by \EsIe, is a linear map on \set{s} such that
+    for any \inA{\act[]}, if $\Es[\act] = 0$ then $\EsIe[{\act[]}] = 0$,
+    where \inA{\act} is a restricted action to \event such that $\act(s) = \act[](s)$ for every $s \in \event$.
+\end{definition}
+
+\begin{theorem}
+    Let \inA{\act[]} and $\event \subseteq \set{s}$, where \set{s} is a sample space.
+    Suppose \inA{\act} is a restricted action to \event such that $\act(s) = \act[](s)$ for every $s \in \event$.
+    Then we have
+    \begin{equation*}
+        \EsIe[{\act[]}] = \frac{\Es[\act]}{P(\event)} \cdot
+    \end{equation*}
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\Ae}{\A{s \cap \event}}
+    We define \Ae to be the set of all restricted actions to \event.
+    \Ae is a subspace of \A{s}.
+    We can easily verify that the restrictions of \Es and \EsIe to \Ae have the same null space.
+    That implies by Lemma~\ref{lm:scale} for any \inA{\act}
+    \begin{equation*}
+        \EsIe[\act] = \lambda \Es[\act] \cdot
+    \end{equation*}
+    Since for the sure thing \sure we have $\EsIe[\sure] = 1$ this implies
+    \begin{equation*}
+        \lambda = \frac{1}{\Es[{\sure[\cap \event]}]} = \frac{1}{P(\event)}
+    \end{equation*}
+\end{proof}
 
 Consider a scenario where we are trying to predict the outcome of a four-sided dice.
 This dice is unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.

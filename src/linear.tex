@@ -1,50 +1,76 @@
+\newcommand{\sampleSet}[1][s]{\set{#1}}
+\newcommand{\sampleSetAlt}[1][s']{\set{#1}}
+\newcommand{\actionSet}[1][\sampleSet]{\mathFix{\mathcal{A}_{#1}}}
+\newcommand{\rstActionSet}[1][]{\actionSet[{\sampleSet \cap \event[{#1}]}]}
+\newcommand{\actionSetAlt}{\actionSet[s']}
+\newcommand{\rstOp}[1][\event]{\mathFix{R_{\cap #1}}}
+\newcommand{\act}[1][\sampleSet]{\mathFix{\ell_{#1}}}
+\newcommand{\rstAct}[1][\event]{\act[{\cap #1}]}
 \newcommand{\F}[1][]{\mathFix{\functional[F]{#1}}}
 \newcommand{\G}[1][]{\mathFix{\functional[G]{#1}}}
-\newcommand{\Es}[1][]{\mathFix{\Ex{\set{s}}{#1}}}
-\newcommand{\EsIe}[1][]{\mathFix{\Ex{\set{s} \mid \event}{#1}}}
-\newcommand{\event}{\set{e}}
-\newcommand{\eventInS}{\mathFix{\event \subseteq \set{s}}}
-\newcommand{\act}[1][\cap \event]{\mathFix{\ell_{#1}}}
-\newcommand{\sure}[1][\cap \event]{\mathFix{c_{#1}}}
+\newcommandx{\Expect}[2][1=, 2=\sampleSet]{\mathFix{\Ex{#2}{#1}}}
+\newcommand{\ExpAlt}[1][]{\Expect[{#1}][\sampleSetAlt]}
+\newcommand{\ExpectOnE}[1][]{\mathFix{\Ex{\sampleSet \mid \event}{#1}}}
+\newcommand{\event}[1][]{\mathFix{\set{e}_{#1}}}
+\newcommand{\eventAlt}{\set{e}'}
+\newcommand{\eventInS}{\mathFix{\event \subseteq \sampleSet}}
+\newcommand{\inA}[1]{\mathFix{#1 \in \actionSet}}
+
+\newcommand{\actAlt}[1][\cap \event']{\mathFix{\ell'_{#1}}}
+\newcommand{\sure}[1][\sampleSet]{\mathFix{c_{#1}}}
+\newcommand{\sureAlt}{\sure[\sampleSetAlt]}
+\newcommand{\maps}[3][M]{#1 : \set{#2} \to \set{#3}}
+\newcommand{\mapsDual}[2]{\maps[{\dualMap}]{\field{R}^{#1}}{\field{R}^{#2}}}
+\newcommand{\dualdualMap}[1][M]{\mathFix{{#1}^{**}}}
+\newcommand{\dualMap}[1][M]{\mathFix{{#1}^*}}
+
 
 \subsection{Expectation as a Linear Map}\label{subsec:probability-as-a-linear-map}
 
-A sample space, denoted by \set{s}, is the set of all possible outcomes of a random experiment.
-This set should be minimal and non redundant.
-That means if we believe two outcomes are not different, we should have a single member in \set{S}
-representing both outcomes.
+A sample space, denoted by \sampleSet, is the set of all possible outcomes of a random experiment.
+That is, the outcome of a random experiment can \emph{always} be represented by \emph{exactly one} element of \sampleSet.
 
 \begin{definition} [Action Space]
-    Let \set{s} be a sample space.
-    The action space of \set{s}, denoted by \A{s}, is the set of all functions from \set{S} to \field{R}, where \field{R}
+    Let \sampleSet be a sample space.
+    The action space of \sampleSet, denoted by \actionSet, is the set of all functions from \sampleSet to \field{R}, where \field{R}
     is the field of real numbers.
 \end{definition}
 
 \begin{proposition}
-    The action space equals $\field{R}^{\set{S}}$, and is a vector space.
+    The action space equals $\field{R}^{\sampleSet}$, and is a vector space.
 \end{proposition}
 
-We can think of the members of \A{s} as hypothetical actions or gambles.
-Each action associates an amount of loss with every outcome \inS.
+We can think of the members of \actionSet as hypothetical actions or gambles.
+Each action associates an amount of loss with every possible outcome \inS.
 This loss is quantified by a real number.
 A negative loss indicates profit.
 
 \begin{definition} [Sure Thing]
-    The \emph{sure thing}, denoted by \sure[], is an element of \A{s} such that for every \inS we have
-    $\sure[](s) = 1$.
+    The \emph{sure thing}, denoted by \sure[], is an element of \actionSet, such that $\sure[](s) = 1$ for every \inS.
 \end{definition}
 
 \begin{definition}
-    Let \inA{\act[]} and let \eventInS.
-    The restriction of \act[] to \event, denoted by \act, is an element of \A{s} such that
+    Let \eventInS.
+    The restriction to \event operator, denoted by \rstOp, is a linear operator on \actionSet,
+    such that $\rstOp(\act)$ for any \inA{\act} is an element of \actionSet and
     \[
-        \act(s) =
+        \rstOp(\act)(s) =
         \begin{cases}
-            \act[](s)       & s \in \event, \\
-            0       & s \in \set{s} - \event \cdot
+            \act(s)       & s \in \event, \\
+            0       & s \in \sampleSet - \event \cdot
         \end{cases}
     \]
+    We denote the range of \rstOp by \rstActionSet.
 \end{definition}
+
+\begin{proposition}
+    \rstActionSet is an invariant subspace of \actionSet under \rstOp.
+    If $\{\event[1], \event[2], \ldots \}$ is a partition of \sampleSet, then
+    \[
+        \actionSet = \rstActionSet[1] \oplus \rstActionSet[2] \oplus \ldots,
+    \]
+    where $\oplus$ indicates direct sum~\cite{axler}.
+\end{proposition}
 
 \begin{definition} [Linear Functional]
     Let \set{V} be a vector space over a field \field{F}.
@@ -52,21 +78,25 @@ A negative loss indicates profit.
 \end{definition}
 
 \begin{definition} [Expectation]
-    An \emph{expectation} for \set{s} is a linear functional on \A{s}, denoted by \Es, with the
+    An \emph{expectation} for \sampleSet is a linear functional on \actionSet, denoted by \Expect, with the
     following properties:
     \begin{itemize}
-        \item For the sure thing \sure[], we have $\Es[{\sure[]}] = 1$.
-        \item For the sure thing restricted to \eventInS, we have $\Es[\sure] \geq 0$.
+        \item For the sure thing \sure, we have $\Expect[{\sure}] = 1$.
+        \item For any \eventInS, we have $\Expect[\rstOp(\sure)] \geq 0$.
     \end{itemize}
 \end{definition}
 
+\begin{proposition}
+    \Expect is an element of the dual space of \actionSet.
+\end{proposition}
+
 \begin{definition} [Conditional Expectation]
-    Let \Es be an expectation for \set{s} and let $\event \subseteq \set{s}$.
-    \Es conditioned on \event, denoted by \EsIe, is a linear map on \set{s} with the following properties:
+    Let \Expect be an expectation for \sampleSet and let \eventInS.
+    \Expect conditioned on \event, denoted by \ExpectOnE, is a linear map on \sampleSet with the following properties:
     \begin{itemize}
-        \item For the sure thing \sure[], we have $\EsIe[{\sure[]}] = 1$.
-        \item For any \inA{\act[]}, and \act, the restriction of \act[] to \eventInS,
-        we have $\EsIe[{\act[]}] = 0$ if and only if $\Es[\act] = 0$.
+        \item For the sure thing \sure, we have $\ExpectOnE[{\sure}] = 1$.
+        \item For any \inA{\act}, and \eventInS,
+        we have $\ExpectOnE[{\act}] = 0$ if and only if $\Expect[\rstOp(\act)] = 0$.
     \end{itemize}
 \end{definition}
 
@@ -75,10 +105,9 @@ Interestingly, we do not need to explicitly define probability.
 However, in order to present a more familiar framework, we provide a definition of conventional probability.
 
 \begin{definition} [Probability]
-    Let $\event \subseteq \set{s}$, and \sure be the sure thing restricted to \event.
-    We define the probability of $\event$ as follows:
+    We define the probability of \eventInS as follows:
     \[
-        P(\event) = \Es[\sure] \cdot
+        P(\event) = \Expect[\rstOp(\sure)] \cdot
     \]
 \end{definition}
 
@@ -109,40 +138,42 @@ We now will establish the familiar relationship between conditional expectation 
 \end{proof}
 
 \begin{theorem}
-    Let \inA{\act[]} and $\event \subseteq \set{s}$, where \set{s} is a sample space.
-    If \act is the restriction of \act[] to \event, then we have
+    Let \inA{\act} and \eventInS, where \sampleSet is a sample space.
+    If \rstOp is the restriction operator to \event, then we have
     \begin{equation*}
-        \EsIe[{\act[]}] = \frac{\Es[\act]}{P(\event)} \cdot
+        \ExpectOnE[\act] = \frac{\Expect[\rstOp(\act)]}{P(\event)} \cdot
     \end{equation*}
 \end{theorem}
 
 \begin{proof}
-    \newcommand{\Ae}{\A{s \cap \event}}
-    For an arbitrary \inA{\act[]}, let $\act[]' = \act[] - \act$.
-    Clearly, $\act[]'$ restricted to \event is the zero function, and therefore $\Es[\act'] = 0$.
-    Since \A{s} is a vector space we have \inA{\act[]'}, and the definition of conditional expectation
-    implies $\EsIe[{\act[]'}] = 0$.
+    \renewcommand{\a}{\act[]}
+    \renewcommand{\aa}{\act[]'}
+    For an arbitrary \inA{\a}, let $\aa = \a - \rstOp(\a)$.
+    Clearly, $\rstOp(\aa)$ is the zero function, and therefore $\Expect[\rstOp(\aa)] = 0$.
+    Since \actionSet is a vector space we have \inA{\aa}, and the definition of conditional expectation
+    implies $\ExpectOnE[\aa] = 0$.
     Therefore
     \begin{equation}
-        \EsIe[{\act[]}] - \EsIe[{\act}] = 0 \cdot
+        \ExpectOnE[\a] - \ExpectOnE[\rstOp(\a)] = 0 \cdot
         \label{eq:exp_cond_theorem}
     \end{equation}
 
-    Let \Ae represent the set of all restricted actions to \event.
-    \Ae is a subspace of \A{s}.
-    By the definition of conditional expectation, the restrictions of \Es and \EsIe to \Ae have the same null space.
-    That implies by Lemma~\ref{lm:scale} for every $\act \in \Ae$ we have
+    Let \rstActionSet represent the range of \rstOp.
+    \rstActionSet is a subspace of \actionSet.
+    By the definition of conditional expectation, functionals obtained by the restrictions of \Expect and \ExpectOnE
+    to \rstActionSet have the same null space.
+    That implies by Lemma~\ref{lm:scale} for every \inA{\a} we have
     \begin{equation*}
-        \EsIe[\act] = \lambda \Es[\act] \cdot
+        \ExpectOnE[\rstOp(\a)] = \lambda \Expect[\rstOp(\a)] \cdot
     \end{equation*}
     Thus, by Equation~\ref{eq:exp_cond_theorem}
     \begin{equation*}
-        \EsIe[{\act[]}] = \lambda \Es[\act] \cdot
+        \ExpectOnE[\a] = \lambda \Expect[\rstOp(\a)] \cdot
     \end{equation*}
 
-    On the other hand, for the sure thing \sure[], we have
+    On the other hand, for the sure thing \sure, we have
     \begin{equation*}
-        \lambda = \frac{\EsIe[{\sure[]}]}{\Es[\sure]} = \frac{1}{P(\event)} \cdot
+        \lambda = \frac{\ExpectOnE[\sure]}{\Expect[\rstOp(\sure)]} = \frac{1}{P(\event)} \cdot
     \end{equation*}
     This proves the theorem.
 \end{proof}
@@ -150,13 +181,85 @@ We now will establish the familiar relationship between conditional expectation 
 \begin{definition} [Dual Map]
     Let \set{a} and \set{b} be two sets.
     Suppose $\maps{a}{b}$ is a map from \set{a} to \set{b}.
-    The dual map of $M$ is the map $\mapsDual{b}{a}$, defined for each $f \in \field{R}^{\set{b}}$ and
-    $a \in \set{a}$ by
+    The dual map of $M$ is the map $\mapsDual{b}{a}$, defined for each $f \in \field{R}^{\set{b}}$ by
     \begin{equation*}
-        \dualMap(f) = f(M(a)) \cdot
+        \dualMap(f) = f \circ M \cdot
     \end{equation*}
 \end{definition}
 
 \begin{proposition}
     The dual map is a linear map.
 \end{proposition}
+
+\begin{theorem}
+    Let \sampleSet be a sample set.
+    Suppose  $\maps{\sampleSet}{\sampleSetAlt}$ is a map from \sampleSet to another set \sampleSetAlt.
+    If \Expect is an expectation for \sampleSet,
+    then $\ExpAlt = \dualdualMap(\Expect)$ is an expectation for \sampleSetAlt,
+    where \dualdualMap is the dual map of \dualMap, and \dualMap is the dual map of $M$.
+\end{theorem}
+
+\begin{proof}
+    \dualdualMap is a dual map and therefore is linear.
+
+    By definition for every $\act[\sampleSetAlt] \in \actionSet[\sampleSetAlt]$ we have
+    \begin{equation*}
+        \ExpAlt[{\act[\sampleSetAlt]}] = \Expect \circ \act[\sampleSetAlt] \circ M \cdot
+    \end{equation*}
+    We can easily verify that
+    \begin{equation*}
+        \sureAlt \circ M = \sure \cdot
+    \end{equation*}
+    Therefore, $\ExpAlt[\sureAlt] = 1$.
+
+    On the other hand for any $\eventAlt \subseteq \sampleSetAlt$, we have
+    \[
+        \rstOp[\eventAlt](\sureAlt) \circ M = \rstOp(\sure),
+    \]
+    where
+    \[
+        \event = \{ s \in \sampleSet \mid M(s) \in \eventAlt \} \cdot
+    \]
+    This implies  $\ExpAlt[{\rstOp[\eventAlt](\sureAlt)}] \geq 0$.
+\end{proof}
+
+\begin{definition}
+    Let \sampleSet be a sample space.
+    Suppose $\maps{\sampleSet}{\sampleSetAlt}$ is a surjective (onto) map from \sampleSet to \sampleSetAlt.
+    When $M$ is injective (one-to-one), we refer to it as \emph{relabeling}.
+    When $M$ is not injective, we refer to it as \emph{simplification}.
+\end{definition}
+
+\begin{definition}
+    Suppose \sampleSet is a sample space and $M$ is a simplification (relabeling) of \sampleSet.
+    Let \inA{\act[]}, and let \Expect be an expectation for \sampleSet.
+    \begin{itemize}
+        \item The simplification (relabeling) of \act[] by $M$ is an element of \actionSetAlt, denoted by $\act[]'$, such that
+        $\act[] = \dualMap(\act[]')$, where \dualMap is the dual map of $M$.
+        \item  The simplification (relabeling) of \Expect by $M$ is an expectation for $\sampleSet'$, denoted by $\Expect'$,
+        such that
+        $\Expect' = \dualdualMap(\Expect)$, where \dualdualMap is the dual map of \dualMap.
+    \end{itemize}
+\end{definition}
+
+$\Expect'$ is an expectation
+\[
+    \dualMap[\dualMap](\Expect) = \Expect \circ \dualMap
+\]
+sd
+
+\[
+    \Expect'[\sure[\sampleSet']] = \Expect[{\dualMap(\sure[\sampleSet'])}]
+\]
+kj
+\[
+    \dualMap(\sure[\sampleSet']) = \sure[\sampleSet'] \circ M = \sure[\sampleSet]
+\]
+is an
+
+\begin{align*}
+    \Expect'[\sure[\sampleSet']] = \Expect[{\sure[\sampleSet]}] = 1 \cdot
+\end{align*}
+expectation
+an the
+composition clearly preserves the properties of expectation.

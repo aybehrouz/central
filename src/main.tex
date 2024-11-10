@@ -48,8 +48,8 @@
 \newcommand{\Qset}{\set{x}}
 \newcommand{\central}[1][\Qset]{\mathFix{C_{#1}}}
 \newcommand{\cPrior}[1][(\paramValue)]{\mathFix{c_{\Qset}#1}}
-\newcommand{\cMass}[1]{c_{\Qset}(#1)}
-\newcommand{\rhoMass}{\phi(\paramFuncValue[i])}
+\newcommand{\cMass}[1]{c_{\Qset}\ifthenelse{\isempty{#1}}{}{(#1)}}
+\newcommand{\rhoMass}[1][{\paramFuncValue[i]}]{\phi(#1)}
 
 \newcommand{\Xpairs}{\mathFix{\Qset = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
 \newcommand{\inP}[1]{\mathFix{\uppercase{#1} \in \set{P}}}
@@ -80,6 +80,7 @@
 \newcommand{\tIw}[1][]{\paramValue \mid \paramFuncValue[#1]}
 \newcommand{\xIw}[1][]{\x[#1] \mid \paramFuncValue[#1]}
 \newcommand{\wIx}[1][]{\paramFuncValue[#1] \mid \x[#1]}
+\newcommand{\tIx}[1][]{\paramValue \mid \x[#1]}
 
 \newcommand{\minP}{\min_{P \in \set{P}}}
 \newcommand{\maxP}{\max_{P \in \set{P}}}

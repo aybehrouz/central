@@ -284,44 +284,66 @@ the multinomial parameters.
 
 This theorem gives a necessary condition for the central probability measure in the general case.
 
-
+\newcommand{\omegaArea}{\left\{ \paramValue : \paramFunc(\paramValue) = \paramFuncValue \right\}}
+\newcommand{\ratio}[1]{\frac{\rhoMass[{#1}]}{\cMass{#1}}}
+\newcommandx{\ratioFull}[3][1=\paramFuncValue, 2=\paramFuncValue, 3=\cMass{}, usedefault]{
+    \frac{\rhoMass[{#1}]}{#3(#2)}
+    \prod_i \frac{\rhoMass[{\paramFuncValue[i]}]}{#3(\paramFuncValue[i])}
+}
+\newcommand{\fixedPoint}{\mu \cMass{}}
 \begin{theorem}
-    Assume \pmodel is a generic parametric model, and $\Qset = \{\seqRv{}\}$ is a query set in \Mt.
+    Assume \pmodel is a generic parametric model, and $\Qset = \{\X, \seqRv{k}\}$ is a query set in \Mt.
     Let $\paramFunc[i]$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \X[i],
     so that for $\paramFuncValue[i] = \paramFunc[i](\paramValue)$ we have:
     \begin{equation}
         \pi(\xIt[i]) = \pi \left( \xIw[i] \right)\cdot
         \label{eq:func_of_theta}
     \end{equation}
-    We define a functional $\functional{}$ of an unnormalized probability measure $\rho$ as
+    Let $\paramFunc(\paramValue) = (\seqRval[\omega]{k}) = \paramFuncValue$.
+    We define a function $\functional{}$ of the unnormalized probability measure $\rho$ as
     follows:
     \begin{equation}
-        \functional{\rho} = \left( \prod_i p(\tIw[i]) \rhoMass \right)^{\frac{1}{|\Qset|}},
+        \functional{\rho}(\paramFuncValue) =
+        \left(  \ratioFull[][][\rho] \right)^{\frac{1}{k+1}} \rho(\paramFuncValue) ,
         \label{eq:fixed_point_cx}
     \end{equation}
-    where $p$ is the normalized probability measure obtained from $\rho$, and
+    where
     \[
-        \rhoMass = \exp \left\{\sum_{\x[i]} \pi(\xIw[i]) \ln p(\wIx[i]) \right\}\cdot
+        \rhoMass = \exp \left\{\sum_{\x[i]} \pi(\xIw[i]) \ln p(\wIx[i]) \right\},
     \]
-    If \cPrior is the prior distribution corresponding to the central probability measure for \Qset in \Mt,
-    then $\mu \cPrior$ is a fixed point for $\functional{}$, where
+    and
     \[
-        \mu = \exp \left\{\frac{1}{|\Qset|}\int \DxCond[\central] \dt[\cPrior[]] \right\} \cdot
+        \rhoMass[\paramFuncValue] = \int_{\omegaArea} \rhoMass[\paramValue] d\paramValue,
+    \]
+    where
+    \[
+        \rhoMass[\paramValue] = \exp \left\{\sum_{\x} \pi(\xIt) \ln p(\tIx) \right\} \cdot
+    \]
+
+    If $\cMass{}$ denotes the probability mass function corresponding to the central probability measure for \Qset in \Mt,
+    then $\fixedPoint$ is a fixed point for $\functional{}$, where
+    \[
+        \mu = \exp \left\{\frac{1}{k+1}\int \DxCond[\central] \dt[\cPrior[]] \right\} \cdot
+    \]
+    Moreover, we have
+    \[
+        \cMass{\tIw} = \frac{\rhoMass[\paramValue]}{\rhoMass[\paramFuncValue]} \cdot
     \]
 \end{theorem}
 
 \begin{proof}
-    First, we show that the set of distributions of each \X[i] is a convex set.
-    Let $Q^*(\x[i]) = \convexCond{Q}{\x[i]}$, for some \inP{Q_1, Q_2}, $0 \leq \alpha \leq 1$ and
-    arbitrary $i, \x[i]$.
+
+    Let $Q^*(y) = \convexCond{Q}{y}$, for some \inP{Q_1, Q_2}, $0 \leq \alpha \leq 1$ and
+    an arbitrary random variable \rv{Y}.
     \Mt is a parametric model.
     Therefore:
     \begin{align*}
-        Q^*(\x[i]) &= \alpha \marginal[q_1]{\x[i]} + (1 - \alpha) \marginal[q_2]{\x[i]}\\
-        &= \int \pi(\xIt[i]) (\convexCond{q}{\paramValue}) d\paramValue\cdot
+        Q^*(y) &= \alpha \marginal[q_1]{y} + (1 - \alpha) \marginal[q_2]{y}\\
+        &= \int \pi(y \mid \paramValue) (\convexCond{q}{\paramValue}) d\paramValue\cdot
     \end{align*}
     $\convexCond{q}{\paramValue}$ is a valid probability distribution and \Mt is a generic parametric model.
     That implies \inP{Q^*}.
+    This proves that the set of distributions of \X and each \X[i] is a convex set.
 
     Thus, the conditions of Theorem~\ref{th:lambda} holds and the central distribution of \Qset satisfies
     \begin{equation*}
@@ -329,27 +351,50 @@ This theorem gives a necessary condition for the central probability measure in 
     \end{equation*}
     Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
     \begin{align*}
-        \DxCond[\central] &= \DxCondExpandFull[\central][][ ] \\
-        &= \DxCondExpandFull[\central][{\paramFuncValue[i]}][ ] \\
-        &= \sumix \pi(\xIw[i]) \ln \frac{\cMass{\wIx[i]}}{\cMass{\paramFuncValue[i]}}\\
-        &= \sum_i \ln \frac{\rhoMass}{\cMass{\paramFuncValue[i]}}\cdot
+        \DxCond[\central] &= \KlCond[\central][\rval{x}][ ] + \DxCondExpandFull[\central][][ ] \\
+        &= \sum_{\rval{x}} \pi(\xIt) \ln \frac{\cMass{\tIx}}{\cMass{\paramValue}} +
+        \sumix \pi(\xIw[i]) \ln \frac{\cMass{\wIx[i]}}{\cMass{\paramFuncValue[i]}}\\
+        &= \ln \ratio{\paramValue} + \sum_i \ln \ratio{\paramFuncValue[i]}\cdot
     \end{align*}
     That implies
     \begin{equation}
         \label{eq:fixed_point_proof}
-        \sum_i \ln \cMass{\paramFuncValue[i]} = \sum_i \ln \rhoMass - \lambda \cdot
+        e^{\lambda} = \ratioFull[\paramValue][\paramValue] \cdot
     \end{equation}
-    For $\paramFunc[i](\paramValue) = \paramFuncValue[i]$, we have $\cMass{\paramValue, \paramFuncValue[i]}=\cPrior$.
+    For $\paramFunc(\paramValue) = \paramFuncValue$, we have $\cMass{\paramValue, \paramFuncValue}=\cPrior$.
     Hence,
     \begin{equation*}
-        \cMass{\paramFuncValue[i]} = \frac{\cPrior}{\cMass{\tIw[i]}}\cdot
+        \cPrior = \cMass{\tIw} \cMass{\paramFuncValue} \cdot
     \end{equation*}
     We substitute this equation into Equation~\ref{eq:fixed_point_proof}:
-    \begin{align*}
-        e^{\frac{\lambda}{|\Qset|}} \cPrior &= \left( \prod_i \cMass{\tIw[i]} \rhoMass \right)^{
-            \frac{1}{|\Qset|}},
-    \end{align*}
-    where $|\Qset|$ is the number of elements of \Qset. \qedhere
+    \begin{equation}
+        \cMass{\tIw} e^{\lambda} = \ratioFull[\paramValue][\paramFuncValue] \cdot
+        \label{eq:fixed_point_proof_1}
+    \end{equation}
+    Since this equation holds for any value of \paramValue, we can integrate both sides with respect to \paramValue:
+    \begin{equation*}
+        \int_{\omegaArea} \cMass{\tIw} e^{\lambda} d\paramValue =
+        \int_{\omegaArea} \ratioFull[\paramValue][\paramFuncValue] d\paramValue \cdot
+    \end{equation*}
+    Therefore,
+    \begin{equation}
+        e^{\lambda} = \ratioFull \cdot
+        \label{eq:fixed_point_proof_2}
+    \end{equation}
+    Now we evaluate $\functional{}$ at $\fixedPoint$:
+    \begin{equation*}
+        \functional{\fixedPoint}(\paramFuncValue) =
+        \left( \ratioFull[][][\fixedPoint] \right)^{\frac{1}{k+1}} \fixedPoint(\paramFuncValue) =
+        e^{\frac{\lambda}{k+1}} \cMass{\paramFuncValue} \cdot
+    \end{equation*}
+    Clearly for $\mu = e^{\frac{\lambda}{k+1}}$, $\fixedPoint$ is a fixed point for $\functional{}$.
+
+    In addition, we can obtain a closed form for $\cMass{\tIw}$ by dividing
+    Equation~\ref{eq:fixed_point_proof_1} by Equation~\ref{eq:fixed_point_proof_2}:
+    \begin{equation*}
+        \cMass{\tIw} = \frac{\rhoMass[\paramValue]}{\rhoMass[\paramFuncValue]},
+    \end{equation*}
+    which completes the proof.
 \end{proof}
 
 
@@ -477,6 +522,7 @@ our problem, our query set should include random variables of both versions.
     \[
         \rhoMass \propto \exp \left\{ \sumxe \xeIba \ln \bIxe \right\} \cdot
     \]
+
 
 \end{theorem}
 

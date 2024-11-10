@@ -191,6 +191,10 @@ We now will establish the familiar relationship between conditional expectation 
     The dual map is a linear map.
 \end{proposition}
 
+\begin{proposition}
+    If {v1, v2, ..} are a basis of l. then
+\end{proposition}
+
 \begin{theorem}
     Let \sampleSet be a sample set.
     Suppose  $\maps{\sampleSet}{\sampleSetAlt}$ is a map from \sampleSet to another set \sampleSetAlt.
@@ -218,7 +222,7 @@ We now will establish the familiar relationship between conditional expectation 
     \]
     where
     \[
-        \event = \{ s \in \sampleSet \mid M(s) \in \eventAlt \} \cdot
+        \event = \{ s \in \sampleSet : M(s) \in \eventAlt \} \cdot
     \]
     This implies  $\ExpAlt[{\rstOp[\eventAlt](\sureAlt)}] \geq 0$.
 \end{proof}
@@ -229,6 +233,18 @@ We now will establish the familiar relationship between conditional expectation 
     When $M$ is injective (one-to-one), we refer to it as \emph{relabeling}.
     When $M$ is not injective, we refer to it as \emph{simplification}.
 \end{definition}
+
+\begin{definition}
+    Let \sampleSet be a sample set.
+    Suppose $\maps{\sampleSet}{\sampleSetAlt}$ is a map from \sampleSet to another set \sampleSetAlt.
+    A \emph{restoration} of $M$, denoted by $R_M$, is a map from $\field{R}^{{\actionSet[\sampleSetAlt]}}$
+    to $\field{R}^{\actionSet}$ such that $\dualdualMap \circ R_M = I$, where $I$ is the identity operator
+    on $\field{R}^{{\actionSet[\sampleSetAlt]}}$.
+\end{definition}
+
+\begin{theorem}
+    r is a linear map.
+\end{theorem}
 
 \begin{definition}
     Suppose \sampleSet is a sample space and $M$ is a simplification (relabeling) of \sampleSet.

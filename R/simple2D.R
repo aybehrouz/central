@@ -89,7 +89,13 @@ cardinality <- function(n, d) {
 }
 
 multiChoose <- function(x) {
-  factorial(sum(x)) / prod(factorial(x))
+  n = sum(x)
+  result = 1
+  for (i in 1:length(x)) {
+    result = result * choose(n, x[i])
+    n = n - x[i]
+  }
+  return(result)
 }
 
 getLikelihoodMatrix <- function(n, m, d, min_allowed) {
@@ -104,7 +110,32 @@ getLikelihoodMatrix <- function(n, m, d, min_allowed) {
   return(pi)
 }
 
-getPhiVector <- function(likelihood_matrix) {
+multinomialEntropy <- function(n, theta) {
+  k = length(theta)
+  h = -log(factorial(n)) - n * sum(theta * log(theta))
+  for (i in 1:k) {
+    for (x in 0:n) {
+      h = h + log(factorial(x)) * choose(n, x) * theta[i] ^ x * (1 - theta[i]) ^ (n - x)
+    }
+  }
+  return(h)
+}
+
+getPhiVectorLimit <- function(n, m, dim, min_allowed) {
+  result = rep(NA, cardinality(m, dim))
+  
+  init = sum(log((n + 1):(n + dim - 1))) 
+  iterate(function(t, i) {
+    theta = getTheta(t, m, min_allowed)
+    result[i] <<- init - multinomialEntropy(n, theta) 
+  }, m, dim)
+  
+  # We need to divide the final result by (dim - 1)! * length(result) to obtain a discrete probability.
+  return(exp(result) / factorial(dim - 1) / length(result))
+}
+
+getPhiVectorDiscrete <- function(n, m, dim, min_allowed) {
+  likelihood_matrix = getLikelihoodMatrix(n, m, dim, min_allowed)
   lp = log(rowSums(likelihood_matrix))
   exp(apply(likelihood_matrix, MARGIN = 2, FUN = function(col) sum((log(col) - lp) * col)))
 }
@@ -115,12 +146,12 @@ getPhiPrecompute <- function(n, m, dim, row_transform, col_transform) {
   
   result = list(
     coefficient = matrix(0, cardinality(m, dim / 2), cardinality(m, dim / 2)),
-    conditional = c(NA, cardinality(m, dim))
+    conditional = rep(NA, cardinality(m, dim))
   )
   
   cat("calculating phi vectors...")
-  full_phi = getPhiVector(getLikelihoodMatrix(n, m, dim, min_allowed = 0))
-  half_phi = getPhiVector(getLikelihoodMatrix(n, m, dim / 2, min_allowed = 0))
+  full_phi = getPhiVector(n, m, dim, min_allowed = 0)
+  half_phi = getPhiVector(n, m, dim / 2, min_allowed = 0)
   cat("done!\n")
   
   iterate(function(theta, theta_index) {
@@ -145,7 +176,7 @@ getPhiPrecompute <- function(n, m, dim, row_transform, col_transform) {
 }
 
 getThetaPrior <- function(m, dim, joint, conditional, row_transform, col_transform) {
-  result = c(NA, cardinality(m, dim))
+  result = rep(NA, cardinality(m, dim))
   iterate(function(theta, theta_index) {
     i = getIndex(row_transform(theta))
     j = getIndex(col_transform(theta))
@@ -186,9 +217,10 @@ oeTransform <- function(x) {
 }
 
 dim = 8
-n = 9
+n = 15
 m = 7
 
+getPhiVector <- getPhiVectorLimit
 phi = getPhiPrecompute(n, m, dim, lgTransform, oeTransform)
 
 
@@ -218,8 +250,14 @@ w = getProbability(prior, k * e + c(0,0,1,0,  0,0,0,0), m)
 l = getProbability(prior, k * e + c(0,0,0,0,  0,0,1,0), m)
 w / (w + l)
 
+# 0.536
+e = c(1,0,0,0,  0,0,0,0)
+w = getProbability(prior, k * e + c(0,1,0,0,  0,0,0,0), m)
+l = getProbability(prior, k * e + c(0,0,0,0,  0,1,0,0), m)
+w / (w + l)
 
-# These three probabilities should be equal:
+
+# These three probabilities should be equal and higher than 0.5:
 k = 1
 e = c(0,0,0,1,  1,0,1,0)
 w = getProbability(prior, k * e + c(0,1,0,0,  0,0,0,0), m)
@@ -235,3 +273,13 @@ e = c(1,1,0,0,  0,0,0,1)
 w = getProbability(prior, k * e + c(0,0,0,0,  0,0,1,0), m)
 l = getProbability(prior, k * e + c(0,0,1,0,  0,0,0,0), m)
 w / (w + l)
+
+
+######################################################
+n = 20
+m = 5000
+d = 2
+x = getPhiVectorDiscrete(n, m, d, 0)
+y = getPhiVectorLimit(n, m, d, 0)
+mean(abs(1 - x / y))
+

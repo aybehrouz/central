@@ -284,7 +284,7 @@ the multinomial parameters.
 
 This theorem gives a necessary condition for the central probability measure in the general case.
 
-\newcommand{\omegaArea}{\left\{ \paramValue : \W(\paramValue) = \w \right\}}
+
 \newcommand{\ratio}[1]{\frac{\avgPost[{#1}][\cMass{}]}{\cMass{#1}}}
 \newcommandx{\ratioFull}[3][1=\w, 2=\w, 3=\cMass{}, usedefault]{
     \frac{\avgPost[{#1}][#3]}{#3(#2)}
@@ -294,6 +294,7 @@ This theorem gives a necessary condition for the central probability measure in 
 
 
 \begin{theorem}
+    \label{th:fixed_point}
     Assume \pmodel is a generic parametric model, and $\Qset = \{\X, \seqRv{k}\}$ is a query set in \Mt.
     Let $\W[i]$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \X[i],
     That is, for $\w[i] = \W[i](\paramValue)$ we have:

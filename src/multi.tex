@@ -1,0 +1,151 @@
+\renewcommand{\t}{\paramValue}
+\newcommand{\mdim}{k}
+\newcommand{\msize}{n}
+\newcommand{\avgPostElem}{\phi(\t[i])}
+\newcommand{\sumDim}{\sum_{i=1}^{k}}
+\newcommand{\prodDim}{\prod_{i=1}^k}
+\newcommand{\prodSeq}[2][k]{#2_{1}, #2_{2}, \ldots, #2_{#1}}
+\newcommand{\vSeq}[2]{(#1_1, #1_2, \ldots, #1_{#2})}
+\newcommand{\multi}{\frac{\msize!}{\prodDim \x[i]!} \prodDim \t_{i}^{\x[i]}}
+\renewcommand{\H}{ \entropy{\X \mid \t}{} }
+
+% Clique tree commands
+\newcommandx{\msg}[3][1=i, 2=j, 3=\delta]{\mathFix{#3_{#1 \rightarrow #2}}}
+\newcommand{\msgAlt}{\msg[i][j][\sigma]}
+\newcommand{\ct}{\mathFix{\mathcal{T}}}
+\newcommand{\rangeSep}{\set{r}_{i,j}}
+\newcommand{\altRangeSep}{\set{r}_{i,j}^{*}}
+\newcommand{\sep}{\mathFix{\set{s}_{i,j}}}
+\newcommand{\sepVal}{\mathFix{s_{i,j}}}
+\newcommand{\msgMap}{f_{ij}}
+
+In this section, we examine the derivation of the posterior potential for multinomial models, which are
+central to our work.
+By de Finetti’s theorem, any exchangeable sequence of discrete random variables can be represented using a multinomial model.
+Exchangeable sequences are fundamental in statistical learning as they provide a framework for modeling data
+with inherent independence and order invariance, which is common in real-world learning tasks.
+
+A multinomial model is a parametric model (Definition~\ref{def:param-model}) in which the likelihood function follows a
+multinomial distribution.
+The configuration of the model is determined by two variables: $\msize$ and $\mdim$.
+Each element of the sample space $s \in \set{S}$ can be represent by a $\mdim$ dimensional random vector
+$\x = \vSeq{\x}{\mdim}$ where each \x[i] is a nonnegative integer, and $\sumDim \x[i] = \msize$.
+The model parameter is a nonnegative $\mdim$ dimensional real vector $\t = \vSeq{\theta}{k}$ such that
+$\sumDim \t[i] = 1$.
+The likelihood distributing $\pi(s \mid \theta)$ is a multinomial distribution
+\begin{equation*}
+    \pi(\x \mid \t) = \multi \cdot
+\end{equation*}
+
+As $\msize$ increases, the posterior distribution of \t converges to the same distribution regardless of the prior.
+Therefore, when $\msize$ is sufficiently large, we can use a uniform prior to obtain the posterior potential of the
+multinomial parameter.
+The uniform prior is conjugate to the multinomial distribution, and the resulting posterior will follow a Dirichlet
+distribution:
+\begin{align*}
+    p(\t \mid \x) &\sim \text{Dir}(\x[1] + 1, \x[2] + 1, \ldots, \x[\mdim] + 1) \\
+    &= \prod_{j = 1}^{\mdim - 1} (\msize + j) \multi \cdot
+\end{align*}
+This implies that for the posterior potential we have
+\begin{align*}
+    \avgPost[\t] &= \avgPostExpand{\t}{\x} \\
+    &= \prod_{j = 1}^{\mdim - 1} (\msize + j) e^{\H},
+\end{align*}
+where $\H$ is the entropy of a multinomial distribution with parameter \t.
+We can write $\H$ in the following form:
+\[
+    \H =  - \ln(n!) + \sumDim \ln \avgPostElem,
+\]
+where
+\begin{equation}
+    \avgPostElem = \exp \left\{ -n \t[i] \ln \t[i] +
+    \sum_{j = 0}^{n} \ln(j!) \binom{n}{j} \t[i]^{j} (1 - \t[i])^{n - j} \right\} \cdot
+    \label{eq:pp_multi_elem}
+\end{equation}
+Therefore, for the posterior potential of the multinomial parameter we have
+\begin{equation}
+    \avgPost[\t] = (\msize + \mdim - 1)! \prodDim \avgPostElem \cdot
+    \label{eq:pp_multi}
+\end{equation}
+
+As we discussed in the previous section, one efficient way for obtaining the central distribution is based on the
+computation of the posterior potential of the joint feature
+$\W(\paramValue) = \vSeq{\w}{m}$ and using theorem~\ref{th:fixed_point}.
+Recall that each \w[i] is a function of the model parameter \paramValue that fully parametrizes some random variable
+\X[i] in the model.
+
+For a multinomial model we are particularly interested in random variables that correspond to fusion of
+multinomial categories.
+If we represent the sample space by a vector $\vSeq{\x}{k}$ a fusion random variable is obtained by summing up some
+entries, for example $(\x[1] + \x[4], \x[2] + \x[3] + \x[5],  \ldots)$.
+A fusion variable has a multinomial distribution with a parameter that can be similarly obtained by summing up the same
+entries of the model parameter.
+For example $(\t[1] + \t[4], \t[2] + \t[3] + \t[5],  \ldots)$ fully parametrizes $(\x[1] + \x[4], \x[2] + \x[3] + \x[5],  \ldots)$.
+When we consider fusion variables, $\W(\t)$ will be a linear map that only includes addition.
+The matrix of this mapping will include only $0$ and $1$.
+
+We aim to compute the posterior potential of the joint features \W
+We use a slightly modified clique tree message passing.
+We define an indicator factor for every equation.
+An indicator factor is $1$ only when its corresponding equation holds. Let $\vartheta \subseteq \{\seqRval[\t]{k}\}$
+
+is a linear map of the model
+parameter that only
+includes addition.
+We can represent this linear map with a matrix, this matrix will only include 1 and 0
+We aim to compute the posterior potential of the joint features \W in a multinomial model.
+
+We may represent \w with a column vector
+\[
+    \w = \begin{bmatrix}
+             \W[1](\paramValue) \\
+             \W[2](\paramValue) \\
+             \vdots             \\
+             \W[m](\paramValue) \\
+    \end{bmatrix} =
+    \begin{bmatrix}
+        \w[1]  \\
+        \w[2]  \\
+        \vdots \\
+        \w[m]  \\
+    \end{bmatrix}
+\]
+
+\begin{definition}
+    Let \ct be a clique tree.
+    Let $\rangeSep$ denote the set of all possible assignments to the sepset \sep.
+    A \emph{message reparameterization} for \ct is a mapping $\msgMap$ defined from $\rangeSep$
+    to another set $\altRangeSep$ for every $i, j$, that is message preserving.
+    That means, for any $\sepVal, \sepVal' \in \rangeSep$ if $\msgMap(\sepVal) = \msgMap(\sepVal')$
+    then $\msg(\sepVal) = \msg(\sepVal')$.
+
+    The reparameterization of a message \msg is a function \msgAlt defined on $\altRangeSep$ such that for every
+    $\sepVal \in \rangeSep$, we have $\msg(\sepVal) = \msgAlt(\msgMap(\sepVal))$.
+\end{definition}
+
+\begin{proposition}
+    We can replace all messages \msg with their reparameterization \msgAlt without affecting the message passing
+    algorithm.
+\end{proposition}
+
+A message reparam does not need to be one to one as long as it is message preserving.
+
+
+\[
+    \avgPost[\t] \propto A e^B \prod_{i=1}^{k} \avgPostElem
+\]
+
+
+\[
+    \avgPost[\t] \propto A e^{\entropy{\X \mid \t}{}}
+\]
+
+\[
+    \entropy{\X \mid \t}{} = B + \sum_{i=1}^{k} \ln \avgPostElem
+\]
+\[
+    B = - \ln(n!)
+\]
+\[
+    \avgPost[\t] \propto \prod_{i=1}^{k} \avgPostElem
+\]

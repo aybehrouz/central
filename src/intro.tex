@@ -94,16 +94,15 @@ distribution.
 
 \begin{definition}[Parametric Model]
     \label{def:param-model}
-    Let $\param$ be a random variable.
+    Let \param be a real vector.
     A \emph{parametric model} is a probabilistic model \pmodel, where for every $P \in \set{P}$ there is a prior
-    probability
-    distribution $p$, such that for every $\rval[]{s} \in \set{s}$
+    probability distribution $p$, such that for every $\rval[]{s} \in \set{s}$
     \begin{equation}
         \marginalEq{\rval[]{s}},
         \label{eq:parametric}
     \end{equation}
     where $\pi$ is a fixed, known probability distribution.
-    We refer to $\pi$ as the \emph{likelihood} distribution.
+    We refer to \param as the \emph{model parameter} and $\pi$ as the \emph{likelihood} distribution.
 \end{definition}
 
 Now, consider our decision-making problem: Suppose the evidence \rv[]{e} consists of a sequence of previous experiences

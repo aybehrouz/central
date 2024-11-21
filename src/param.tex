@@ -284,40 +284,44 @@ the multinomial parameters.
 
 This theorem gives a necessary condition for the central probability measure in the general case.
 
-\newcommand{\omegaArea}{\left\{ \paramValue : \paramFunc(\paramValue) = \paramFuncValue \right\}}
-\newcommand{\ratio}[1]{\frac{\rhoMass[{#1}]}{\cMass{#1}}}
-\newcommandx{\ratioFull}[3][1=\paramFuncValue, 2=\paramFuncValue, 3=\cMass{}, usedefault]{
-    \frac{\rhoMass[{#1}]}{#3(#2)}
-    \prod_i \frac{\rhoMass[{\paramFuncValue[i]}]}{#3(\paramFuncValue[i])}
+\newcommand{\omegaArea}{\left\{ \paramValue : \W(\paramValue) = \w \right\}}
+\newcommand{\ratio}[1]{\frac{\avgPost[{#1}][\cMass{}]}{\cMass{#1}}}
+\newcommandx{\ratioFull}[3][1=\w, 2=\w, 3=\cMass{}, usedefault]{
+    \frac{\avgPost[{#1}][#3]}{#3(#2)}
+    \prod_i \frac{\avgPost[{\w[i]}][#3]}{#3(\w[i])}
 }
 \newcommand{\fixedPoint}{\mu \cMass{}}
+
+
 \begin{theorem}
     Assume \pmodel is a generic parametric model, and $\Qset = \{\X, \seqRv{k}\}$ is a query set in \Mt.
-    Let $\paramFunc[i]$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \X[i],
-    so that for $\paramFuncValue[i] = \paramFunc[i](\paramValue)$ we have:
+    Let $\W[i]$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \X[i],
+    That is, for $\w[i] = \W[i](\paramValue)$ we have:
     \begin{equation}
         \pi(\xIt[i]) = \pi \left( \xIw[i] \right)\cdot
         \label{eq:func_of_theta}
     \end{equation}
-    Let $\paramFunc(\paramValue) = (\seqRval[\omega]{k}) = \paramFuncValue$.
-    We define a function $\functional{}$ of the unnormalized probability measure $\rho$ as
-    follows:
+    Also, let $\W(\paramValue) = (\seqRval[\omega]{k}) = \w$.
+
+    Suppose $\rho$ is an unnormalized probability measure and $p$ is the corresponding normalized probability
+    mass function.
+    We define a function $\functional{}$ of $\rho$ as follows:
     \begin{equation}
-        \functional{\rho}(\paramFuncValue) =
-        \left(  \ratioFull[][][\rho] \right)^{\frac{1}{k+1}} \rho(\paramFuncValue) ,
+        \functional{\rho}(\w) =
+        \left(  \ratioFull[][][\rho] \right)^{\frac{1}{k+1}} \rho(\w) ,
         \label{eq:fixed_point_cx}
     \end{equation}
     where
     \[
-        \rhoMass = \exp \left\{\sum_{\x[i]} \pi(\xIw[i]) \ln p(\wIx[i]) \right\},
+        \avgPost[{\w[i]}][\rho] = \exp \left\{\sum_{\x[i]} \pi(\xIw[i]) \ln p(\wIx[i]) \right\},
     \]
     and
     \[
-        \rhoMass[\paramFuncValue] = \int_{\omegaArea} \rhoMass[\paramValue] d\paramValue,
+        \avgPost[\w][\rho] = \int_{\omegaArea} \avgPost[\paramValue][\rho] d\paramValue,
     \]
     where
     \[
-        \rhoMass[\paramValue] = \exp \left\{\sum_{\x} \pi(\xIt) \ln p(\tIx) \right\} \cdot
+        \avgPost[\paramValue][\rho] = \exp \left\{\sum_{\x} \pi(\xIt) \ln p(\tIx) \right\} \cdot
     \]
 
     If $\cMass{}$ denotes the probability mass function corresponding to the central probability measure for \Qset in \Mt,
@@ -327,7 +331,7 @@ This theorem gives a necessary condition for the central probability measure in 
     \]
     Moreover, we have
     \[
-        \cMass{\tIw} = \frac{\rhoMass[\paramValue]}{\rhoMass[\paramFuncValue]} \cdot
+        \cMass{\tIw} = \frac{\avgPost[\paramValue][\cMass{}]}{\avgPost[\w][\cMass{}]} \cdot
     \]
 \end{theorem}
 
@@ -353,28 +357,28 @@ This theorem gives a necessary condition for the central probability measure in 
     \begin{align*}
         \DxCond[\central] &= \KlCond[\central][\rval{x}][ ] + \DxCondExpandFull[\central][][ ] \\
         &= \sum_{\rval{x}} \pi(\xIt) \ln \frac{\cMass{\tIx}}{\cMass{\paramValue}} +
-        \sumix \pi(\xIw[i]) \ln \frac{\cMass{\wIx[i]}}{\cMass{\paramFuncValue[i]}}\\
-        &= \ln \ratio{\paramValue} + \sum_i \ln \ratio{\paramFuncValue[i]}\cdot
+        \sumix \pi(\xIw[i]) \ln \frac{\cMass{\wIx[i]}}{\cMass{\w[i]}}\\
+        &= \ln \ratio{\paramValue} + \sum_i \ln \ratio{\w[i]}\cdot
     \end{align*}
     That implies
     \begin{equation}
         \label{eq:fixed_point_proof}
         e^{\lambda} = \ratioFull[\paramValue][\paramValue] \cdot
     \end{equation}
-    For $\paramFunc(\paramValue) = \paramFuncValue$, we have $\cMass{\paramValue, \paramFuncValue}=\cPrior$.
+    For $\W(\paramValue) = \w$, we have $\cMass{\paramValue, \w}=\cPrior$.
     Hence,
     \begin{equation*}
-        \cPrior = \cMass{\tIw} \cMass{\paramFuncValue} \cdot
+        \cPrior = \cMass{\tIw} \cMass{\w} \cdot
     \end{equation*}
     We substitute this equation into Equation~\ref{eq:fixed_point_proof}:
     \begin{equation}
-        \cMass{\tIw} e^{\lambda} = \ratioFull[\paramValue][\paramFuncValue] \cdot
+        \cMass{\tIw} e^{\lambda} = \ratioFull[\paramValue][\w] \cdot
         \label{eq:fixed_point_proof_1}
     \end{equation}
     Since this equation holds for any value of \paramValue, we can integrate both sides with respect to \paramValue:
     \begin{equation*}
         \int_{\omegaArea} \cMass{\tIw} e^{\lambda} d\paramValue =
-        \int_{\omegaArea} \ratioFull[\paramValue][\paramFuncValue] d\paramValue \cdot
+        \int_{\omegaArea} \ratioFull[\paramValue][\w] d\paramValue \cdot
     \end{equation*}
     Therefore,
     \begin{equation}
@@ -383,330 +387,34 @@ This theorem gives a necessary condition for the central probability measure in 
     \end{equation}
     Now we evaluate $\functional{}$ at $\fixedPoint$:
     \begin{equation*}
-        \functional{\fixedPoint}(\paramFuncValue) =
-        \left( \ratioFull[][][\fixedPoint] \right)^{\frac{1}{k+1}} \fixedPoint(\paramFuncValue) =
-        e^{\frac{\lambda}{k+1}} \cMass{\paramFuncValue} \cdot
+        \functional{\fixedPoint}(\w) =
+        \left( \ratioFull[][][\fixedPoint] \right)^{\frac{1}{k+1}} \fixedPoint(\w) =
+        e^{\frac{\lambda}{k+1}} \cMass{\w} \cdot
     \end{equation*}
     Clearly for $\mu = e^{\frac{\lambda}{k+1}}$, $\fixedPoint$ is a fixed point for $\functional{}$.
 
     In addition, we can obtain a closed form for $\cMass{\tIw}$ by dividing
     Equation~\ref{eq:fixed_point_proof_1} by Equation~\ref{eq:fixed_point_proof_2}:
     \begin{equation*}
-        \cMass{\tIw} = \frac{\rhoMass[\paramValue]}{\rhoMass[\paramFuncValue]},
+        \cMass{\tIw} = \frac{\avgPost[\paramValue][\cMass{}]}{\avgPost[\w][\cMass{}]},
     \end{equation*}
     which completes the proof.
 \end{proof}
 
 
-Consider a scenario where we are trying to predict the outcome of a four-sided dice.
-This dice is unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
-Before making our prediction, we can roll the dice for several times and use the results to learn the associated
-probabilities.
-We assume that the dice rolls are independent.
-
-Let's focus on determining the central distribution for this problem.
-The first step in this process is to establish our query set $\Xpairs$.
-
-In a prediction problem, we are interested in the distribution of the random variable we want to predict,
-conditioned on the observed data.
-For example, if we roll the dice for three times before making our prediction,
-we will need $P(\rv[4]{x} \mid \rv[1]{x},\rv[2]{x},\rv[3]{x})$, where \Qvar denotes the outcome
-of the $i$-th dice roll.
-
-Imagine playing a game of chance involving our four-sided dice.
-After rolling the dice, we input the outcome into a mysterious machine.
-The machine then announces whether we have won or lost the game.
-We have no clue how the machine works.
-We are not even sure if the dice outcome truly affects the machine’s output.
-All we know is that the machine is memory-less, and the result of each game is independent.
-
-Our goal is to learn how the machine operates through experimentation.
-We aim to be able to predict whether we will win the game after observing the dice outcome.
-
-We assume that, first, we roll the dice $n$ times, and record each outcome.
-Next, we input some of these dice outcomes into the machine and observe the result of each game.
-As we will see, this assumption is important for deriving the central distribution more easily.
-
-Let us define a query set for this problem.
-We denote this set as $\Xpairs$, where each \Qvar is the result of the $i$-th game, and the evidence \rv{e} is a
-vector
-\[
-    (\seqRv{i-1}, \seqRv[y]{n}),
-\]
-where each \rv{y} denotes the $i$-th dice outcome.
-
-The conditional divergence for \set{x} can be obtained by
-\begin{align*}
-    \DxeCond &= \KlCond{\rval[1]{x}}{\seqRval[y]{n}} \\
-    &+ \KlCond{\rval[2]{x}}{\rval[1]{x},\seqRval[y]{n}} \\
-    &+ \KlCond{\rval[3]{x}}{x1, x2, \seqRval[y]{n}} \\
-    &+ \ \cdots \\
-\end{align*}
-After using the chain rule for conditional probability the right hand side simplifies to
-\begin{align*}
-    \KlCond{\seqRval{n}}{\seqRval[y]{n}} \cdot
-\end{align*}
-
-Consequently, an alternative way for defining our query set is to define it as a single
-pair $\left\{(\rvec{x}, \rvec{e})\right\}$, where \rvec{x} is the vector of $n$ game's result, and \rvec{e} is the vector of $n$
-dice outcome.
-
-Using the new definition for \set{x}, by Equation~\ref{eq:lambda} we have:
-\begin{equation*}
-    \KlCond[\central]{\vval{x}}{\vval{e}} = \lambda
-\end{equation*}
-\emph{derive a $\paramValue = (\paramA, \paramB)$ closed form for central dist...}
-
-\[
-    \frac{\pi(\vval{x} \mid \vval{e}, \paramValue)}{\central(\vval{x} \mid \vval{e})}
-    = \frac{\pi(\paramValue \mid \vval{x}, \vval{e})}{\central(\paramValue \mid \vval{e})}
-\]
-
-sdfd
-
-\[
-    \KLabVec
-\]
-
-Assume that we decide to simplify our learning task.
-We choose to consider only the least significant digit of the dice outcome and ignore the other digit.
-For example, if the dice outcome is $10$, we treat it as $0$.
-This approach decreases the number of possible outcomes of the dice, making the learning process simpler.
-However, it also reduces our ability to predict the game’s result accurately.
-
-In order to find a central distribution for this version of our game, we should slightly modify the definition of the
-query set.
-While each \Qvar remains unchanged, we need to represent each \rv{e} as a vector
-\[
-    (\seqRv{i-1}, \seqRv[y']{n}),
-\]
-where each \rv{y'} represents the least significant digit of the dice outcome.
-We denote this new query set as \set{x'} and the previous query set as \set{x}.
-
-Following similar steps as we did for \set{x}, we can show that \set{x'} also has a more compact counterpart,
-which includes a single pair $(\rvec{x}, \rvec{e'})$, where \rvec{x} is the vector $(\seqRv{n})$, and \rvec{e'} is
-the vector
-$(\seqRv[y']{n})$.
-
-\emph{explain how the central distribution for this version is different...}
-
-When we have a lot of learning data, there is no point in using this simpler version of our learning task.
-However, when the available data is not enough for the more complex version, the simpler version can still produce
-relatively meaningful results,
-while the data is too small for the more complex version.
-
-Is it possible to have a probabilistic inference framework that is able to automatically choose between these two
-versions of the problem based on the quality and amount of available data?
-It seems that the central distributing has this ability.
-For that, we need to use the central distribution for the query set $\set{x} \cup \set{x'}$.
-This seems reasonable, since when we want our probabilistic inference framework to choose between two versions of
-our problem, our query set should include random variables of both versions.
-
-
-
-\begin{theorem}
-    Let \pmodel be a generic parametric model, and $\Xpairs$ be a set of random variables in \Mt.
-    Let $\paramFunc$, for every $i$, be a function of the parameter $\param$ that fully parametrizes \Qvar,
-    so that for $\paramFuncValue = \paramFunc(\paramValue)$ we have:
-    \begin{equation}
-        \pi(\xIt) = \pi \left( \rval{x} \mid \paramFuncValue \right)\cdot
-        \label{eq:func_of_theta2}
-    \end{equation}
-    The prior distribution corresponding to the central distribution for \set{X} in \Mt can be characterized
-    by the following fixed point equation:
-    \begin{equation}
-        \bIaRoot \propto \left( \prod_i \frac{\abIab \rhoMass}{\aIa} \right)^{\frac{1}{|\set{x}|}},
-        \label{eq:fixed_point_cx2}
-    \end{equation}
-    where
-    \[
-        \rhoMass \propto \exp \left\{ \sumxe \xeIba \ln \bIxe \right\} \cdot
-    \]
-
-
-\end{theorem}
-
-\begin{proof}
-    First, we show that the set of distributions of each \Qvar is a convex set.
-    Let $Q^*(\xIe) = \convexCond{Q}{\xIe}$, for some $Q_1, Q_2 \in \set{P}$, $0 \leq \alpha \leq 1$ and
-    arbitrary $i, \xe$.
-
-    \Mt is a parametric model.
-    Therefore,
-    \begin{align*}
-        Q^*(\xIe) &= \alpha \int \xIebFull q_1(\beta \mid \rval {e}) d\beta + (1 - \alpha) \marginal[q_2]{\rval{x}}\\
-        &= \int \pi(\xIt) (\convexCond{q}{\paramValue}) d\paramValue\cdot
-    \end{align*}
-    $\convexCond{q}{\paramValue}$ is a valid prior distribution and \Mt is a generic parametric model.
-    That implies $Q^* \in \set{P}$.
-
-    Thus, by Theorem~\ref{th:lambda} the central distribution of \set{X} satisfies
-    \begin{equation}
-        \Dparam[\central] = \lambda\cdot
-        \label{eq:lambda_th_proof}
-    \end{equation}
-    Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
-    \begin{align*}
-        \lambda
-        &= \Dparam[\central]\\
-        &= \sumxe \xeIba \ln \frac{\xIeb}{\central(\xIe)} \\
-        &= \sumxe \xeIba \ln \frac{\bIxe}{\cMass(\paramB \mid \rval{e})} \\
-        &= \sum_i \ln \frac{\rhoMass}{\bIa}\cdot
-    \end{align*}
-    Since each $\paramFunc$ is a function of $\param$, for $\paramFunc(\paramValue) = \paramFuncValue$
-    we have $\cMass{\paramValue, \paramA, \paramB}=\cPrior$ $\cMass{\alpha , \paramA} = \cMass{\alpha}$.
-    Therefore,
+\begin{definition}[Posterior Potential]
+    Let \pmodel be a parametric model and \X be a random variable in \Mt.
+    Let $\W$, be a function of the parameter \param that fully parametrizes \X.
+    We define the \emph{posterior potential} of $\W$ with respect to \X, denoted by $\avgPost[\w][\X]$, as
+    follows:
     \begin{equation*}
-        \bIa = \frac{\aIa}{\abIab} \bIaRoot \cdot
+        \avgPost[\w][\X] = \avgPostExpand[\cMass{}]{\w}{\x} \cdot
     \end{equation*}
-    Now we rewrite Equation~\ref{eq:lambda_th_proof}:
-    \[
-        |\set{X}| \ln \bIaRoot = -\lambda + \sum_i \ln \frac{\abIab \rhoMass}{\aIa}
-    \]
-    Then:
-    \begin{align*}
-        \bIaRoot
-        &= \left( e^{-\lambda} \prod_i \frac{\abIab \rhoMass}{\aIa} \right)^{\frac{1}{|\set{x}|}} \\
-        &= \left( e^{-\lambda} \prod_i \frac{\bIaRoot \rhoMass}{\bIa} \right)^{\frac{1}{|\set{x}|}} \\
-        &= \bIaRoot \left( \prod_i \frac{ \rhoMass}{\bIa} \right)^{\frac{1}{|\set{x}|}} \\
-        &= \bIaRoot \left(e^{-\lambda} \prod_i
-        \frac{\rhoMass[(\paramA, \paramB) \cMass(\paramA)]}{\cMass(\paramA, \paramB) \rhoMass[(\paramA)] } \right)
-        ^{\frac{1
-        }{|\set{x}|}}
-        \qedhere
-    \end{align*}
-\end{proof}
-
-
-
-
-
-
-Let’s revisit our discussion from the previous section.
-We saw that in Bayesian framework when we have evidence \rv{e'}, such that $\rv{e'} = f(\rv{e})$, the
-optimal strategy for \rv{e} always has a greater expected utility than any strategy that uses \rv{e'}.
-We stated that we believe
-
-
-\begin{definition}[Aggregator]
-    Consider two probabilistic models \model and \aggmodel.
-    Let \Qvar be a query variable and $\Eset = \{\seqRvInf[e]\}$ be an evidence set in \M.
-    Also, let \agg{\rv{e}}, \agg{\Qvar}, and \rv{i} be random variables defined on \agg{\set{s}} in \Magg.
-    We refer to \agg{\rv{x}}, \agg{\rv{e}} as the \emph{aggregated} query and evidence variables, and \rv{i} as the
-    \emph{selector} variable.
-
-    Suppose that for a probability measure $P \in \set{P}$ there exists a probability measure
-    $\agg{P} \in \agg{\set{P}}$, such that for any index \rval{i}, and every values \QvarVal, and \rval[i]{e}
-    there is some \agg{\QvarVal}, and \agg{\rval{e}}, where we have
-    \begin{equation}
-        P(\Qvar = \QvarVal, \rv[i]{e} = \rval[i]{e}) =
-        \agg{P}(\agg{\Qvar} = \agg{\QvarVal}, \assign{\agg{e}} \mid \assign{I}) \cdot
-        \label{eq:th1-1}
-    \end{equation}
-    Furthermore, \agg{\Qvar} and \rv{I} are conditionally independent given \agg{\rv{E}}:
-    \begin{equation}
-        \agg{P}(\aggXIE, \rv{I}) = \agg{P}(\aggXIE) \cdot
-        \label{eq:th1-2}
-    \end{equation}
-    We call \agg{P} an \emph{aggregator of $P$ with respect to $\QvarIEset$}.
+    When \X is clear from the context we will omit \X from the notation and simply write $\avgPost[\w]$.
 \end{definition}
 
-\begin{proposition}
-    By Equations~\ref{eq:th1-1} and~\ref{eq:th1-2} we have
-    \begin{equation*}
-        P(\QvarVal \mid \rval[i]{e}) = \agg{P}(\aggxIe) \cdot
-    \end{equation*}
-\end{proposition}
-
-\begin{definition}[Aggregate Model]
-    \label{def:aggregate-model}
-    Consider a probabilistic model \model.
-    Let \Qvar be a query variable, and \Eset be an evidence set in \M.
-    We say a model \aggmodel is the \emph{aggregate model} of \M with respect to $\QvarIEset$,
-    If every probability measure in \Magg is the aggregator of a probability measure in \M with respect to $\QvarIEset$.
-    %, and every probability measure in \M has at least one aggregator in \Magg with respect to $\QvarIEset$.
-\end{definition}
-
-\begin{definition}[Selective Aggregate Model]
-    Let \Qvar be a query variable, and \Eset be an evidence set in \model.
-    Let \Magg be an aggregate model of \M with respect to $\QvarIEset$.
-    We say \Magg is \emph{selective}, if for every $P \in \set{P}$ and any value \rval{i} of the selector
-    variable \rv{I}, there is an aggregator of $P$ in \Magg, such that $\agg{P}(i) = 1$.
-
-\end{definition}
+In a model that the posterior converges, we can find $\avgPost$ by using any well behaved prior instead of $\cMass{}$.
+We typically will use a conjugate prior to simplify the derivation of the posterior potential.
+By using a conjugate prior the posterior potential will be very similar to the entropy of the likelihood distribution.
 
 
-\begin{theorem}
-    Let \Qvar be a query variable, and \Eset be an evidence set in a probabilistic model \model.
-    Suppose that \aggmodel is a selective aggregate model of \M with respect to $\QvarIEset$.
-    Let \agg{\rv{x}}, \agg{\rv{e}} be the aggregated query and evidence variables in \Magg.
-    If $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$
-    with respect to $\QvarIEset$, then we have
-    \begin{equation*}
-        \Dx = \aggDxP \cdot
-    \end{equation*}
-
-    In addition, the central distribution for $\agg{\Qvar}|\agg{\rv{e}}$ is an aggregator of the central
-    distribution for $\QvarIEset$.
-\end{theorem}
-
-\begin{proof}
-    \newcommand{\aggExpKL}[1]{\ExpKL[\agg{\rval{x}}][\agg{\rval{e}}][\agg{#1}][\agg{P}]}
-    Suppose $\agg{P} \in \agg{\set{P}}$ is an aggregator of the probability measure $P \in \set{P}$
-    with respect to $\QvarIEset$.
-    Let
-    \begin{equation*}
-        \agg{R} = \arg\max_{\agg{Q} \in \agg{\set{P}}} \aggExpKL{Q}.
-    \end{equation*}
-    Since \Magg is an aggregate model, $\agg{R}$ must be an aggregator of some probability measure $R \in \set{P}$.
-    It follows that
-    \begin{align*}
-        \aggDxP
-        &= \aggExpKL{R} \\
-        &= \sum_i \agg{R}(\rval{i}) \ExpKL[][{\rval[i]{e}}][R] \\
-        &\leq \max_i \ExpKL[][{\rval[i]{e}}][R] \cdot
-    \end{align*}
-    This implies
-    \begin{equation}
-        \aggDxP \leq \Dx \cdot
-        \label{eq:th-2-proof-1}
-    \end{equation}
-
-    Similarly, let
-    \begin{equation*}
-    (S,k)
-        = \arg\max_{(Q,i)} \ExpKL[][{\rval[i]{e}}] \cdot
-    \end{equation*}
-    \Magg is a selective aggregate model.
-    This means that $S$ must have an aggregator \agg{S} in \Magg, which selects $k$ by assigning it a
-    probability of 1: $\agg{S}(k) = 1$.
-    Therefore,
-    \begin{align*}
-        \Dx
-        &= \ExpKL[][{\rval[k]{e}}][S] \\
-        &= \sum_{\aggxe} \agg{S}(\aggxe \mid k) \ln\frac{\agg{S}(\aggxIe)}{\agg{P}(\aggxIe)} \\
-        &= \aggExpKL{S} \\
-        &\leq \aggDxP \cdot
-    \end{align*}
-    From this and Inequality~\ref{eq:th-2-proof-1}, we conclude that
-    \begin{equation*}
-        \Dx = \aggDxP \cdot
-    \end{equation*}
-
-    To prove the second part of the theorem, let \agg{C} be a central distribution
-    for $\agg{\Qvar}|\agg{\rv{e}}$.
-    Since \Magg is an aggregate model for \M, \agg{C} must be an aggregator for some probability
-    measure $C \in \agg{\set{P}}$.
-    If we assume, by contradiction, that $C$ is not a central distribution for $\QvarIEset$ in \M, then there must
-    be a probability
-    measure $R \in \set{P}$ such that:
-    \begin{equation*}
-        \Dx[R] < \Dx[C] = \aggDxP[C] \cdot
-    \end{equation*}
-    On the other hand, since \Magg is a selective model, $R$ must have an aggregator $\agg{R} \in \agg{\set{P}}$,
-    and since \agg{C} is a central distribution in \Magg, we have
-    \begin{equation*}
-        \Dx[R] = \aggDxP[R] \geq \aggDxP[C],
-    \end{equation*}
-    which is a contradiction.
-\end{proof}

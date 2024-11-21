@@ -28,9 +28,10 @@
 
 % Primitive
 \newcommand{\mathFix}[1]{\ensuremath{#1}\xspace}
+\newcommand{\sub}[2]{\ifthenelse{\isempty{#2}}{#1}{#1_{#2}}}
 \newcommand{\set}[1]{\mathFix{\mathcal{\uppercase{#1}}}}
-\newcommand{\rv}[2][]{\mathFix{\uppercase\expandafter{#2}_{#1}}}
-\newcommand{\rval}[2][]{\mathFix{\lowercase\expandafter{#2}_{#1}}}
+\newcommand{\rv}[2][]{\mathFix{\sub{\uppercase\expandafter{#2}}{#1}}}
+\newcommand{\rval}[2][]{\mathFix{\sub{\lowercase\expandafter{#2}}{#1}}}
 \newcommand{\measure}[1]{\mathFix{\mathbb{#1}}}
 
 % Shortcut
@@ -41,15 +42,15 @@
 \newcommand{\econverges}{$\epsilon$-converges }
 \newcommand{\prior}{\mathFix{p(\paramValue)}}
 \newcommand{\param}{\rv{\varTheta}}
-\newcommand{\paramValue}{\rval{\theta}}
-\newcommand{\paramFunc}[1][]{\Omega_{#1}}
-\newcommand{\paramFuncValue}[1][]{\omega_{#1}}
+\newcommand{\paramValue}[1][]{\rval[#1]{\theta}}
+\newcommand{\W}[1][]{\rv[#1]{\Omega}}
+\newcommand{\w}[1][]{\rval[#1]{\omega}}
 \newcommand{\paramRange}{\Theta}
 \newcommand{\Qset}{\set{x}}
 \newcommand{\central}[1][\Qset]{\mathFix{C_{#1}}}
 \newcommand{\cPrior}[1][(\paramValue)]{\mathFix{c_{\Qset}#1}}
 \newcommand{\cMass}[1]{c_{\Qset}\ifthenelse{\isempty{#1}}{}{(#1)}}
-\newcommand{\rhoMass}[1][{\paramFuncValue[i]}]{\phi(#1)}
+\newcommandx{\avgPost}[2][1={\w[i]}, 2=]{\varphi_{#2}(#1)}
 
 \newcommand{\Xpairs}{\mathFix{\Qset = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
 \newcommand{\inP}[1]{\mathFix{\uppercase{#1} \in \set{P}}}
@@ -77,9 +78,9 @@
 \newcommand{\xIt}[1][]{\x[#1] \mid \paramValue}
 \newcommand{\xet}[1][]{\xe[#1], \paramValue}
 \newcommand{\xIet}[1][]{\rval[#1]{x} \mid \rval[#1]{e},  \paramValue}
-\newcommand{\tIw}[1][]{\paramValue \mid \paramFuncValue[#1]}
-\newcommand{\xIw}[1][]{\x[#1] \mid \paramFuncValue[#1]}
-\newcommand{\wIx}[1][]{\paramFuncValue[#1] \mid \x[#1]}
+\newcommand{\tIw}[1][]{\paramValue \mid \w[#1]}
+\newcommand{\xIw}[1][]{\x[#1] \mid \w[#1]}
+\newcommand{\wIx}[1][]{\w[#1] \mid \x[#1]}
 \newcommand{\tIx}[1][]{\paramValue \mid \x[#1]}
 
 \newcommand{\minP}{\min_{P \in \set{P}}}
@@ -142,6 +143,8 @@
     \left. \frac{\partial{#1}}{\partial{#2}} \right|_{#3}
 }
 \newcommand{\de}[2][\epsilon]{\frac{d#2}{d#1}}
+
+\newcommand{\avgPostExpand}[3][p]{\exp \left\{\sum_{#3} \pi(#3 \mid #2) \ln #1(#2 \mid #3) \right\}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -267,9 +270,22 @@
     %\section{Making Decisions under Uncertainty}\label{sec:uncertainty}
 
 
-    \section{Central Probability Measure}\label{sec:prior}
+    \section{Central Probability Measure}\label{sec:prior} {
+        \input{central}
 
-    \input{central}
+        \input{divergence}
+
+        \input{param}
+
+        \subsection{Multinomial Model} {
+            \input{multi}
+        }\label{subsec:multinomial-model}
+    }
+
+
+
+
+
 
     \section{Inference}
     {

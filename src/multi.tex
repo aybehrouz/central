@@ -1,28 +1,37 @@
 \renewcommand{\t}{\paramValue}
-\newcommand{\mdim}{k}
+\newcommand{\mdim}{d}
 \newcommand{\msize}{n}
 \newcommand{\avgPostElem}{\phi(\t[i])}
-\newcommand{\sumDim}{\sum_{i=1}^{k}}
-\newcommand{\prodDim}{\prod_{i=1}^k}
-\newcommand{\prodSeq}[2][k]{#2_{1}, #2_{2}, \ldots, #2_{#1}}
+\newcommand{\sumDim}{\sum_{i=1}^{\mdim}}
+\newcommand{\prodDim}{\prod_{i=1}^{\mdim}}
 \newcommand{\vSeq}[2]{(#1_1, #1_2, \ldots, #1_{#2})}
 \newcommand{\multi}{\frac{\msize!}{\prodDim \x[i]!} \prodDim \t_{i}^{\x[i]}}
 \renewcommand{\H}{ \entropy{\X \mid \t}{} }
 \newcommand{\omegaElem}{w}
+\newcommand{\omegaElemAlt}{w^{(ij)}}
 \newcommand{\eqSys}{\W(\t) = \w}
 % Clique tree commands
 \newcommandx{\msg}[3][1=i, 2=j, 3=\delta]{\mathFix{#3_{#1 \rightarrow #2}}}
 \newcommand{\msgAlt}{\msg[i][j][\sigma]}
-\newcommand{\ct}{\mathFix{\mathcal{T}}}
+\newcommand{\ct}[1]{\mathFix{\mathcal{T}_{#1}}}
 \newcommand{\rangeSep}{\set{r}_{i,j}}
 \newcommand{\altRangeSep}{\set{r}_{i,j}^{*}}
-\newcommand{\sep}{\mathFix{\set{s}_{i,j}}}
+\newcommandx{\sep}[2][1=i, 2=j]{\mathFix{\set{s}_{#1,#2}}}
 \newcommand{\sepVal}{\mathFix{s_{i,j}}}
-\newcommand{\msgMap}{f_{ij}}
+\newcommand{\msgMap}{\mathnormal{f}_{i,j}}
 \newcommand{\eqScope}{\vartheta}
-\newcommand{\ind}{i}
-\newcommand{\eqNum}{m}
+\newcommand{\ind}{\xi}
+\newcommand{\pr}[1]{pr_{#1}}
+\newcommand{\tInd}{I_{<(i, j)}}
+\newcommand{\rankEqSys}{r}
 \renewcommand{\M}{\psi}
+\newcommand{\mat}{M_{\W}}
+\newcommand{\C}[1]{C_{#1}}
+\newcommandx{\wPart}[3][1=i, 2=j, 3=\set{w}]{#3_{<(#1,#2)}}
+\newcommand{\wSep}{\wPart[i][j][\set{w}^*]}
+\newcommand{\eqScopeSep}[2]{\eqScope_{#1,#2}}
+\newcommand{\wSepVal}{\wPart[i][j][w^*]}
+\newcommand{\Nb}{Nb_i}
 
 In this section, we examine the derivation of the posterior potential for multinomial models, which are
 central to our work.
@@ -35,7 +44,7 @@ multinomial distribution.
 The configuration of the model is determined by two variables: $\msize$ and $\mdim$.
 Each element of the sample space $s \in \set{S}$ can be represent by a $\mdim$ dimensional random vector
 \[\X = \vSeq{\x}{\mdim},\] where each \x[i] is a nonnegative integer such that $\sumDim \x[i] = \msize$.
-The model parameter is a nonnegative $\mdim$ dimensional real vector \[\t = \vSeq{\theta}{k},\]
+The model parameter is a nonnegative $\mdim$ dimensional real vector \[\t = \vSeq{\theta}{\mdim},\]
 where $\sumDim \t[i] = 1$.
 The likelihood distributing $\pi(\X \mid \theta)$ is a multinomial distribution
 \begin{equation*}
@@ -76,34 +85,36 @@ Therefore, for the posterior potential of the multinomial parameter we have
 For the central probability measure of a multinomial model, we usually consider a query set that consists of random
 variables corresponding to fusions of the multinomial categories. %todo: should be rewrittten later
 
-Let $\X = \vSeq{\x}{\mdim}$ represent the elements of the sample space of a multinomial model.
+Let $\X = \vSeq{\x}{\mdim}$ be a random vector representing an element of the sample space of a multinomial model.
 A fusion random variable \Y is obtained by summing up some entries of \X.
-More precisely, if $\set{A}_1, \ldots, \set{A}_r$ is a partition of the set $\{1,2,\ldots, \mdim\}$, each value of \Y
-is a vector $\vSeq{y}{r}$ where
+More precisely, if $\set{A}_1, \ldots, \set{A}_{\mdim'}$ is a partition of the set $\{1,2,\ldots, \mdim\}$, each value
+of \Y is a vector $\vSeq{y}{\mdim'}$ where
 \[
-    \rval[j]{y} = \sum_{i \in \set{A}_j} \x[i], \qquad j = 1, \ldots, r
+    \rval[j]{y} = \sum_{i \in \set{A}_j} \x[i], \qquad j = 1, \ldots, \mdim'\ \cdot
 \]
-The fusion variable \Y has a multinomial distribution with the parameter $\w = \vSeq{\omegaElem}{r}$, where
+The fusion variable \Y has a multinomial distribution with the parameter $\w = \vSeq{\omegaElem}{\mdim'}$, where
 \[
-    \omegaElem_j = \sum_{i \in \set{A}_j} \t[i], \qquad j = 1, \ldots, r
+    \omegaElem_j = \sum_{i \in \set{A}_j} \t[i], \qquad j = 1, \ldots, \mdim'\ \cdot
 \]
 For example $(\t[1] + \t[5], \t[2], \t[4] + \t[7] + \t[8],  \ldots)$ fully parametrizes the fusion variable
 $(\x[1] + \x[5], \x[2], \x[4] + \x[7] + \x[8],  \ldots)$.
 
 Suppose that in a multinomial model we aim to find the central probability measure for a query set
-$\Qset = \{\X, \seqRv[Y]{m}\}$, where each \Y[i] is a fusion variable, and \X represents the sample set.
+$\Qset = \{\X, \seqRv[Y]{k}\}$, where each \Y[i] is a fusion variable, and \X represents the sample set.
 For using theorem~\ref{th:fixed_point}, we need to obtain $\avgPost$, where \w[i] is the parameter of \Y[i],
-and also $\avgPost[\w]$, where $\w = \vSeq{\w}{m}$.
+and also $\avgPost[\w]$, where $\w = \vSeq{\w}{k}$.
+Note that each \w[i] is a multinomial parameter.
 
 Each $\avgPost$ can be easily obtained using Equation~\ref{eq:pp_multi}.
 However, calculating $\avgPost[\w]$ requires integration:
 \[
     \avgPost[\w] = \int_{\omegaArea} \avgPost[\t] d\t \cdot
 \]
-The integration is performed over the set of all nonnegative solutions to the linear system of equations $\eqSys$.
-Here, \W is a linear map with a special matrix consisting solely of $0$ and $1$ entries.
+This integration is performed over the set of all nonnegative solutions to the linear system of equations $\eqSys$.
+Here, \W is a linear map with a matrix $\mat$ consisting solely of $0$ and $1$ entries.
 The range of \W typically has much lower dimensionality than \t, and the system of equations contains
 many free variables.
+The equation system has a solution when \w is inside the convex hull of the columns of $\mat$.
 
 We convert this integration into an inference problem in a probabilistic graphical model, and then use a slightly
 modified version of the clique tree message passing~\cite{koller2009probabilistic} algorithm.
@@ -113,21 +124,91 @@ Let $\eqScope \subseteq \vSeq{\t}{\mdim}$, and $0 \leq \omegaElem \leq 1$.
 An indicator factor $\ind$ is a function with the scope $\{\eqScope, \omegaElem\}$ such that:
 \[
     \ind(\eqScope, \omegaElem) = \begin{cases}
-                                     1 \quad &  \sum_{\t[i] \in \eqScope} \t[i] = w, \\
+                                     1 \quad &  \sum_{\t[i] \in \eqScope} \t[i] = \omegaElem, \\
                                      0 & \text{otherwise} \cdot
     \end{cases}
 \]
 For example $\ind(\t[2], \t[5], \t[6], \omegaElem)$ is $1$ when $\t[2] + \t[5] + \t[6] = w$, and is $0$ otherwise.
 
-If $\eqSys$ consists of $\eqNum$ equations, we define an indicator factor for every equation and construct an unnormalized
-measure $\M$:
+Suppose the rank of $\mat$ is $\rankEqSys$.
+We select $\rankEqSys$ linearly independent equations from $\eqSys$, and define an indicator factor for every
+equation.
+Then, we construct an unnormalized measure $\M$:
 \[
-    \M(\t, \w) = \prodDim \avgPostElem \prod_{j = 1}^{\eqNum} \ind(\eqScope_j, \omegaElem_j) \cdot
+    \M(\t, \omegaElem_1, \ldots, \omegaElem_{\rankEqSys}) =
+    \prodDim \avgPostElem \prod_{j = 1}^{\rankEqSys} \ind(\eqScope_j, \omegaElem_j) \cdot
 \]
-Clearly, marginalizing $\M$ over \t yields the desired $\avgPost[\w]$.
-To do so we can construct a clique tree for and perform message passing.
+Clearly, marginalizing $\M$ over \t yields $\avgPost[\w]$.
+To achieve this, we construct a clique tree for $\M$ that has at least one clique $\C{\omegaElem}$ containing all
+$\omegaElem_j$.
+By performing message passing and selecting $\C{\omegaElem}$ as the root of the tree, we can compute the desired
+marginal: $\M(\omegaElem_1, \ldots, \omegaElem_{\rankEqSys})$.
+We denote this clique tree by $\ct{\M}$.
 
+In $\ct{\M}$ each equation and each variable of the equation system $\eqSys$ is associated with a clique.
+Let $\C{i}$ and $\C{j}$ be two adjacent cliques in $\ct{\M}$ with the sepset \sep.
+Without loss of generality, we assume that the root is in the $\C{j}$ side of the tree.
+Let $\wPart$ be the set of all $\omegaElem_k$ such that an indicator $\ind(\cdot, \omegaElem_k)$ is associated
+with a clique in the $\C{i}$ side of the tree.
+We can think of $\wPart$ as the set of all equations that are associated with the $\C{i}$ side of the tree.
+Let $\eqScopeSep{i}{j}$ be the set of all \t[i], i.e., the variables of the equation system that are in the scope of
+both $\C{i}$ and $\C{j}$.
+Clearly we have \[ \sep = \wPart \cup \eqScopeSep{i}{j} \cdot \]
+However, it turns out that during message passing, we can use a simpler sepset.
 
+\begin{definition}
+    Let $\ct{}$ be a clique tree.
+    Let $\rangeSep$ denote the set of all possible assignments to the sepset \sep.
+    A \emph{message reparameterization} for $\ct{}$ is a mapping $\msgMap$ defined from $\rangeSep$
+    to another set $\altRangeSep$ for every $i, j$, which is message preserving.
+    That means, for any $\sepVal, \sepVal' \in \rangeSep$, if $\msgMap(\sepVal) = \msgMap(\sepVal')$
+    then $\msg(\sepVal) = \msg(\sepVal')$.
+
+    The reparameterization of a message \msg is a function \msgAlt defined on $\altRangeSep$ such that for every
+    $\sepVal \in \rangeSep$, we have $\msg(\sepVal) = \msgAlt(\msgMap(\sepVal))$.
+\end{definition}
+
+\begin{proposition}
+    We can replace all messages \msg with their reparameterization \msgAlt without affecting the message passing
+    algorithm.
+\end{proposition}
+
+\begin{proof}
+    During message passing no information regarding specific assignments to \sep is passed between cliques.
+    $\C{i}$ simply produces \msg for every possible assignments to \sep.
+    Having the reparameterization mapping the reparameterized messages can be used to produce \msg.
+\end{proof}
+
+Suppose $\omegaElem \in \wPart$ and $\ind(\eqScope, \omegaElem)$ is the indicator containing
+$\omegaElem$.
+This indicator represents the equation
+\[
+    \sum_{\t[i] \in \eqScope} \t[i] = \omegaElem \cdot
+\]
+We define a new variable $0 \leq \omegaElemAlt \leq 1$ for every $\omegaElem \in \wPart$ such that
+\[
+    \omegaElemAlt = \omegaElem - \sum_{\t[i] \in \eqScope \cap \eqScopeSep{i}{j}} \t[i]
+\]
+For each sepset \sep, there will be a corresponding set of these new variables.
+We denote this set by $\wSep$.
+We have a map from assignments to \sep into assignments to $\wSep$, which is message preserving.
+If two assignments $\sepVal$, $\sepVal'$ to the sepset variables induce the same assignment to
+$\wSep$ variables, that will imply that the equation system corresponding to the $\C{i}$ part of the tree has
+the same solution set for $\sepVal$ and $\sepVal'$.
+As a result $\msg(\sepVal) = \msg(\sepVal')$.
+
+To simplify message computation, we may impose some restrictions on the clique tree structure.
+For each clique $\C{i}$, Let $\pr{i}$ be the upstream neighbor of $i$, the one on the path to the root clique
+$\C{\omegaElem}$.
+We require that $\C{i} - \sep[i][\pr{i}] = \{\t[i]\}$.
+That is, in each clique exactly one variable should be eliminated.
+We associate $\avgPostElem$ with the clique that eliminates \t[i].
+Let $\Nb$ be the set of indexes of cliques that are neighbors of $\C{i}$.
+We define $\tInd$ to be an indicator vector.
+The message from $\C{i}$ to another clique $\C{j}$ is computed using the following convolution:
+\begin{equation}
+    \msg(\wSepVal) = \int \avgPostElem \prod_{k \in \Nb - \{j\}} \msg[k][i](\wSepVal - \t[i] \tInd) d\t[i]
+\end{equation}
 As we discussed in the previous section, we usually need to compute the
 posterior potential of the joint feature $\W(\paramValue) = \vSeq{\w}{m}$, where each \w[i] is a function of the model
 parameter \paramValue that fully parametrizes some random variable \X[i] in the model.
@@ -143,6 +224,8 @@ parameter that only
 includes addition.
 We can represent this linear map with a matrix, this matrix will only include 1 and 0
 We aim to compute the posterior potential of the joint features \W in a multinomial model.
+We can think of $\eqScopeSep{i}{j}$ as the set of all variables of the equation system that are associated with
+the $\C{i}$ side of the tree.
 
 We may represent \w with a column vector
 \[
@@ -159,25 +242,6 @@ We may represent \w with a column vector
         \w[m]  \\
     \end{bmatrix}
 \]
-
-\begin{definition}
-    Let \ct be a clique tree.
-    Let $\rangeSep$ denote the set of all possible assignments to the sepset \sep.
-    A \emph{message reparameterization} for \ct is a mapping $\msgMap$ defined from $\rangeSep$
-    to another set $\altRangeSep$ for every $i, j$, that is message preserving.
-    That means, for any $\sepVal, \sepVal' \in \rangeSep$ if $\msgMap(\sepVal) = \msgMap(\sepVal')$
-    then $\msg(\sepVal) = \msg(\sepVal')$.
-
-    The reparameterization of a message \msg is a function \msgAlt defined on $\altRangeSep$ such that for every
-    $\sepVal \in \rangeSep$, we have $\msg(\sepVal) = \msgAlt(\msgMap(\sepVal))$.
-\end{definition}
-
-\begin{proposition}
-    We can replace all messages \msg with their reparameterization \msgAlt without affecting the message passing
-    algorithm.
-\end{proposition}
-
-A message reparam does not need to be one to one as long as it is message preserving.
 
 
 \[

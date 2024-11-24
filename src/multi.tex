@@ -1,43 +1,45 @@
 \renewcommand{\t}{\paramValue}
 \newcommand{\mdim}{d}
 \newcommand{\msize}{n}
-\newcommand{\avgPostElem}{\phi(\t[i])}
+\newcommand{\avgPostElem}[1][{\t[i]}]{\phi(#1)}
 \newcommand{\sumDim}{\sum_{i=1}^{\mdim}}
 \newcommand{\prodDim}{\prod_{i=1}^{\mdim}}
-\newcommand{\vSeq}[2]{(#1_1, #1_2, \ldots, #1_{#2})}
+\newcommand{\seq}[2]{#1_1, #1_2, \ldots, #1_{#2}}
+\newcommand{\intSeq}[1]{\left\{ 1, 2, \ldots, #1 \right\}}
+\newcommand{\vSeq}[2]{(\seq{#1}{#2})}
 \newcommand{\multi}{\frac{\msize!}{\prodDim \x[i]!} \prodDim \t_{i}^{\x[i]}}
 \renewcommand{\H}{ \entropy{\X \mid \t}{} }
 \newcommand{\omegaElem}{w}
 \newcommand{\omegaElemAlt}{w^{(ij)}}
 \newcommand{\eqSys}{\W(\t) = \w}
 % Clique tree commands
-\newcommandx{\msg}[3][1=i, 2=j, 3=\delta]{\mathFix{#3_{#1 \rightarrow #2}}}
-\newcommand{\msgAlt}{\msg[i][j][\sigma]}
+\newcommandx{\msg}[3][1=\delta, 2=i, 3=j]{\mathFix{#1_{#2 \rightarrow #3}}}
+\newcommand{\altMsgSym}{\sigma}
 \newcommand{\ct}[1]{\mathFix{\mathcal{T}_{#1}}}
 \newcommand{\rangeSep}{\set{r}_{i,j}}
 \newcommand{\altRangeSep}{\set{r}_{i,j}^{*}}
 \newcommandx{\sep}[2][1=i, 2=j]{\mathFix{\set{s}_{#1,#2}}}
 \newcommand{\sepVal}{\mathFix{s_{i,j}}}
-\newcommand{\msgMap}{\mathnormal{f}_{i,j}}
+\newcommandx{\msgMap}[2][1=i, 2=j]{f_{#1,#2}}
 \newcommand{\eqScope}{\vartheta}
 \newcommand{\ind}{\xi}
-\newcommand{\pr}[1]{pr_{#1}}
-\newcommand{\tInd}{I_{<(i, j)}}
+\newcommand{\pr}[1]{pr(#1)}
+\newcommand{\indVec}[2]{\mathbf{1}_{#1, #2}}
 \newcommand{\rankEqSys}{r}
 \renewcommand{\M}{\psi}
 \newcommand{\mat}{M_{\W}}
 \newcommand{\C}[1]{C_{#1}}
 \newcommandx{\wPart}[3][1=i, 2=j, 3=\set{w}]{#3_{<(#1,#2)}}
-\newcommand{\wSep}{\wPart[i][j][\set{w}^*]}
+\newcommand{\wSep}{\set{w}^{*}_{i,j}}
 \newcommand{\eqScopeSep}[2]{\eqScope_{#1,#2}}
-\newcommand{\wSepVal}{\wPart[i][j][w^*]}
+\newcommand{\wSepVal}[2]{w^{*}_{#1, #2}}
 \newcommand{\Nb}{Nb_i}
 
-In this section, we examine the derivation of the posterior potential for multinomial models, which are
-central to our work.
+In this section, we examine the derivation of the central probability measure for multinomial models.
+Multinomial models play a key role in statistical learning.
 By de Finetti’s theorem, any exchangeable sequence of discrete random variables can be represented using a multinomial model.
-Exchangeable sequences are fundamental in statistical learning as they provide a framework for modeling data
-with inherent independence and order invariance, which is common in real-world learning tasks.
+Exchangeable sequences are fundamental to statistical learning, as they offer a framework for modeling data with
+inherent independence and order invariance.
 
 A multinomial model is a parametric model (Definition~\ref{def:param-model}) in which the likelihood function follows a
 multinomial distribution.
@@ -63,16 +65,16 @@ distribution:
 This implies that for the posterior potential we have
 \begin{align*}
     \avgPost[\t] &= \avgPostExpand{\t}{\x} \\
-    &= e^{\H} \prod_{j = 1}^{\mdim - 1} (\msize + j),
+    &= e^{-\H} \prod_{j = 1}^{\mdim - 1} (\msize + j),
 \end{align*}
-where $\H$ is the entropy of a multinomial distribution with parameter \t.
-We can write $\H$ in the following form:
+where $\H$ is the entropy of the multinomial distribution with parameter \t.
+The entropy of the multinomial distribution can be written in the following form:
 \[
-    \H =  - \ln(n!) + \sumDim \ln \avgPostElem,
+    \H =  - \ln(n!) - \sumDim \ln \avgPostElem,
 \]
 where
 \begin{equation}
-    \avgPostElem = \exp \left\{ -n \t[i] \ln \t[i] +
+    \avgPostElem = \exp \left\{ n \t[i] \ln \t[i] -
     \sum_{j = 0}^{n} \ln(j!) \binom{n}{j} \t[i]^{j} (1 - \t[i])^{n - j} \right\} \cdot
     \label{eq:pp_multi_elem}
 \end{equation}
@@ -87,12 +89,13 @@ variables corresponding to fusions of the multinomial categories. %todo: should 
 
 Let $\X = \vSeq{\x}{\mdim}$ be a random vector representing an element of the sample space of a multinomial model.
 A fusion random variable \Y is obtained by summing up some entries of \X.
-More precisely, if $\set{A}_1, \ldots, \set{A}_{\mdim'}$ is a partition of the set $\{1,2,\ldots, \mdim\}$, each value
+More precisely, if $\set{A}_1, \ldots, \set{A}_{\mdim'}$ is a partition of the set $\intSeq{\mdim}$, each value
 of \Y is a vector $\vSeq{y}{\mdim'}$ where
 \[
     \rval[j]{y} = \sum_{i \in \set{A}_j} \x[i], \qquad j = 1, \ldots, \mdim'\ \cdot
 \]
-The fusion variable \Y has a multinomial distribution with the parameter $\w = \vSeq{\omegaElem}{\mdim'}$, where
+The fusion variable \Y also follows a multinomial distribution with the parameter $\w = \vSeq{\omegaElem}{\mdim'}$,
+where
 \[
     \omegaElem_j = \sum_{i \in \set{A}_j} \t[i], \qquad j = 1, \ldots, \mdim'\ \cdot
 \]
@@ -100,7 +103,8 @@ For example $(\t[1] + \t[5], \t[2], \t[4] + \t[7] + \t[8],  \ldots)$ fully param
 $(\x[1] + \x[5], \x[2], \x[4] + \x[7] + \x[8],  \ldots)$.
 
 Suppose that in a multinomial model we aim to find the central probability measure for a query set
-$\Qset = \{\X, \seqRv[Y]{k}\}$, where each \Y[i] is a fusion variable, and \X represents the sample set.
+$\Qset = \{\X, \seqRv[Y]{k}\}$, where each \Y[i] is a fusion variable, and \X represents the elements of the sample
+space.
 For using theorem~\ref{th:fixed_point}, we need to obtain $\avgPost$, where \w[i] is the parameter of \Y[i],
 and also $\avgPost[\w]$, where $\w = \vSeq{\w}{k}$.
 Note that each \w[i] is a multinomial parameter.
@@ -114,13 +118,13 @@ This integration is performed over the set of all nonnegative solutions to the l
 Here, \W is a linear map with a matrix $\mat$ consisting solely of $0$ and $1$ entries.
 The range of \W typically has much lower dimensionality than \t, and the system of equations contains
 many free variables.
-The equation system has a solution when \w is inside the convex hull of the columns of $\mat$.
+This equation system has a solution when \w is inside the convex hull of the columns of $\mat$.
 
 We convert this integration into an inference problem in a probabilistic graphical model, and then use a slightly
 modified version of the clique tree message passing~\cite{koller2009probabilistic} algorithm.
 
-We represent each equation in the linear system $\eqSys$ using an indicator factor.
-Let $\eqScope \subseteq \vSeq{\t}{\mdim}$, and $0 \leq \omegaElem \leq 1$.
+For representing equations of the linear system $\eqSys$ by a graphical model, we use indicator factors.
+Let $\eqScope \subseteq \{\seq{\t}{\mdim}\}$, and $0 \leq \omegaElem \leq 1$.
 An indicator factor $\ind$ is a function with the scope $\{\eqScope, \omegaElem\}$ such that:
 \[
     \ind(\eqScope, \omegaElem) = \begin{cases}
@@ -134,81 +138,119 @@ Suppose the rank of $\mat$ is $\rankEqSys$.
 We select $\rankEqSys$ linearly independent equations from $\eqSys$, and define an indicator factor for every
 equation.
 Then, we construct an unnormalized measure $\M$:
-\[
-    \M(\t, \omegaElem_1, \ldots, \omegaElem_{\rankEqSys}) =
-    \prodDim \avgPostElem \prod_{j = 1}^{\rankEqSys} \ind(\eqScope_j, \omegaElem_j) \cdot
-\]
+\begin{equation}
+    \M(\t, \seq{\omegaElem}{\rankEqSys}) =
+    \prodDim \avgPostElem \prod_{k = 1}^{\rankEqSys} \ind(\eqScope_k, \omegaElem_k) \cdot
+    \label{eq:tree_measure}
+\end{equation}
+
 Clearly, marginalizing $\M$ over \t yields $\avgPost[\w]$.
-To achieve this, we construct a clique tree for $\M$ that has at least one clique $\C{\omegaElem}$ containing all
-$\omegaElem_j$.
+To achieve this, we construct a clique tree for $\M$ that has at least one clique $\C{\omegaElem}$, containing all
+$\omegaElem_k$ for $k \in \intSeq{\rankEqSys}$.
 By performing message passing and selecting $\C{\omegaElem}$ as the root of the tree, we can compute the desired
 marginal: $\M(\omegaElem_1, \ldots, \omegaElem_{\rankEqSys})$.
 We denote this clique tree by $\ct{\M}$.
 
 In $\ct{\M}$ each equation and each variable of the equation system $\eqSys$ is associated with a clique.
 Let $\C{i}$ and $\C{j}$ be two adjacent cliques in $\ct{\M}$ with the sepset \sep.
-Without loss of generality, we assume that the root is in the $\C{j}$ side of the tree.
-Let $\wPart$ be the set of all $\omegaElem_k$ such that an indicator $\ind(\cdot, \omegaElem_k)$ is associated
-with a clique in the $\C{i}$ side of the tree.
+Without loss of generality, we assume that the root $\C{\omegaElem}$, is in the $\C{j}$ side of the tree.
+Let $\wPart$ be the set of all $\omegaElem_k$ for $k \in \intSeq{r}$,
+such that an indicator $\ind(\cdot, \omegaElem_k)$ is associated with a clique in the $\C{i}$ side of the tree.
 We can think of $\wPart$ as the set of all equations that are associated with the $\C{i}$ side of the tree.
-Let $\eqScopeSep{i}{j}$ be the set of all \t[i], i.e., the variables of the equation system that are in the scope of
-both $\C{i}$ and $\C{j}$.
-Clearly we have \[ \sep = \wPart \cup \eqScopeSep{i}{j} \cdot \]
-However, it turns out that during message passing, we can use a simpler sepset.
+Let $\eqScopeSep{i}{j}$ be the set of all \t[i] for $i \in \intSeq{\mdim}$ (i.e. the variables of the equation system)
+that are in the scope of both $\C{i}$ and $\C{j}$.
+Due to the running intersection property, we have \[ \sep = \wPart \cup \eqScopeSep{i}{j} \cdot \]
+However, during message passing, we can use a simplified sepset instead.
 
 \begin{definition}
     Let $\ct{}$ be a clique tree.
     Let $\rangeSep$ denote the set of all possible assignments to the sepset \sep.
-    A \emph{message reparameterization} for $\ct{}$ is a mapping $\msgMap$ defined from $\rangeSep$
+    A \emph{message reparameterization} for $\ct{}$ is a map (i.e. function) $\msgMap$ defined from $\rangeSep$
     to another set $\altRangeSep$ for every $i, j$, which is message preserving.
     That means, for any $\sepVal, \sepVal' \in \rangeSep$, if $\msgMap(\sepVal) = \msgMap(\sepVal')$
-    then $\msg(\sepVal) = \msg(\sepVal')$.
+    then $\msg(\sepVal) = \msg(\sepVal')$, where \msg denotes the message from $\C{i}$ to $\C{j}$.
 
-    The reparameterization of a message \msg is a function \msgAlt defined on $\altRangeSep$ such that for every
-    $\sepVal \in \rangeSep$, we have $\msg(\sepVal) = \msgAlt(\msgMap(\sepVal))$.
+    The reparameterization of \msg, is a function \msg[\altMsgSym] defined on $\altRangeSep$ such that for every
+    $\sepVal \in \rangeSep$, we have $\msg(\sepVal) = \msg[\altMsgSym](\msgMap(\sepVal))$.
 \end{definition}
 
 \begin{proposition}
-    We can replace all messages \msg with their reparameterization \msgAlt without affecting the message passing
+    We can replace all messages \msg with their reparameterization \msg[\altMsgSym] without affecting the message passing
     algorithm.
 \end{proposition}
 
 \begin{proof}
     During message passing no information regarding specific assignments to \sep is passed between cliques.
-    $\C{i}$ simply produces \msg for every possible assignments to \sep.
-    Having the reparameterization mapping the reparameterized messages can be used to produce \msg.
+    $\C{i}$ simply produces \msg for every possible assignment to \sep.
+    Let $\Nb$ be the set of indexes of cliques that are neighbors of $\C{i}$.
+    Having the mappings $\msgMap$ and $\msgMap[k][i]$ for every $k \in \Nb$,
+    the reparameterized messages \msg[\altMsgSym][k][i] can be used to produce \msg[\altMsgSym].
 \end{proof}
 
-Suppose $\omegaElem \in \wPart$ and $\ind(\eqScope, \omegaElem)$ is the indicator containing
-$\omegaElem$.
+Suppose $\omegaElem_k \in \wPart$ and $\ind(\eqScope_k, \omegaElem_k)$ is the indicator factor containing
+$\omegaElem_k$.
 This indicator represents the equation
 \[
-    \sum_{\t[i] \in \eqScope} \t[i] = \omegaElem \cdot
+    \sum_{\t[i] \in \eqScope_k} \t[i] = \omegaElem_k \cdot
 \]
-We define a new variable $0 \leq \omegaElemAlt \leq 1$ for every $\omegaElem \in \wPart$ such that
+We define a new variable $0 \leq \omegaElemAlt_k \leq 1$ for every \mbox{$\omegaElem_k \in \wPart$} such that
 \[
-    \omegaElemAlt = \omegaElem - \sum_{\t[i] \in \eqScope \cap \eqScopeSep{i}{j}} \t[i]
+    \omegaElemAlt_k = \omegaElem_k - \sum_{\t[i] \in \eqScope_k \cap \eqScopeSep{i}{j}} \t[i] \cdot
 \]
 For each sepset \sep, there will be a corresponding set of these new variables.
 We denote this set by $\wSep$.
 We have a map from assignments to \sep into assignments to $\wSep$, which is message preserving.
 If two assignments $\sepVal$, $\sepVal'$ to the sepset variables induce the same assignment to
-$\wSep$ variables, that will imply that the equation system corresponding to the $\C{i}$ part of the tree has
+$\wSep$ variables, that implies the equation system corresponding to the $\C{i}$ part of the tree has
 the same solution set for $\sepVal$ and $\sepVal'$.
-As a result $\msg(\sepVal) = \msg(\sepVal')$.
+As a result, we will have $\msg(\sepVal) = \msg(\sepVal')$.
 
-To simplify message computation, we may impose some restrictions on the clique tree structure.
-For each clique $\C{i}$, Let $\pr{i}$ be the upstream neighbor of $i$, the one on the path to the root clique
-$\C{\omegaElem}$.
-We require that $\C{i} - \sep[i][\pr{i}] = \{\t[i]\}$.
-That is, in each clique exactly one variable should be eliminated.
-We associate $\avgPostElem$ with the clique that eliminates \t[i].
-Let $\Nb$ be the set of indexes of cliques that are neighbors of $\C{i}$.
-We define $\tInd$ to be an indicator vector.
-The message from $\C{i}$ to another clique $\C{j}$ is computed using the following convolution:
+Message computation can be simplified by introducing certain constraints on the structure of $\ct{\M}$.
+
+\begin{definition}[Convolution Clique Tree]
+    Let $\ct{\M}$ be a clique tree for the factorized measure of Equation \ref{eq:tree_measure}.
+    Let $\pr{i}$, for each clique $\C{i}$, be the index of the parent of $\C{i}$, i.e. the neighbor on the
+    path to the root clique $\C{\omegaElem}$.
+    We refer to $\ct{\M}$ as a \emph{convolution clique tree} if for every $i$ we have
+    \[\C{i} - \sep[i][\pr{i}] = \{\t[i]\} \cdot\]
+    That is, in each clique exactly one variable is eliminated.
+    We also require that each $\avgPostElem$ factor be associated with the clique that eliminates \t[i].
+\end{definition}
+
+Note that indicator factors may be associated with any clique as long as the tree remains
+family preserving.
+
+\begin{definition}
+    In a convolution clique tree, a clique that is associated with at least one indicator factor is an
+    \emph{assignment node}.
+    Any clique that is not an assignment node is a \emph{convolution node}.
+\end{definition}
+
+To have a more convenient notation, we can express messages as functions of vectors.
+Thus, the reparameterized message $\msg[\altMsgSym]$ will be a function of a vector $\wSepVal{i}{j}$, with an entry for
+each variable in $\wSep$.
+Note that each variable in $\wSep$ corresponds to an equation.
+Alternatively, $\wSep$ can be viewed as a set of equations.
+We define $\indVec{i}{j}$, for each $i$, $j$, to be an indicator vector indicating those equations of $\wSep$ that
+include \t[i].
+
+If $\C{i}$ is a convolution node, the outgoing message from $\C{i}$ to $\C{j}$ can be computed by convolution:
 \begin{equation}
-    \msg(\wSepVal) = \int \avgPostElem \prod_{k \in \Nb - \{j\}} \msg[k][i](\wSepVal - \t[i] \tInd) d\t[i]
+    \msg[\altMsgSym](\wSepVal{i}{j}) =
+    \int \avgPostElem[t] \prod_{k \in \Nb - \{j\}} \msg[\altMsgSym][k][i](\wSepVal{k}{i} - t \indVec{k}{i}) dt
 \end{equation}
+
+On the other hand, when $\C{i}$ is an assignment node, for every value of $\wSepVal{i}{j}$ there is only one acceptable
+value for \t[i] and the message can be computed without convolution.
+Moreover, certain values of $\wSepVal{i}{j}$ will be invalid.
+For every indicator factor, if $\t[i] \notin \eqScope$, the corresponding variable in $\wSep$ to that indicator factor
+must be always $0$ in the computed message.
+If $\t[i] \in \eqScope$, we assign the corresponding variable in $\wSep$ to $t$, then for $\msg[\altMsgSym]$ we have
+\begin{equation}
+    \msg[\altMsgSym](\wSepVal{i}{j}) =
+    \avgPostElem[t] \prod_{k \in \Nb - \{j\}} \msg[\altMsgSym][k][i](\wSepVal{k}{i} - t \indVec{k}{i}) \cdot
+\end{equation}
+
 As we discussed in the previous section, we usually need to compute the
 posterior potential of the joint feature $\W(\paramValue) = \vSeq{\w}{m}$, where each \w[i] is a function of the model
 parameter \paramValue that fully parametrizes some random variable \X[i] in the model.

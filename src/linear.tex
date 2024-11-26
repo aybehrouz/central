@@ -25,8 +25,6 @@
 \newcommand{\dualMap}[1][M]{\mathFix{{#1}^*}}
 
 
-\subsection{Expectation as a Linear Map}\label{subsec:probability-as-a-linear-map}
-
 A sample space, denoted by \sampleSet, is the set of all possible outcomes of a random experiment.
 That is, the outcome of a random experiment can \emph{always} be represented by \emph{exactly one} element of \sampleSet.
 
@@ -191,10 +189,6 @@ We now will establish the familiar relationship between conditional expectation 
     The dual map is a linear map.
 \end{proposition}
 
-\begin{proposition}
-    If {v1, v2, ..} are a basis of l. then
-\end{proposition}
-
 \begin{theorem}
     Let \sampleSet be a sample set.
     Suppose  $\maps{\sampleSet}{\sampleSetAlt}$ is a map from \sampleSet to another set \sampleSetAlt.
@@ -226,56 +220,3 @@ We now will establish the familiar relationship between conditional expectation 
     \]
     This implies  $\ExpAlt[{\rstOp[\eventAlt](\sureAlt)}] \geq 0$.
 \end{proof}
-
-\begin{definition}
-    Let \sampleSet be a sample space.
-    Suppose $\maps{\sampleSet}{\sampleSetAlt}$ is a surjective (onto) map from \sampleSet to \sampleSetAlt.
-    When $M$ is injective (one-to-one), we refer to it as \emph{relabeling}.
-    When $M$ is not injective, we refer to it as \emph{simplification}.
-\end{definition}
-
-\begin{definition}
-    Let \sampleSet be a sample set.
-    Suppose $\maps{\sampleSet}{\sampleSetAlt}$ is a map from \sampleSet to another set \sampleSetAlt.
-    A \emph{restoration} of $M$, denoted by $R_M$, is a map from $\field{R}^{{\actionSet[\sampleSetAlt]}}$
-    to $\field{R}^{\actionSet}$ such that $\dualdualMap \circ R_M = I$, where $I$ is the identity operator
-    on $\field{R}^{{\actionSet[\sampleSetAlt]}}$.
-\end{definition}
-
-\begin{theorem}
-    r is a linear map.
-\end{theorem}
-
-\begin{definition}
-    Suppose \sampleSet is a sample space and $M$ is a simplification (relabeling) of \sampleSet.
-    Let \inA{\act[]}, and let \Expect be an expectation for \sampleSet.
-    \begin{itemize}
-        \item The simplification (relabeling) of \act[] by $M$ is an element of \actionSetAlt, denoted by $\act[]'$, such that
-        $\act[] = \dualMap(\act[]')$, where \dualMap is the dual map of $M$.
-        \item  The simplification (relabeling) of \Expect by $M$ is an expectation for $\sampleSet'$, denoted by $\Expect'$,
-        such that
-        $\Expect' = \dualdualMap(\Expect)$, where \dualdualMap is the dual map of \dualMap.
-    \end{itemize}
-\end{definition}
-
-$\Expect'$ is an expectation
-\[
-    \dualMap[\dualMap](\Expect) = \Expect \circ \dualMap
-\]
-sd
-
-\[
-    \Expect'[\sure[\sampleSet']] = \Expect[{\dualMap(\sure[\sampleSet'])}]
-\]
-kj
-\[
-    \dualMap(\sure[\sampleSet']) = \sure[\sampleSet'] \circ M = \sure[\sampleSet]
-\]
-is an
-
-\begin{align*}
-    \Expect'[\sure[\sampleSet']] = \Expect[{\sure[\sampleSet]}] = 1 \cdot
-\end{align*}
-expectation
-an the
-composition clearly preserves the properties of expectation.

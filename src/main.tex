@@ -50,7 +50,7 @@
 \newcommand{\central}[1][\Qset]{\mathFix{C_{#1}}}
 \newcommand{\cPrior}[1][(\paramValue)]{\mathFix{c_{\Qset}#1}}
 \newcommand{\cMass}[1]{c_{\Qset}\ifthenelse{\isempty{#1}}{}{(#1)}}
-\newcommandx{\avgPost}[2][1={\w[i]}, 2=]{\varphi_{#2}(#1)}
+\newcommandx{\avgPost}[2][1={\w[i]}, 2=]{\varphi_{#2}\ifthenelse{\isempty{#1}}{}{(#1)}}
 
 \newcommand{\Xpairs}{\mathFix{\Qset = \left\{(\XE[1]), (\XE[2]), \ldots \right\}}}
 \newcommand{\inP}[1]{\mathFix{\uppercase{#1} \in \set{P}}}
@@ -89,6 +89,8 @@
 \newcommand{\maxParam}{\max_{\paramValue \in \paramRange}}
 \newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots \ifthenelse{\isempty{#2}}{}{, \rv[{#2}]{#1}}}
 \newcommand{\seqRval}[2][x]{\rval[1]{#1}, \ldots, \rval[{#2}]{#1}}
+\newcommand{\vSeq}[2]{(\seq{#1}{#2})}
+\newcommand{\seq}[2]{#1_1, #1_2, \ldots, #1_{#2}}
 % Formula
 \newcommand{\assign}[2][]{\rv[#1]{#2} = \rval[#1]{#2}}
 

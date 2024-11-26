@@ -290,8 +290,11 @@ This theorem gives a necessary condition for the central probability measure in 
     \frac{\avgPost[{#1}][#3]}{#3(#2)}
     \prod_i \frac{\avgPost[{\w[i]}][#3]}{#3(\w[i])}
 }
+\newcommandx{\pusFrontal}[2][1=\avgPost, 2=\rho]{
+    \left(\frac{#1(\w)}{#2(\w)} \prod_i \frac{#1(\w[i])}{#2(\w[i])} \right)
+}
 \newcommand{\fixedPoint}{\mu \cMass{}}
-
+\newcommand{\fpMap}[1]{T \ifthenelse{\isempty{#1}}{}{\left[ #1 \right]}}
 
 \begin{theorem}
     \label{th:fixed_point}
@@ -302,42 +305,33 @@ This theorem gives a necessary condition for the central probability measure in 
         \pi(\xIt[i]) = \pi \left( \xIw[i] \right)\cdot
         \label{eq:func_of_theta}
     \end{equation}
-    Also, let $\W(\paramValue) = (\seqRval[\omega]{k}) = \w$.
+    Also, let $\W(\paramValue) = \vSeq{\w}{k} = \w$.
 
-    Suppose $\rho$ is an unnormalized probability measure and $p$ is the corresponding normalized probability
-    mass function.
-    We define a function $\functional{}$ of $\rho$ as follows:
+    We define a map $\fpMap{}$ on the space of unnormalized probability measures of \w as follows:
     \begin{equation}
-        \functional{\rho}(\w) =
-        \left(  \ratioFull[][][\rho] \right)^{\frac{1}{k+1}} \rho(\w) ,
-        \label{eq:fixed_point_cx}
+        \fpMap{\rho}(\w) = \pusFrontal[{\avgPost[][\rho]}][\rho]^{\frac{1}{k+1}} \rho(\w) ,
+        \label{eq:pus_frontal}
     \end{equation}
-    where
-    \[
-        \avgPost[{\w[i]}][\rho] = \exp \left\{\sum_{\x[i]} \pi(\xIw[i]) \ln p(\wIx[i]) \right\},
-    \]
-    and
-    \[
-        \avgPost[\w][\rho] = \int_{\omegaArea} \avgPost[\paramValue][\rho] d\paramValue,
-    \]
-    where
-    \[
-        \avgPost[\paramValue][\rho] = \exp \left\{\sum_{\x} \pi(\xIt) \ln p(\tIx) \right\} \cdot
-    \]
+    where $\rho$ is an unnormalized probability measure and:
+    \begin{align*}
+        \avgPost[{\w[i]}][\rho] &= \exp \left\{\sum_{\x[i]} \pi(\xIw[i]) \ln \rho(\wIx[i]) \right\},\\
+        \avgPost[\w][\rho] &= \int_{\omegaArea} \avgPost[\paramValue][\rho] d\paramValue,\\
+        \avgPost[\paramValue][\rho] &= \exp \left\{\sum_{\x} \pi(\xIt) \ln \rho(\tIx) \right\} \cdot\\
+    \end{align*}
 
     If $\cMass{}$ denotes the probability mass function corresponding to the central probability measure for \Qset in \Mt,
-    then $\fixedPoint$ is a fixed point for $\functional{}$, where
+    then $\fixedPoint$ is a fixed point for $\fpMap{}$, where
     \[
         \mu = \exp \left\{\frac{1}{k+1}\int \DxCond[\central] \dt[\cPrior[]] \right\} \cdot
     \]
     Moreover, we have
-    \[
+    \begin{equation}
         \cMass{\tIw} = \frac{\avgPost[\paramValue][\cMass{}]}{\avgPost[\w][\cMass{}]} \cdot
-    \]
+        \label{eq:conditional_for_theta}
+    \end{equation}
 \end{theorem}
 
 \begin{proof}
-
     Let $Q^*(y) = \convexCond{Q}{y}$, for some \inP{Q_1, Q_2}, $0 \leq \alpha \leq 1$ and
     an arbitrary random variable \rv{Y}.
     \Mt is a parametric model.
@@ -386,13 +380,13 @@ This theorem gives a necessary condition for the central probability measure in 
         e^{\lambda} = \ratioFull \cdot
         \label{eq:fixed_point_proof_2}
     \end{equation}
-    Now we evaluate $\functional{}$ at $\fixedPoint$:
+    Now we evaluate $\fpMap{}$ at $\fixedPoint$:
     \begin{equation*}
-        \functional{\fixedPoint}(\w) =
+        \fpMap{\fixedPoint}(\w) =
         \left( \ratioFull[][][\fixedPoint] \right)^{\frac{1}{k+1}} \fixedPoint(\w) =
         e^{\frac{\lambda}{k+1}} \cMass{\w} \cdot
     \end{equation*}
-    Clearly for $\mu = e^{\frac{\lambda}{k+1}}$, $\fixedPoint$ is a fixed point for $\functional{}$.
+    Clearly for $\mu = e^{\frac{\lambda}{k+1}}$, $\fixedPoint$ is a fixed point for $\fpMap{}$.
 
     In addition, we can obtain a closed form for $\cMass{\tIw}$ by dividing
     Equation~\ref{eq:fixed_point_proof_1} by Equation~\ref{eq:fixed_point_proof_2}:
@@ -402,11 +396,21 @@ This theorem gives a necessary condition for the central probability measure in 
     which completes the proof.
 \end{proof}
 
+Using Equation~\ref{eq:pus_frontal}, we can construct a sequence of unnormalized measures by
+\[\rho_{n+1} = \fpMap{\rho_n} \cdot \]
+This sequence can be used in an iterative algorithm to find an estimation of the central probability measure
+$\cMass{\w}$.
+Once $\cMass{\w}$ is determined, Equation~\ref{eq:conditional_for_theta} can be used to obtain $\cMass{\paramValue{}}$.
+
+The key property of Equation~\ref{eq:pus_frontal} is that it allows us to compute $\cMass{\paramValue}$ for
+specific regions of the parameter space without needing to scan the entire space, which is typically large and intractable.
+Additionally, it defines a mapping based on \w and its marginals \w[i], rather than \paramValue.
+Notably, the space of \w is significantly smaller than that of \paramValue.
 
 \begin{definition}[Posterior Potential]
-    Let \pmodel be a parametric model and \X be a random variable in \Mt.
-    Let $\W$, be a function of the parameter \param that fully parametrizes \X.
-    We define the \emph{posterior potential} of $\W$ with respect to \X, denoted by $\avgPost[\w][\X]$, as
+    Let \pmodel be a parametric model and \Qset be a query set.
+    Let $\X \in \Qset$, and $\W$ be a function of the parameter \param that fully parametrizes \X.
+    We define the \emph{posterior potential} of \X for \w, denoted by $\avgPost[\w][\X]$, as
     follows:
     \begin{equation*}
         \avgPost[\w][\X] = \avgPostExpand[\cMass{}]{\w}{\x} \cdot
@@ -414,8 +418,53 @@ This theorem gives a necessary condition for the central probability measure in 
     When \X is clear from the context we will omit \X from the notation and simply write $\avgPost[\w]$.
 \end{definition}
 
-In a model that the posterior converges, we can find $\avgPost$ by using any well behaved prior instead of $\cMass{}$.
+In Equation~\ref{eq:pus_frontal}, if we replace $\avgPost[][\rho]$ with $\avgPost[][\cMass{}]$, that could improve the
+convergence properties considerably.
+In a model that the posterior of \X converges, we can find $\avgPost[][\X]$ by using any well behaved prior
+instead of $\cMass{\paramValue}$.
 We typically will use a conjugate prior to simplify the derivation of the posterior potential.
-By using a conjugate prior the posterior potential will be very similar to the entropy of the likelihood distribution.
+Using a conjugate prior, the posterior potential takes a form similar to the entropy of the likelihood distribution.
 
+\begin{theorem}
+    Let $\fpMap{}$ be the map defined in theorem~\ref{th:fixed_point}.
+    The sequence \[\rho_{n+1} = \fpMap{\rho_n},\] converges to the fixed point of
+    $\fpMap{}$ for any arbitrary initial unnormalized probability measure $\rho_1$.
+\end{theorem}
+
+\begin{proof}
+    \renewcommand{\d}[2]{d_{\W} \ifthenelse{\isempty{#1}}{}{\left( #1, #2 \right)}}
+    \newcommand{\dExpand}[2]{\intAbs{\lnfrac{#1}{#2}}}
+    \newcommand{\lnfrac}[2]{\ln \frac{#1(\w)}{#2(\w)}}
+    \newcommand{\intAbs}[1]{\int \left| #1 \right| d\w}
+    \newcommand{\p}{\rho}
+    \newcommand{\q}{\eta}
+    \renewcommand{\r}{\phi}
+    We prove the theorem by using Banach fixed point theorem~\cite{Agarwal2018}.
+    Let $\p$ and $\q$ be two unnormalized probability measures of a random variable \w
+    We define the distance of $\p$ and $\q$ as follows:
+    \begin{equation}
+        \d{\p}{\q} = \dExpand{\p}{\q} \cdot
+        \label{eq:d_metric}
+    \end{equation}
+    Obviously, if $\p = \q$, then $\d{\p}{\q} = 0$.
+    Conversely, if $\d{\p}{\q} = 0$, that implies  $\p = \q$ because $\intAbs{f(\w)} = 0$ if and only if $f(\w) = 0$.
+    Moreover, $\d{}{}$ is symmetric $\d{\p}{\q} = \d{\q}{\p}$, and satisfies the triangle inequality:
+    \begin{align*}
+        \d{\p}{\r} + \d{\r}{\q} &= \dExpand{\p}{\r} + \dExpand{\r}{\q} \\
+        &= \int \left( \left| \lnfrac{\p}{\r} \right| + \left| \lnfrac{\r}{\q} \right| \right) d\w \\
+        &\geq \intAbs{\lnfrac{\p}{\r} + \lnfrac{\r}{\q}} \\
+        &= \d{\p}{\q} \cdot
+    \end{align*}
+    Thus, $\d{}{}$ is a metric.
+
+    Now, we show that $\fpMap{}$ is a contraction.
+    \begin{align*}
+        \d{\fpMap{\p}}{\fpMap{\q}} &= \dExpand{\fpMap{\p}}{\fpMap{\q}} \\
+        &= \intAbs{ \ln \left( \frac{\p(\w)}{\q(\w)} \pusFrontal[\q][\p]^{\frac{1}{k+1}} \right) }\\
+        &= \frac{1}{k+1} \intAbs{ \ln \left( \prod_i \frac{p_{\p}(\w \mid \w[i])}{p_{\q}(\w \mid \w[i])} \right)} \\
+        &\leq \frac{1}{k+1} \sum_{i=1}^{k} \intAbs{\ln \frac{p_{\p}(\w \mid \w[i])}{p_{\q}(\w \mid \w[i])}} \\
+        &\leq^{?} \frac{k}{k+1} \d{\p}{\q}
+    \end{align*}
+    Unfortunately, this proof is not complete.
+\end{proof}
 

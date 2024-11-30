@@ -16,7 +16,7 @@ Therefore, he believes, instead of $P$, we should use a different probability me
 When evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\X)$,
 while he believes the correct distribution is $Q(\X)$.
 
-Let's assume that a real number can be used to measure this loss, and denote it as $\D[\X]$.
+Let us assume that a real number can be used to measure this loss, and denote it as $\D[\X]$.
 It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
 Therefore, $\D$ effectively is a measure of the divergence of $P(\X)$ from $Q(\X)$, when $Q$ is
 the believed true probability measure.
@@ -184,7 +184,7 @@ even when the minimum achievable value of $\epsilon$ is not very small.
     We define the \emph{divergence measure of $P \in \set{P}$ for \Qset} as follows:
     \begin{align}
         \label{eq:div_def}
-        \Dx & = \max_{Q \in \set{P}} \DxExpand,                    \\
+        \Dx & = \maxQ \DxExpand,                    \\
         & = \maxQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
         \frac{Q(\assign[i]{x} \mid \assign[i]{e})}{P(\assign[i]{x} \mid \assign[i]{e})} \cdot
     \end{align}

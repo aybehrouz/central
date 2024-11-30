@@ -106,6 +106,265 @@ of the divergence measure.
     A generic parametric model satisfies the conditions of Theorem~\ref{th:Dx_parametric_form}.
 \end{proposition}
 
+
+\newcommandx{\f}[2][1 = \rDist, 2 = \pVector, usedefault]{ f \ifthenelse{\isempty{#1}}{}{(#2, #1)}}
+\newcommand{\rDist}{r}
+\newcommand{\pxIe}{p_{\xIe[i]}}
+\newcommand{\pVector}{P_{\Qset}}
+\newcommand{\sad}[1]{#1^{*}}
+\newcommand{\saddle}{(\sad{\pVector}, \sad{\rDist})}
+\newcommand{\fExpand}{\intProd[\rDist]{\left( \fInside{\pxIe} \right)}}
+\newcommand{\fInside}[1]{\sumixe \pi(\xIet[i]) \ln \frac{\pi(\xIet[i])}{#1}}
+\newcommand{\Rdist}[1][{\xIe[i]}]{\sad{R}({#1})}
+\newcommand{\sadR}{\sad{R}}
+\newcommand{\Rvector}{\sad{R}_\Qset}
+
+\begin{theorem}
+    Let \pmodel be a generic parametric model and \Xpairs be a query set.
+    We define
+    \begin{equation*}
+        \f = \fExpand,
+    \end{equation*}
+    where $\rDist$ is a probability distribution, and $\pVector$ is a vector that includes an
+    entry $\pxIe \geq 0$ for every $i, \xe[i]$, such that $\sum_{\x[i]} \pxIe = 1$.
+
+    $\f[ ]$ is a concave-convex function and has a saddle point: $(\sad{r}, \sad{\pVector})$.
+    Furthermore, the distribution $P(\assign[i]{x} \mid \assign[i]{e}) = \sad{\pxIe}$ is a central
+    distribution for \Qset.
+    If $\saddle$ is a saddle point of $\f[ ]$, and there is a prior distribution $p$ such that
+    $\sad{\pxIe} = \int \pi(\xIet[i]) \dt$, then the
+    distribution $P(\assign[i]{x} \mid \assign[i]{e}) = \sad{\pxIe}$ is a central distribution for \Qset.
+\end{theorem}
+
+\begin{proof}
+    We define
+    \begin{equation*}
+        \f = \fExpand,
+    \end{equation*}
+    where $\rDist$ is a real function of the model parameter \paramValue, and $\pVector$ is a vector of real
+    numbers with an entry $\pxIe$ for every $i, \xe[i]$.
+
+    Let $\saddle$ be a simultaneous solution to the following two optimization problems:
+
+    \begin{equation*}
+        \begin{aligned}
+            &\text{minimize} & &\f[\sad{\rDist}] & &\text{w.r.t.} \ \pVector \\
+            &\text{subject to} & &\sum_{\x[i]} \pxIe = 1,  & &\text{for all}\  i,\e[i] \\
+            \\
+            &\text{maximize} & &\f[][\sad{\pVector}] & &\text{w.r.t.} \ \rDist \\
+            &\text{subject to} & &\rDist(\paramValue) \geq 0, & &\text{for all} \ \paramValue \\
+            & & &\intProd[\rDist]{} = 1 &
+        \end{aligned}
+    \end{equation*}
+    Clearly, if $\saddle$ exists, it will be a saddle point for $\f[ ]$.
+
+    Both of these optimization problems are convex and differentiable~\cite{0521833787}.
+    All the constraint functions are affine, and therefore are convex and differentiable.
+    Note that for the constraint $\rDist(\paramValue) \geq 0$, we can define an infinite number of affine
+    constraint functions of the form $\int \delta(\paramValue - t) \rDist(t) dt$, where $\delta$ is the Dirac delta
+    function.
+
+    Additionally, $\f[ ]$ is differentiable with respect to both $\rDist$ and $\pVector$.
+    For any fixed $\pVector$, $\f[\cdot]$ is an affine function and is concave.
+    For a fixed $\sad{\rDist}$, we can write
+    \begin{equation}
+        \f[\sad{\rDist}][\pVector] = c - \sumixe \Rdist[{\xe[i]}] \ln \pxIe,
+        \label{eq:max_for_P}
+    \end{equation}
+    where $c$ and $\Rdist[{\xe[i]}] = \marginal[\sad{\rDist}]{\xe[i]}$ are not functions of $\pVector$.
+    Since $\sad{\rDist}$ is a solution to the second optimization problem, it is feasible and satisfies
+    all the constraints.
+    Therefore, $\sad{R}(\xe[i]) \geq 0$ for any $i$, \e[i], and $\f[\sad{\rDist}][\cdot]$ is the negative of a
+    linear combination of concave $\ln \pxIe$ functions with nonnegative coefficients and is a convex function.
+
+    Since both optimization problems are convex and differentiable, any point $\saddle$ that simultaneously satisfies
+    the KKT conditions~\cite{0521833787} for both problems is a saddle point for $\f[ ]$.
+    The following KKT conditions can be obtained for every \paramValue, $i$, \x[i], and \e[i]:
+    \begin{gather}
+        \label{eq:kkt_R_is_pxIe}
+        \intProd[\sad{\rDist}]{\pi(\xIet[i])} = \lambda(\e[i]) \sad{\pxIe}, \\
+        \label{eq:kkt_pxIe_sums_one}
+        \sum_{\x[i]} \sad{\pxIe} = 1, \\
+        \nonumber
+        \fInside{\sad{\pxIe}} - \mu(\paramValue) = \lambda, \\
+        \label{eq:kkt_r_sums_one}
+        \intProd[\sad{\rDist}]{} = 1, \\
+        \label{eq:kkt_r_nonnegative}
+        \sad{\rDist}(\paramValue) \geq 0 \\
+        \nonumber
+        \mu(\paramValue) \geq 0, \\
+        \label{eq:kkt_mu_product}
+        \mu(\paramValue) \sad{\rDist}(\paramValue) = 0 \cdot
+    \end{gather}
+
+    By summing Equation \ref{eq:kkt_R_is_pxIe} over \x[i] and using Equations~\ref{eq:kkt_r_sums_one}
+    and~\ref{eq:kkt_pxIe_sums_one}, we obtain $\lambda(\e[i]) = 1$.
+
+    Note that we can impose more restrictive conditions and still derive a set of sufficient conditions for a saddle
+    point.
+    Hence, we can replace Inequality~\ref{eq:kkt_r_nonnegative} with the more restrictive $\sad{\rDist}(\paramValue) > 0$.
+    Then, Equation~\ref{eq:kkt_mu_product} implies $\mu(\paramValue) = 0$, and the KKT conditions are simplified to
+    \begin{gather}
+        \label{eq:kkt_Rlambda}
+        \fInside{\Rdist} = \lambda, \\
+        \nonumber
+        \Rdist = \intProd[\sad{\rDist}]{\pi(\xIet[i])}, \\
+        \nonumber
+        \sad{\rDist}(\paramValue) > 0 \cdot
+    \end{gather}
+
+    Let \pmodel be a parametric model.
+    If a probability measure $\sadR \in \set{p}$ which is obtained by a positive prior,
+    satisfies Equation~\ref{eq:kkt_Rlambda}, then it corresponds to a saddle point of $\f[ ]$
+    Suppose \central is a central distribution for \Qset.
+    Since $\sadR \in \set{p}$, we have
+    \begin{equation*}
+        \Dx[\central] \leq \Dx[\sadR] \cdot
+    \end{equation*}
+    On the other hand, $(\Rvector, \sad{\rDist})$ is a saddle point and we have
+    \begin{equation}
+        \label{eq:kkt_saddle_lq_dx}\f[\sad{\rDist}][\Rvector] \leq \f[\sad{\rDist}][\central]
+    \end{equation}
+    $\sad{\rDist}$ is a distribution.
+    Therefore,
+    \[
+        \f[\sad{\rDist}][\central] = \intProd[\sad{\rDist}]{\DxCond[\central]}
+        \leq \maxParam \DxCond[\central] = \Dx[\central]
+    \]
+    On the other hand, Equation~\ref{eq:kkt_Rlambda} implies
+    \[
+        \Dx[\sadR] = \f[\sad{\rDist}][\Rvector] = \lambda
+    \]
+    By inequality~\ref{eq:kkt_saddle_lq_dx} we get
+    \[
+        \Dx[\sadR] \leq \Dx[\central]
+    \]
+    Thus, we proved \[\Dx[\sadR] = \Dx[\central],\] which completes the proof of the theorem.
+\end{proof}
+\begin{proof}
+
+    $\sad{\rDist}$ is a distribution and $\f[\sad{\rDist}][\central]$ is a weighted average of $\DxCond[\central]$ for
+    different values of \paramValue.
+    Therefore,
+    \[
+        \f[\sad{\rDist}][\central] \leq \Dx[\central]
+    \]
+
+
+
+
+
+    where $R$ is a probability measure in \Mt that is obtained by a positive prior $\sad{\rDist}(\paramValue) > 0$:
+    \[
+        \cdot
+    \]
+
+
+
+
+
+
+
+    of concave functions with non-positive we have that ensures
+    $\f[\sad{\rDist}][\cdot]$ is convex.
+    Note that is a solution
+    we use kkt \cite{0521833787}
+    First, we show that $\f[ ]$ is a concave-convex function.
+
+    For any fixed $\pVector$, $\f[\cdot]$ is a linear function.
+    Note that if a function is concave (convex) on a set, it is also concave (convex) on any convex subset of that set.
+    The domain of $\f[\cdot]$ is the set of all real functions $\rDist$ such that $\intProd[r]{} = 1$.
+    We can easily verify that this set is a convex set, and therefore $\f[\cdot]$ is concave (and also convex) on the
+    defined domain.
+
+    On the other hand, for a fixed $\rDist$, if we let $Q(\xe[i]) =\marginal[r]{\xe[i]}$ we have
+    \begin{equation}
+        \f[r][\cdot] = c - \sumixe Q(\xe[i]) \ln \pxIe,
+        \label{eq:max_for_P}
+    \end{equation}
+    where $c$ and $Q(\xe[i])$ are constants.
+    We know that a function of the form $f(\seqRvalInf) = \sum_i a_i \ln x_i$ is concave for $a_i \geq 0$.
+    Consequently, $\f[][\cdot]$ will be convex if the domain of valid $\pVector$-vectors is a compact convex set.
+    For a valid $\pVector$ we must have $\interZeroOne{\pxIe}$ and $\sum_{\x[i]} \pxIe = 1$.
+    We can easily verify that if $\pVector$ and $\pVector'$ satisfy the required conditions,
+    $\alpha \pVector + (1 - \alpha) \pVector'$, where $\interZeroOne{\alpha}$ also satisfies these conditions.
+    Therefore, $\f[][\cdot]$ is a convex function.
+
+
+    Since $\f[ ]$ is a differentiable concave-convex function, any point $\saddle$ that is simultaneously a
+    stationary point of the two Lagrangian functions
+    \begin{align*}
+        \Lagr[r(\paramValue)] = &\fExpand \\
+        &- \lambda \left( \intProd[\rDist]{} - 1 \right),
+    \end{align*}
+    and
+    \begin{align*}
+        \Lagr[\pVector][\lambda_{\e[i]}] = &\fExpand \\
+        &+ \sum_{i} \sum_{\e[i]} \left(\lambda_{\e[i]}\left(\sum_{\x[i]} \pxIe - 1\right)\right) \cdot
+    \end{align*}
+    is a saddle point of $\f[ ]$.
+    \footnote{I need reference for this! This seems similar to the case where $f'(x*) = 0$ for a differentiable convex function
+    implies that $x*$ is a global minimum. However, I'm still looking for a good reference for this.}
+
+    By setting the partial derivatives of the Lagrangian functions to zero, we obtain the following system of
+    equations for every \paramValue, $i$, \x[i], and \e[i]:
+
+    Any solution $\saddle$ to this equation system is a saddle points of $\f[ ]$.
+
+
+
+    \[
+        -\intProd[r]{ \frac{\pi(\xIet[i])}{\pxIe}} + \lambda(\e[i])
+    \]
+
+    From Equation~\ref{eq:convex_dist_set}, it follows that the domain of the $P_{\XIE[i]}$-vectors is also a
+    compact convex set.
+    If we calculate the Hessian matrix of $\f[r][\cdot]$, we observe that the matrix is
+    diagonal, and each element of the main diagonal is $\frac{R(\xIe[i])}{P(\xIe[i])^2}$.
+    Thus, the hessian matrix of $\f[r][\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
+
+    Let $\saddle$ be the saddle point of $\f[ ]$, and \central be the central distribution for \Qset.
+    For a saddle point we have
+    \[
+        \f[ ]\saddle  = \min_{\pVector} \f[\sad{\rDist}][],
+    \]
+
+    If $\pVector$ represents a valid distribution for each $\XIE[i]$ that can be obtained by a prior distribution, we
+    have
+    \[
+        \Dx[\sad{\pVector}] = \f[ ]\saddle
+    \]
+    That impleas
+    \[
+        \Dx[\central] \leq \f[ ]\saddle
+    \]
+    \begin{align*}
+        \f[ ]\saddle &= \max_{\rDist} \f[][\sad{\pVector}] \\
+        &= \min_{\pVector} \f[\sad{\rDist}][] \cdot
+    \end{align*}
+    This implies
+    \[
+        \Dx[\central] \geq \f[\sad{\rDist}][\central] \geq \f[\sad{\rDist}][\sad{\pVector}]
+    \]
+
+
+    and \central be the central distribution for \Qset.
+
+    sdada
+    \[
+        \intProd{F}
+    \]
+
+
+    since
+
+
+    \[
+        \f[\sad{\rDist}][\sad{\pVector}] = \Dx[\pVector]
+    \]
+
+\end{proof}
+
 Theorem~\ref{th:Dx_parametric_form} implies that in a generic parametric model, we can obtain the central
 probability measure by:
 \begin{equation*}
@@ -146,15 +405,14 @@ In the next theorem we will use the minimax theorem, assuming $x$ is a real func
         Q^*(\xIe[i]) = \convexCond{Q}{\xIe[i]}\cdot
         \label{eq:convex_dist_set}
     \end{equation}
-    Then, the central distribution for \Qset can be obtained by:
-    \begin{align}
-        \central  &= \arg\maxP \int \DxCond \dt
+    Then, we have
+    \begin{equation}
+        \minP \maxParam \DxCond = \maxP \int \DxCond \dt \cdot
         \label{eq:Cx_by_max}
-    \end{align}
+    \end{equation}
 \end{theorem}
 
 \begin{proof}
-    \newcommandx{\f}[2][1 = r, 2 = P_{\XIE[i]}]{ f(#1, #2)}
     We prove this theorem using the minimax theorem.
     To do so, we define a function as follows:
     \begin{equation*}
@@ -166,24 +424,9 @@ In the next theorem we will use the minimax theorem, assuming $x$ is a real func
     Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is similar to maximizing
     with respect to $\paramValue$, and we have
     \[
-        \central = \arg\minP \max_{r} \f\cdot
+        \minP \maxParam \DxCond = \minP \max_{r} \f\cdot
     \]
 
-    For a fixed $P_{\XIE[i]}$, $\f[\cdot]$ is a linear function.
-    The domain of this function is the set of all probability distributions, which is a compact convex set,
-    and this function is both concave and convex.
-
-    On the other hand, for a fixed $r$, if we let $\marginalEq[r]{\xe[i]}$ we have
-    \begin{equation}
-        \f[r][\cdot] = c - \sumixe R(\xe[i]) \ln P(\xIe[i]),
-        \label{eq:max_for_P}
-    \end{equation}
-    where $c$ is not a function of $P_{\XIE[i]}$.
-    From Equation~\ref{eq:convex_dist_set}, it follows that the domain of the $P_{\XIE[i]}$-vectors is also a
-    compact convex set.
-    If we calculate the Hessian matrix of $\f[r][\cdot]$, we observe that the matrix is
-    diagonal, and each element of the main diagonal is $\frac{R(\xIe[i])}{P(\xIe[i])^2}$.
-    Thus, the hessian matrix of $\f[r][\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
 
     Hence, we can use Theorem~\ref{th:minimax}
     \begin{equation}
@@ -210,13 +453,10 @@ In the next theorem we will use the minimax theorem, assuming $x$ is a real func
     \[
         \minP \f = \int \DxCondExpand[R] \dt[r] \cdot
     \]
-    By Equation~\ref{eq:divergence_minmax}, we conclude
-    \[
-        \central = \arg\max_{\inP{R}} \int \DxCond[R] \dt[r] \cdot \qedhere
-    \]
+    Substituting this into Equation~\ref{eq:divergence_minmax} completes the proof of the theorem.
 \end{proof}
 
-Now, let's use this theorem for our dice example and rewrite Equation~\ref{eq:joint_form}:
+Let us now use this theorem for our dice example and rewrite Equation~\ref{eq:joint_form}:
 \begin{align*}
     \central &= \arg\maxP \int \KlCond[][\seqRval{n}][ ] \dt \\
     &= \arg\maxP \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
@@ -228,7 +468,13 @@ the multinomial parameters.
 
 \begin{theorem}
     \label{th:lambda}
-    Under the assumptions of Theorem~\ref{th:central_by_max}, the central probability measure for \Qset satisfies:
+    Suppose the conditions of Theorem~\ref{th:central_by_max} hold and the central distribution for \Qset exists and
+    can be obtained by
+    \[
+        \central = \arg\maxP \int \DxCond \dt \cdot
+    \]
+    in \Mt, if any prior that is negative for some values of \paramValue, induces a negative distribution for
+    a variable in \Qset, then the central distribution for \Qset satisfies:
     \begin{equation}
         \DxCond[\central] = \lambda,
         \label{eq:lambda}
@@ -236,23 +482,28 @@ the multinomial parameters.
     where $\lambda$ is a constant.
 \end{theorem}
 \begin{proof}
-    By Theorem~\ref{th:central_by_max}, the central distribution for $\QvarIE$ maximizes
+    By the assumptions of the theorem, the central distribution for \Qset is a solution to the problem of
+    maximizing
     \[
         \functional{p(\paramValue)} = \Dminimax,
     \]
     with respect to different choices of the prior distribution $p(\paramValue)$, subject to the
     constraint $\int \dt[p] = 1$.
+    We do not need to consider the constraint $p(\paramValue) \geq 0$,
+    since the objective function $\functional{}$ contains logarithm terms that ensure all $P(\xIe[i])$ will be
+    positive in any solution.
+    By assumption, this implies $p(\paramValue) \geq 0$.
 
-    Applying the Lagrange multiplier technique, the local maximum of $\functional{}$ is a stationary point of the
+    Applying the Lagrange multiplier technique, the solution is a stationary point of the
     Lagrangian functional:
     \[
         \Lagr[p(\paramValue)] = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
     \]
-    Let's denote the prior distribution corresponding to the central distribution \central by $\cPrior$.
+    Let us denote the prior distribution corresponding to the central distribution \central by $\cPrior$.
     Let $p(\paramValue) = \cPrior + \epsilon \eta(\paramValue)$ be a variation of $\cPrior$, where $\eta(\paramValue)$ is
-    a continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
+    an arbitrary continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
 
-    Since $\cPrior$ is an extremizing function for $\functional{p(\paramValue)}$, the lagrangian
+    Since $\cPrior$ is an extremizing function for $\functional{}$, the lagrangian
     $\Lagr$ has a stationary point where $\epsilon = 0$, and we have
     \[
         \parDerivAt[\Lagr] = 0\cdot

@@ -35,7 +35,7 @@
 \newcommand{\measure}[1]{\mathFix{\mathbb{#1}}}
 
 % Shortcut
-
+\newcommand{\sampleSet}[1][s]{\set{#1}}
 \newcommand{\field}[1]{\mathFix{\mathbb{#1}}}
 \newcommand{\Mt}{\mathFix{\M_{\param}}}
 \newcommand{\M}{\mathFix{\mathcal{M}}}
@@ -82,11 +82,11 @@
 \newcommand{\xIw}[1][]{\x[#1] \mid \w[#1]}
 \newcommand{\wIx}[1][]{\w[#1] \mid \x[#1]}
 \newcommand{\tIx}[1][]{\paramValue \mid \x[#1]}
-
+\newcommand{\interZeroOne}[1]{#1 \in \left[0,1 \right]}
 \newcommand{\minP}{\min_{P \in \set{P}}}
 \newcommand{\maxP}{\max_{P \in \set{P}}}
-\newcommand{\maxQ}{\max_{Q \in \set{P}}}
-\newcommand{\maxParam}{\max_{\paramValue \in \paramRange}}
+\newcommand{\maxQ}{\sup_{Q \in \set{P}}}
+\newcommand{\maxParam}{\sup_{\paramValue \in \paramRange}}
 \newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots \ifthenelse{\isempty{#2}}{}{, \rv[{#2}]{#1}}}
 \newcommand{\seqRval}[2][x]{\rval[1]{#1}, \ldots, \rval[{#2}]{#1}}
 \newcommand{\vSeq}[2]{(\seq{#1}{#2})}
@@ -137,7 +137,7 @@
 \newcommand{\marginalEq}[2][P]{
     \uppercase{#1}(#2) = \marginal[\lowercase{#1}]{#2}
 }
-
+\newcommandx{\intProd}[3][1=p, 2=\paramValue{}]{\int #3 #1(#2)d#2}
 \newcommand{\convexCond}[2]{ \alpha #1_{1}(#2) + (1 - \alpha) #1_{2}(#2)}
 \newcommandx{\dt}[2][1=p, 2=\paramValue]{#1(#2)d#2}
 \newcommandx{\parDeriv}[2][1=\mathcal{L}, 2=\epsilon, usedefault]{\frac{\partial{#1}}{\partial{#2}}}
@@ -246,7 +246,7 @@
 
 \newcommand{\KLabVec}{\KLab{\vval{x}}{\vval{e}}{\alpha}{\beta}}
 
-\newcommand{\Lagr}[1][\epsilon]{\mathcal{L} \left[#1, \lambda\right]}
+\newcommandx{\Lagr}[2][1=\epsilon, 2=\lambda]{\mathcal{L} \left[#1, #2\right]}
 
 
 

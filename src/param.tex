@@ -116,6 +116,10 @@ of the divergence measure.
 \end{proposition}
 
 
+A vector in $\mathbb {R}^{n}$ shares many properties with a real function.
+We sometimes assume that a real function is a real vector, and vice versa.
+In the next theorem we will use the minimax theorem, assuming $x$ is a real function.
+
 
 
 \newcommand{\Pentry}{p_{\xIe[i]}}
@@ -140,25 +144,20 @@ of the divergence measure.
 
 
 \begin{theorem}
-    Let \pmodel be a generic parametric model and \Xpairs be a query set.
-    We define
+    Let \pmodel be a generic parametric model, $\central \in \set{P}$, and \Xpairs be a query set.
+    Suppose that there is a prior distribution $\cMass{}$ where $\cMass{\paramValue} > 0$ for all \paramValue,
+    and for every $i$, \x[i] and \e[i] we have
+    \[
+        \central(\xIe[i]) = \int \pi(\xIet[i]) \dt[\cMass{}] \cdot
+    \]
+    If there is a constant $\lambda$ such that
     \begin{equation*}
-        \f = \fExpand,
+        \DxCond[\central] = \lambda,
     \end{equation*}
-    where $\r$ is a probability distribution, and $\P$ is a vector that includes an
-    entry $\Pentry \geq 0$ for every $i, \xe[i]$, such that $\sum_{\x[i]} \Pentry = 1$.
-
-    $\f[ ]$ is a concave-convex function and has a saddle point: $(\sad{r}, \PP)$.
-    Furthermore, the distribution $P(\assign[i]{x} \mid \assign[i]{e}) = \PPentry$ is a central
-    distribution for \Qset.
-    If $\saddle$ is a saddle point of $\f[ ]$, and there is a prior distribution $p$ such that
-    $\PPentry = \int \pi(\xIet[i]) \dt$, then the
-    distribution $P(\assign[i]{x} \mid \assign[i]{e}) = \PPentry$ is a central distribution for \Qset.
+    then \central is a central distribution for \Qset.
 \end{theorem}
 
 \begin{proof}
-
-
     We define
     \begin{equation*}
         \f = \fExpand,
@@ -272,193 +271,24 @@ of the divergence measure.
     \]
     Consequently, $\RR$ is a central distribution for \Qset.
 \end{proof}
-\begin{proof}
 
-    $\rr$ is a distribution and $\f[\rr][\central]$ is a weighted average of $\DxCond[\central]$ for
-    different values of \paramValue.
-    Therefore,
-    \[
-        \f[\rr][\central] \leq \Dx[\central]
-    \]
+\begin{theorem} [minimax]
+    Let \pmodel be a generic parametric model and \Xpairs be a query set.
+    Let $\f[ ]$ be the function defined by:
+    \begin{equation*}
+        \f = \fExpand,
+    \end{equation*}
+    where $\r$ is a probability distribution, and $\P$ is a vector with an
+    entry $\Pentry \geq 0$ for every $i, \xe[i]$, such that $\sum_{\x[i]} \Pentry = 1$.
 
-
-
-
-
-    where $R$ is a probability measure in \Mt that is obtained by a positive prior $\rr(\paramValue) > 0$:
-    \[
-        \cdot
-    \]
-
-
-
-
-
-
-
-    of concave functions with non-positive we have that ensures
-    $\f[\rr][\cdot]$ is convex.
-    Note that is a solution
-    we use kkt \cite{0521833787}
-    First, we show that $\f[ ]$ is a concave-convex function.
-
-    For any fixed $\P$, $\f[\cdot]$ is a linear function.
-    Note that if a function is concave (convex) on a set, it is also concave (convex) on any convex subset of that set.
-    The domain of $\f[\cdot]$ is the set of all real functions $\r$ such that $\intProd[r]{} = 1$.
-    We can easily verify that this set is a convex set, and therefore $\f[\cdot]$ is concave (and also convex) on the
-    defined domain.
-
-    On the other hand, for a fixed $\r$, if we let $Q(\xe[i]) =\marginal[r]{\xe[i]}$ we have
+    If $\f[ ]$ has a saddle point, then the central distribution for \Qset can be obtained by:
     \begin{equation}
-        \f[r][\cdot] = c - \sumixe Q(\xe[i]) \ln \Pentry,
-        \label{eq:max_for_P}
-    \end{equation}
-    where $c$ and $Q(\xe[i])$ are constants.
-    We know that a function of the form $f(\seqRvalInf) = \sum_i a_i \ln x_i$ is concave for $a_i \geq 0$.
-    Consequently, $\f[][\cdot]$ will be convex if the domain of valid $\P$-vectors is a compact convex set.
-    For a valid $\P$ we must have $\interZeroOne{\Pentry}$ and $\sum_{\x[i]} \Pentry = 1$.
-    We can easily verify that if $\P$ and $\P'$ satisfy the required conditions,
-    $\alpha \P + (1 - \alpha) \P'$, where $\interZeroOne{\alpha}$ also satisfies these conditions.
-    Therefore, $\f[][\cdot]$ is a convex function.
-
-
-    Since $\f[ ]$ is a differentiable concave-convex function, any point $\saddle$ that is simultaneously a
-    stationary point of the two Lagrangian functions
-    \begin{align*}
-        \Lagr[r(\paramValue)] = &\fExpand \\
-        &- \lambda \left( \intProd[\r]{} - 1 \right),
-    \end{align*}
-    and
-    \begin{align*}
-        \Lagr[\P][\lambda_{\e[i]}] = &\fExpand \\
-        &+ \sum_{i} \sum_{\e[i]} \left(\lambda_{\e[i]}\left(\sum_{\x[i]} \Pentry - 1\right)\right) \cdot
-    \end{align*}
-    is a saddle point of $\f[ ]$.
-    \footnote{I need reference for this! This seems similar to the case where $f'(x*) = 0$ for a differentiable convex function
-    implies that $x*$ is a global minimum. However, I'm still looking for a good reference for this.}
-
-    By setting the partial derivatives of the Lagrangian functions to zero, we obtain the following system of
-    equations for every \paramValue, $i$, \x[i], and \e[i]:
-
-    Any solution $\saddle$ to this equation system is a saddle points of $\f[ ]$.
-
-
-
-    \[
-        -\intProd[r]{ \frac{\pi(\xIet[i])}{\Pentry}} + \lambda(\e[i])
-    \]
-
-    From Equation~\ref{eq:convex_dist_set}, it follows that the domain of the $P_{\XIE[i]}$-vectors is also a
-    compact convex set.
-    If we calculate the Hessian matrix of $\f[r][\cdot]$, we observe that the matrix is
-    diagonal, and each element of the main diagonal is $\frac{R(\xIe[i])}{P(\xIe[i])^2}$.
-    Thus, the hessian matrix of $\f[r][\cdot]$ is positive semi-definite and $\f[r][\cdot]$ is a convex function.
-
-    Let $\saddle$ be the saddle point of $\f[ ]$, and \central be the central distribution for \Qset.
-    For a saddle point we have
-    \[
-        \f[ ]\saddle  = \min_{\P} \f[\rr][],
-    \]
-
-    If $\P$ represents a valid distribution for each $\XIE[i]$ that can be obtained by a prior distribution, we
-    have
-    \[
-        \Dx[\PP] = \f[ ]\saddle
-    \]
-    That impleas
-    \[
-        \Dx[\central] \leq \f[ ]\saddle
-    \]
-    \begin{align*}
-        \f[ ]\saddle &= \max_{\r} \f[][\PP] \\
-        &= \min_{\P} \f[\rr][] \cdot
-    \end{align*}
-    This implies
-    \[
-        \Dx[\central] \geq \f[\rr][\central] \geq \f[\rr][\PP]
-    \]
-
-
-    and \central be the central distribution for \Qset.
-
-    sdada
-    \[
-        \intProd{F}
-    \]
-
-
-    since
-
-
-    \[
-        \f[\rr][\PP] = \Dx[\P]
-    \]
-
-\end{proof}
-
-Theorem~\ref{th:Dx_parametric_form} implies that in a generic parametric model, we can obtain the central
-probability measure by:
-\begin{equation*}
-    \central = \arg\minP \supParam \DxCond  \cdot
-\end{equation*}
-
-This is a challenging minimax problem that cannot be easily solved.
-However, by using the minimax theorem we can convert it into a more convenient maximization problem which can be
-solved by variational methods.
-
-\begin{theorem}[Minimax~\cite{Du1995}]
-    \label{th:minimax}
-    Let $\set{X} \subset \mathbb {R}^{n}$ and $\set{Y} \subset \mathbb {R}^{m}$ be compact convex sets.
-    If $f:\set{X}\times \set{Y}\rightarrow \mathbb {R}$ is a continuous function that is concave-convex, i.e.
-
-    \begin{itemize}
-        \item $f(\cdot ,y):\set{X}\to \mathbb {R}$ is concave for fixed $y$, and
-        \item $f(x,\cdot ):\set{Y}\to \mathbb {R}$ is convex for fixed $x$.
-    \end{itemize}
-    Then we have that
-    \begin{equation}
-        \max_{x\in \set{X}}\min_{y\in \set{Y}}f(x, y) = \min_{y\in \set{Y}}\max_{x\in \set{X}}f(x,y)\cdot
-        \label{eq:minimax}
-    \end{equation}
-\end{theorem}
-
-A vector in $\mathbb {R}^{n}$ shares many properties with a real function.
-We sometimes assume that a real function is a real vector, and vice versa.
-In the next theorem we will use the minimax theorem, assuming $x$ is a real function.
-
-\begin{theorem}
-    \label{th:central_by_max}
-    Consider a generic parametric model \pmodel,
-    and let $\Xpairs$ be a query set in \Mt.
-    Assume that for every \inP{Q_1, Q_2} and any real number $0 \leq \alpha \leq 1$, there is
-    a distribution \inP{Q^*}, such that for every $i, \xe[i]$ we have
-    \begin{equation}
-        Q^*(\xIe[i]) = \convexCond{Q}{\xIe[i]}\cdot
-        \label{eq:convex_dist_set}
-    \end{equation}
-    Then, we have
-    \begin{equation}
-        \minP \supParam \DxCond = \maxP \int \DxCond \dt \cdot
+        \central = \arg\maxP \int \DxCond \dt
         \label{eq:Cx_by_max}
     \end{equation}
 \end{theorem}
 
 \begin{proof}
-    We prove this theorem using the minimax theorem.
-    To do so, we define a function as follows:
-    \begin{equation*}
-        \f = \int \DxCondExpand \dt[r] \cdot
-    \end{equation*}
-    Here, $r(\paramValue)$ is an arbitrary probability distribution, and $P_{\XIE[i]}$ is a vector that includes
-    all values of $P(\assign[i]{x} \mid \assign[i]{e})$ for every $i, \xe[i]$.
-
-    Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is similar to maximizing
-    with respect to $\paramValue$, and we have
-    \[
-        \minP \supParam \DxCond = \minP \max_{r} \f\cdot
-    \]
-
-
     Hence, we can use Theorem~\ref{th:minimax}
     \begin{equation}
         \minP \max_{r} \f = \max_{r} \minP \f\cdot
@@ -484,7 +314,10 @@ In the next theorem we will use the minimax theorem, assuming $x$ is a real func
     \[
         \minP \f = \int \DxCondExpand[R] \dt[r] \cdot
     \]
-    Substituting this into Equation~\ref{eq:divergence_minmax} completes the proof of the theorem.
+    By Equation~\ref{eq:divergence_minmax}, we conclude
+    \[
+        \central = \arg\max_{\inP{R}} \int \DxCond[R] \dt[r] \cdot \qedhere
+    \]
 \end{proof}
 
 Let us now use this theorem for our dice example and rewrite Equation~\ref{eq:joint_form}:
@@ -496,76 +329,6 @@ Let us now use this theorem for our dice example and rewrite Equation~\ref{eq:jo
 This means that the central distribution for our dice example, when we consider a query set equivalent to the
 sample space, is the probability measure that is obtained by using the Reference prior~\cite{BERNARDO200517} for
 the multinomial parameters.
-
-\begin{theorem}
-    \label{th:lambda}
-    Suppose the conditions of Theorem~\ref{th:central_by_max} hold and the central distribution for \Qset exists and
-    can be obtained by
-    \[
-        \central = \arg\maxP \int \DxCond \dt \cdot
-    \]
-    in \Mt, if any prior that is negative for some values of \paramValue, induces a negative distribution for
-    a variable in \Qset, then the central distribution for \Qset satisfies:
-    \begin{equation}
-        \DxCond[\central] = \lambda,
-        \label{eq:lambda}
-    \end{equation}
-    where $\lambda$ is a constant.
-\end{theorem}
-\begin{proof}
-    By the assumptions of the theorem, the central distribution for \Qset is a solution to the problem of
-    maximizing
-    \[
-        \functional{p(\paramValue)} = \Dminimax,
-    \]
-    with respect to different choices of the prior distribution $p(\paramValue)$, subject to the
-    constraint $\int \dt[p] = 1$.
-    We do not need to consider the constraint $p(\paramValue) \geq 0$,
-    since the objective function $\functional{}$ contains logarithm terms that ensure all $P(\xIe[i])$ will be
-    positive in any solution.
-    By assumption, this implies $p(\paramValue) \geq 0$.
-
-    Applying the Lagrange multiplier technique, the solution is a stationary point of the
-    Lagrangian functional:
-    \[
-        \Lagr[p(\paramValue)] = \Dminimax - \lambda \left( \int \dt - 1 \right)\cdot
-    \]
-    Let us denote the prior distribution corresponding to the central distribution \central by $\cPrior$.
-    Let $p(\paramValue) = \cPrior + \epsilon \eta(\paramValue)$ be a variation of $\cPrior$, where $\eta(\paramValue)$ is
-    an arbitrary continuously differentiable function with $\eta(0) = \eta(1) = 0$, and $\epsilon$ is a small constant.
-
-    Since $\cPrior$ is an extremizing function for $\functional{}$, the lagrangian
-    $\Lagr$ has a stationary point where $\epsilon = 0$, and we have
-    \[
-        \parDerivAt[\Lagr] = 0\cdot
-    \]
-    Note that
-    \begin{align*}
-        \de{p(\paramValue)} &= \eta(\paramValue),\\
-        \de{P(\xe[i])} &= \marginal[\eta]{\xe[i]},\\
-        \de{P(\e[i])} &= \marginal[\eta]{\e[i]}\cdot
-    \end{align*}
-    Using the chain rule of calculus, we calculate the partial derivative of $\Lagr$ relative to $\epsilon$:
-    \begin{align*}
-        \parDeriv\ =\ &\int \left( \DxCondExpandFull  \right) \dt[\eta] \\
-        &- \int \left( \sumixe \pi(\xeIt[i]) \frac{\marginal[\eta]{\xe[i]}}{P(\xe[i])} \right) \dt \\
-        &+ \int \left( \sum_i \sum_{\e[i]} \pi(\e[i] \mid \paramValue) \frac{\marginal[\eta]{\e[i]}}{P(\e[i])} \right) \dt \\
-        &- \int \lambda \dt[\eta]
-    \end{align*}
-    Since $\marginalEq{\xe[i]}$ and $\marginalEq{\e[i]}$, we get
-    \begin{equation*}
-        \parDeriv = \int \left(-\lambda + \DxCondExpandFull \right) \dt[\eta]\cdot
-    \end{equation*}
-    We let $ \parDerivAt = 0$.
-    Since $\eta(\paramValue)$ is an arbitrary function, by applying the fundamental lemma of the calculus of
-    variations and letting $\epsilon = 0$, for every value of $\paramValue$ we have
-    \[
-        \DxCondExpandFull[\central] = \lambda\cdot \qedhere
-    \]
-\end{proof}
-
-This theorem gives a necessary condition for the central probability measure in the general case.
-
 
 \newcommand{\ratio}[1]{\frac{\avgPost[{#1}][\cMass{}]}{\cMass{#1}}}
 \newcommandx{\ratioFull}[3][1=\w, 2=\w, 3=\cMass{}, usedefault]{

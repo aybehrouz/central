@@ -85,8 +85,8 @@
 \newcommand{\interZeroOne}[1]{#1 \in \left[0,1 \right]}
 \newcommand{\minP}{\min_{P \in \set{P}}}
 \newcommand{\maxP}{\max_{P \in \set{P}}}
-\newcommand{\maxQ}{\sup_{Q \in \set{P}}}
-\newcommand{\maxParam}{\sup_{\paramValue \in \paramRange}}
+\newcommand{\supQ}{\sup_{Q \in \set{P}}}
+\newcommand{\supParam}{\sup_{\paramValue \in \paramRange}}
 \newcommand{\seqRv}[2][x]{\rv[1]{#1},\rv[2]{#1}, \ldots \ifthenelse{\isempty{#2}}{}{, \rv[{#2}]{#1}}}
 \newcommand{\seqRval}[2][x]{\rval[1]{#1}, \ldots, \rval[{#2}]{#1}}
 \newcommand{\vSeq}[2]{(\seq{#1}{#2})}
@@ -109,7 +109,7 @@
     \Ex{#1}{\sum_i \measure{D}\left( #1_{\XIe[i]} \parallel #2_{\XIe[i]} \right)}
 }
 
-\newcommand{\DxCond}[1][P]{\measure{D}_{\Qset}\left[ #1 \mid \paramValue \right]}
+\newcommandx{\DxCond}[2][1=P, 2=\paramValue, usedefault]{\measure{D}_{\Qset}\left[ #1 \mid #2 \right]}
 \newcommandx{\DxCondExpand}[2][1=P, 2=\paramValue, usedefault]{
     \Ex{\pi}{\sum_i \measure{D}\left( \pi_{\XIe[i], #2} \parallel #1_{\XIe[i]} \right) \;\middle|\;#2}
 }
@@ -279,7 +279,7 @@
         \subsection{Divergence Measure}\label{subsec:divergence}
         \input{divergence}
 
-        \subsection{Parametric Models} {
+        \subsection{Central Distribution in Parametric Models} {
             \input{param}
         } \label{subsec:parametric-models}
 

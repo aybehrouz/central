@@ -20,7 +20,7 @@ of the divergence measure.
     Let \Xpairs be a query set in \Mt.
     For every $P \in \set{P}$ we have
     \begin{equation*}
-        \Dx \leq \maxParam \DxCond
+        \Dx \leq \supParam \DxCond
     \end{equation*}
 \end{lemma}
 
@@ -32,20 +32,20 @@ of the divergence measure.
     \[
         \DxCond[P] - \DxCond[R] = \RP \cdot
     \]
-    The conditional divergence is non-negative and we have
+    The conditional divergence is nonnegative and we have
     \[
         \RP \leq \DxCond \cdot
     \]
     This inequality holds for every \paramValue.
-    Therefore, the maximum of the right-hand side w.r.t. \paramValue is also greater than or equal to the
-    maximum of the left-hand side:
+    Therefore, the supremum of the right-hand side w.r.t. \paramValue is also greater than or equal to the
+    supremum of the left-hand side:
     \begin{equation}
-        \maxParam \RP \leq \maxParam \DxCond \cdot
+        \supParam \RP \leq \supParam \DxCond \cdot
         \label{eq:ineq-theorem1}
     \end{equation}
     Trivially, for any \paramValue we have
     \[
-        \RP \leq \maxParam \RP \cdot
+        \RP \leq \supParam \RP \cdot
     \]
     \Mt is a parametric model and $\marginalEq[R]{\xe[i]}$, where $r(\paramValue)$ is
     a prior probability distribution.
@@ -54,12 +54,12 @@ of the divergence measure.
     Notice that the right hand side is not a function of $\paramValue$ and it remains unchanged
     because $\int \dt[r] = 1$:
     \[
-        \DxExpand[R] \leq \maxParam \RP\cdot
+        \DxExpand[R] \leq \supParam \RP\cdot
     \]
     Now from Inequality~\ref{eq:ineq-theorem1}, for \emph{any} $P \in \set{P}$ and $R \in \set{P}$, it
     follows that
     \[
-        \DxExpand[R] \leq \maxParam \DxCond,
+        \DxExpand[R] \leq \supParam \DxCond,
     \]
     which proves the lemma.
 \end{proof}
@@ -67,39 +67,48 @@ of the divergence measure.
 \begin{theorem}
     \label{th:Dx_parametric_form}
     Suppose \pmodel is a parametric model, and let $\Xpairs$ be a query set in \Mt.
-    If for every value of $\paramValue$ there is a distribution $R \in \set{P}$ such that
-    $R(\rval[]{s}) = \pi(\rval[]{s} \mid \paramValue)$ for every $\rval[]{s} \in \set{S}$,
+    If for every $\epsilon > 0$ and every value of the parameter $\paramValue$, there exists a distribution $R \in \set{P}$
+    such that
+    \begin{equation}
+        \DxCond[][\paramValue] - \DxExpand[R]  < \epsilon,
+        \label{eq:epsilon_close}
+    \end{equation}
     then for any $P \in \set{P}$ we have:
     \begin{equation}
-        \Dx = \maxParam \DxCond  \cdot
+        \Dx = \supParam \DxCond  \cdot
         \label{eq:div_parametric}
     \end{equation}
     \label{th:div_for_parametric}
 \end{theorem}
 
 \begin{proof}
-    For an arbitrary distribution \inP{P}, we let
+    Assume, for the sake of contradiction, that
     \[
-        \paramValue^* = \arg\maxParam \DxCond \cdot
+        \Dx \neq \supParam \DxCond \cdot
     \]
-    In \Mt there should be a distribution $R \in \set{P}$ that equals $\pi(\rval[]{s} \mid \paramValue^*)$
-    for every $\rval[]{s} \in \set{S}$.
-    Obviously, $R$ and $\pi(\cdot \mid \paramValue^*)$ define the same distribution for any random variable,
-    and we have
+    Then, Lemma~\ref{lm:DxP_uppper_bound} implies $\Dx < \supParam \DxCond$.
+    Supremum is the minimal upper bound of a set.
+    That means $\Dx$ can not be an upper bound for the set of values of $\DxCond$,
+    and there should exist a $\paramValue^{*}$ such that
+    \[
+        \DxCond[][\paramValue^{*}] > \Dx \cdot
+    \]
 
+    By the theorem assumption, for $\paramValue^{*}$ and $\epsilon = \DxCond[][\paramValue^{*}] - \Dx$ there should be a
+    distribution $R \in \set{P}$ such that Equation~\ref{eq:epsilon_close} holds, and
     \begin{align*}
-        \DxExpand[R] &= \DxCondExpand[][\paramValue^*] \\
-        &= \maxParam \DxCond \cdot
+        \DxExpand[R] > \Dx  \cdot
     \end{align*}
-    On the other hand, clearly
+    On the other hand
     \[
-        \maxQ \DxExpand[Q] \geq \DxExpand[R] \cdot
+        \supQ \DxExpand[Q] \geq \DxExpand[R] \cdot
     \]
-    Notice that the left hand side is $\Dx$, and hence
+    Notice that the left hand side is $\Dx$.
+    This contradiction implies that the assumption can not hold.
+    Hence,
     \[
-        \Dx \geq \maxParam \DxCond \cdot
+        \Dx = \supParam \DxCond. \qedhere
     \]
-    This inequality and Lemma~\ref{lm:DxP_uppper_bound} prove the theorem.
 \end{proof}
 
 \begin{proposition}
@@ -246,12 +255,12 @@ of the divergence measure.
     \]
     Since $\rr$ is a distribution and integrates to one we have
     \[
-        \intProd[\rr]{\DxCond[\central]} \leq \maxParam \DxCond[\central] = \Dx[\central] \cdot
+        \intProd[\rr]{\DxCond[\central]} \leq \supParam \DxCond[\central] = \Dx[\central] \cdot
     \]
     On the other hand, $\RR$ satisfies Equation~\ref{eq:kkt_Rlambda}, and the definition of the divergence
     measure implies
     \[
-        \Dx[\RR] = \maxParam \DxCond[\RR] = \lambda = \f[\rr][\RRvector] \cdot
+        \Dx[\RR] = \supParam \DxCond[\RR] = \lambda = \f[\rr][\RRvector] \cdot
     \]
     Thus,
     \[
@@ -390,7 +399,7 @@ of the divergence measure.
 Theorem~\ref{th:Dx_parametric_form} implies that in a generic parametric model, we can obtain the central
 probability measure by:
 \begin{equation*}
-    \central = \arg\minP \maxParam \DxCond  \cdot
+    \central = \arg\minP \supParam \DxCond  \cdot
 \end{equation*}
 
 This is a challenging minimax problem that cannot be easily solved.
@@ -429,7 +438,7 @@ In the next theorem we will use the minimax theorem, assuming $x$ is a real func
     \end{equation}
     Then, we have
     \begin{equation}
-        \minP \maxParam \DxCond = \maxP \int \DxCond \dt \cdot
+        \minP \supParam \DxCond = \maxP \int \DxCond \dt \cdot
         \label{eq:Cx_by_max}
     \end{equation}
 \end{theorem}
@@ -446,7 +455,7 @@ In the next theorem we will use the minimax theorem, assuming $x$ is a real func
     Since $r(\paramValue)$ can be any distribution, maximizing with respect to $r$ is similar to maximizing
     with respect to $\paramValue$, and we have
     \[
-        \minP \maxParam \DxCond = \minP \max_{r} \f\cdot
+        \minP \supParam \DxCond = \minP \max_{r} \f\cdot
     \]
 
 

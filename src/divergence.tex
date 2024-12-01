@@ -184,8 +184,8 @@ even when the minimum achievable value of $\epsilon$ is not very small.
     We define the \emph{divergence measure of $P \in \set{P}$ for \Qset} as follows:
     \begin{align}
         \label{eq:div_def}
-        \Dx & = \maxQ \DxExpand,                    \\
-        & = \maxQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
+        \Dx & = \supQ \DxExpand,                    \\
+        & = \supQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
         \frac{Q(\assign[i]{x} \mid \assign[i]{e})}{P(\assign[i]{x} \mid \assign[i]{e})} \cdot
     \end{align}
 \end{definition}
@@ -207,8 +207,8 @@ fully determines the distribution of the sample space.
 
 \begin{definition}[Conditional Divergence Measure]
     \label{def:cond_divergence}
-    Assume that \pmodel is a parametric model, and $\Xpairs$ is a query set.
-    We define the \emph{divergence measure of $P \in \set{P}$ for \Qset given $\paramValue$} as follows:
+    Assume \pmodel is a parametric model, and $\Xpairs$ is a query set.
+    We define the \emph{conditional divergence measure of $P \in \set{P}$ for \Qset given $\paramValue$} as follows:
     \begin{align}
         \DxCond & = \DxCondExpand           \\
         & = \DxCondExpandFull \cdot
@@ -217,7 +217,7 @@ fully determines the distribution of the sample space.
 \end{definition}
 
 \begin{proposition}
-    For any value of \paramValue, the conditional divergence is non-negative.
+    For any value of \paramValue, the conditional divergence is nonnegative.
 \end{proposition}
 
 Now that we have established a divergence measure, we are ready to provide a formal definition for the probability

@@ -107,17 +107,28 @@ of the divergence measure.
 \end{proposition}
 
 
-\newcommandx{\f}[2][1 = \rDist, 2 = \pVector, usedefault]{ f \ifthenelse{\isempty{#1}}{}{(#2, #1)}}
-\newcommand{\rDist}{r}
-\newcommand{\pxIe}{p_{\xIe[i]}}
-\newcommand{\pVector}{P_{\Qset}}
+
+
+\newcommand{\Pentry}{p_{\xIe[i]}}
+\newcommand{\PPentry}{\sad{\Pentry}}
 \newcommand{\sad}[1]{#1^{*}}
-\newcommand{\saddle}{(\sad{\pVector}, \sad{\rDist})}
-\newcommand{\fExpand}{\intProd[\rDist]{\left( \fInside{\pxIe} \right)}}
+\newcommand{\rDist}{r}
+\newcommand{\fExpand}{\intProd[\r]{\left( \fInside{\Pentry} \right)}}
 \newcommand{\fInside}[1]{\sumixe \pi(\xIet[i]) \ln \frac{\pi(\xIet[i])}{#1}}
-\newcommand{\Rdist}[1][{\xIe[i]}]{\sad{R}({#1})}
-\newcommand{\sadR}{\sad{R}}
+
+\newcommand{\RR}{\sad{R}}
 \newcommand{\Rvector}{\sad{R}_\Qset}
+\newcommand{\RRvector}{\mathbf{\sad{R}_\Qset}}
+\newcommand{\Cvector}{\mathbf{\central}}
+
+\newcommandx{\f}[2][1 = \r, 2 = \P, usedefault]{ f \ifthenelse{\isempty{#1}}{}{(#2, #1)}}
+\renewcommand{\r}{r}
+\renewcommand{\P}{\mathbf{P_{\Qset}}}
+\newcommand{\rr}{\sad{\r}}
+\newcommand{\PP}{\mathbf{\sad{P}_{\Qset}}}
+\newcommand{\R}[1][{\xIe[i]}]{\sad{R}({#1})}
+\newcommand{\saddle}{(\PP, \rr)}
+
 
 \begin{theorem}
     Let \pmodel be a generic parametric model and \Xpairs be a query set.
@@ -125,76 +136,79 @@ of the divergence measure.
     \begin{equation*}
         \f = \fExpand,
     \end{equation*}
-    where $\rDist$ is a probability distribution, and $\pVector$ is a vector that includes an
-    entry $\pxIe \geq 0$ for every $i, \xe[i]$, such that $\sum_{\x[i]} \pxIe = 1$.
+    where $\r$ is a probability distribution, and $\P$ is a vector that includes an
+    entry $\Pentry \geq 0$ for every $i, \xe[i]$, such that $\sum_{\x[i]} \Pentry = 1$.
 
-    $\f[ ]$ is a concave-convex function and has a saddle point: $(\sad{r}, \sad{\pVector})$.
-    Furthermore, the distribution $P(\assign[i]{x} \mid \assign[i]{e}) = \sad{\pxIe}$ is a central
+    $\f[ ]$ is a concave-convex function and has a saddle point: $(\sad{r}, \PP)$.
+    Furthermore, the distribution $P(\assign[i]{x} \mid \assign[i]{e}) = \PPentry$ is a central
     distribution for \Qset.
     If $\saddle$ is a saddle point of $\f[ ]$, and there is a prior distribution $p$ such that
-    $\sad{\pxIe} = \int \pi(\xIet[i]) \dt$, then the
-    distribution $P(\assign[i]{x} \mid \assign[i]{e}) = \sad{\pxIe}$ is a central distribution for \Qset.
+    $\PPentry = \int \pi(\xIet[i]) \dt$, then the
+    distribution $P(\assign[i]{x} \mid \assign[i]{e}) = \PPentry$ is a central distribution for \Qset.
 \end{theorem}
 
 \begin{proof}
+
+
     We define
     \begin{equation*}
         \f = \fExpand,
     \end{equation*}
-    where $\rDist$ is a real function of the model parameter \paramValue, and $\pVector$ is a vector of real
-    numbers with an entry $\pxIe$ for every $i, \xe[i]$.
+    where $\r$ is a real function of the model parameter \paramValue, and $\P$ is a vector of real
+    numbers with an entry $\Pentry$ for every $i, \xe[i]$.
 
     Let $\saddle$ be a simultaneous solution to the following two optimization problems:
 
     \begin{equation*}
         \begin{aligned}
-            &\text{minimize} & &\f[\sad{\rDist}] & &\text{w.r.t.} \ \pVector \\
-            &\text{subject to} & &\sum_{\x[i]} \pxIe = 1,  & &\text{for all}\  i,\e[i] \\
+            &\text{minimize} & &\f[\rr] & &\text{w.r.t.} \ \P \\
+            &\text{subject to} & &\sum_{\x[i]} \Pentry = 1,  & &\text{for all}\  i,\e[i] \\
             \\
-            &\text{maximize} & &\f[][\sad{\pVector}] & &\text{w.r.t.} \ \rDist \\
-            &\text{subject to} & &\rDist(\paramValue) \geq 0, & &\text{for all} \ \paramValue \\
-            & & &\intProd[\rDist]{} = 1 &
+            &\text{maximize} & &\f[][\PP] & &\text{w.r.t.} \ \r \\
+            &\text{subject to} & &\r(\paramValue) \geq 0, & &\text{for all} \ \paramValue  \\
+            & & &\intProd[\r]{} = 1 &
         \end{aligned}
     \end{equation*}
-    Clearly, if $\saddle$ exists, it will be a saddle point for $\f[ ]$.
+    Clearly, if $\saddle$ exists, it will be a saddle point for $\f[ ]$ on a restricted domain.
 
     Both of these optimization problems are convex and differentiable~\cite{0521833787}.
     All the constraint functions are affine, and therefore are convex and differentiable.
-    Note that for the constraint $\rDist(\paramValue) \geq 0$, we can define an infinite number of affine
-    constraint functions of the form $\int \delta(\paramValue - t) \rDist(t) dt$, where $\delta$ is the Dirac delta
+    Note that for the constraint $\r(\paramValue) \geq 0$, we can define an infinite number of affine
+    constraint functions of the form $\int \delta(\paramValue - t) \r(t) dt \geq 0$, where $\delta$ is the Dirac delta
     function.
 
-    Additionally, $\f[ ]$ is differentiable with respect to both $\rDist$ and $\pVector$.
-    For any fixed $\pVector$, $\f[\cdot]$ is an affine function and is concave.
-    For a fixed $\sad{\rDist}$, we can write
+    Additionally, $\f[ ]$ is differentiable with respect to both $\r$ and $\P$.
+    For any fixed $\P$, $\f[\cdot]$ is an affine function and is concave.
+    For a fixed solution to the second optimization problem denoted by $\rr$, we can write
     \begin{equation}
-        \f[\sad{\rDist}][\pVector] = c - \sumixe \Rdist[{\xe[i]}] \ln \pxIe,
-        \label{eq:max_for_P}
+        \f[\rr][\P] = c - \sumixe \R[{\xe[i]}] \ln \Pentry,
     \end{equation}
-    where $c$ and $\Rdist[{\xe[i]}] = \marginal[\sad{\rDist}]{\xe[i]}$ are not functions of $\pVector$.
-    Since $\sad{\rDist}$ is a solution to the second optimization problem, it is feasible and satisfies
+    where $c$ and $\R[{\xe[i]}] = \marginal[\rr]{\xe[i]}$ are not functions of $\P$.
+    Since $\rr$ is a solution to the second optimization problem, it is feasible and satisfies
     all the constraints.
-    Therefore, $\sad{R}(\xe[i]) \geq 0$ for any $i$, \e[i], and $\f[\sad{\rDist}][\cdot]$ is the negative of a
-    linear combination of concave $\ln \pxIe$ functions with nonnegative coefficients and is a convex function.
+    Therefore, we have $\sad{R}(\xe[i]) \geq 0$ for any $i$, \e[i], and $\f[\rr][\cdot]$ is the negative of a
+    linear combination of concave $\ln \Pentry$ functions with nonnegative coefficients.
+    This function is convex.
 
     Since both optimization problems are convex and differentiable, any point $\saddle$ that simultaneously satisfies
-    the KKT conditions~\cite{0521833787} for both problems is a saddle point for $\f[ ]$.
-    The following KKT conditions can be obtained for every \paramValue, $i$, \x[i], and \e[i]:
+    the KKT conditions~\cite{0521833787} for both problems is a saddle point for $\f[ ]$ on the restricted domain
+    defined by the constraints.
+    The following KKT conditions are obtained for every \paramValue, $i$, \x[i], and \e[i]:
     \begin{gather}
         \label{eq:kkt_R_is_pxIe}
-        \intProd[\sad{\rDist}]{\pi(\xIet[i])} = \lambda(\e[i]) \sad{\pxIe}, \\
+        \intProd[\rr]{\pi(\xIet[i])} = \lambda(\e[i]) \PPentry, \\
         \label{eq:kkt_pxIe_sums_one}
-        \sum_{\x[i]} \sad{\pxIe} = 1, \\
+        \sum_{\x[i]} \PPentry = 1, \\
         \nonumber
-        \fInside{\sad{\pxIe}} - \mu(\paramValue) = \lambda, \\
+        \fInside{\PPentry} - \mu(\paramValue) = \lambda, \\
         \label{eq:kkt_r_sums_one}
-        \intProd[\sad{\rDist}]{} = 1, \\
+        \intProd[\rr]{} = 1, \\
         \label{eq:kkt_r_nonnegative}
-        \sad{\rDist}(\paramValue) \geq 0 \\
+        \rr(\paramValue) \geq 0, \\
         \nonumber
         \mu(\paramValue) \geq 0, \\
         \label{eq:kkt_mu_product}
-        \mu(\paramValue) \sad{\rDist}(\paramValue) = 0 \cdot
+        \mu(\paramValue) \rr(\paramValue) = 0 \cdot
     \end{gather}
 
     By summing Equation \ref{eq:kkt_R_is_pxIe} over \x[i] and using Equations~\ref{eq:kkt_r_sums_one}
@@ -202,59 +216,67 @@ of the divergence measure.
 
     Note that we can impose more restrictive conditions and still derive a set of sufficient conditions for a saddle
     point.
-    Hence, we can replace Inequality~\ref{eq:kkt_r_nonnegative} with the more restrictive $\sad{\rDist}(\paramValue) > 0$.
-    Then, Equation~\ref{eq:kkt_mu_product} implies $\mu(\paramValue) = 0$, and the KKT conditions are simplified to
+    Hence, we can replace Inequality~\ref{eq:kkt_r_nonnegative} with the more restrictive $\rr(\paramValue) > 0$
+    condition.
+    By Equation~\ref{eq:kkt_mu_product}, this implies $\mu(\paramValue) = 0$, and the KKT conditions can be
+    simplified to
     \begin{gather}
         \label{eq:kkt_Rlambda}
-        \fInside{\Rdist} = \lambda, \\
+        \fInside{\R} = \lambda, \\
         \nonumber
-        \Rdist = \intProd[\sad{\rDist}]{\pi(\xIet[i])}, \\
+        \R = \intProd[\rr]{\pi(\xIet[i])}, \\
         \nonumber
-        \sad{\rDist}(\paramValue) > 0 \cdot
+        \rr(\paramValue) > 0 \cdot
     \end{gather}
 
     Let \pmodel be a parametric model.
-    If a probability measure $\sadR \in \set{p}$ which is obtained by a positive prior,
-    satisfies Equation~\ref{eq:kkt_Rlambda}, then it corresponds to a saddle point of $\f[ ]$
+    If a probability measure $\RR \in \set{p}$ which is obtained by a positive prior $\rr$,
+    satisfies Equation~\ref{eq:kkt_Rlambda}, then the KKT conditions imply that $(\RRvector, \rr)$ is a solution to
+    both optimization problems, where $\RRvector$ is the corresponding vector of $\RR(\xIe[i])$ probabilities.
+
     Suppose \central is a central distribution for \Qset.
-    Since $\sadR \in \set{p}$, we have
-    \begin{equation*}
-        \Dx[\central] \leq \Dx[\sadR] \cdot
-    \end{equation*}
-    On the other hand, $(\Rvector, \sad{\rDist})$ is a saddle point and we have
+    Clearly, the point $(\Cvector, \rr)$ satisfies the constraints of the minimization problem (the first problem).
+    Therefore, we have
     \begin{equation}
-        \label{eq:kkt_saddle_lq_dx}\f[\sad{\rDist}][\Rvector] \leq \f[\sad{\rDist}][\central]
+        \label{eq:kkt_saddle_lq_dx}\f[\rr][\RRvector] \leq \f[\rr][\Cvector] \cdot
     \end{equation}
-    $\sad{\rDist}$ is a distribution.
-    Therefore,
+    Notice that by the definition of $\f[ ]$, we have
     \[
-        \f[\sad{\rDist}][\central] = \intProd[\sad{\rDist}]{\DxCond[\central]}
-        \leq \maxParam \DxCond[\central] = \Dx[\central]
+        \f[\rr][\Cvector] = \intProd[\rr]{\DxCond[\central]} \cdot
     \]
-    On the other hand, Equation~\ref{eq:kkt_Rlambda} implies
+    Since $\rr$ is a distribution and integrates to one we have
     \[
-        \Dx[\sadR] = \f[\sad{\rDist}][\Rvector] = \lambda
+        \intProd[\rr]{\DxCond[\central]} \leq \maxParam \DxCond[\central] = \Dx[\central] \cdot
     \]
-    By inequality~\ref{eq:kkt_saddle_lq_dx} we get
+    On the other hand, $\RR$ satisfies Equation~\ref{eq:kkt_Rlambda}, and the definition of the divergence
+    measure implies
     \[
-        \Dx[\sadR] \leq \Dx[\central]
+        \Dx[\RR] = \maxParam \DxCond[\RR] = \lambda = \f[\rr][\RRvector] \cdot
     \]
-    Thus, we proved \[\Dx[\sadR] = \Dx[\central],\] which completes the proof of the theorem.
+    Thus,
+    \[
+        \Dx[\RR] \leq \Dx[\central] \cdot
+    \]
+    $\Dx[\central]$ is minimal in \pmodel, and $\RR \in \set{P}$ implies
+    \[
+        \Dx[\RR] = \Dx[\central],
+    \]
+    Consequently, $\RR$ is a central distribution for \Qset.
 \end{proof}
 \begin{proof}
 
-    $\sad{\rDist}$ is a distribution and $\f[\sad{\rDist}][\central]$ is a weighted average of $\DxCond[\central]$ for
+    $\rr$ is a distribution and $\f[\rr][\central]$ is a weighted average of $\DxCond[\central]$ for
     different values of \paramValue.
     Therefore,
     \[
-        \f[\sad{\rDist}][\central] \leq \Dx[\central]
+        \f[\rr][\central] \leq \Dx[\central]
     \]
 
 
 
 
 
-    where $R$ is a probability measure in \Mt that is obtained by a positive prior $\sad{\rDist}(\paramValue) > 0$:
+    where $R$ is a probability measure in \Mt that is obtained by a positive prior $\rr(\paramValue) > 0$:
     \[
         \cdot
     \]
@@ -266,28 +288,28 @@ of the divergence measure.
 
 
     of concave functions with non-positive we have that ensures
-    $\f[\sad{\rDist}][\cdot]$ is convex.
+    $\f[\rr][\cdot]$ is convex.
     Note that is a solution
     we use kkt \cite{0521833787}
     First, we show that $\f[ ]$ is a concave-convex function.
 
-    For any fixed $\pVector$, $\f[\cdot]$ is a linear function.
+    For any fixed $\P$, $\f[\cdot]$ is a linear function.
     Note that if a function is concave (convex) on a set, it is also concave (convex) on any convex subset of that set.
-    The domain of $\f[\cdot]$ is the set of all real functions $\rDist$ such that $\intProd[r]{} = 1$.
+    The domain of $\f[\cdot]$ is the set of all real functions $\r$ such that $\intProd[r]{} = 1$.
     We can easily verify that this set is a convex set, and therefore $\f[\cdot]$ is concave (and also convex) on the
     defined domain.
 
-    On the other hand, for a fixed $\rDist$, if we let $Q(\xe[i]) =\marginal[r]{\xe[i]}$ we have
+    On the other hand, for a fixed $\r$, if we let $Q(\xe[i]) =\marginal[r]{\xe[i]}$ we have
     \begin{equation}
-        \f[r][\cdot] = c - \sumixe Q(\xe[i]) \ln \pxIe,
+        \f[r][\cdot] = c - \sumixe Q(\xe[i]) \ln \Pentry,
         \label{eq:max_for_P}
     \end{equation}
     where $c$ and $Q(\xe[i])$ are constants.
     We know that a function of the form $f(\seqRvalInf) = \sum_i a_i \ln x_i$ is concave for $a_i \geq 0$.
-    Consequently, $\f[][\cdot]$ will be convex if the domain of valid $\pVector$-vectors is a compact convex set.
-    For a valid $\pVector$ we must have $\interZeroOne{\pxIe}$ and $\sum_{\x[i]} \pxIe = 1$.
-    We can easily verify that if $\pVector$ and $\pVector'$ satisfy the required conditions,
-    $\alpha \pVector + (1 - \alpha) \pVector'$, where $\interZeroOne{\alpha}$ also satisfies these conditions.
+    Consequently, $\f[][\cdot]$ will be convex if the domain of valid $\P$-vectors is a compact convex set.
+    For a valid $\P$ we must have $\interZeroOne{\Pentry}$ and $\sum_{\x[i]} \Pentry = 1$.
+    We can easily verify that if $\P$ and $\P'$ satisfy the required conditions,
+    $\alpha \P + (1 - \alpha) \P'$, where $\interZeroOne{\alpha}$ also satisfies these conditions.
     Therefore, $\f[][\cdot]$ is a convex function.
 
 
@@ -295,12 +317,12 @@ of the divergence measure.
     stationary point of the two Lagrangian functions
     \begin{align*}
         \Lagr[r(\paramValue)] = &\fExpand \\
-        &- \lambda \left( \intProd[\rDist]{} - 1 \right),
+        &- \lambda \left( \intProd[\r]{} - 1 \right),
     \end{align*}
     and
     \begin{align*}
-        \Lagr[\pVector][\lambda_{\e[i]}] = &\fExpand \\
-        &+ \sum_{i} \sum_{\e[i]} \left(\lambda_{\e[i]}\left(\sum_{\x[i]} \pxIe - 1\right)\right) \cdot
+        \Lagr[\P][\lambda_{\e[i]}] = &\fExpand \\
+        &+ \sum_{i} \sum_{\e[i]} \left(\lambda_{\e[i]}\left(\sum_{\x[i]} \Pentry - 1\right)\right) \cdot
     \end{align*}
     is a saddle point of $\f[ ]$.
     \footnote{I need reference for this! This seems similar to the case where $f'(x*) = 0$ for a differentiable convex function
@@ -314,7 +336,7 @@ of the divergence measure.
 
 
     \[
-        -\intProd[r]{ \frac{\pi(\xIet[i])}{\pxIe}} + \lambda(\e[i])
+        -\intProd[r]{ \frac{\pi(\xIet[i])}{\Pentry}} + \lambda(\e[i])
     \]
 
     From Equation~\ref{eq:convex_dist_set}, it follows that the domain of the $P_{\XIE[i]}$-vectors is also a
@@ -326,25 +348,25 @@ of the divergence measure.
     Let $\saddle$ be the saddle point of $\f[ ]$, and \central be the central distribution for \Qset.
     For a saddle point we have
     \[
-        \f[ ]\saddle  = \min_{\pVector} \f[\sad{\rDist}][],
+        \f[ ]\saddle  = \min_{\P} \f[\rr][],
     \]
 
-    If $\pVector$ represents a valid distribution for each $\XIE[i]$ that can be obtained by a prior distribution, we
+    If $\P$ represents a valid distribution for each $\XIE[i]$ that can be obtained by a prior distribution, we
     have
     \[
-        \Dx[\sad{\pVector}] = \f[ ]\saddle
+        \Dx[\PP] = \f[ ]\saddle
     \]
     That impleas
     \[
         \Dx[\central] \leq \f[ ]\saddle
     \]
     \begin{align*}
-        \f[ ]\saddle &= \max_{\rDist} \f[][\sad{\pVector}] \\
-        &= \min_{\pVector} \f[\sad{\rDist}][] \cdot
+        \f[ ]\saddle &= \max_{\r} \f[][\PP] \\
+        &= \min_{\P} \f[\rr][] \cdot
     \end{align*}
     This implies
     \[
-        \Dx[\central] \geq \f[\sad{\rDist}][\central] \geq \f[\sad{\rDist}][\sad{\pVector}]
+        \Dx[\central] \geq \f[\rr][\central] \geq \f[\rr][\PP]
     \]
 
 
@@ -360,7 +382,7 @@ of the divergence measure.
 
 
     \[
-        \f[\sad{\rDist}][\sad{\pVector}] = \Dx[\pVector]
+        \f[\rr][\PP] = \Dx[\P]
     \]
 
 \end{proof}

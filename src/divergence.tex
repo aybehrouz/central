@@ -223,8 +223,8 @@ fully determines the distribution of the sample space.
 Now that we have established a divergence measure, we are ready to provide a formal definition for the probability
 measure that we consider the ``safest'' choice in a model.
 
-\begin{definition}[Central Probability Measure]
-    In a model \model, we define the \emph{central probability measure} for a query set \Qset, to be a probability
+\begin{definition}[central distribution]
+    In a model \model, we define the \emph{central distribution} for a query set \Qset, to be a probability
     measure $\central \in \set{P}$ which minimizes the divergence measure for \Qset:
     \begin{equation*}
         \central = \arg\minP \Dx\cdot
@@ -280,14 +280,14 @@ measure has good convergence properties for every definable random variable.
 Back to our dice example, suppose we are interested in predicting the next dice outcome based on the number of previous
 odd and even outcomes.
 Let \Y[i] represent the least significant bit of the $i$-th dice roll, indicating whether the number is odd or even.
-If we want our central probability measure to exhibit good convergence properties for  $P(\X[i] \mid \seqRv[Y]{i-1})$,
+If we want our central distribution to exhibit good convergence properties for  $P(\X[i] \mid \seqRv[Y]{i-1})$,
 we need to explicitly include these conditional pairs in our query set, in the same way we did for $\X[i]|\seqRv{i-1}$.
 
-After adding these pairs, the central probability measure for this new query set shows some interesting feature
+After adding these pairs, the central distribution for this new query set shows some interesting feature
 selection capabilities.
 In this probability measure, for smaller values of $i$, $P(\X[i] \mid \seqRv{i-1})$
 tends to get somewhat combined with $P(\X[i] \mid \seqRv[Y]{i-1})$.
 For example when $i = 2$, if the single observed dice roll is $01$, the posterior probabilities of
 $00,10$ and $11$ are not equal, and $P(11 \mid 01) = 0.158$ is slightly higher than
 $P(00 \mid 01) = P(10 \mid 01) = 0.133$.
-It can be said that this central probability measure identifies that $01$ and $11$ are both odd numbers.
+It can be said that this central distribution identifies that $01$ and $11$ are both odd numbers.

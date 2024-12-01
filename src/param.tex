@@ -364,7 +364,7 @@ the multinomial parameters.
         \avgPost[\paramValue][\rho] &= \exp \left\{\sum_{\x} \pi(\xIt) \ln \rho(\tIx) \right\} \cdot\\
     \end{align*}
 
-    If $\cMass{}$ denotes the probability mass function corresponding to the central probability measure for \Qset in \Mt,
+    If $\cMass{}$ denotes the probability mass function corresponding to the central distribution for \Qset in \Mt,
     then $\fixedPoint$ is a fixed point for $\fpMap{}$, where
     \[
         \mu = \exp \left\{\frac{1}{k+1}\int \DxCond[\central] \dt[\cPrior[]] \right\} \cdot
@@ -443,7 +443,7 @@ the multinomial parameters.
 
 Using Equation~\ref{eq:pus_frontal}, we can construct a sequence of unnormalized measures by
 \[\rho_{n+1} = \fpMap{\rho_n} \cdot \]
-This sequence can be used in an iterative algorithm to find an estimation of the central probability measure
+This sequence can be used in an iterative algorithm to find an estimation of the central distribution
 $\cMass{\w}$.
 Once $\cMass{\w}$ is determined, Equation~\ref{eq:conditional_for_theta} can be used to obtain $\cMass{\paramValue{}}$.
 

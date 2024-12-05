@@ -18,37 +18,38 @@ and can be quantified by a real number.
 Specifically, let \rval[]{a} denote an action, and \rval[]{x} represent the unknown environment state.
 The loss function  $\util$ quantifies the loss for each action.
 
-Moreover, we assume that an evidence \rval[]{e} of this unknown environment state exists, and the agent can leverage
+Furthermore, we assume that an evidence \rval[]{e} of this unknown environment state exists, and the agent can leverage
 this evidence to determine the best action.
 In other words, our agent aims to find the optimal strategy, where a strategy defines the distribution of each
 action conditioned on the observed evidence: $S(A \mid E)$.
 
 According to Bayesian decision theory, the optimal strategy is the one that minimizes the expected loss:
 \begin{equation*}
-    S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
+    S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e),
 \end{equation*}
+where $\envDist$ is the joint probability distribution of the environment state and the evidence.
 
 It can be shown that there always exists a deterministic optimal strategy.
 That is, we can consider a strategy as a function of the evidence, rather than as a conditional distribution:
 \[
     S_{\text{opt}} = \arg\min_S \sum_{x,e} \util[S(e)] \envDist(x, e).
 \]
-
-The optimal strategy, for each evidence \rval{e}, chooses the action that
-minimizes the expected loss conditioned on \rval{e}:
-\begin{align}
+A strategy that, for each evidence \rval{e}, selects the action minimizing the expected loss conditioned
+on \rval{e}, is optimal:
+\begin{align*}
     S_{\text{opt}}(e) &= \arg\min_a \Ex{\envDist}{\util \mid e} \\
     &= \arg\min_a\sumx \util \envDist(x \mid e) \cdot
     \label{eq:bayes-action}
-\end{align}
-This implies that the only distribution which affects the optimal strategy is $\envDist(\XIE)$.
+\end{align*}
+
+This shows that the optimal actions are determined solely based on $\envDist(\XIE)$.
 Note that the value of the expected loss depends on $\envDist(\E)$, but the actions that
 construct the optimal strategy are not affected by $\envDist(\E)$.
 Only for suboptimal strategies $\envDist(\E)$ plays a role and determines the importance of suboptimal actions.
 
-Here, $\envDist(\XE)$ is the joint probability distribution of the environment state and the evidence.
-However, how do we obtain this distribution?
-Is there an objective distribution inherent in the environment that we need to somehow discover?
+To identify the optimal strategy, we rely on $\envDist$.
+But how can we obtain this distribution?
+Is there an inherent, objective distribution within the environment that we must discover?
 
 Answering this question is not straightforward.
 From a subjective perspective on probability, the answer is negative.
@@ -70,8 +71,8 @@ We will refer to this refined set as a probabilistic model:
     space, and \set{P} is a set of acceptable probability measures on \set{S}.
 \end{definition}
 
-In the statistical modeling, one of the most commonly used assumptions, that determines the set of acceptable
-probability measures, is the exchangeability assumption.
+To narrow the set of acceptable probabilities, one of the most commonly used assumptions in the statistical modeling,
+is the exchangeability assumption.
 We say a sequence of random variables $\seqRvInf$ is exchangeable, if the ordering of variables does not provide any
 useful information.
 In other words, for an exchangeable sequence of random variables, the joint probability is the same
@@ -91,7 +92,6 @@ This means, exchangeable observations are conditionally independent relative to 
 Moreover, the theorem states that if each \rv[i]{x} is discrete, the distribution $\post$ corresponds to the multinomial
 distribution.
 
-
 \begin{definition}[Parametric Model]
     \label{def:param-model}
     Let \param be a real vector.
@@ -106,7 +106,7 @@ distribution.
     We say that $P$ is the probability measure \emph{induced} by $p$.
 \end{definition}
 
-Now, consider our decision-making problem: Suppose the evidence \rv[]{e} consists of a sequence of previous experiences
+In our decision making problem, suppose that the available evidence \E, consists of a sequence of previous experiences
 of the environment.
 If we assume that our environment remains unchanged over time so that this sequence is exchangeable,
 to fully determine $\envDist$, we only need to determine the prior distribution of the latent parameter $\prior$.
@@ -115,15 +115,15 @@ Clearly, one approach to selecting a suitable prior distribution $\prior$ is to 
 environment.
 But, what if such knowledge is unavailable?
 This is a crucial question.
-In Bayesian statistics, this is where non-informative priors come into play.
+In Bayesian statistics, this is where noninformative priors come into play.
 These priors are typically chosen to be uniform or to represent a state of ignorance about the parameters.
 
 There is also another consideration that could play a role in choosing an appropriate prior distribution.
-Suppose that in our initial decision making problem, we choose to use a different
+Suppose that in our initial decision making problem, we decide to use a different
 evidence $\E'$ instead of \E.
 Could this change potentially improve our strategy?
 Within the framework of Bayesian decision theory, we can straightforwardly answer this question.
-To compare any two strategies, we simply compare their expected loss.
+To compare any two strategies, we can simply compare their expected loss.
 The strategy with the lower expected loss is the better one.
 
 Note that in reality we cannot freely choose any evidence we want.
@@ -142,17 +142,17 @@ Thus, at first glance, it appears that Bayesian decision theory does not favor f
 From a certain perspective, it could be argued that adopting a strategy which uses simpler evidence may lead to
 ignoring some parts of useful available information, and therefore is not justified by Bayesian
 decision theory.
-However, in practice we have to use feature selection because without it the original learning task requires
+However, in practice we rather to use feature selection because without it the original learning task requires
 impractical large datasets.
 
-The key point here is that the space of strategies using \rv{E'} is a subset of strategies that use \rv{E}.
+The key point here is that the space of strategies using \rv{E'} is a subset of the strategies that use \rv{E}.
 When we are searching for the best strategy based on \rv{E}, we are implicitly evaluating all simpler forms as well.
-For this reason, we believe if we choose an appropriate prior distribution, when we are finding the optimal
-strategy, feature selection should be performed automatically within the Bayesian decision theory framework,.
+We believe this is why the Bayesian framework never favours the simpler evidence \rv{E'}.
+Plausibly, if we choose an appropriate prior distribution, when we are finding the optimal
+strategy feature selection should be performed automatically within the Bayesian framework.
 However, many commonly used non-informative priors, such as the flat prior, do not exhibit feature
 selection characteristics.
 
-Throughout this discussion, we will explore a systematic approach for choosing prior distributions when
-prior knowledge about the environment is lacking.
-As we will see, these priors also exhibit some interesting feature selection characteristics.
+Throughout this discussion, we will explore a systematic approach for finding noninformative priors that
+exhibit feature selection characteristics as well.
 

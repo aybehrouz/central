@@ -23,22 +23,23 @@
 \newcommand{\rFixed}{\tilde{\r}}
 \newcommand{\RFixed}{\tilde{R}}
 
-\newcommand{\pDmax}{\hat{p}}
-\newcommand{\PDmax}{\hat{P}}
-\newcommand{\PvecDmax}{\mathbf{\hat{P}_\Qset}}
-\newcommand{\PvecDmaxEntry}{\hat{p}_{\xIe[i]}}
+\newcommand{\pDmax}{q}
+\newcommand{\PDmax}{Q}
+\newcommand{\PvecDmax}{\mathbf{Q_\Qset}}
+\newcommand{\PvecDmaxEntry}{q_{\xIe[i]}}
+
 \begin{definition} [Saddle Point]
     Consider a function $f:\set{w} \times \set{Z} \to \field{R}$.
-    We refer to a pair $(w^*, z^*)$ as a saddle point for $f$, if for all $w \in \set{W}$ and $z \in \set{Z}$, we have
+    We refer to a pair $(w^*, z^*)$ as a saddle point for $f$, if we have
     \[
-        f(w^*, z) \leq f(w^*, z^*) \leq f(w, z^*) \cdot
+        f(w^*, z) \leq f(w^*, z^*) \leq f(w, z^*),
     \]
+    for all $w \in \set{W}$ and $z \in \set{Z}$.
 \end{definition}
-
 
 \begin{lemma}
     \label{lm:saddle_conditions}
-    Let \pmodel be a parametric model and \Xpairs be a query set.
+    Let \Mt be a parametric model, and \Xpairs be a query set.
     Let $\f[ ]$ be the function defined by:
     \begin{equation*}
         \f = \fExpand,
@@ -68,8 +69,9 @@
     satisfies
     \begin{equation}
         \label{eq:saddle_lm_max_coverage}
-        \PvecDmaxEntry = \RFixed(\xIe[i]) \cdot
+        \PvecDmaxEntry = \RFixed(\xIe[i]),
     \end{equation}
+    for all $i$, \x[i], and \e[i].
 \end{lemma}
 
 \begin{proof}
@@ -94,13 +96,14 @@
     \end{equation}
     Clearly, if $\saddle$ exists, it will be a saddle point for $\f[ ]$.
 
-    Both of these optimization problems are convex and differentiable~\cite{0521833787}.
-    All the constraint functions are affine, and therefore are convex and differentiable.
-    Note that for the constraint $\r(\paramValue) \geq 0$, we can define an infinite number of affine
-    constraint functions of the form $\int \delta(\paramValue - t) \r(t) dt \geq 0$, where $\delta$ is the Dirac delta
-    function.
+    Both of these optimization problems are convex~\cite{0521833787} and differentiable.
+    To establish this, consider that all the constraint functions are affine, and therefore are convex and
+    differentiable.
+    Note that for the constraint $\r(\paramValue) \geq 0$, for each \paramValue, we can define an affine
+    constraint function of the form \[ \int \delta(\paramValue - t) \r(t) dt \geq 0,\] where $\delta$ is
+    the Dirac delta function.
 
-    Additionally, $\fAlt[ ]$ is differentiable with respect to both $\r$ and $\Pvector$.
+    Additionally, $\fAlt[ ]$ is differentiable function with respect to both $\r$ and $\Pvector$.
     For any fixed $\Pvector$, $\fAlt[\cdot]$ is an affine function and is concave.
     For a fixed solution to the second optimization problem denoted by $\rFixed$, we can write
     \begin{equation}
@@ -110,13 +113,13 @@
     where $c$ and $\RFixed(\xe[i]) = \marginal[\rFixed]{\xe[i]}$ are not functions of $\Pvector$.
     Since $\rFixed$ is a solution to the second optimization problem, it satisfies the constraints
     of the second problem and is a distribution.
-    Therefore, we have $\RFixed(\xe[i]) \geq 0$ for any $i$, \e[i], and $\fAlt[\rFixed][\cdot]$ is the negative of a
-    linear combination of concave $\ln \Pentry$ functions with nonnegative coefficients.
+    Therefore, for all $i, \xe[i]$ we have $\RFixed(\xe[i]) \geq 0$, and $\fAlt[\rFixed][\cdot]$ is
+    the negative of a linear combination of concave $\ln \Pentry$ functions with nonnegative coefficients.
     This function is convex.
 
     Thus, both optimization problems are convex and differentiable, with affine constraints.
     The constraints simply restrict the feasible set to the set of probability distributions, and it is always possible
-    to find points that meet all the constraints.
+    to find feasible points that meet all the constraints.
     Therefore, Slater’s condition is satisfied, and the KKT conditions provide necessary
     and sufficient conditions for optimality~\cite{0521833787}.
     In other words, If a point $\saddle$ satisfies the KKT conditions for both problems, it will be a saddle
@@ -220,7 +223,7 @@
         \f[\rr][\PPvector] \leq \Dx[\central] \cdot
     \]
 
-    \Mt is a generic parametric model, and therefore $\inP{\RR}$.
+    \Mt is a generic parametric model, and therefore $\inP{\RR}$, where $\RR$ is the probability measure induced by $\rr$.
     Given that $\saddle$ is a saddle point for $\f[ ]$, by Lemma~\ref{lm:saddle_conditions}, the entries of $\PPvector$
     satisfy Equation~\ref{eq:saddle_lm_pxIe}.
     Consequently, for the divergence measure of $\RR$, we can write
@@ -228,8 +231,9 @@
         \Dx[\RR] &= \supParam \DxCond[\RR] \\
         &= \max_{\r} \intProd[\r]{\DxCond[\RR]}\\
         &= \max_{\r} \f[\r][\PPvector] \\
-        &= \fsad \cdot
+        &= \fsad,
     \end{align*}
+    where $\r$ denotes a probability distribution.
     Thus, Inequality~\ref{eq:th_proof_saddle_lq_dx} implies
     \[
         \Dx[\RR] \leq \Dx[\central] \cdot
@@ -291,7 +295,7 @@
         \intProd[\rr]{} = 1,\quad \rr(\paramValue) > 0 \cdot
     \end{gather*}
 
-    Let $\inP{\central}$ be a probability measure that is induced by a strictly positive prior $\cMass{}$.
+    Let $\inP{\central}$ be a probability measure, induced by a strictly positive prior $\cMass{}$.
     If for some constant $\lambda$, we have $\DxCond[\central] = \lambda$, we see that the point $(\Cvector, \cMass{})$
     satisfies these simplified conditions, where $\Cvector$ is the corresponding vector of $\central(\xIe[i])$
     probabilities.

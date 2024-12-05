@@ -1,8 +1,8 @@
 
 
 Unfortunately, the expected loss of a strategy is a functional of the loss function.
-Therefore, we cannot directly use the expected loss of the optimal Bayesian strategy for evaluating
-different probability measures.
+Therefore, based on the principle of objectivity, we should not directly use the expected loss of the optimal Bayesian
+strategy for evaluating probability measures.
 We need a measure that quantifies the similarity between two probability measures while it ignores the
 specific loss function we are using.
 
@@ -10,9 +10,9 @@ Suppose that for an environment, we have decided on a probabilistic model \M, an
 knowledge, we have chosen a probability measure $P$ from our model.
 In particular, we are interested in the distribution of a random variable \X.
 
-We ask an expert---a person familiar with the environment---to evaluate our probability measure $P$.
-Presumably, that expert has his own beliefs about the environment.
-Therefore, he believes, instead of $P$, we should use a different probability measure $Q$.
+Imagine that we ask an expert---a person familiar with the environment---to evaluate our probability measure $P$.
+Presumably, that expert has his own beliefs about the environment, and thinks that we should, instead of $P$, use a
+different probability measure $Q$.
 When evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\X)$,
 while he believes the correct distribution is $Q(\X)$.
 
@@ -101,7 +101,7 @@ We know that the divergence of $P(\XY)$ from $Q(\XY)$ is a measure of the generi
 when we believe $Q(\XY)$ is the true distribution.
 To calculate this loss, we can assume that \X happens before \Y.
 In that way, this loss would include the loss of using $P(\X)$, and then, if we observe
-$\assign{X}$, which can happen with probability $Q(\x)$, it would also include the loss of
+$\assign{X}$, which can happen with the probability $Q(\x)$, it would also include the loss of
 using $P(\Y \mid \assign{x})$.
 This property indicates that for combining these individual terms we should use addition.
 
@@ -115,17 +115,20 @@ We may want to evaluate $P(\XY)$, or we may want to evaluate $P(\X)$ and $P(\Y)$
 Evaluating the joint distribution $P(\XY)$ is straightforward and can be done by defining a new random variable
 $\rv{Z} = (\XY)$.
 
-However, the correct approach for handling the second case is not obvious.
-Here, we may use a similar argument to what we used for the additive property.
-When we want to evaluate the loss of $P(\XY)$, If \X happens first we will face the loss of $P(\X)$,
-then when \Y happens, we will face the loss of $P(\Y)$ only if \X and \Y are independent.
-Therefore, evaluating the marginal distributions $P(\X)$ and $P(\Y)$ appears to be the same as evaluating $P(\XY)$
-when \X and \Y are independent, and we can use addition:
+The second case, however, is more challenging and the correct approach is not immediately clear.
+Here, we may use a similar argument to what we used for the additive property:
+Suppose that we are evaluating the loss of using $P(\XY)$, when \X and \Y are independent.
+If \X happens first, we will use the marginal $P(\X)$.
+Therefore, the loss of using $P(\XY)$ includes the loss of using $P(\X)$.
+Then, when \Y happens, since \X and \Y are independent, we will be using the marginal $P(\Y)$,
+and the loss of using $P(\XY)$ also includes the loss of using $P(\Y)$.
+Therefore, it appears that separately evaluating the marginal distributions $P(\X)$ and $P(\Y)$, should be the same as
+evaluating $P(\XY)$ when \X and \Y are independent.
+Hence, we may use
 \[
     \D[\X] + \D[\Y].
 \]
-Separate evaluation of random variable distributions is essential for the divergence measure that we will define
-shortly.
+Separate evaluation of marginals is essential for the divergence measure that we will define shortly.
 
 The KL divergence provides a method for measuring the agreement of a model about a specific distribution.
 This agreement can be called convergence.
@@ -153,27 +156,19 @@ This dice is unfair, with each face marked by a binary number: $00$, $01$, $10$,
 Before making our prediction, we can roll the dice multiple times, with each roll being independent.
 
 If we let \E be a vector representing the first 10 dice rolls and \X be the outcome of the next roll,
-\XIE \econverges by $P_u$ for $\epsilon \geq 0.109$, where $P_u$ is the probability measure obtained from
-assuming a uniform prior for the multinomial parameters.
+\XIE \econverges by $P_u$ for $\epsilon \geq 0.109$, where $P_u$ is the probability measure induced by considering a
+uniform prior for the multinomial parameters.
 If \E represents the first 20 outcomes, then we can choose any $\epsilon \geq 0.073$.
 
-Here, the chosen prior for the multinomial parameters affects the value of $\epsilon$.
-In other words, different probability measures in our model have different convergence properties.
+Here, the selected prior for the multinomial parameters affects the minimum value of $\epsilon$.
+In other words, different probability measures in our model have different $\epsilon$-convergence properties.
+The minimum $\epsilon$ gives us an assessment of the safety of a probability measure,
+with respect to a particular \XIE conditional.
+If this value is sufficiently small, any other probability measure in the model agrees that our distribution for \XIE is
+safe, in the sense that it has a small expected divergence.
 
-If there is a probability measure that provides $\epsilon$-convergence for a very small $\epsilon$, we can hardly
-justify using any other probability measure.
-However, that probability measure may not always exist.
-Furthermore, we cannot determine what value of $\epsilon$ would be small enough.
-This becomes more problematic when we need to consider more than one distribution.
-For example, suppose that we are interested in the distributions of both $\X|\E[1]$ and $\X|\E[2]$.
-As we discussed earlier, when dealing with multiple distributions we should consider the sum of their KL divergences.
-Unfortunately, that would make determining the appropriate value of $\epsilon$ even harder because that naturally
-increases the value of $\epsilon$.
-
-We could avoid all these hurdles by simpling choosing the probability measure that gives the smallest
-possible $\epsilon$.
-Subjectively, this probability measure is the ``safest'' choice in our model and it turns out that it performs well
-even when the minimum achievable value of $\epsilon$ is not very small.
+When we are interested in the distribution of several random variables, we may consider the sum of their KL
+divergences, as we discussed earlier, to construct a measure that accounts for various random variables.
 
 \begin{definition}[Query Set]
     A \emph{query set} is a set of pairs of discrete random variables, all defined on the same sample space.
@@ -185,18 +180,18 @@ even when the minimum achievable value of $\epsilon$ is not very small.
     \begin{align}
         \label{eq:div_def}
         \Dx & = \supQ \DxExpand,                    \\
+        \nonumber
         & = \supQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
         \frac{Q(\assign[i]{x} \mid \assign[i]{e})}{P(\assign[i]{x} \mid \assign[i]{e})} \cdot
     \end{align}
 \end{definition}
 
+\begin{proposition}
+    \XIE \econverges by $P$, if and only if \[\Dx[P][\{(\XE)\}] < \epsilon \cdot\]
+\end{proposition}
 Note that we usually simplify our notation and instead of writing the full assignment to a random variable, we only
 write the assigned value.
 For example, instead of $Q(\assign[i]{x} , \assign[i]{e})$ we write: $Q(\xe[i])$.
-
-\begin{proposition}
-    \XIE \econverges by $P$, if and only if \[\Dx < \epsilon,\] where $\Qset = \{(\XE)\}$.
-\end{proposition}
 
 For a parametric model (as defined in Definition~\ref{def:param-model}), it seems reasonable to define a conditional
 form of our divergence measure, conditioned on the value of the parameter.
@@ -220,8 +215,11 @@ fully determines the distribution of the sample space.
     For any value of \paramValue, the conditional divergence is nonnegative.
 \end{proposition}
 
-Now that we have established a divergence measure, we are ready to provide a formal definition for the probability
-measure that we consider the ``safest'' choice in a model.
+Subjectively, the probability measure that has the lowest divergence measure can be considered the ``safest'' choice
+in a model.
+It is safe in the sense that it has the best possible performance in the worst case, and more importantly, when
+convergence is possible in a model, if we use this probability measure, we are guaranteed to
+have a convergent distribution for our query set.
 
 \begin{definition}[Central Distribution]
     In a model \model, we define the \emph{central distribution} for a query set \Qset, to be a probability
@@ -237,19 +235,19 @@ Specifically, \Qset defines the set of random variables in which we are interest
 Each \X[i] represents a random variable whose distribution is important to us, and each \E[i] corresponds to the
 evidence that is available for that variable.
 
-However, if we choose our query set based on our specific experimental setup, we will violate the
+However, if we choose our query set based on our specific experimental setup, it would violate the
 principle of objectivity.
-It is important that we use the same query set for any problem that can be defined within the same environment.
+To avoid that, we have to use the same query set for any possible problem that could be
+defined within an environment.
 
 One natural way to do this is to let the query set include all potentially relevant conditional pairs.
 For example, in our dice problem, we might let each \X[i] be the outcome of the $i$-th dice roll, and define each \E[i]
 as a vector of the previous dice outcomes: $\E[i] = (\seqRv{i-1})$.
-We may assume that our set contains $n$ pairs.
+We may assume that our query set contains $n$ pairs.
 The choice of $n$ should be based on our assumptions about the complexity of the problem.
 It shows where we think the convergence becomes trivial and, if necessary, could approach infinity.
 
-
-Now let us calculate the conditional divergence measure for \set{x} as defined in Definition~\ref{def:cond_divergence}:
+Now let us calculate the conditional divergence measure (Definition~\ref{def:cond_divergence}) for this query set:
 \begin{align*}
     \DxCond & = \KlCond[][{\x[1]}][ ]                  \\
     & + \KlCond[][{\x[2]}][{\x[1]}]            \\
@@ -270,24 +268,49 @@ we use the chain rule for conditional probability:
     \label{eq:joint_form}
 \end{equation}
 
-This implies that we could alternatively define our query set as a set containing a single pair $\Qset = \{ (\XE) \}$,
-where \X represents the vector of $n$ dice rolls $\X = (\seqRv{n})$, and \E is a dummy certain event with $P(\E) = 1$.
+This means that we can alternatively define our query set as $\Qset = \{ (\XE) \}$,
+where \X represents the vector of $n$ dice rolls: $\X = (\seqRv{n})$, and \E is a dummy certain event with $P(\E) = 1$.
 This query set essentially corresponds to the entire sample set for $n$ dice rolls.
-We usually simplify our notation and omit dummy events: $\Qset = \{\X\}$.
+We usually simplify our notation and omit dummy events and write: $\Qset = \{\X\}$.
 
-The fact that our query set includes the entire sample set does not necessarily mean its central probability
-measure has good convergence properties for every definable random variable.
-Back to our dice example, suppose we are interested in predicting the next dice outcome based on the number of previous
+\newcommand{\XcondYseq}{\X[i] \mid \seqRv[Y]{i-1}}
+\newcommand{\YcondYseq}{\Y[i] \mid \seqRv[Y]{i-1}}
+
+The fact that our query set includes the entire sample set does not necessarily mean its central distribution has good
+convergence properties for every random variable.
+In our dice example, suppose we are interested in predicting the next dice outcome based on the number of previous
 odd and even outcomes.
 Let \Y[i] represent the least significant bit of the $i$-th dice roll, indicating whether the number is odd or even.
-If we want our central distribution to exhibit good convergence properties for  $P(\X[i] \mid \seqRv[Y]{i-1})$,
+If we want our central distribution to exhibit good convergence properties for  $P(\XcondYseq)$,
 we need to explicitly include these conditional pairs in our query set, in the same way we did for $\X[i]|\seqRv{i-1}$.
 
-After adding these pairs, the central distribution for this new query set shows some interesting feature
-selection capabilities.
-In this probability measure, for smaller values of $i$, $P(\X[i] \mid \seqRv{i-1})$
-tends to get somewhat combined with $P(\X[i] \mid \seqRv[Y]{i-1})$.
+Intuitively, it seems that in any noninformative distribution we should have
+\[
+    P(\XcondYseq) = \frac{1}{2} P(\YcondYseq) \cdot
+\]
+
+For example, consider $P(\X[4] = 01 \mid 0,1,1)$, which represents the probability of observing $01$ on the 4th
+roll, given that we have previously seen two odd numbers and one even number.
+It is reasonable to expect that this probability equals $P(\X[4] = 11 \mid 0,1,1)$.
+On the other hand,
+\[
+    P(\Y[4] = 1 \mid 0,1,1) = P(\X[4] = 01 \mid 0,1,1) + P(\X[4] = 11 \mid 0,1,1),
+\]
+which implies
+\[
+    P(\X[4] = 01 \mid 0,1,1) = P(\X[4] = 11 \mid 0,1,1) = \frac{1}{2} P(\Y[4] = 1 \mid 0,1,1) \cdot
+\]
+This suggests that adding $\YcondYseq$ conditionals to our query set,
+would have the same effect as adding $\XcondYseq$ conditionals.
+
+If we add conditionals of the form $\YcondYseq$ to our query set, we will get
+$\Qset = \{\X, \Y\}$, where \X represents the sample space of $n$ rolls of a four sided dice,
+and \Y represents the sample space of $n$ rolls of a two-sided odd-even dice or coin.
+
+The central distribution for this new query set shows some interesting properties.
+In this distribution, for smaller values of $i$, $P(\X[i] \mid \seqRv{i-1})$
+tends to get somewhat combined with $P(\XcondYseq)$.
 For example when $i = 2$, if the single observed dice roll is $01$, the posterior probabilities of
-$00,10$ and $11$ are not equal, and $P(11 \mid 01) = 0.158$ is slightly higher than
+$00,10$ and $11$ are not equal, and $P(11 \mid 01) = 0.158$, which is slightly higher than
 $P(00 \mid 01) = P(10 \mid 01) = 0.133$.
-It can be said that this central distribution identifies that $01$ and $11$ are both odd numbers.
+We can say that the central distribution identifies that $01$ and $11$ are both odd numbers.

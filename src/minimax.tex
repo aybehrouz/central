@@ -28,6 +28,14 @@
 \newcommand{\PvecDmax}{\mathbf{Q_\Qset}}
 \newcommand{\PvecDmaxEntry}{q_{\xIe[i]}}
 
+The central distribution is essentially the solution to a minimax game.
+By relaxing some constraints, this game can be converted into a convex-concave game.
+It turns out that the solution to the relaxed problem always satisfies the constraints of the original problem, and is
+feasible.
+Since the solution to a convex-concave game corresponds to a saddle point,
+by defining the appropriate function, we can characterize the central
+distribution using standard convex optimization techniques.
+
 \begin{definition} [Saddle Point]
     Consider a function $f:\set{w} \times \set{Z} \to \field{R}$.
     We refer to a pair $(w^*, z^*)$ as a saddle point for $f$, if we have
@@ -181,15 +189,24 @@
 %    We can reach the upper bound at the right hand side by letting $\Pentry \coloneqq \RFixed(\xe[i])$.
 \end{proof}
 
+Next, we will establish the connection between the saddle point and the central distribution.
+We also show that there is a strong relationship between central distributions and
+Bernardo's reference priors~\cite{BERNARDO200517}.
+
+One important implication of the next theorem is that it suggests inference and searching for a central
+distribution can be combined and performed simultaneously when finding a saddle point for $\f[ ]$.
 
 \begin{definition} [Coverage]
     Let \pmodel be a parametric model, and \Qset be a query set.
     Let $p$ be a prior distribution, and $\inP{P}$ be the probability measure induced by $p$.
-    We define the \emph{coverage} of $p$ as
+    We define the \emph{coverage of $p$ for \Qset} as
     \begin{equation*}
         \Cx = \CxExpand \cdot
     \end{equation*}
 \end{definition}
+
+The coverage $\Cx$ is the dual of the divergence $\Dx$.
+For a query set, as we decrease the divergence, the coverage increases.
 
 \begin{theorem}
     \label{th:saddle_is_central}
@@ -270,7 +287,23 @@
     and $\rr$ has the maximum coverage.
 \end{proof}
 
-\begin{theorem}
+Back to our dice example, we continue from Equation~\ref{eq:joint_form}, and calculate the coverage of a prior
+distribution $p$ for the query set $\Qset = \{\X\}$, where \X is the sample space of $n$ dice rolls:
+\begin{align*}
+    \Cx &= \CxExpand \\
+    &= \int \KlCond[][\seqRval{n}][ ] \dt \\
+    &= \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
+    \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
+\end{align*}
+
+We see that the central distribution for our dice example, when we consider a query set equivalent to the
+sample space, is the probability measure that is obtained by using the reference prior~\cite{BERNARDO200517} for
+the multinomial parameters.
+
+With the next theorem, we finally see why we refer to these distributions as ``central.''
+Exactly like the center of a circle, the central distribution is equidistant from the boundary.
+
+\begin{theorem} [Centrality]
     \label{th:lambda}
     Let \pmodel be a generic parametric model, and \Xpairs be a query set.
     Suppose $\inP{\central}$ is a probability measure induced by a strictly positive prior distribution.

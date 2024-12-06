@@ -212,10 +212,18 @@ fully determines the distribution of the sample space.
 \end{definition}
 
 \begin{proposition}
-    For any value of \paramValue, the conditional divergence is nonnegative.
+    For the conditional divergence we have:
+    \begin{itemize}
+        \item $\begin{aligned}
+                   \DxCond \geq 0
+        \end{aligned}$
+        \item $\begin{aligned}
+                   \Dx = \supQ \intProd[q]{\left(\DxCond - \DxCond[Q] \right)}
+        \end{aligned}$
+    \end{itemize}
 \end{proposition}
 
-Subjectively, the probability measure that has the lowest divergence measure can be considered the ``safest'' choice
+Subjectively, the probability measure that has the lowest divergence can be considered the ``safest'' choice
 in a model.
 It is safe in the sense that it has the best possible performance in the worst case, and more importantly, when
 convergence is possible in a model, if we use this probability measure, we are guaranteed to
@@ -288,7 +296,6 @@ Intuitively, it seems that in any noninformative distribution we should have
 \[
     P(\XcondYseq) = \frac{1}{2} P(\YcondYseq) \cdot
 \]
-
 For example, consider $P(\X[4] = 01 \mid 0,1,1)$, which represents the probability of observing $01$ on the 4th
 roll, given that we have previously seen two odd numbers and one even number.
 It is reasonable to expect that this probability equals $P(\X[4] = 11 \mid 0,1,1)$.

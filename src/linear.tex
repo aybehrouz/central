@@ -25,8 +25,11 @@
 \newcommand{\dualMap}[1][M]{\mathFix{{#1}^*}}
 
 
-A sample space, denoted by \sampleSet, is the set of all possible outcomes of a random experiment.
-That is, the outcome of a random experiment can \emph{always} be represented by \emph{exactly one} element of \sampleSet.
+
+\begin{definition} [Sample Space]
+    A sample space, denoted by \sampleSet, is the set of all possible outcomes of a random experiment.
+    That is, the outcome of a random experiment can \emph{always} be represented by \emph{exactly one} element of \sampleSet.
+\end{definition}
 
 \begin{definition} [Action Space]
     Let \sampleSet be a sample space.
@@ -190,7 +193,7 @@ We now will establish the familiar relationship between conditional expectation 
 \end{proposition}
 
 \begin{theorem}
-    Let \sampleSet be a sample set.
+    Let \sampleSet be a sample space.
     Suppose  $\maps{\sampleSet}{\sampleSetAlt}$ is a map from \sampleSet to another set \sampleSetAlt.
     If \Expect is an expectation for \sampleSet,
     then $\ExpAlt = \dualdualMap(\Expect)$ is an expectation for \sampleSetAlt,

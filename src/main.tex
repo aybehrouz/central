@@ -30,7 +30,7 @@
 % Primitive
 \newcommand{\mathFix}[1]{\ensuremath{#1}\xspace}
 \newcommand{\sub}[2]{\ifthenelse{\isempty{#2}}{#1}{#1_{#2}}}
-\newcommand{\set}[1]{\mathFix{\mathcal{\uppercase{#1}}}}
+\newcommand{\set}[2][]{\mathFix{\sub{\mathcal{\uppercase{#2}}}{#1}}}
 \newcommand{\rv}[2][]{\mathFix{\sub{\uppercase\expandafter{#2}}{#1}}}
 \newcommand{\rval}[2][]{\mathFix{\sub{\lowercase\expandafter{#2}}{#1}}}
 \newcommand{\measure}[1]{\mathFix{\mathbb{#1}}}
@@ -265,7 +265,7 @@
 
 \newcommand{\maxE}{\max_{\rv{E} \in \set{E}}}
 
-\title{Automatic Feature Selection Using the Central Distribution}
+\title{The Central Distribution: A Noninformative Prior for Feature Selection}
 \author{Behrouz Ayati \\ aybehrouz@gmail.com}
 \date{June 18, 2023}
 % Document

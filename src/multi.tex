@@ -1,4 +1,5 @@
 \renewcommand{\t}{\paramValue}
+\newcommand{\pa}{a}
 \newcommand{\mdim}{d}
 \newcommand{\msize}{n}
 \newcommand{\avgPostElem}[1][{\t[i]}]{\phi(#1)}
@@ -15,10 +16,10 @@
 % Clique tree commands
 \newcommandx{\msg}[3][1=\delta, 2=i, 3=j]{\mathFix{#1_{#2 \rightarrow #3}}}
 \newcommand{\altMsgSym}{\sigma}
-\newcommand{\ct}[1]{\mathFix{\mathcal{T}_{#1}}}
-\newcommand{\rangeSep}{\set{r}_{i,j}}
-\newcommand{\altRangeSep}{\set{r}_{i,j}^{*}}
-\newcommandx{\sep}[2][1=i, 2=j]{\mathFix{\set{s}_{#1,#2}}}
+\newcommand{\ct}[1]{\mathFix{\sub{\mathcal{T}}{#1}}}
+\newcommand{\rangeSep}{\set[i,j]{r}}
+\newcommand{\altRangeSep}{\set[i,j]{r}^{*}}
+\newcommandx{\sep}[2][1=i, 2=j]{\mathFix{\set[{#1,#2}]{s}}}
 \newcommand{\sepVal}{\mathFix{s_{i,j}}}
 \newcommandx{\msgMap}[2][1=i, 2=j]{f_{#1,#2}}
 \newcommand{\eqScope}{\vartheta}
@@ -29,22 +30,23 @@
 \renewcommand{\M}{\psi}
 \newcommand{\mat}{M_{\W}}
 \newcommand{\C}[1]{C_{#1}}
-\newcommandx{\wPart}[3][1=i, 2=j, 3=\set{w}]{#3_{<(#1,#2)}}
-\newcommand{\wSep}{\set{w}^{*}_{i,j}}
+\newcommandx{\wPart}[3][1=i, 2=j, 3=w]{\set[<(#1,#2)]{#3}}
+\newcommand{\wSep}{\set[i,j]{w}^{*}}
 \newcommand{\eqScopeSep}[2]{\eqScope_{#1,#2}}
 \newcommand{\wSepVal}[2]{w^{*}_{#1, #2}}
 \newcommand{\Nb}{Nb_i}
 
-In this section, we examine the derivation of the central probability measure for multinomial models.
+In this section, we examine the derivation of central distributions in multinomial models.
 Multinomial models play a key role in statistical learning.
-By de Finetti’s theorem, any exchangeable sequence of discrete random variables can be represented using a multinomial model.
-Exchangeable sequences are fundamental to statistical learning, as they offer a framework for modeling data with
-independence and order invariance.
+By de Finetti’s theorem, any exchangeable sequence of discrete random variables can be represented
+by a multinomial model.
+Exchangeable sequences offer a framework for modeling data with independence and order invariance, which is
+particularly important in probabilistic and statistical applications.
 
 A multinomial model is a parametric model (Definition~\ref{def:param-model}) in which the likelihood function follows a
 multinomial distribution.
 The configuration of the model is determined by two variables: $\msize$ and $\mdim$.
-Each element of the sample space $s \in \set{S}$ can be represent by a $\mdim$ dimensional random vector
+Each element of the sample space $s \in \set{S}$ can be represented by a $\mdim$ dimensional random vector
 \[\X = \vSeq{\x}{\mdim},\] where each \x[i] is a nonnegative integer such that $\sumDim \x[i] = \msize$.
 The model parameter is a nonnegative $\mdim$ dimensional real vector \[\t = \vSeq{\theta}{\mdim},\]
 where $\sumDim \t[i] = 1$.
@@ -53,7 +55,8 @@ The likelihood distributing $\pi(\X \mid \theta)$ is a multinomial distribution
     \pi(\x \mid \t) = \multi \cdot
 \end{equation*}
 
-As $\msize$ increases, the posterior distribution of \t converges to the same distribution regardless of the prior.
+In a multinomial model, as $\msize$ increases, the posterior distribution of \t converges to the same distribution
+regardless of the prior.
 Therefore, when $\msize$ is sufficiently large, we can use a uniform prior to obtain the posterior potential of the
 multinomial parameter.
 The uniform prior is conjugate to the multinomial distribution, and the resulting posterior will follow a Dirichlet
@@ -84,7 +87,7 @@ Therefore, for the posterior potential of the multinomial parameter we have
     \label{eq:pp_multi}
 \end{equation}
 
-For the central probability measure of a multinomial model, we usually consider a query set that consists of random
+When using a multinomial model, we usually consider query sets that consist of random
 variables corresponding to fusions of the multinomial categories. %todo: should be rewrittten later
 
 Let $\X = \vSeq{\x}{\mdim}$ be a random vector representing an element of the sample space of a multinomial model.
@@ -102,8 +105,8 @@ where
 For example $(\t[1] + \t[5], \t[2], \t[4] + \t[7] + \t[8],  \ldots)$ fully parametrizes the fusion variable
 $(\x[1] + \x[5], \x[2], \x[4] + \x[7] + \x[8],  \ldots)$.
 
-Suppose that in a multinomial model we aim to find the central probability measure for a query set
-$\Qset = \{\X, \seqRv[Y]{k}\}$, where each \Y[i] is a fusion variable, and \X represents the elements of the sample
+Suppose that in a multinomial model we aim to find the central distribution for a query set
+$\Qset = \{\X, \seqRv[Y]{k}\}$, where each \Y[i] is a fusion variable, and \X represents the original sample
 space.
 For using theorem~\ref{th:fixed_point}, we need to obtain $\avgPost$, where \w[i] is the parameter of \Y[i],
 and also $\avgPost[\w]$, where $\w = \vSeq{\w}{k}$.
@@ -123,7 +126,7 @@ This equation system has a solution when \w is inside the convex hull of the col
 We convert this integration into an inference problem in a probabilistic graphical model, and then use a slightly
 modified version of the clique tree message passing~\cite{koller2009probabilistic} algorithm.
 
-For representing equations of the linear system $\eqSys$ by a graphical model, we use indicator factors.
+For representing the equations of the linear system $\eqSys$ by a graphical model, we use indicator factors.
 Let $\eqScope \subseteq \{\seq{\t}{\mdim}\}$, and $0 \leq \omegaElem \leq 1$.
 An indicator factor $\ind$ is a function with the scope $\{\eqScope, \omegaElem\}$ such that:
 \[
@@ -166,7 +169,7 @@ Due to the running intersection property, we have
 However, during message passing, we can use a simplified sepset instead.
 
 \begin{definition}
-    Let $\ct{}$ be a clique tree.
+    Let \ct{} be a clique tree.
     Let $\rangeSep$ denote the set of all possible assignments to the sepset \sep.
     A \emph{message reparameterization} for $\ct{}$ is a map (i.e.\ function) $\msgMap$ defined from $\rangeSep$
     to another set $\altRangeSep$ for every $i, j$, which is message preserving.
@@ -211,7 +214,7 @@ As a result, we will have $\msg(\sepVal) = \msg(\sepVal')$.
 We can simplify message computation by introducing certain constraints on the structure of $\ct{\M}$.
 
 \begin{definition}[Convolution Clique Tree]
-    Let $\ct{\M}$ be a clique tree for the factorized measure of Equation~\ref{eq:tree_measure}.
+    Let \ct{\M} be a clique tree for the factorized measure of Equation~\ref{eq:tree_measure}.
     Let $\pr{i}$, for each clique $\C{i}$, be the index of the parent of $\C{i}$, i.e.\ the neighbor on the
     path to the root clique $\Troot$.
     We refer to $\ct{\M}$ as a \emph{convolution clique tree} if for every $i$ we have
@@ -229,7 +232,7 @@ family preserving.
     Any clique that is not an assignment node is a \emph{convolution node}.
 \end{definition}
 
-To have a more convenient notation, we can express messages as functions of vectors.
+To make the notation more convenient, we can express messages as functions of vectors.
 Thus, the reparameterized message $\msg[\altMsgSym]$ will be a function of a vector $\wSepVal{i}{j}$, with an entry for
 each variable in $\wSep$.
 Note that each variable in $\wSep$ corresponds to an equation.
@@ -244,7 +247,7 @@ If $\C{i}$ is a convolution node, the outgoing message from $\C{i}$ to $\C{j}$ c
 \end{equation*}
 
 On the other hand, when $\C{i}$ is an assignment node, for every value of $\wSepVal{i}{j}$ there is only one acceptable
-value for \t[i] and the message can be computed without convolution.
+value for \t[i], and the message can be computed without convolution.
 Moreover, certain values of $\wSepVal{i}{j}$ will be invalid.
 For each indicator factor associated with $\C{i}$ that does not include \t[i], the corresponding variable in $\wSep$
 must always be $0$ in the computed message.
@@ -255,6 +258,6 @@ If we denote this value by $t$, we have
     \avgPostElem[t] \prod_{k \in \Nb - \{j\}} \msg[\altMsgSym][k][i](\wSepVal{k}{i} - t \indVec{k}{i}) \cdot
 \end{equation*}
 
-Thus, in this equation the entries of $\wSepVal{i}{j}$ that correspond to equations including \t[i] are $t$,
+In the above equation, the entries of $\wSepVal{i}{j}$ that correspond to equations including \t[i] are $t$,
 the entries corresponding to equations that do not include \t[i] are $0$,
-and other entries take any value.
+and other entries can take any value.

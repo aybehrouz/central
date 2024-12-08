@@ -3,11 +3,18 @@
     \frac{\avgPost[{#1}][#3]}{#3(#2)}
     \prod_i \frac{\avgPost[{\w[i]}][#3]}{#3(\w[i])}
 }
-\newcommandx{\pusFrontal}[2][1=\avgPost, 2=\rho]{
+\newcommandx{\pusFrontal}[2][1={\avgPost[][\cMass{}]}, 2=\cMass{}]{
     \left(\frac{#1(\w)}{#2(\w)} \prod_i \frac{#1(\w[i])}{#2(\w[i])} \right)
 }
-\newcommand{\fixedPoint}{\mu \cMass{}}
+\newcommand{\fixedPoint}{\normConst \solPrior}
 \newcommand{\fpMap}[1]{T \ifthenelse{\isempty{#1}}{}{\left[ #1 \right]}}
+\newcommand{\normConst}{\mu}
+\newcommand{\solPrior}{c}
+\newcommand{\solDist}{C}
+
+\newcommandx{\leg}[2][1={\w[i]}, 2=\solPrior, usedefault]{\frac{\avgPost[{#1}][{#2}]}{#2(#1)}}
+\newcommandx{\frontalPus}[2][1=\w, 2=\solPrior, usedefault]{\left( \leg[{#1}][{#2}] \prod_i \leg[{\w[i]}][{#2}] \right)}
+\newcommand{\unnorm}{\rho}
 
 In the dice example, following the principle of objectivity led us to define a query set that included vectors
 representing $n$ trials of our experiment.
@@ -24,6 +31,8 @@ model parameter.
 In the next theorem, for query sets of this form, we will develop a fixed point equation characterizing the
 central distribution.
 
+
+
 \begin{theorem}
     \label{th:fixed_point}
     Suppose \pmodel is a generic parametric model, and $\Qset = \{\X, \seqRv{k}\}$ is a query set in \Mt.
@@ -35,93 +44,97 @@ central distribution.
     \end{equation}
     Also, let $\W(\paramValue) = \vSeq{\w}{k} = \w$.
 
-    We define a map $\fpMap{}$ on the space of unnormalized probability measures of \w as follows:
+    We define a map, denoted by $\fpMap{}$, on the space of unnormalized probability measures of \w, as follows:
     \begin{equation}
-        \fpMap{\rho}(\w) = \pusFrontal[{\avgPost[][\rho]}][\rho]^{\frac{1}{k+1}} \rho(\w) ,
+        \fpMap{\unnorm}(\w) = \frontalPus[][\unnorm]^{\frac{1}{k+1}} \unnorm(\w),
         \label{eq:pus_frontal}
     \end{equation}
-    where $\rho$ is an unnormalized probability measure and:
+    where $\unnorm$ is an unnormalized probability measure, and:
     \begin{align*}
         \avgPost[{\w[i]}][\rho] &= \exp \left\{\sum_{\x[i]} \pi(\xIw[i]) \ln \rho(\wIx[i]) \right\},\\
         \avgPost[\w][\rho] &= \int_{\omegaArea} \avgPost[\paramValue][\rho] d\paramValue,\\
         \avgPost[\paramValue][\rho] &= \exp \left\{\sum_{\x} \pi(\xIt) \ln \rho(\tIx) \right\} \cdot\\
     \end{align*}
 
-    If $\cMass{}$ denotes the probability mass function corresponding to the central distribution for \Qset in \Mt,
-    then $\fixedPoint$ is a fixed point for $\fpMap{}$, where
-    \[
-        \mu = \exp \left\{\frac{1}{k+1}\int \DxCond[\central] \dt[\cPrior[]] \right\} \cdot
-    \]
-    Moreover, we have
+    Let $\solPrior$ be a strictly positive prior probability distribution.
+    The unnormalized measure $\fixedPoint$ is a fixed point for $\fpMap{}$, and
     \begin{equation}
-        \cMass{\tIw} = \frac{\avgPost[\paramValue][\cMass{}]}{\avgPost[\w][\cMass{}]} \cdot
-        \label{eq:conditional_for_theta}
+        \solPrior(\tIw) = \frac{\avgPost[\paramValue][\solPrior]}{\avgPost[\w][\solPrior]},
+        \label{eq:pus_th_conditional}
     \end{equation}
+    if and only if
+    \begin{equation}
+        \DxCond[\solDist] = (k + 1) \ln \normConst,
+        \label{eq:pus_th_Dx_is_const}
+    \end{equation}
+    where $\solDist$ is the probability measure induced by $\solPrior$.
 \end{theorem}
 
 \begin{proof}
-    Let $Q^*(y) = \convexCond{Q}{y}$, for some \inP{Q_1, Q_2}, $0 \leq \alpha \leq 1$ and
-    an arbitrary random variable \rv{Y}.
-    \Mt is a parametric model.
-    Therefore:
+    \newcommand{\someDist}{P}
+    \newcommand{\somePrior}{p}
+    First, note that for any arbitrary probability distribution $\someDist$, induced by a strictly positive prior $\somePrior$,
+    we can write:
     \begin{align*}
-        Q^*(y) &= \alpha \marginal[q_1]{y} + (1 - \alpha) \marginal[q_2]{y}\\
-        &= \int \pi(y \mid \paramValue) (\convexCond{q}{\paramValue}) d\paramValue\cdot
+        \DxCond[\someDist] &= \KlCond[\someDist][\rval{x}][ ] + \DxCondExpandFull[\someDist][][ ] \\
+        &= \sum_{\rval{x}} \pi(\xIt) \ln \frac{\somePrior(\tIx)}{\somePrior(\paramValue)} +
+        \sumix \pi(\xIw[i]) \ln \frac{\somePrior(\wIx[i])}{\somePrior(\w[i])}\\
+        &= \ln \leg[\paramValue][\somePrior] + \sum_i \ln \leg[][\somePrior] \\
+        &= \ln \frontalPus[\paramValue][\somePrior] \cdot
     \end{align*}
-    $\convexCond{q}{\paramValue}$ is a valid probability distribution and \Mt is a generic parametric model.
-    That implies \inP{Q^*}.
-    This proves that the set of distributions of \X and each \X[i] is a convex set.
-
-    Thus, the conditions of Theorem~\ref{th:lambda} holds and the central distribution of \Qset satisfies
-    \begin{equation*}
-        \DxCond[\central ] = \lambda \cdot \\
-    \end{equation*}
-    Moreover, from Equation~\ref{eq:func_of_theta} and Bayes' theorem it follows
-    \begin{align*}
-        \DxCond[\central] &= \KlCond[\central][\rval{x}][ ] + \DxCondExpandFull[\central][][ ] \\
-        &= \sum_{\rval{x}} \pi(\xIt) \ln \frac{\cMass{\tIx}}{\cMass{\paramValue}} +
-        \sumix \pi(\xIw[i]) \ln \frac{\cMass{\wIx[i]}}{\cMass{\w[i]}}\\
-        &= \ln \ratio{\paramValue} + \sum_i \ln \ratio{\w[i]}\cdot
-    \end{align*}
-    That implies
+    Since $\W(\paramValue) = \w$, we have $\somePrior(\paramValue) = \somePrior(\tIw) \somePrior(\w)$, and
     \begin{equation}
-        \label{eq:fixed_point_proof}
-        e^{\lambda} = \ratioFull[\paramValue][\paramValue] \cdot
+        \label{eq:pus_proof_main_eq}
+        \DxCond[\someDist] + \ln \somePrior(\tIw) =
+        \ln \left(  \frac{\avgPost[\paramValue][\somePrior]}{\somePrior(\w)} \prod_i \leg[][\somePrior] \right) \cdot
     \end{equation}
-    For $\W(\paramValue) = \w$, we have $\cMass{\paramValue, \w}=\cPrior$.
-    Hence,
-    \begin{equation*}
-        \cPrior = \cMass{\tIw} \cMass{\w} \cdot
-    \end{equation*}
-    We substitute this equation into Equation~\ref{eq:fixed_point_proof}:
+
+    To prove the `if' part, we assume Equation~\ref{eq:pus_th_Dx_is_const} holds for a probability measure $\solDist$,
+    induced by a strictly positive prior $\solPrior$, for every value of \paramValue.
+    We exponentiate both sides of Equation~\ref{eq:pus_proof_main_eq} to obtain
     \begin{equation}
-        \cMass{\tIw} e^{\lambda} = \ratioFull[\paramValue][\w] \cdot
-        \label{eq:fixed_point_proof_1}
+        \normConst ^{k+1} \solPrior(\tIw) =\frac{\avgPost[\paramValue][\solPrior]}{\solPrior(\w)} \prod_{i=1}^k \leg \cdot
+        \label{eq:pus_proof_a}
     \end{equation}
     Since this equation holds for any value of \paramValue, we can integrate both sides with respect to \paramValue:
-    \begin{equation*}
-        \int_{\omegaArea} \cMass{\tIw} e^{\lambda} d\paramValue =
-        \int_{\omegaArea} \ratioFull[\paramValue][\w] d\paramValue \cdot
-    \end{equation*}
-    Therefore,
+    \[
+        \int_{\omegaArea} \normConst ^{k+1} \solPrior(\tIw) d\paramValue =
+        \int_{\omegaArea}
+        \left( \frac{\avgPost[\paramValue][\solPrior]}{\solPrior(\w)} \prod_i \leg  \right) d\paramValue \cdot
+    \]
+    That implies
     \begin{equation}
-        e^{\lambda} = \ratioFull \cdot
-        \label{eq:fixed_point_proof_2}
+        \normConst ^{k+1} = \frontalPus \cdot
+        \label{eq:pus_proof_b}
     \end{equation}
     Now we evaluate $\fpMap{}$ at $\fixedPoint$:
     \begin{equation*}
-        \fpMap{\fixedPoint}(\w) =
-        \left( \ratioFull[][][\fixedPoint] \right)^{\frac{1}{k+1}} \fixedPoint(\w) =
-        e^{\frac{\lambda}{k+1}} \cMass{\w} \cdot
+        \fpMap{\fixedPoint}(\w) = \frontalPus[][\fixedPoint] ^{\frac{1}{k+1}} \fixedPoint(\w) = \fixedPoint(\w) \cdot
     \end{equation*}
-    Clearly for $\mu = e^{\frac{\lambda}{k+1}}$, $\fixedPoint$ is a fixed point for $\fpMap{}$.
+    Therefore, $\fixedPoint$ is a fixed point for $\fpMap{}$.
+    In addition, we can obtain Equation~\ref{eq:pus_th_conditional} for $\solPrior(\tIw)$ by dividing
+    Equation~\ref{eq:pus_proof_a} by Equation~\ref{eq:pus_proof_b}.
+    This completes the proof of the forward direction.
 
-    In addition, we can obtain a closed form for $\cMass{\tIw}$ by dividing
-    Equation~\ref{eq:fixed_point_proof_1} by Equation~\ref{eq:fixed_point_proof_2}:
-    \begin{equation*}
-        \cMass{\tIw} = \frac{\avgPost[\paramValue][\cMass{}]}{\avgPost[\w][\cMass{}]},
-    \end{equation*}
-    which completes the proof.
+    We now prove the `only if' part.
+    Suppose $\fixedPoint$ is a fixed point of $\fpMap{}$, where $\solPrior$ is a strictly positive probability
+    distribution and $\normConst$ is a constant.
+    Since $\solPrior(\w) \neq 0$, by letting $\fpMap{\fixedPoint} = \fixedPoint$ for every value of \w we get
+    \begin{equation}
+        \label{eq:puss_proof_pus_is_mu}
+        \frontalPus^{\frac{1}{k+1}} = \normConst \cdot
+    \end{equation}
+
+    On the other hand, under the assumptions of the theorem, Equation~\ref{eq:pus_th_conditional} holds.
+    Substituting this into Equation~\ref{eq:pus_proof_main_eq} yields
+    \[
+        \DxCond[\solDist] = \ln \frontalPus \cdot
+    \]
+    Substituting Equation~\ref{eq:puss_proof_pus_is_mu} into the preceding equation yields
+    \[
+        \DxCond[\solDist] = (k + 1) \ln \normConst,
+    \]
+    which concludes the proof.
 \end{proof}
 
 Using Equation~\ref{eq:pus_frontal}, we can construct a sequence of unnormalized measures by

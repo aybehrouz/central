@@ -32,6 +32,7 @@ measuring divergence between distributions.
     Let \X be a discrete random variable.
     Suppose that $\D[\X]$ is a divergence measure that quantifies the divergence of $P(\X)$ from $Q(\X)$.
     Consider the following properties:
+
     \begin{description}
         \item[Consistency with entropy] Let $\varOmega$ be a continuous random variable, and $Q$ be a probability
         measure.
@@ -144,8 +145,9 @@ This agreement can be called convergence.
     where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and $\D[\XIe]$ is the Kullback-Leibler divergence
     of $P(\XIe)$ from $Q(\XIe)$:
     \[
-        \D[\XIe] = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)}\cdot
+        \D[\XIe] = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)},
     \]
+    with the convention that $\ln (0) \equiv 0$.
 \end{definition}
 
 $\epsilon$-convergence is closely related to the concept of Bayesian convergence, where the posterior converges to

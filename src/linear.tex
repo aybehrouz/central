@@ -52,10 +52,10 @@ A negative loss indicates profit.
 
 \begin{definition}
     Let \eventInS.
-    The restriction to \event operator, denoted by \rstOp, is a linear operator on \actionSet,
-    such that $\rstOp(\act)$ for any \inA{\act} is an element of \actionSet and
+    The restriction to \event operator, denoted by \rstOp, is an operator on \actionSet,
+    such that $\actAlt[ ] = \rstOp(\act)$ for any \inA{\act} is an element of \actionSet and
     \[
-        \rstOp(\act)(s) =
+        \actAlt[ ](s) =
         \begin{cases}
             \act(s)       & s \in \event, \\
             0       & s \in \sampleSet - \event \cdot
@@ -63,6 +63,10 @@ A negative loss indicates profit.
     \]
     We denote the range of \rstOp by \rstActionSet.
 \end{definition}
+
+\begin{proposition}
+    The restriction operator is a linear map.
+\end{proposition}
 
 \begin{proposition}
     \rstActionSet is an invariant subspace of \actionSet under \rstOp.

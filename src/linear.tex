@@ -24,7 +24,8 @@
 \newcommand{\dualdualMap}[1][M]{\mathFix{{#1}^{**}}}
 \newcommand{\dualMap}[1][M]{\mathFix{{#1}^*}}
 
-
+In this section, we present a fresh perspective on probability by introducing an alternative axiomatization of probability theory.
+This formulation highlights the deep connections between probability theory and linear algebra.
 
 \begin{definition} [Sample Space]
     A sample space, denoted by \sampleSet, is the set of all possible outcomes of a random experiment.
@@ -110,11 +111,16 @@ Interestingly, we do not need to explicitly define probability.
 However, in order to present a more familiar framework, we provide a definition of conventional probability.
 
 \begin{definition} [Probability]
+    \label{def:probability}
     We define the probability of \eventInS as follows:
     \[
         P(\event) = \Expect[\rstOp(\sure)] \cdot
     \]
 \end{definition}
+
+\begin{theorem}
+    Definition~\ref{def:probability} satisfies Kolmogorov's axioms of probability.
+\end{theorem}
 
 We now will establish the familiar relationship between conditional expectation and normal expectation.
 

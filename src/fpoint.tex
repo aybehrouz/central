@@ -177,8 +177,7 @@ By using a conjugate prior, the posterior potential takes a form similar to the 
         \avgPost[\w] = \avgPostExpand[p]{\w}{\x},
     \end{equation*}
     dose not depend on $p(\w)$, we refer to it as the \emph{posterior potential} of \w.
-
-    \emph{This definition needs to be fixed!}
+    \emph{(This is not formal enough)}
 \end{definition}
 
 \begin{theorem}
@@ -225,5 +224,5 @@ By using a conjugate prior, the posterior potential takes a form similar to the 
         &\leq \frac{1}{k+1} \sum_{i=1}^{k} \intAbs{\ln \frac{p_{\p}(\w \mid \w[i])}{p_{\q}(\w \mid \w[i])}} \\
         &\leq^{?} \frac{k}{k+1} \d{\p}{\q}
     \end{align*}
-    Unfortunately, this proof is not complete.
+    \emph{Unfortunately, this proof is not complete.}
 \end{proof}

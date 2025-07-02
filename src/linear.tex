@@ -78,6 +78,9 @@ A negative loss indicates profit.
     where $\oplus$ indicates direct sum~\cite{axler}.
 \end{proposition}
 
+The restriction operator restricts an action to a subset of the sample space by simply ignoring its payoff
+for any outcome that is not in that subset.
+
 \begin{definition} [Linear Functional]
     Let \set{V} be a vector space over a field \field{F}.
     A linear functional on \set{V} is a linear map from \set{V} to \field{F}.
@@ -95,6 +98,13 @@ A negative loss indicates profit.
 \begin{proposition}
     \Expect is an element of the dual space of \actionSet.
 \end{proposition}
+
+The expectation map quantifies our expectation about an action as a real number.
+It must have three properties:
+Most importantly it should be linear.
+That means if the payoff of an action doubles, our expectation from that action should be doubled too.
+If we add
+
 
 \begin{definition} [Conditional Expectation]
     Let \Expect be an expectation for \sampleSet and let \eventInS.

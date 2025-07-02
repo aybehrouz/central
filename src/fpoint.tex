@@ -7,7 +7,7 @@
     \left(\frac{#1(\w)}{#2(\w)} \prod_i \frac{#1(\w[i])}{#2(\w[i])} \right)
 }
 \newcommand{\fixedPoint}{\normConst \solPrior}
-\newcommand{\fpMap}[1]{T \ifthenelse{\isempty{#1}}{}{\left[\,#1\,\right]}}
+\newcommand{\fpMap}[1]{T \ifthenelse{\isempty{#1}}{}{\left[#1\right]}}
 \newcommand{\normConst}{\mu}
 \newcommand{\solPrior}{r}
 \newcommand{\solDist}{R}
@@ -98,8 +98,9 @@ central distribution.
         \ln \left(  \frac{\avgPost[\paramValue][\somePrior]}{\somePrior(\w)} \prod_i \leg[][\somePrior] \right) \cdot
     \end{equation}
 
-    To prove the `if' part, we assume Equation~\ref{eq:pus_th_Dx_is_const} holds for a probability measure $\solDist$,
-    induced by a strictly positive prior $\solPrior$, for every value of \paramValue.
+    To prove the `if' direction, we assume for every value of \paramValue,
+    Equation~\ref{eq:pus_th_Dx_is_const} holds for
+    a probability measure $\solDist$, induced by a strictly positive prior $\solPrior$.
     We exponentiate both sides of Equation~\ref{eq:pus_proof_main_eq} to obtain
     \begin{equation}
         \normConst ^{k+1} \solPrior(\tIw) =\frac{\avgPost[\paramValue][\solPrior]}{\solPrior(\w)} \prod_{i=1}^k \leg \cdot
@@ -127,7 +128,7 @@ central distribution.
     Equation~\ref{eq:pus_proof_a} by Equation~\ref{eq:pus_proof_b}.
     This completes the proof of the forward direction.
 
-    We now prove the `only if' part.
+    We now prove the `only if' direction.
     Suppose $\fixedPoint$ is a fixed point of $\fpMap{}$, where $\solPrior$ is a strictly positive probability
     distribution and $\normConst$ is a constant.
     Since $\solPrior(\w) \neq 0$, by letting $\fpMap{\fixedPoint} = \fixedPoint$, for every value of \w we get

@@ -1,0 +1,232 @@
+\newcommandx{\supD}[3][1=P, 2=\setQ, 3=X]{\sup_{Q \in #2} \kl[Q][#1][#3]}
+\newcommand{\myDiv}[1][P]{\measure{D}{\mathrm{C}}{\setQ \,\middle\|\, #1(X)}}
+\newcommand{\infseq}[1]{\mathFix{\left\{ #1_{i} \right\}_{i = 1}^{\infty}}}
+\newcommandx{\kl}[3][1=Q, 2=P, 3=X, usedefault]{ \measure{D}{\mathrm{KL}}{#1(#3) \,\middle\|\, #2(#3)} }
+\newcommandx{\klExp}[3][1=Q, 2=P, 3=x]{\sum_{#3} #1(#3) \ln \frac{#1(#3)}{#2(#3)}}
+\newcommand{\inSet}[1]{\mathFix{#1 \in \set{#1}}}
+
+\newcommandx{\entropy}[2]{\measure{H}\ifthenelse{\isempty{#1}}{}{\left[#1_{#2}\right]}}
+\newcommand{\saddle}{\mathFix{(\saddP, \saddR)}}
+\newcommand{\fExp}{\sum_i R(i) \klExp[Q_i]}
+\newcommand{\cDist}[1][]{\mathFix{\sub{C}{#1}}}
+\newcommand{\ccDist}[1][]{\mathFix{\sub{C^{*}}{#1}}}
+\newcommand{\sadd}[1]{\mathFix{#1^{*}}}
+\newcommand{\saddR}{\sadd{R}}
+\newcommand{\saddP}{\sadd{P}}
+
+
+\begin{definition}[Central Distribution]
+    Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
+    We say a probability distribution $C$ is a central distribution of \setQ for $X$, if for any arbitrary distribution
+    $P$, we have
+    \[
+        \supD[\cDist] \leq \supD[P] ,
+    \]
+    where $\measure{D}{\mathrm{KL}}{}$ denotes the Kullback–Leibler (KL) divergence.
+\end{definition}
+
+Note that with this definition the central distribution of \setQ is not essentially a member of \setQ.
+
+\begin{definition}[Central Divergence]
+    For any distribution $P$, we define the central divergence of $P$ from a set of distributions \setQ, with respect
+    to a random variable $X$, as follows:
+    \begin{equation*}
+        \myDiv = \inf_{\cDist} \kl[{\cDist}],
+    \end{equation*}
+    where $\cDist$ denotes a central distribution of \setQ for $X$.
+\end{definition}
+
+When \setQ has a unique central distribution, the central divergence is simply defined as the KL divergence from
+that unique central distribution.
+
+\begin{definition} [Saddle Point]
+    Consider a function $f:\set{w} \times \set{z} \to \field{R}$.
+    We refer to a pair $(w^*, z^*)$ as a saddle point for $f$, if we have
+    \[
+        f(w^*, z) \leq f(w^*, z^*) \leq f(w, z^*),
+    \]
+    for all \inSet{w} and \inSet{z}.
+\end{definition}
+
+\begin{theorem}
+    \label{th:saddle_is_central}
+    Let $X$ be a discrete random variable, and \setQ be a finite set of distributions for $X$.
+    Consider the following function:
+    \begin{equation*}
+        f(P, R)= \fExp,
+    \end{equation*}
+    where $Q_i \in \setQ$, and $P$, $R$ are probability distributions.
+
+    If \saddle is a saddle point of $f$, then \saddP is a central distribution of \setQ for $X$.
+\end{theorem}
+
+\begin{proof}
+    Since $X$ is a discrete random variable, \setQ has a central distribution for $X$.
+    Let \cDist be a central distribution of \setQ, and \saddle be a saddle point for $f$.
+    Clearly, the point $(\cDist, \saddR)$, is in the domain of $f$, and
+    since \saddle is a saddle point for $f$, we have
+    \begin{equation}
+        \label{eq:th_proof_saddle_lq_dx}
+        f\saddle \leq f(\cDist, \saddR) \cdot
+    \end{equation}
+    Because \saddR is a probability distribution, the definition of $f$ implies:
+    \[
+        f(\cDist, \saddR) \leq \supD[\cDist] \cdot
+    \]
+    On the other hand,
+    \[
+        f\saddle = \max_{R} f(\saddP, R) = \supD[\saddP] \cdot
+    \]
+    Thus, Inequality~\ref{eq:th_proof_saddle_lq_dx} implies
+    \[
+        \supD[\saddP] \leq \supD[\cDist] \cdot
+    \]
+    Consequently, $\saddP$ is also a central distribution of \setQ for $X$.
+\end{proof}
+
+\begin{lemma}
+    \label{lm:saddle_conditions}
+    Let $f$ be the function defined in theorem~\ref{th:saddle_is_central}.
+    The point \saddle is a saddle point for $f$, if and only if there are constants $\lambda$, $\eta$ and a
+    function $\mu$, such that for every $i$, the following conditions hold:
+    \begin{gather}
+        \label{eq:kkt_lambda}
+        \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
+        \label{eq:kkt_w_avg}
+        \saddP(x) = \sum_i \saddR(i) Q_i(x) \\
+        \label{eq:kkt_r_sums_one}
+        \sum_i \saddR(i) = 1, \\
+        \label{eq:saddle_lm_r_geq_0}
+        \saddR(i) \geq 0, \\
+        \nonumber
+        \mu(i) \geq 0, \\
+        \label{eq:saddle_lm_rmu_is_zero}
+        \mu(i) \saddR(i) = 0 \cdot
+    \end{gather}
+\end{lemma}
+
+\begin{proof}
+    Similar to $f$, we define $\hat{f}$ as follows:
+    \begin{equation*}
+        \hat{f}(P, R) = \fExp,
+    \end{equation*}
+    where $P$, $R$ are arbitrary real functions instead of probability distributions.
+    This enables us to formulate the saddle point of $f$ as the solution to a constrained optimization problem.
+
+    Let \saddle be a simultaneous solution to the following two optimization problems:
+
+    \begin{equation}
+        \begin{aligned}
+            &\text{minimize} & &\hat{f}(P,R) & &\text{w.r.t.} \ P \\
+            &\text{subject to} & &\sum_{x} P(x) = 1, \\
+            \\
+            &\text{maximize} & &\hat{f}(P,R) & &\text{w.r.t.} \ R \\
+            &\text{subject to} & &R(i) \geq 0, & &\text{for all} \ i  \\
+            & & &\sum_{i} R(i) = 1 &
+        \end{aligned}\label{eq:twin_optimization}
+    \end{equation}
+    Clearly, if $\saddle$ exists, it will be a saddle point for $f$.
+
+    Both of these optimization problems are convex~\cite{0521833787} and differentiable.
+    To establish this, consider that all the constraint functions are affine, and therefore are convex and
+    differentiable.
+
+    Additionally, $\hat{f}$ is differentiable function with respect to both $R$ and $P$.
+    For any fixed $P$, $\hat{f}(P,\, \cdot \,)$ is an affine function and is concave.
+
+    On the other hand, for a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
+    \begin{equation}
+        \label{eq:simplified_f}
+        \hat{f}(P,\hat{R}) = c - \sum_{i,x} \hat{R}(i) Q_i(x) \ln P(x),
+    \end{equation}
+    where $c$ is not a function of $P$.
+    Since $\hat{R}$ is a solution to the second optimization problem, it satisfies the constraints
+    of the second problem and therefore is a probability distribution.
+    Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(P,\, \cdot \,)$  is
+    the negative of a linear combination of concave $\ln P(x)$ functions with nonnegative coefficients.
+    This function is convex.
+
+    Thus, both optimization problems are convex and differentiable, with affine constraints.
+    The constraints simply restrict the feasible set to the set of probability distributions, and it is always possible
+    to find feasible points that meet all the constraints.
+    Therefore, Slater’s condition is satisfied, and the KKT conditions provide necessary
+    and sufficient conditions for optimality~\cite{0521833787}.
+    In other words, If a point $\saddle$ satisfies the KKT conditions for both problems, it will be a saddle
+    point for $f$, and vice versa.
+
+    The KKT conditions are as follows for every $x$, $i$ and constants $\lambda$, $\eta$:
+    \begin{gather}
+        \label{eq:kkt_proof_R_is_pxIe}
+        \sum_i \saddR(i) Q_i(x) = \eta \saddP(x) \\
+        \label{eq:kkt_proof_p_sums_one}
+        \sum_{x} \saddP(x) = 1, \\
+        \nonumber
+        \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
+        \label{eq:kkt_proof_r_sums_one}
+        \sum_i \saddR(i) = 1, \\
+        \nonumber
+        \saddR(i) \geq 0, \\
+        \nonumber
+        \mu(i) \geq 0, \\
+        \nonumber
+        \mu(i) \saddR(i) = 0 \cdot
+    \end{gather}
+
+    By summing Equation~\ref{eq:kkt_proof_R_is_pxIe} over $x$ and using Equation~\ref{eq:kkt_proof_r_sums_one},
+    we have
+    \[
+        \eta = 1 \cdot
+    \]
+    Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
+\end{proof}
+
+\begin{theorem} [Centrality]
+    \label{th:lambda}
+    Let $X$ be a discrete random variable, and \setQ be a finite set of distributions for $X$.
+    Suppose \cDist is a weighted average of members of \setQ with nonzero weights.
+    If for every \inSet{Q} and some constant $\lambda$ we have:
+    \begin{equation*}
+        \kl[][\cDist] = \lambda,
+    \end{equation*}
+    then \cDist is a central distribution of \setQ for $X$.
+\end{theorem}
+
+\begin{proof}
+    Lemma~\ref{lm:saddle_conditions} provides a set of sufficient conditions for a saddle point.
+    Note that more restrictive conditions can also be imposed to derive an alternative set of sufficient conditions.
+    We can replace Inequality~\ref{eq:saddle_lm_r_geq_0} with the more
+    restrictive $\saddR(i) > 0$ condition.
+    By Equation~\ref{eq:saddle_lm_rmu_is_zero}, that implies $\mu(i) = 0$,
+    and Lemma~\ref{lm:saddle_conditions} conditions can be simplified to
+    \begin{gather*}
+        \klExp[Q][\saddP][x] = \lambda, \\
+        \saddP(x) = \sum_i \saddR(i) Q(x),
+    \end{gather*}
+    which must hold for every \inSet{Q} and a positive probability distribution \saddR.
+
+    Since \cDist satisfies these condition, Lemma~\ref{lm:saddle_conditions} and
+    Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
+\end{proof}
+
+\begin{definition}
+    Let \infseq{X} be a sequence of random variables and \setQ be a set of probability measures that define
+    distributions for every $X_i$.
+    Assume \cDist[i] is a central distribution for $X_i$.
+    Let \cDist be a probability measure that defines a distribution over every $X_i$.
+    \cDist is a central probability measure of \setQ for \infseq{X}, if we have
+    \begin{equation*}
+        \lim_{i \to \infty} \kl[{\cDist[i]}][\cDist][X_i] = 0 \cdot
+    \end{equation*}
+\end{definition}
+
+Intuitively, this definition states that \cDist is a central distribution for $X_{\infty}$.
+
+\begin{definition}
+    Let $X$ be a random variable, and let \setQQ be a set whose elements are sets of distributions over $X$.
+    Let \cDist[\setQ] be a central distribution of $\setQ \in \setQQ$ for $X$, and $P$ be an arbitrary probability
+    distribution.
+    We say \ccDist is a central distribution of \setQQ, if we have:
+    \begin{equation*}
+        \sup_{\setQ \in \setQQ} \myDiv[\ccDist]  \leq \sup_{\setQ \in \setQQ} \myDiv \cdot
+    \end{equation*}
+\end{definition}

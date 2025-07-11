@@ -1,0 +1,68 @@
+%! Author = aybehrouz
+%! Date = 7/10/25
+
+\begin{theorem}
+    Let $X$ be a discrete random variable.
+    Suppose that $\kl$ is a divergence measure that quantifies the divergence of $P(X)$ from $Q(X)$.
+    Consider the following properties:
+
+    \begin{description}
+        \item[Consistency with entropy] Let $\varOmega$ be a continuous random variable, and $Q$ be a probability
+        measure.
+        If $U(\varOmega)$ is the uniform distribution with the same support as $Q(\varOmega)$, then we have
+        \[
+            \kl[Q][U][\varOmega] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
+        \]
+        where $\entropy{}{}$ denotes Shannon's entropy.
+        \item[Additivity] For any two discrete random variables $\XY$, and probability measures $P,Q$
+        \[
+            \D[\XY] = \D + \sumx \D[\YIx]Q(\rval[]{x})\cdot
+        \]
+    \end{description}
+    If \measure{D} satisfies these properties, then it is the Kullback-Leibler divergence.
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\T}{\varOmega}
+    \renewcommand{\t}{\omega}
+
+    \newcommand{\TIx}{\T \mid \rval[]{x}}
+    \newcommand{\TX}{\T, \X}
+    \newcommand{\tx}{\t, \rval[]{x}}
+    \newcommand{\tent}[1]{\int q(#1) \ln q(#1) d\t}
+
+    \newcommand{\Qx}{Q(\rval[]{x})}
+    Let $P(\X)$ and $Q(\X)$ be two arbitrary distributions for a discrete random variable \X.
+    We define a new continuous random variable $\T$ and let
+    \begin{equation*}
+        p(\T = \t \mid \rvEq) =
+        \begin{cases}
+            \frac{1}{P(\rval[]{x})} & 0 \leq \t \leq P(\rvEq), \\
+            0                       & \text{otherwise}\cdot
+        \end{cases}
+    \end{equation*}
+    Notice that both $P(\T \mid \X)$ and $P(\TX)$ are uniform distributions, and
+    $\entropy{P}{\TIx} = \ln P(\rval[]{x})$, $\entropy{P}{\TX} = 0$.
+
+    We define $Q(\TIx)$ to be an arbitrary distribution that has the same support as $P(\TIx)$.
+    This ensures that $Q(\TX)$ and $P(\TX)$ have the same support as well.
+    Thus, we have
+    \begin{align*}
+        \D[\TX] & = \entropy{P}{\TX} - \entropy{Q}{\TX}    \\
+        & = \sumx \tent{\tx}                       \\
+        & = \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
+    \end{align*}
+    and
+    \begin{align*}
+        \D[\TIx] & = \entropy{P}{\TIx} - \entropy{Q}{\TIx} \\
+        & = \ln P(\rval[]{x}) + \tent{\tIx}\cdot
+    \end{align*}
+    Now, we use the additivity property to obtain a formula for our divergence measure:
+    \begin{align*}
+        \D & = \D[\TX] - \sumx \D[\TIx]\Qx                                                              \\
+        & = \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(\rval[]{x}) \right) \\
+        & = \sumx \Qx  \left( \ln \Qx \int q(\tIx) d\t - \ln P(\rval[]{x}) \right)                   \\
+        & = \sumx \Qx \ln \frac{\Qx}{P(\rval[]{x})}\cdot \qedhere
+    \end{align*}
+\end{proof}
+

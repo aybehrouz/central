@@ -1,0 +1,46 @@
+%! Author = aybehrouz
+%! Date = 6/15/23
+
+% Preamble
+\documentclass[a4paper, 12pt]{article}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{xspace}
+\usepackage{xargs}
+\usepackage{xifthen}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{stmaryrd}
+\usepackage{mathtools} % should be the last import
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}[theorem]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem*{proposition}{Proposition}
+
+
+\newcommand{\mathFix}[1]{\ensuremath{#1}\xspace}
+\newcommand{\sub}[2]{\ifthenelse{\isempty{#2}}{#1}{#1_{#2}}}
+\newcommand{\set}[2][]{\mathFix{\sub{\mathcal{\uppercase{#2}}}{#1}}}
+\newcommand{\measure}[3]{\mathFix{\sub{\mathbb{#1}}{{#2}}}\ifthenelse{\isempty{#3}}{}{\left[ #3 \right] }}
+\newcommand{\field}[1]{\mathFix{\mathbb{#1}}}
+\newcommand{\setQ}{\set{q}}
+\newcommand{\setQQ}{\set{q^*}}
+
+
+% Document
+\begin{document}
+    %\input{intro}
+
+    \section{Central Distribution}\label{sec:central}
+    \input{central}
+
+    \bibliography{main}
+    \bibliographystyle{plain}
+\end{document}

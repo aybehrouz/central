@@ -1,6 +1,6 @@
 \newcommandx{\supD}[3][1=P, 2=\setQ, 3=X]{\sup_{Q \in #2} \kl[Q][#1][#3]}
 \newcommand{\myDiv}[1][P]{\measure{D}{\mathrm{C}}{\setQ \,\middle\|\, #1(X)}}
-\newcommand{\infseq}[1]{\mathFix{\left\{ #1_{i} \right\}_{i = 1}^{\infty}}}
+\newcommand{\infSeq}[2][i]{\mathFix{\left\{ \sub{#2}{#1} \right\}_{i = 1}^{\infty}}}
 \newcommandx{\klExp}[3][1=Q, 2=P, 3=x]{\sum_{#3} #1(#3) \ln \frac{#1(#3)}{#2(#3)}}
 \newcommand{\inSet}[1]{\mathFix{#1 \in \set{#1}}}
 
@@ -13,6 +13,7 @@
 \newcommand{\sadd}[1]{\mathFix{#1^{*}}}
 \newcommand{\saddR}{\sadd{R}}
 \newcommand{\saddP}{\sadd{P}}
+\newcommand{\est}{T}
 
 \newcommand{\fun}[1][]{\ifthenelse{\isempty{#1}}{}{(#1)}}
 
@@ -46,6 +47,17 @@ Note that with this definition the central distribution of \setQ is not essentia
 \begin{theorem}
     Any distribution $R \in \setQ$ that can be written as a weighted average of some elements of \setQ, is an
     interior distribution of \setQ.
+\end{theorem}
+
+\begin{theorem}
+    Let $X$ and $Y$ be two random variables, and let \setQ be a set of distributions over the pair $(X,Y)$.
+    Assume that for every \inSet{Q}, we have
+    \[
+        Q(X, Y) = P(\XIY) Q(Y),
+    \]
+    where $P$ is a fixed conditional distribution.
+    If $C$ is a central distribution of \setQ for $Y$, then $P(\XIY)C(Y)$ is a central
+    distribution of \setQ for $(X,Y)$.
 \end{theorem}
 
 \begin{definition}[Central Divergence]
@@ -252,17 +264,31 @@ Then, the wight function, $\saddR(i)$, will essentially become a prior distribut
 
 
 \begin{definition}
-    Let \infseq{X} be a sequence of random variables and \setQ be a set of probability measures that define
+    Let \infSeq{X} be a sequence of random variables and \setQ be a set of probability measures that define
     distributions for every $X_i$.
     Assume \cDist[i] is a central distribution for $X_i$.
     Let \cDist be a probability measure that defines a distribution over every $X_i$.
-    \cDist is a central probability measure of \setQ for \infseq{X}, if we have
+    \cDist is a central probability measure of \setQ for \infSeq{X}, if we have
     \begin{equation*}
         \lim_{i \to \infty} \kl[{\cDist[i]}][\cDist][X_i] = 0 \cdot
     \end{equation*}
 \end{definition}
 
 Intuitively, this definition states that \cDist is a central distribution for $X_{\infty}$.
+
+\begin{theorem}
+    Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures that define the
+    distribution of each $\est_i$.
+    Assume that \setQ can be indexed by a finite-dimensional vector \param.
+    If \infSeq{\est} is a consistent sequence of estimators for \param, and there exists a sequence \infSeq{\lambda}
+    such that the sequence $\infSeq[]{\lambda_i -\entropy{Q}{\est_i \mid \paramVal}}$ converges
+    for every value of \paramVal, then
+    \begin{equation*}
+        \cPrior(\paramVal) \propto \lim_{i \to \infty} \exp
+        \left\{ \lambda_i -\entropy{Q}{\est_i \mid \paramVal} \right\},
+    \end{equation*}
+    is a central prior of \setQ for \param.
+\end{theorem}
 
 \begin{definition}
     Let $X$ be a random variable, and let \setQQ be a set whose elements are sets of distributions over $X$.

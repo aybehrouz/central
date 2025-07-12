@@ -77,10 +77,10 @@
 \newcommandx{\klRatio}[2][1=Q, 2=R]{\sum_x #1(x) \ln \frac{#2(x)}{P(x)}}
 
 \begin{lemma}
-    Let $X$ be a random variable and $P$, $Q$, and $R$ be probability distributions.
-    For the Kullback-Leibler divergence the following inequality holds:
+    Let $X$ be a random variable, and let $P$, $Q$, and $R$ be probability distributions over $X$.
+    The Kullback–Leibler divergence satisfies the following inequality:
     \begin{equation*}
-        \kl \geq \klRatio
+        \kl \geq \klRatio \cdot
     \end{equation*}
 \end{lemma}
 

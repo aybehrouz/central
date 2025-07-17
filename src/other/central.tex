@@ -32,7 +32,7 @@ Note that with this definition the central distribution of \setQ is not essentia
 
 
 \begin{definition}[Interior Distribution]
-    Let $R, Q \in \setQ$, and for every $P \in \setQ$ we have
+    Let $R, Q \in \setQ$ be such that for every $P \in \setQ$, we have
     \begin{equation*}
         \kl[R] \leq \kl[Q] \cdot
     \end{equation*}
@@ -45,19 +45,19 @@ Note that with this definition the central distribution of \setQ is not essentia
 \end{theorem}
 
 \begin{theorem}
-    Any distribution $R \in \setQ$ that can be written as a weighted average of some elements of \setQ, is an
+    Any distribution $R \in \setQ$ that can be expressed as a convex combination of elements of \setQ, is an
     interior distribution of \setQ.
 \end{theorem}
 
 \begin{theorem}
-    Let $X$ and $Y$ be two random variables, and let \setQ be a set of distributions over the pair $(X,Y)$.
+    Let $X$ and $T$ be two random variables, and let \setQ be a set of distributions over the pair $(X,T)$.
     Assume that for every \inSet{Q}, we have
     \[
-        Q(X, Y) = P(\XIY) Q(Y),
+        Q(X, T) = P(\XIT) Q(T),
     \]
     where $P$ is a fixed conditional distribution.
-    If $C$ is a central distribution of \setQ for $Y$, then $P(\XIY)C(Y)$ is a central
-    distribution of \setQ for $(X,Y)$.
+    If $C$ is a central distribution of \setQ for $T$, then $P(\XIT)C(T)$ is a central
+    distribution of \setQ for $(X,T)$.
 \end{theorem}
 
 \begin{definition}[Central Divergence]
@@ -215,8 +215,8 @@ that unique central distribution.
 
 \begin{theorem} [Centrality]
     \label{th:lambda}
-    Let $X$ be a discrete random variable, and \setQ be a finite set of distributions for $X$.
-    Suppose \cDist is a weighted average of members of \setQ with nonzero weights.
+    Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
+    Suppose \cDist is a convex combination of elements of \setQ, with all weights strictly positive.
     If for every \inSet{Q} and some constant $\lambda$ we have:
     \begin{equation*}
         \kl[][\cDist] = \lambda,
@@ -265,7 +265,7 @@ Then, the wight function, $\saddR(i)$, will essentially become a prior distribut
 
 \begin{definition}
     Let \infSeq{X} be a sequence of random variables and \setQ be a set of probability measures that define
-    distributions for every $X_i$.
+    the distribution of each $X_i$.
     Assume \cDist[i] is a central distribution for $X_i$.
     Let \cDist be a probability measure that defines a distribution over every $X_i$.
     \cDist is a central probability measure of \setQ for \infSeq{X}, if we have
@@ -280,8 +280,9 @@ Intuitively, this definition states that \cDist is a central distribution for $X
     Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures that define the
     distribution of each $\est_i$.
     Assume that \setQ can be indexed by a finite-dimensional vector \param.
-    If \infSeq{\est} is a consistent sequence of estimators for \param, and there exists a sequence \infSeq{\lambda}
-    such that the sequence $\infSeq[]{\lambda_i -\entropy{Q}{\est_i \mid \paramVal}}$ converges
+    If \infSeq{\est} is a consistent sequence of estimators for \param, and there exists a sequence of
+    constants \infSeq{\lambda} such that the sequence
+    $\infSeq[]{\lambda_i -\entropy{Q}{\est_i \mid \paramVal}}$ converges
     for every value of \paramVal, then
     \begin{equation*}
         \cPrior(\paramVal) \propto \lim_{i \to \infty} \exp

@@ -1,101 +1,79 @@
 %! Author = aybehrouz
 %! Date = 7/10/25
 
-\newcommandx{\entropy}[2]{\measure{H}{}{#1(#2)}}
-\newcommand{\convex}[2]{\alpha#1 + (1 - \alpha)#2}
 
-\begin{theorem}
-    Let $X$ be a discrete random variable.
-    Suppose that $\kl[][][][ ]$ is some divergence measure that quantifies the divergence of $P(X)$ from $Q(X)$.
-    Consider the following properties:
+\newcommand{\util}[1][a]{\ell(#1, x)}
+\newcommand{\envDist}{P^*}
+\newcommand{\post}{\pi(x_i \mid \paramVal)}
 
-    \begin{description}
-        \item[Consistency with entropy] Let $\varOmega$ be a continuous random variable, and $Q$ be a probability
-        measure.
-        If $U(\varOmega)$ is the uniform distribution with the same support as $Q(\varOmega)$, then we have
-        \[
-            \kl[Q][U][\varOmega][ ] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
-        \]
-        where $\measure{H}{}{}$ denotes Shannon's entropy.
-        \item[Additivity] For any two discrete random variables $X, Y$ and probability measures $P,Q$
-        \[
-            \kl[][][X, Y][ ] = \kl[][][][ ] + \sum_x \kl[][][Y|x][ ]Q(x)\cdot
-        \]
-    \end{description}
-    If $\measure{D}{}{\,\cdot\,}$ satisfies these properties, then it is the Kullback-Leibler divergence.
-\end{theorem}
 
-\begin{proof}
-    \newcommand{\D}[1][]{\kl[][][#1][ ]}
-    \newcommand{\T}{\varOmega}
-    \renewcommand{\t}{\omega}
-    \renewcommand{\tIx}{\t \mid x}
-    \newcommand{\X}{X}
-    \newcommand{\Y}{Y}
+We begin by revisiting a fundamental decision-making problem, and how it is treated within the framework of Bayesian
+decision theory.
 
-    \newcommand{\TIx}{\T|x}
-    \newcommand{\TX}{\T, \X}
-    \newcommand{\tx}{\t, x}
-    \newcommand{\tent}[1]{\int q(#1) \ln q(#1) d\t}
-    \newcommand{\Qx}{Q(x)}
-    \newcommand{\sumx}{\sum_{x}}
+Consider an environment where an agent must select an action from a set of available actions.
+The loss associated with each action depends on the unknown state of the environment
+and can be quantified by a real number.
+Specifically, let $a$ denote an action, and $x$ represent the unknown environment state.
+The loss function  $\util$ quantifies the loss for each action.
 
-    Let $P(\X)$ and $Q(\X)$ be two arbitrary distributions for a discrete random variable \X.
-    We define a new continuous random variable $\T$ and let
-    \begin{equation*}
-        p(\T = \t \mid \rvEq) =
-        \begin{cases}
-            \frac{1}{P(x)} & 0 \leq \t \leq P(\rvEq), \\
-            0                       & \text{otherwise}\cdot
-        \end{cases}
-    \end{equation*}
-    Notice that both $P(\T|\X)$ and $P(\TX)$ are uniform distributions, and
-    $\entropy{P}{\TIx} = \ln P(x)$, $\entropy{P}{\TX} = 0$.
+Furthermore, we assume that an evidence $e$ of this unknown environment state exists, and the agent can leverage
+this evidence to determine the best action.
+In other words, our agent aims to find an optimal strategy, where a strategy defines the distribution of each
+action conditioned on the observed evidence: $S(A \mid E)$.
 
-    We define $Q(\TIx)$ to be an arbitrary distribution that has the same support as $P(\TIx)$.
-    This ensures that $Q(\TX)$ and $P(\TX)$ have the same support as well.
-    Thus, we have
-    \begin{align*}
-        \D[\TX] & = \entropy{P}{\TX} - \entropy{Q}{\TX}    \\
-        & = \sumx \tent{\tx}                       \\
-        & = \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
-    \end{align*}
-    and
-    \begin{align*}
-        \D[\TIx] & = \entropy{P}{\TIx} - \entropy{Q}{\TIx} \\
-        & = \ln P(x) + \tent{\tIx}\cdot
-    \end{align*}
-    Now, we use the additivity property to obtain a formula for our divergence measure:
-    \begin{align*}
-        \D & = \D[\TX] - \sumx \D[\TIx]\Qx                                                              \\
-        & = \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(x) \right) \\
-        & = \sumx \Qx  \left( \ln \Qx \int q(\tIx) d\t - \ln P(x) \right)                   \\
-        & = \sumx \Qx \ln \frac{\Qx}{P(x)}\cdot \qedhere
-    \end{align*}
-\end{proof}
+According to Bayesian decision theory, the optimal strategy is the one that minimizes the expected loss:
+\begin{equation*}
+    S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e),
+\end{equation*}
+where $\envDist$ is the joint probability distribution of the environment state and the evidence.
 
-\newcommandx{\klRatio}[2][1=Q, 2=R]{\sum_x #1(x) \ln \frac{#2(x)}{P(x)}}
+It can be shown that there always exists a deterministic optimal strategy.
+That is, we can consider a strategy as a function of the evidence, rather than as a conditional distribution:
+\[
+    S_{\text{opt}} = \arg\min_S \sum_{x,e} \util[S(e)] \envDist(x, e).
+\]
+A strategy that, for each evidence $e$, selects the action minimizing the expected loss conditioned
+on $e$, is optimal:
+\begin{align*}
+    S_{\text{opt}}(e) &= \arg\min_a \Ex{\envDist}{\util \mid e} \\
+    &= \arg\min_a\sum_x \util \envDist(x \mid e) \cdot
+    \label{eq:bayes-action}
+\end{align*}
 
-\begin{lemma}
-    Let $X$ be a random variable, and let $P$, $Q$, and $R$ be probability distributions over $X$.
-    The Kullback–Leibler divergence satisfies the following inequality:
-    \begin{equation*}
-        \kl \geq \klRatio \cdot
-    \end{equation*}
-\end{lemma}
+Now, suppose that we decide to use a different evidence $E'$ instead of $E$.
+Could this change potentially improve our strategy?
+Within the framework of Bayesian decision theory, we can easily answer this question:
+To compare any two strategies, we can simply compare their expected loss.
+The strategy with the lower expected loss is the better one.
 
-\begin{proof}
-    $R$ is a probability distribution, and the Kullback-Leibler divergence is non-negative:
-    \begin{equation*}
-        \kl[][R] \geq 0 \cdot
-    \end{equation*}
-    By adding $\klRatio$ to both sides of the above inequality, the desired inequality follows.
-\end{proof}
+Note that, in reality, we cannot freely choose any random variable as our evidence.
+We can only choose evidence that is a deterministic function of the evidence provided by the environment,
+allowing us to determine its value after observing the original evidence.
+Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
+For instance, in a learning task where our evidence is an image, we might substitute the image with the first
+three coefficients of its Fourier transform.
+Naturally, these coefficients are a function of the original evidence.
 
-\begin{theorem}
-    Let $Q_1$, $Q_2$ and $P$ be probability distributions.
-    If for some $0 \leq \alpha \leq 1$ we have $Q = \convex{Q_1}{Q_2}$, then:
-    \begin{equation*}
-        \kl \leq \convex{\kl[Q_1]}{\kl[Q_2]} \cdot
-    \end{equation*}
-\end{theorem}
+Interestingly, if we assume $E' = f(E)$, it turns out
+that, according to our Bayesian framework, the optimal strategy for $E$ is always
+better than any strategy that uses $E'$.
+Thus, at first glance, it appears that Bayesian decision theory does not favor feature selection.
+
+From a certain perspective, it could be argued that adopting a strategy which uses simpler evidence may lead to
+ignoring some parts of useful available information, and therefore is not justified by Bayesian
+decision theory.
+However, in practice we rather to use feature selection because without it the original learning task requires
+impractical large datasets.
+
+The key point here is that the space of strategies using $E'$ is a subset of the strategies that use $E$.
+When we are searching for the best strategy based on $E$, we are implicitly evaluating all simpler forms as well.
+We believe this is why the Bayesian framework never favors the simpler evidence $E'$.
+Plausibly, if we choose an appropriate prior distribution, when we are finding the optimal
+strategy, feature selection should be performed automatically within the Bayesian framework.
+However, many commonly used non-informative priors, such as the flat prior, do not exhibit feature
+selection characteristics.
+
+Throughout this discussion, we will explore a systematic approach for finding a noninformative prior that also
+exhibit feature selection characteristics.
+
+

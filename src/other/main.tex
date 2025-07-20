@@ -20,9 +20,11 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{Corollary}[theorem]
+
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
 \newtheorem*{proposition}{Proposition}
+\newtheorem{example}{Example}[section]  % or [subsection], or no counter
 
 
 \newcommand{\mathFix}[1]{\ensuremath{#1}\xspace}
@@ -44,8 +46,9 @@
 \newcommand{\setQQ}{\set{q^*}}
 
 \newcommand{\theKL}{the Kullback-Leibler divergence}
-\newcommand{\infSeq}[2][i]{\mathFix{\left\{ \sub{#2}{#1} \right\}_{i = 1}^{\infty}}}
+\newcommand{\infSeq}[2][n]{\mathFix{\left\{ \sub{#2}{#1} \right\}_{n = 1}^{\infty}}}
 \newcommand{\infSeqExp}[1]{\mathFix{#1_1, #1_2, \ldots}}
+\newcommand{\seqExp}[2][n]{\mathFix{#2_1, #2_2, \ldots, #2_{#1}}}
 \newcommand{\xIt}{x \mid \paramVal}
 \newcommand{\tIx}{\paramVal \mid x}
 \newcommand{\XIY}{X \mid Y}

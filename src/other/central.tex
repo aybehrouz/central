@@ -88,6 +88,7 @@ Note that with this definition the central distribution of \setQ is not essentia
 \end{theorem}
 
 \begin{theorem}
+    \label{th:estimator-to-var}
     Let $X$ and $T$ be two random variables, and let \setQ be a set of distributions over the pair $(X,T)$.
     Assume that for every \inSet{Q}, we have
     \[
@@ -293,7 +294,7 @@ These theorems were proved under the assumption that \setQ is finite; however, t
 \setQ can be indexed by a finite-dimensional real vector \param.
 We can treat this vector as a random variable and interpret $Q_{\paramVal}$ as a conditional
 distribution $Q(\xIt)$.
-Then, the wight function, $\saddR(i)$, will essentially become a prior distribution for \paramVal.
+Then, the weight function, $\saddR(i)$, will essentially become a prior distribution for \paramVal.
 
 \begin{theorem}
     Let $X$ be a discrete random variable and \setQ be a set of distributions over $X$, indexed by a
@@ -303,53 +304,110 @@ Then, the wight function, $\saddR(i)$, will essentially become a prior distribut
         \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\} \cdot
     \end{equation*}
     Then, $\cDist(x) = \mrg$ is a central distribution of \setQ for $X$.
-    We also refer to \cPrior as a central prior for \param.
+    We also refer to \cPrior as a central prior for $X$.
 \end{theorem}
 
 \begin{proof}
-    for some constant $\eta$ we have
+    To Do!!!
 \end{proof}
 
 Suppose we wish to model an exchangeable sequence of random variables.
-Let $X_i$ denote the sequence of the first $i$ variables.
+Let $S_n$ denote the sequence of the first $n$ variables: $S_n = (\seqExp{X})$.
 As discussed earlier, exchangeability can be interpreted as a form of partial knowledge, which allows us to
-represent our uncertainty using a central distribution over $X_i$.
+represent our uncertainty using a central distribution over $S_n$.
 
-However, this central distribution generally depends on the sequence length $i$.
+However, this central distribution generally depends on the sequence length $n$.
 According to the principle of objectivity, our beliefs should not depend on the specifics of our experimental setup,
 and in particular, should not vary with the length of the sequence.
+
 It is important to note that a distribution defined over a longer sequence induces marginal distributions over its
 shorter subsequences.
-
 This observation suggests that, in order to satisfy the principle of objectivity, we may instead define a central
 distribution over an infinite exchangeable sequence---thereby maintaining consistency with the
 distributions of all finite initial segments.
-This requires constructing a central distribution that is well-defined over $X_{\infty}$.
+
+This requires constructing a central distribution that is well-defined over $S_{\infty}$.
 
 \begin{definition}
-    Let \infSeq{X} be a sequence of random variables and \setQ be a set of probability measures that define
-    the distribution of each $X_i$.
-    Assume \cDist[i] is a central distribution for $X_i$.
-    Let \cDist be a probability measure that defines a distribution over every $X_i$.
-    \cDist is a central probability measure of \setQ for \infSeq{X}, if we have
+    Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
+    where each element of \setQ defines a distribution over each $S_n$.
+    Assume \cDist[n] is a central distribution for $S_n$.
+    Let \cDist be a probability measure that defines a distribution over every $S_n$.
+    \cDist is a central probability measure of \setQ for \infSeq{S}, if we have
     \begin{equation*}
-        \lim_{i \to \infty} \kl[{\cDist[i]}][\cDist][X_i] = 0 \cdot
+        \lim_{n \to \infty} \kl[{\cDist[n]}][\cDist][S_n] = 0 \cdot
     \end{equation*}
 \end{definition}
 
-Intuitively, this definition states that \cDist is a central distribution for $X_{\infty}$.
+Intuitively, this definition states that \cDist is a central distribution for $S_{\infty}$.
+
+If we have a consistent estimator sequence for the index of a set, the following theorem provides a way to construct a
+central distribution for that estimator.
+
+By a consistent estimator, we mean a sequence of estimators such that, for any fixed parameter value, the
+distribution of each estimator $\est_n$ becomes increasingly concentrated around the corresponding value of the
+parameter as $n$ increases.
 
 \begin{theorem}
-    Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures that define the
-    distribution of each $\est_i$.
+    \label{th:central-by-estimator}
+    Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures,
+    where each element of \setQ defines a distribution over each $\est_n$.
     Assume that \setQ can be indexed by a finite-dimensional vector \param.
     If \infSeq{\est} is a consistent sequence of estimators for \param, and there exists a sequence of
     constants \infSeq{\lambda} such that the sequence
-    $\infSeq[]{\lambda_i -\entropy{Q}{\est_i \mid \paramVal}}$ converges
+    $\infSeq[]{\lambda_n -\entropy{Q}{\est_n \mid \paramVal}}$ converges
     for every value of \paramVal, then
     \begin{equation*}
-        \cPrior(\paramVal) \propto \lim_{i \to \infty} \exp
-        \left\{ \lambda_i -\entropy{Q}{\est_i \mid \paramVal} \right\},
+        \cPrior(\paramVal) \propto \lim_{n \to \infty} \exp
+        \left\{ \lambda_n -\entropy{Q}{\est_n \mid \paramVal} \right\},
     \end{equation*}
-    is a central prior of \setQ for \param.
+    is a central prior of \setQ for \infSeq{\est}.
 \end{theorem}
+
+\begin{proof}
+    To Do!!!
+\end{proof}
+
+A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed
+outcomes.
+To do so, we must convert it into a distribution over the primary variables of interest.
+Theorem~\ref{th:estimator-to-var} provides a simple way for carrying out this conversion.
+
+As an illustrative example, consider a binomial experiment.
+Theorem~\ref{th:central-by-estimator} allows us to determine a central distribution over the number of successes.
+However, for inference, we typically require a distribution over specific sequences of successes and failures.
+Theorem~\ref{th:estimator-to-var} enables this by offering a natural approach: we assign a uniform
+distribution over all sequences with the same number of successes and failures.
+
+\begin{corollary}
+    Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
+    random variable $I$, then $c(i) \propto \lambda$ is a central prior of \setQ for \infSeq{\est}, where $\lambda$
+    is a constant.
+\end{corollary}
+
+\begin{example}
+    Assume that $S_n$ is a sequence of $n$ independent trials of an experiment with $k$ outcomes.
+
+
+\end{example}
+
+\begin{example}
+    Let \infSeq{S} be a sequence where each $S_n = (\seqExp{X})$ represents $n$ independent trials of an
+    experiment with $k$ possible outcomes.
+    Let $f: \set{X} \to \set{Y}$ be a deterministic function that maps each outcome $X_i$ to a label
+    $Y_i = f(X_i)$, where \( \mathcal{Y} = \{1, \dots, m\} \).
+
+    Assume that given \( Y_i = y \), the conditional distribution \( P(X_i \mid Y_i = y) \) is uniform over the
+    preimage \( f^{-1}(y) \).
+    Let \( \theta = (\theta_1, \dots, \theta_m) \) be a probability vector over \( \mathcal{Y} \), where each \( \theta_y \) specifies the probability of observing label \( y \).
+
+    For a sequence \( S_n \), let \( n_y \) denote the number of times label \( y \in \mathcal{Y} \) appears in the sequence.
+    Let \( |f^{-1}(y)| \) denote the number of outcomes in \( \mathcal{X} \) that are mapped to label \( y \) by \( f \).
+    Then the probability of observing \( S_n \) under \( Q_\theta \in \mathcal{Q} \) is:
+    \[
+        Q_\theta(S_n) = \prod_{y=1}^m \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y}.
+    \]
+
+    This expression reflects that each \( Y_i \sim \text{Categorical}(\theta) \), and each \( X_i \) is drawn uniformly from the set \( f^{-1}(Y_i) \).
+    The product captures the joint contribution of label frequencies and uniform uncertainty within each label.
+\end{example}

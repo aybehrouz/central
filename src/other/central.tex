@@ -112,6 +112,7 @@ When \setQ has a unique central distribution, the central divergence is simply d
 that unique central distribution.
 
 \begin{definition}
+    \label{def:set-of-sets}
     Let $X$ be a random variable, and let \setQQ be a set whose elements are sets of distributions over $X$.
     Let \cDist[\setQ] be a central distribution of $\setQ \in \setQQ$ for $X$, and $P$ be an arbitrary probability
     distribution.
@@ -263,7 +264,7 @@ that unique central distribution.
 \end{proof}
 
 \begin{theorem} [Centrality]
-    \label{th:lambda}
+    \label{th:lambda-centrality}
     Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
     Suppose \cDist is a convex combination of elements of \setQ, with all weights strictly positive.
     If for every \inSet{Q} and some constant $\lambda$ we have:
@@ -380,34 +381,108 @@ Theorem~\ref{th:estimator-to-var} enables this by offering a natural approach: w
 distribution over all sequences with the same number of successes and failures.
 
 \begin{corollary}
+    \label{cor:center-of-countable}
     Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
     random variable $I$, then $c(i) \propto \lambda$ is a central prior of \setQ for \infSeq{\est}, where $\lambda$
     is a constant.
 \end{corollary}
 
-\begin{example}
-    Assume that $S_n$ is a sequence of $n$ independent trials of an experiment with $k$ outcomes.
-
-
-\end{example}
-
-\begin{example}
+\begin{example}[Fused Multinomial Model]
+    \label{ex:fused-multinomial}
+    \newcommand{\prodm}{\prod_{y=1}^m}
     Let \infSeq{S} be a sequence where each $S_n = (\seqExp{X})$ represents $n$ independent trials of an
     experiment with $k$ possible outcomes.
     Let $f: \set{X} \to \set{Y}$ be a deterministic function that maps each outcome $X_i$ to a label
-    $Y_i = f(X_i)$, where \( \mathcal{Y} = \{1, \dots, m\} \).
+    $Y_i = f(X_i)$, where $\set{Y} = \{1, \dots, m\}$.
 
-    Assume that given \( Y_i = y \), the conditional distribution \( P(X_i \mid Y_i = y) \) is uniform over the
-    preimage \( f^{-1}(y) \).
-    Let \( \theta = (\theta_1, \dots, \theta_m) \) be a probability vector over \( \mathcal{Y} \), where each \( \theta_y \) specifies the probability of observing label \( y \).
+    Assume that given $Y_i = y$, the conditional distribution $P(X_i \mid Y_i = y)$ is uniform over the preimage $f^{-1}(y)$.
+    Let $\theta = (\theta_1, \dots, \theta_m)$ be a probability vector over $\mathcal{Y}$, where each $\theta_y$ specifies the probability of observing label $y$.
 
-    For a sequence \( S_n \), let \( n_y \) denote the number of times label \( y \in \mathcal{Y} \) appears in the sequence.
-    Let \( |f^{-1}(y)| \) denote the number of outcomes in \( \mathcal{X} \) that are mapped to label \( y \) by \( f \).
-    Then the probability of observing \( S_n \) under \( Q_\theta \in \mathcal{Q} \) is:
+    For a sequence $S_n$, let $n_y$ denote the number of times label $y \in \mathcal{Y}$ appears.
+    Let $|f^{-1}(y)|$ denote the number of outcomes in $\mathcal{X}$ that are mapped to label $y$ by $f$.
+    Then the probability of observing $S_n$ under $Q_\theta \in \setQ$ is:
     \[
-        Q_\theta(S_n) = \prod_{y=1}^m \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y}.
+        Q(S_n \mid \theta) = \prodm \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y} \cdot
     \]
 
-    This expression reflects that each \( Y_i \sim \text{Categorical}(\theta) \), and each \( X_i \) is drawn uniformly from the set \( f^{-1}(Y_i) \).
-    The product captures the joint contribution of label frequencies and uniform uncertainty within each label.
+    Now, consider the estimator sequence $T_n = \frac{1}{n} \left( \seqExp[m]{n} \right)$, which is a consistent
+    estimator for $\theta$.
+    The conditional distribution $P(S_n \mid T_n)$ is then given by:
+    \[
+        P(S_n \mid T_n) = \frac{1}{n!} \prodm \frac{n_y!}{|f^{-1}(y)|^{n_y}} \cdot
+    \]
+    Note that this distribution is independent of the parameter $\theta$.
+    Therefore, by Theorem~\ref{th:estimator-to-var}, a central distribution for $S_n$ can be obtained from a central distribution
+    for $T_n$.
+
+    As $n \to \infty$, the distribution of $T_n$ converges to a multivariate Gaussian distribution.
+    Using this fact and Theorem~\ref{th:central-by-estimator}, we can determine a central prior for \infSeq{T}:
+    \[
+        c(\theta) \propto \prodm \theta_y^{-\hf}
+    \]
+    This is a Dirichlet prior and induces a Dirichlet-multinomial distribution for each $T_n$:
+    \[
+        C(T_n) = \frac{\gm{\hf[m]}\gm{n+1}}{\gm{n + \hf[m]}}
+        \prodm \frac{\gm{y + \hf}}{\gm{\hf}\gm{y+1}} \cdot
+    \]
+    Note that here, $C$ denotes a central distribution for $T_\infty$.
+
+    By Theorem~\ref{th:estimator-to-var}, we can derive a central distribution for \infSeq{S}, which induces the
+    following distribution over each $S_n$:
+    \[
+        C_f(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}
+        \prodm \frac{\gm{y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}} \cdot
+    \]
+\end{example}
+
+\begin{example}[Attribute Selection]
+    In this example, we consider a classification problem where the goal is to predict a target class, denoted by
+    $Y$, from a set of observed nominal attributes $(\seqExp{A})$.
+    We assume that $Y$ may depend on an unknown subset of the attributes, rather than the full set.
+
+    This reflects a form of sparsity in the relationship between the class and the attributes, where irrelevant
+    features are ignored in the true generative model.
+
+    We can use the fused multinomial model of Example~\ref{ex:fused-multinomial} to capture this relationship.
+    As an example, assume that $Y$ depends only on $A_2$, $A_5$.
+    Then, we define the labeling function $f$ as follows:
+    \[
+        f(\seqExp{A}, Y) = (A_2, A_5, Y) \cdot
+    \]
+    In a fused multinomial model with this labeling function, $Y$ will be conditionally independent
+    from other attributes, given $A_2, A_5$.
+    Additionally, $P(\seqExp{A} \mid A_2, A_5)$ will be uniform.
+
+    For every possible subset of attributes a distinct fused multinomial model of this form is needed.
+    Each model corresponds to a set of plausible distributions.
+    Definition~\ref{def:set-of-sets} provides a way to define a central distribution for situations like this one.
+
+    By Theorem~\ref{th:lambda-centrality} we know that this central distribution would be a weighted average of
+    central distributions of individual fused multinomial models.
+    Since, we have a finite number of models, Corollary~\ref{cor:center-of-countable} implies that these weights
+    are uniform:
+    \[
+        C_{\setQQ}(S_n) \propto \sum_i C_{f_i}(S_n) \cdot
+    \]
+
+    To establish this, observe that we can construct a consistent estimator for the model indicator $I$ by checking
+    for the equality of different outcomes.
+    Specifically, the estimator identifies outcomes with equal frequency in the data and returns the indicator for
+    the model that supports this equality.
+
+    To see how this idea works in practice, we carried out a synthetic experiment with the following setup.
+    We considered binary attributes and generated each feature independently with equal probability for 0 and 1.
+    The class label was defined as a deterministic function of a fixed subset of 3 out of 12 total attributes. The
+    same relevant features and labeling function were used across all trials.
+
+    For each experiment, we generated a training set of size $n$ and a test set of size $n/2$.
+    To assess robustness to irrelevant features, we progressively removed one attribute at a time from the full set
+    of 12, starting with irrelevant ones and stopping just before removing any of the three relevant features.
+
+    At each step, we trained and tested two versions of the central distribution: one assuming a deterministic label
+    function and one allowing for a conditional (non-deterministic) label distribution.
+    As a baseline, we also trained a decision tree classifier.
+    All methods were trained on the same training data and evaluated on the same test data.
+    Each configuration was repeated for $k$ independent trials, and we reported the average accuracy (correct
+    predictions divided by total test instances) over these trials.
 \end{example}

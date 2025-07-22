@@ -15,6 +15,9 @@
 \usepackage{amssymb}
 \usepackage{xcolor}
 \usepackage{stmaryrd}
+\usepackage{pgfplots}
+\usepackage{booktabs}
+\usepackage{caption}
 \usepackage{mathtools} % should be the last import
 
 \newtheorem{theorem}{Theorem}
@@ -26,6 +29,7 @@
 \newtheorem*{proposition}{Proposition}
 \newtheorem{example}{Example}[section]  % or [subsection], or no counter
 
+\pgfplotsset{compat=1.18}
 
 \newcommand{\mathFix}[1]{\ensuremath{#1}\xspace}
 \newcommand{\sub}[2]{\ifthenelse{\isempty{#2}}{#1}{#1_{#2}}}
@@ -75,5 +79,6 @@
     \input{central}
 
     \bibliography{main}
+
     \bibliographystyle{plain}
 \end{document}

@@ -29,15 +29,15 @@ A well-known example of this idea is the exchangeability assumption used in de F
 A sequence of random variables \infSeqExp{X} is said to be exchangeable, if the ordering of the variables carries no
 information.
 That is, the joint probability distribution remains invariant under permutations of the variables.
-This assumption imposes a structural constraint, effectively narrowing the set of admissible distributions.
+This assumption imposes a constraint, effectively narrowing the set of admissible distributions.
 Thus, exchangeability can be seen as a specific form of partial knowledge.
 
 In this work, we adopt the perspective that such sets provide a meaningful representation of the state of partial
 knowledge, and that this representation can likewise be used for inference.
 
 Importantly, the act of choosing this set reflects some degree of knowledge.
-If even that is uncertain, we may represent our uncertainty by a set of sets of distributions---capturing deeper
-layers of ignorance.
+If even that is uncertain, we may similarly represent our uncertainty by a set of sets of distributions---capturing
+deeper layers of ignorance.
 
 In Bayesian theory, any type of knowledge must ultimately be encoded in a single probability measure.
 Thus, to use our partial knowledge for performing inference in a Bayesian manner, we must find a principled way to
@@ -51,11 +51,13 @@ less informative, none of these should change our beliefs about the environment,
 probability measure.
 We will use this principle several times in this discussion and refer to it as the \emph{principle of objectivity}.
 
-Subjectively, for a set of distributions, a probability measure that has the lowest divergence from the distributions
-of the set can be considered the ``safest'' choice.
-``Safe'' in the sense that it has the best possible performance in the worst case, and more importantly, when
-convergence is possible for a set, if we use this probability measure, we are guaranteed to have a convergent
-distribution.
+Subjectively, when we are uncertain about a set of distributions, a probability measure that has the lowest
+divergence from the distributions of the set can be considered the ``safest'' choice.
+``Safe'' in the sense that using it incurs the least possible loss in the worst case, and more
+importantly, when convergence is possible for a set of distributions, if we use this probability measure, we are
+guaranteed to have a convergent distribution.
+By convergent distribution, we mean a distribution with sufficiently low divergence from any other distribution in the
+set.
 
 \begin{definition}[Central Distribution]
     Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
@@ -323,9 +325,9 @@ and in particular, should not vary with the length of the sequence.
 
 It is important to note that a distribution defined over a longer sequence induces marginal distributions over its
 shorter subsequences.
-This observation suggests that, in order to satisfy the principle of objectivity, we may instead define a central
-distribution over an infinite exchangeable sequence---thereby maintaining consistency with the
-distributions of all finite initial segments.
+This observation suggests that, in order to satisfy the principle of objectivity, we may instead determine a central
+distribution over an infinite exchangeable sequence, from which the distributions of all finite initial segments can
+be derived.
 
 This requires constructing a central distribution that is well-defined over $S_{\infty}$.
 
@@ -340,14 +342,16 @@ This requires constructing a central distribution that is well-defined over $S_{
     \end{equation*}
 \end{definition}
 
-Intuitively, this definition states that \cDist is a central distribution for $S_{\infty}$.
+Intuitively, this definition states that as $n \to \infty$ the distribution that $C$ induces over $S_n$ becomes
+increasingly similar to a central distribution for $S_n$.
+In other words, \cDist is a central distribution for $S_{\infty}$.
 
 If we have a consistent estimator sequence for the index of a set, the following theorem provides a way to construct a
 central distribution for that estimator.
 
-By a consistent estimator, we mean a sequence of estimators such that, for any fixed parameter value, the
+Here, by a consistent estimator we mean a sequence of estimators such that, for any fixed index value, the
 distribution of each estimator $\est_n$ becomes increasingly concentrated around the corresponding value of the
-parameter as $n$ increases.
+index as $n$ increases.
 
 \begin{theorem}
     \label{th:central-by-estimator}
@@ -376,9 +380,15 @@ Theorem~\ref{th:estimator-to-var} provides a simple way for carrying out this co
 
 As an illustrative example, consider a binomial experiment.
 Theorem~\ref{th:central-by-estimator} allows us to determine a central distribution over the number of successes.
-However, for inference, we typically require a distribution over specific sequences of successes and failures.
+However, for inference, we typically require a distribution over specific ordered sequences of successes and failures.
 Theorem~\ref{th:estimator-to-var} enables this by offering a natural approach: we assign a uniform
 distribution over all sequences with the same number of successes and failures.
+
+When dealing with multi-level ignorance and attempting to determine the central distribution of a set of sets of
+distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of
+such sets is finite.
+
+In this setting, the central distribution is simply the uniform distribution.
 
 \begin{corollary}
     \label{cor:center-of-countable}
@@ -476,7 +486,7 @@ distribution over all sequences with the same number of successes and failures.
     shown in Table~\ref{tab:functions}.
     The same relevant features and labeling function were used across all trials.
 
-    For each experiment, we generated a training set of size 10 or 20 and a test set of size 60.
+    For each experiment, we generated a training set of size 20 and a test set of size 60.
     A larger test set was used to reduce variability in performance estimates, taking advantage of the synthetic
     nature of the data.
     To assess robustness to irrelevant features, we progressively removed one attribute at a time from the full set
@@ -489,7 +499,7 @@ distribution over all sequences with the same number of successes and failures.
     Each configuration was repeated for 75 independent trials, and we reported the average accuracy (correct
     predictions divided by total test instances) over these trials.
 
-    \begin{table}[h]
+    \begin{table}[htbp]
         \centering
         \caption{Mappings of 3-bit inputs under functions $f_1$ and $f_2$}
         \begin{tabular}{ccc}
@@ -510,7 +520,7 @@ distribution over all sequences with the same number of successes and failures.
 
     \vspace{2em}
 
-    \begin{figure}[h]
+    \begin{figure}[htbp]
         \centering
         \caption{Accuracy vs. Number of Attributes (Function $f_1$, 20 train samples)}
         \begin{tikzpicture}
@@ -549,7 +559,7 @@ distribution over all sequences with the same number of successes and failures.
 
     \vspace{2em}
 
-    \begin{figure}[h]
+    \begin{figure}[htbp]
         \centering
         \caption{Accuracy vs. Number of Attributes (Function $f_2$, 20 train samples)}
         \begin{tikzpicture}
@@ -588,21 +598,14 @@ distribution over all sequences with the same number of successes and failures.
     The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, reveal notable differences in
     performance depending on the underlying class assignment rule.
     For function $f_1$, both deterministic and probabilistic methods achieve high accuracy, with the deterministic
-    version of the central distribution slightly outperforming the others.
+    version of the central distribution slightly outperforming the other.
     In contrast, function $f_2$ introduces more ambiguity in the label assignment, leading to a clearer separation
     in performance between these two methods.
     In this case, the deterministic central distribution remains the most accurate overall, while the probabilistic
     version shows reduced performance due to label overlap.
 
-    While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not
-    substantial in our primary experiments with 20 training samples.
-    However, we observed that the benefit of attribute removal becomes more noticeable when the training set is
-    smaller.
-    In particular, additional experiments with only 10 training samples showed a clearer performance gain as
-    irrelevant features were removed, indicating that the impact of irrelevant attributes is more pronounced in
-    low-data regimes (see Figure~\ref{fig:f2-10samples-results})
 
-    \begin{figure}[h]
+    \begin{figure}[htbp]
         \centering
         \caption{Accuracy vs. Number of Attributes (Function $f_2$, 10 train samples)}
         \begin{tikzpicture}
@@ -633,4 +636,12 @@ distribution over all sequences with the same number of successes and failures.
             \end{axis}
         \end{tikzpicture}\label{fig:f2-10samples-results}
     \end{figure}
+
+    While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not
+    substantial in our primary experiments with 20 training samples.
+    However, we observed that the benefit of attribute removal becomes more noticeable when the training set is
+    smaller.
+    In particular, additional experiments with only 10 training samples showed a clearer performance gain as
+    irrelevant features were removed, indicating that the impact of irrelevant attributes is more pronounced in
+    low-data regimes (see Figure~\ref{fig:f2-10samples-results})
 \end{example}

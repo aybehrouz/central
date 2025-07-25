@@ -101,9 +101,12 @@ $\assign{X}$, which can happen with the probability $Q(x)$, it would also includ
 using $P(Y \mid \assign{x})$.
 This property indicates that for combining these individual terms we should use addition.
 
+We now briefly review some KL divergence properties needed in subsequent sections.
+
 \newcommandx{\klRatio}[2][1=Q, 2=R]{\sum_x #1(x) \ln \frac{#2(x)}{P(x)}}
 
 \begin{lemma}
+    \label{lem:kl-ineq}
     Let $X$ be a random variable, and let $P$, $Q$, and $R$ be probability distributions over $X$.
     The Kullback–Leibler divergence satisfies the following inequality:
     \begin{equation*}
@@ -125,5 +128,14 @@ This property indicates that for combining these individual terms we should use 
     \begin{equation*}
         \kl \leq \convex{\kl[Q_1]}{\kl[Q_2]} \cdot
     \end{equation*}
+    That is, the KL divergence is convex in its first argument.
 \end{theorem}
+
+\begin{proof}
+    The result follows from Lemma~\ref{lem:kl-ineq} after expanding the left-hand side of the inequality using the
+    definition of KL divergence.
+\end{proof}
+
+The KL divergence plays a key role in the notion of central distribution, which we introduce in the next section.
+
 

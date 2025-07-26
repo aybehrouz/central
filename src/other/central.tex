@@ -1,6 +1,6 @@
 \newcommandx{\supD}[3][1=P, 2=\setQ, 3=X]{\sup_{Q \in #2} \kl[Q][#1][#3]}
 \newcommand{\argSupD}[1][\setQ]{\arg\min_{P}\sup_{Q \in #1}}
-\newcommand{\myDiv}[1][P]{\measure{D}{\mathrm{C}}{\setQ \,\middle\|\, #1(X)}}
+\newcommand{\myDiv}[1][P(X)]{\measure{D}{\mathrm{C}}{\setQ \,\middle\|\, #1}}
 \newcommandx{\klExp}[3][1=Q, 2=P, 3=x]{\sum_{#3} #1(#3) \ln \frac{#1(#3)}{#2(#3)}}
 \newcommand{\inSet}[1]{\mathFix{#1 \in \set{#1}}}
 
@@ -62,11 +62,12 @@ set.
 
 \begin{definition}[Central Distribution]
     Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
-    We say a probability distribution $C$ is a \emph{central distribution} of \setQ for $X$, if
-    \begin{equation}
-        \cDist \in \argSupD \kl,
+    We say a distribution $C$ is a \emph{central distribution} of \setQ for $X$, if for every probability
+    distribution $P$, we have
+    \[
+        \supD[\cDist] \leq \supD[P],
         \label{eq:central-def}
-    \end{equation}
+    \]
     where $\measure{D}{\mathrm{KL}}{}$ denotes the Kullback–Leibler (KL) divergence.
 \end{definition}
 
@@ -156,6 +157,7 @@ While it may not belong to the set itself, it reflects the overall behavior of t
 inference or comparison with other distributions.
 
 \begin{definition}[Central Divergence]
+    \label{def:central-divergence}
     For any distribution $P$, we define the \emph{central divergence} of $P$ from a set of distributions \setQ, with
     respect to a random variable $X$, as follows:
     \begin{equation*}
@@ -170,286 +172,17 @@ from that unique central distribution.
 \begin{definition}
     \label{def:set-of-sets}
     Let $X$ be a random variable, and let \setQQ be a set whose elements are sets of distributions over $X$.
-    Let \cDist[\setQ] be a central distribution of $\setQ \in \setQQ$ for $X$, and $P$ be an arbitrary probability
-    distribution.
-    We say \ccDist is a central distribution of \setQQ, if we have:
+    Let \cDist[\setQ] be a central distribution of $\setQ \in \setQQ$ for $X$.
+    We say \ccDist is a central distribution of \setQQ, if for every probability distribution $P$ we have:
     \begin{equation*}
-        \sup_{\setQ \in \setQQ} \myDiv[\ccDist]  \leq \sup_{\setQ \in \setQQ} \myDiv \cdot
+        \sup_{\setQ \in \setQQ} \myDiv[\ccDist(X)]  \leq \sup_{\setQ \in \setQQ} \myDiv,
     \end{equation*}
+    where $\myDiv[\, \cdot \,]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
 \end{definition}
 
-\begin{definition} [Saddle Point]
-    Consider a function $f:\set{w} \times \set{z} \to \field{R}$.
-    We refer to a pair $(w^*, z^*)$ as a \emph{saddle point} for $f$, if we have
-    \[
-        f(w^*, z) \leq f(w^*, z^*) \leq f(w, z^*),
-    \]
-    for all \inSet{w} and \inSet{z}.
-\end{definition}
+\input{minimax}
 
-\begin{theorem}
-    \label{th:saddle_is_central}
-    Let $X$ be a discrete random variable, and \setQ be a finite set of distributions for $X$.
-    Consider the following function:
-    \begin{equation*}
-        f(P, R)= \fExp,
-    \end{equation*}
-    where $Q_i \in \setQ$, and $P$, $R$ are probability distributions.
-
-    If \saddle is a saddle point of $f$, then \saddP is a central distribution of \setQ for $X$.
-\end{theorem}
-
-\begin{proof}
-    Since $X$ is a discrete random variable, \setQ has a central distribution for $X$.
-    Let \cDist be a central distribution of \setQ, and \saddle be a saddle point for $f$.
-    Clearly, the point $(\cDist, \saddR)$, is in the domain of $f$, and
-    since \saddle is a saddle point for $f$, we have
-    \begin{equation}
-        \label{eq:th_proof_saddle_lq_dx}
-        f\saddle \leq f(\cDist, \saddR) \cdot
-    \end{equation}
-    Because \saddR is a probability distribution, the definition of $f$ implies:
-    \[
-        f(\cDist, \saddR) \leq \supD[\cDist] \cdot
-    \]
-    On the other hand,
-    \[
-        f\saddle = \max_{R} f(\saddP, R) = \supD[\saddP] \cdot
-    \]
-    Thus, Inequality~\ref{eq:th_proof_saddle_lq_dx} implies
-    \[
-        \supD[\saddP] \leq \supD[\cDist] \cdot
-    \]
-    Consequently, $\saddP$ is also a central distribution of \setQ for $X$.
-\end{proof}
-
-\begin{lemma}
-    \label{lm:saddle_conditions}
-    Let $f$ be the function defined in theorem~\ref{th:saddle_is_central}.
-    The point \saddle is a saddle point for $f$, if and only if there are constants $\lambda$, $\eta$ and a
-    function $\mu$, such that for every $i$, the following conditions hold:
-    \begin{gather}
-        \label{eq:kkt_lambda}
-        \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
-        \label{eq:kkt_w_avg}
-        \saddP(x) = \sum_i \saddR(i) Q_i(x) \\
-        \label{eq:kkt_r_sums_one}
-        \sum_i \saddR(i) = 1, \\
-        \label{eq:saddle_lm_r_geq_0}
-        \saddR(i) \geq 0, \\
-        \nonumber
-        \mu(i) \geq 0, \\
-        \label{eq:saddle_lm_rmu_is_zero}
-        \mu(i) \saddR(i) = 0 \cdot
-    \end{gather}
-\end{lemma}
-
-\begin{proof}
-    Similar to $f$, we define $\hat{f}$ as follows:
-    \begin{equation*}
-        \hat{f}(P, R) = \fExp,
-    \end{equation*}
-    where $P$, $R$ are arbitrary real functions instead of probability distributions.
-    This enables us to formulate the saddle point of $f$ as the solution to a constrained optimization problem.
-
-    Let \saddle be a simultaneous solution to the following two optimization problems:
-
-    \begin{equation}
-        \begin{aligned}
-            &\text{minimize} & &\hat{f}(P,R) & &\text{w.r.t.} \ P \\
-            &\text{subject to} & &\sum_{x} P(x) = 1, \\
-            \\
-            &\text{maximize} & &\hat{f}(P,R) & &\text{w.r.t.} \ R \\
-            &\text{subject to} & &R(i) \geq 0, & &\text{for all} \ i  \\
-            & & &\sum_{i} R(i) = 1 &
-        \end{aligned}\label{eq:twin_optimization}
-    \end{equation}
-    Clearly, if $\saddle$ exists, it will be a saddle point for $f$.
-
-    Both of these optimization problems are convex~\cite{0521833787} and differentiable.
-    To establish this, consider that all the constraint functions are affine, and therefore are convex and
-    differentiable.
-
-    Additionally, $\hat{f}$ is differentiable function with respect to both $R$ and $P$.
-    For any fixed $P$, $\hat{f}(P,\, \cdot \,)$ is an affine function and is concave.
-
-    On the other hand, for a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
-    \begin{equation}
-        \label{eq:simplified_f}
-        \hat{f}(P,\hat{R}) = c - \sum_{i,x} \hat{R}(i) Q_i(x) \ln P(x),
-    \end{equation}
-    where $c$ is not a function of $P$.
-    Since $\hat{R}$ is a solution to the second optimization problem, it satisfies the constraints
-    of the second problem and therefore is a probability distribution.
-    Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(P,\, \cdot \,)$  is
-    the negative of a linear combination of concave $\ln P(x)$ functions with nonnegative coefficients.
-    This function is convex.
-
-    Thus, both optimization problems are convex and differentiable, with affine constraints.
-    The constraints simply restrict the feasible set to the set of probability distributions, and it is always possible
-    to find feasible points that meet all the constraints.
-    Therefore, Slater’s condition is satisfied, and the KKT conditions provide necessary
-    and sufficient conditions for optimality~\cite{0521833787}.
-    In other words, If a point $\saddle$ satisfies the KKT conditions for both problems, it will be a saddle
-    point for $f$, and vice versa.
-
-    The KKT conditions are as follows for every $x$, $i$ and constants $\lambda$, $\eta$:
-    \begin{gather}
-        \label{eq:kkt_proof_R_is_pxIe}
-        \sum_i \saddR(i) Q_i(x) = \eta \saddP(x) \\
-        \label{eq:kkt_proof_p_sums_one}
-        \sum_{x} \saddP(x) = 1, \\
-        \nonumber
-        \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
-        \label{eq:kkt_proof_r_sums_one}
-        \sum_i \saddR(i) = 1, \\
-        \nonumber
-        \saddR(i) \geq 0, \\
-        \nonumber
-        \mu(i) \geq 0, \\
-        \nonumber
-        \mu(i) \saddR(i) = 0 \cdot
-    \end{gather}
-
-    By summing Equation~\ref{eq:kkt_proof_R_is_pxIe} over $x$ and using Equation~\ref{eq:kkt_proof_r_sums_one},
-    we have
-    \[
-        \eta = 1 \cdot
-    \]
-    Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
-\end{proof}
-
-\begin{theorem} [Centrality]
-    \label{th:lambda-centrality}
-    Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
-    Suppose \cDist is a convex combination of elements of \setQ, with all weights strictly positive.
-    If for every \inSet{Q} and some constant $\lambda$ we have:
-    \begin{equation*}
-        \kl[][\cDist] = \lambda,
-    \end{equation*}
-    then \cDist is a central distribution of \setQ for $X$.
-\end{theorem}
-
-\begin{proof}
-    Lemma~\ref{lm:saddle_conditions} provides a set of sufficient conditions for a saddle point.
-    Note that more restrictive conditions can also be imposed to derive an alternative set of sufficient conditions.
-    We can replace Inequality~\ref{eq:saddle_lm_r_geq_0} with the more
-    restrictive $\saddR(i) > 0$ condition.
-    By Equation~\ref{eq:saddle_lm_rmu_is_zero}, that implies $\mu(i) = 0$,
-    and Lemma~\ref{lm:saddle_conditions} conditions can be simplified to
-    \begin{gather*}
-        \klExp[Q][\saddP][x] = \lambda, \\
-        \saddP(x) = \sum_i \saddR(i) Q(x),
-    \end{gather*}
-    which must hold for every \inSet{Q} and a positive probability distribution \saddR.
-
-    Since \cDist satisfies these condition, Lemma~\ref{lm:saddle_conditions} and
-    Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
-\end{proof}
-
-These theorems were proved under the assumption that \setQ is finite; however, they can be extended to cases where
-\setQ can be indexed by a finite-dimensional real vector \param.
-We can treat this vector as a random variable and interpret $Q_{\paramVal}$ as a conditional
-distribution $Q(\xIt)$.
-Then, the weight function, $\saddR(i)$, will essentially become a prior distribution for \paramVal.
-
-\begin{theorem}
-    Let $X$ be a discrete random variable and \setQ be a set of distributions over $X$, indexed by a
-    finite-dimensional random vector \param.
-    Let \cPrior be a positive prior distribution for \param such that for $\like(\xIt) \in \setQ$ we have
-    \begin{equation*}
-        \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\} \cdot
-    \end{equation*}
-    Then, $\cDist(x) = \mrg$ is a central distribution of \setQ for $X$.
-    We also refer to \cPrior as a central prior for $X$.
-\end{theorem}
-
-\begin{proof}
-    To Do!!!
-\end{proof}
-
-Suppose we wish to model an exchangeable sequence of random variables.
-Let $S_n$ denote the sequence of the first $n$ variables: $S_n = (\seqExp{X})$.
-As discussed earlier, exchangeability can be interpreted as a form of partial knowledge, which allows us to
-represent our uncertainty using a central distribution over $S_n$.
-
-However, this central distribution generally depends on the sequence length $n$.
-According to the principle of objectivity, our beliefs should not depend on the specifics of our experimental setup,
-and in particular, should not vary with the length of the sequence.
-
-It is important to note that a distribution defined over a longer sequence induces marginal distributions over its
-shorter subsequences.
-This observation suggests that, in order to satisfy the principle of objectivity, we may instead determine a central
-distribution over an infinite exchangeable sequence, from which the distributions of all finite initial segments can
-be derived.
-
-This requires constructing a central distribution that is well-defined over $S_{\infty}$.
-
-\begin{definition}
-    Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
-    where each element of \setQ defines a distribution over each $S_n$.
-    Assume \cDist[n] is a central distribution for $S_n$.
-    Let \cDist be a probability measure that defines a distribution over every $S_n$.
-    \cDist is a central probability measure of \setQ for \infSeq{S}, if we have
-    \begin{equation*}
-        \lim_{n \to \infty} \kl[{\cDist[n]}][\cDist][S_n] = 0 \cdot
-    \end{equation*}
-\end{definition}
-
-Intuitively, this definition states that as $n \to \infty$ the distribution that $C$ induces over $S_n$ becomes
-increasingly similar to a central distribution for $S_n$.
-In other words, \cDist is a central distribution for $S_{\infty}$.
-
-If we have a consistent estimator sequence for the index of a set, the following theorem provides a way to construct a
-central distribution for that estimator.
-
-Here, by a consistent estimator we mean a sequence of estimators such that, for any fixed index value, the
-distribution of each estimator $\est_n$ becomes increasingly concentrated around the corresponding value of the
-index as $n$ increases.
-
-\begin{theorem}
-    \label{th:central-by-estimator}
-    Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures,
-    where each element of \setQ defines a distribution over each $\est_n$.
-    Assume that \setQ can be indexed by a finite-dimensional vector \param.
-    If \infSeq{\est} is a consistent sequence of estimators for \param, and there exists a sequence of
-    constants \infSeq{\lambda} such that the sequence
-    $\infSeq[]{\lambda_n -\entropy{Q}{\est_n \mid \paramVal}}$ converges
-    for every value of \paramVal, then
-    \begin{equation*}
-        \cPrior(\paramVal) \propto \lim_{n \to \infty} \exp
-        \left\{ \lambda_n -\entropy{Q}{\est_n \mid \paramVal} \right\},
-    \end{equation*}
-    is a central prior of \setQ for \infSeq{\est}.
-\end{theorem}
-
-\begin{proof}
-    To Do!!!
-\end{proof}
-
-A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed
-outcomes.
-To do so, we must convert it into a distribution over the primary variables of interest.
-Theorem~\ref{th:estimator-to-var} provides a simple way for carrying out this conversion.
-
-As an illustrative example, consider a binomial experiment.
-Theorem~\ref{th:central-by-estimator} allows us to determine a central distribution over the number of successes.
-However, for inference, we typically require a distribution over specific ordered sequences of successes and failures.
-Theorem~\ref{th:estimator-to-var} enables this by offering a natural approach: we assign a uniform
-distribution over all sequences with the same number of successes and failures.
-
-When dealing with layered ignorance and attempting to determine the central distribution of a set of sets of
-distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of
-such sets is finite.
-
-In this setting, the central distribution is simply the uniform distribution.
-
-\begin{corollary}
-    \label{cor:center-of-countable}
-    Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
-    random variable $I$, then $c(i) \propto \lambda$ is a central prior of \setQ for \infSeq{\est}, where $\lambda$
-    is a constant.
-\end{corollary}
+\input{infty}
 
 \begin{example}[Fused Multinomial Model]
     \label{ex:fused-multinomial}
@@ -529,173 +262,5 @@ In this setting, the central distribution is simply the uniform distribution.
         C_{\setQQ}(S_n) \propto \sum_i C_{f_i}(S_n) \cdot
     \]
 
-    To establish this, observe that we can construct a consistent estimator for the model indicator $I$ by checking
-    for the equality of different outcomes.
-    Specifically, the estimator identifies outcomes with equal frequency in the data and returns the indicator for
-    the model that supports this equality.
-
-    To see how this idea works in practice, we carried out a synthetic experiment with the following setup.
-    We considered binary attributes and generated each feature independently with equal probability for 0 and 1.
-    The class label was defined as a deterministic function of a fixed subset of 3 out of 12 total attributes, as
-    shown in Table~\ref{tab:functions}.
-    The same relevant features and labeling function were used across all trials.
-
-    For each experiment, we generated a training set of size 20 and a test set of size 60.
-    A larger test set was used to reduce variability in performance estimates, taking advantage of the synthetic
-    nature of the data.
-    To assess robustness to irrelevant features, we progressively removed one attribute at a time from the full set
-    of 12, starting with irrelevant ones and stopping just before removing any of the three relevant features.
-
-    At each step, we trained and tested two versions of the central distribution: one assuming a deterministic label
-    function (CD-Det) and one allowing for a conditional (non-deterministic) label distribution (CD-Prob).
-    As a baseline, we also trained a decision tree classifier (DTree).
-    All methods were trained on the same training data and evaluated on the same test data.
-    Each configuration was repeated for 75 independent trials, and we reported the average accuracy (correct
-    predictions divided by total test instances) over these trials.
-
-    \begin{table}[htbp]
-        \centering
-        \caption{Mappings of 3-bit inputs under functions $f_1$ and $f_2$}
-        \begin{tabular}{ccc}
-            \toprule
-            Input (bits) & $f_1$(Input) & $f_2$(Input) \\
-            \midrule
-            000          & a            & A            \\
-            001          & b            & B            \\
-            010          & c            & A            \\
-            011          & d            & C            \\
-            100          & e            & D            \\
-            101          & f            & D            \\
-            110          & g            & D            \\
-            111          & h            & E            \\
-            \bottomrule
-        \end{tabular}\label{tab:functions}
-    \end{table}
-
-    \vspace{2em}
-
-    \begin{figure}[htbp]
-        \centering
-        \caption{Accuracy vs. Number of Attributes (Function $f_1$, 20 train samples)}
-        \begin{tikzpicture}
-            \begin{axis}[
-                width=11cm,
-                height=7cm,
-                xlabel={Number of Attributes},
-                ylabel={Accuracy},
-                xmin=3, xmax=12,
-                ymin=0.1, ymax=1.0,
-                xtick={3,4,5,6,7,8,9,10,11,12},
-                ytick={0.1,0.3,0.5,0.7,0.9},
-                legend pos=south east,
-                grid=major,
-                mark options={solid}
-            ]
-
-                \addplot+[mark=*, blue] coordinates {
-                    (3, 0.936541) (4, 0.936541) (5, 0.936541) (6, 0.935624) (7, 0.932875) (8, 0.932417) (9, 0.931271) (10, 0.928522) (11, 0.928064) (12, 0.928064)
-                };
-                \addlegendentry{CD-Det}
-
-                \addplot+[mark=square*, red] coordinates {
-                    (3, 0.928064) (4, 0.928064) (5, 0.928064) (6, 0.928064) (7, 0.928064) (8, 0.928064) (9, 0.928064) (10, 0.928064) (11, 0.928064) (12, 0.928064)
-                };
-                \addlegendentry{CD-Prob}
-
-                \addplot+[mark=triangle*, black] coordinates {
-                    (3, 0.181672) (4, 0.181214) (5, 0.180985) (6, 0.180985) (7, 0.17984) (8, 0.181443) (9, 0.180069) (10, 0.180985) (11, 0.183047) (12, 0.181901)
-                };
-                \addlegendentry{DTree}
-
-            \end{axis}
-        \end{tikzpicture}\label{fig:f1-results}
-    \end{figure}
-
-    \vspace{2em}
-
-    \begin{figure}[htbp]
-        \centering
-        \caption{Accuracy vs. Number of Attributes (Function $f_2$, 20 train samples)}
-        \begin{tikzpicture}
-            \begin{axis}[
-                width=11cm,
-                height=7cm,
-                xlabel={Number of Attributes},
-                ylabel={Accuracy},
-                xmin=3, xmax=12,
-                ymin=0.1, ymax=1.0,
-                xtick={3,4,5,6,7,8,9,10,11,12},
-                ytick={0.1,0.3,0.5,0.7,0.9},
-                legend pos=south east,
-                grid=major,
-                mark options={solid}
-            ]
-
-                \addplot+[mark=*, blue] coordinates {
-                    (3, 0.949528) (4, 0.939848) (5, 0.93593) (6, 0.93593) (7, 0.933625) (8, 0.934086) (9, 0.938235) (10, 0.939387) (11, 0.929707) (12, 0.929016)
-                };
-                \addlegendentry{CD-Det}
-
-                \addplot+[mark=square*, red] coordinates {
-                    (3, 0.771145) (4, 0.764692) (5, 0.764692) (6, 0.766306) (7, 0.766306) (8, 0.765384) (9, 0.764923) (10, 0.764923) (11, 0.764692) (12, 0.764231)
-                };
-                \addlegendentry{CD-Prob}
-
-                \addplot+[mark=triangle*, black] coordinates {
-                    (3, 0.380272) (4, 0.378428) (5, 0.368979) (6, 0.366674) (7, 0.366213) (8, 0.36437) (9, 0.3646) (10, 0.362526) (11, 0.360452) (12, 0.358838)   };
-                \addlegendentry{DTree}
-
-            \end{axis}
-        \end{tikzpicture}\label{fig:f2-results}
-    \end{figure}
-
-    The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, reveal notable differences in
-    performance depending on the underlying class assignment rule.
-    For function $f_1$, both deterministic and probabilistic methods achieve high accuracy, with the deterministic
-    version of the central distribution slightly outperforming the other.
-    In contrast, function $f_2$ introduces more ambiguity in the label assignment, leading to a clearer separation
-    in performance between these two methods.
-    In this case, the deterministic central distribution remains the most accurate overall, while the probabilistic
-    version shows reduced performance due to label overlap.
-
-
-    \begin{figure}[htbp]
-        \centering
-        \caption{Accuracy vs. Number of Attributes (Function $f_2$, 10 train samples)}
-        \begin{tikzpicture}
-            \begin{axis}[
-                width=11cm,
-                height=7cm,
-                xlabel={Number of Attributes},
-                ylabel={Accuracy},
-                xmin=3, xmax=12,
-                ymin=0.55, ymax=0.8,
-                xtick={3,4,5,6,7,8,9,10,11,12},
-                ytick={0.6,0.65,0.7,0.75,0.8},
-                legend pos=south east,
-                grid=major,
-                mark options={solid}
-            ]
-
-                \addplot+[mark=*, blue] coordinates {
-                    (3, 0.772143) (4, 0.772143) (5, 0.765833) (6, 0.748704) (7, 0.723011) (8, 0.712193) (9, 0.700699) (10, 0.6865) (11, 0.681992) (12, 0.669146)
-                };
-                \addlegendentry{CD-Det}
-
-                \addplot+[mark=square*, red] coordinates {
-                    (3, 0.702502) (4, 0.691909) (5, 0.688754) (6, 0.681091) (7, 0.675456) (8, 0.67433) (9, 0.670273) (10, 0.659905) (11, 0.660356) (12, 0.657877)
-                };
-                \addlegendentry{CD-Prob}
-
-            \end{axis}
-        \end{tikzpicture}\label{fig:f2-10samples-results}
-    \end{figure}
-
-    While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not
-    substantial in our primary experiments with 20 training samples.
-    However, we observed that the benefit of attribute removal becomes more noticeable when the training set is
-    smaller.
-    In particular, additional experiments with only 10 training samples showed a clearer performance gain as
-    irrelevant features were removed, indicating that the impact of irrelevant attributes is more pronounced in
-    low-data regimes (see Figure~\ref{fig:f2-10samples-results})
+    \input{results}
 \end{example}

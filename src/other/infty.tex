@@ -1,0 +1,82 @@
+Suppose we wish to model an exchangeable sequence of random variables.
+Let $S_n$ denote the sequence of the first $n$ variables: $S_n = (\seqExp{X})$.
+As discussed earlier, exchangeability can be interpreted as a form of partial knowledge, which allows us to
+represent our uncertainty using a central distribution over $S_n$.
+
+However, this central distribution generally depends on the sequence length $n$.
+According to the principle of objectivity, our beliefs should not depend on the specifics of our experimental setup,
+and in particular, should not vary with the length of the sequence.
+
+It is important to note that a distribution defined over a longer sequence induces marginal distributions over its
+shorter subsequences.
+This observation suggests that, in order to satisfy the principle of objectivity, we may instead determine a central
+distribution over an infinite exchangeable sequence, from which the distributions of all finite initial segments can
+be derived.
+
+This requires constructing a central distribution that is well-defined over $S_{\infty}$.
+
+\begin{definition}
+    Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
+    where each element of \setQ defines a distribution over each $S_n$.
+    Assume \cDist[n] is a central distribution for $S_n$.
+    Let \cDist be a probability measure that defines a distribution over every $S_n$.
+    \cDist is a central probability measure of \setQ for \infSeq{S}, if we have
+    \begin{equation*}
+        \lim_{n \to \infty} \kl[{\cDist[n]}][\cDist][S_n] = 0 \cdot
+    \end{equation*}
+\end{definition}
+
+Intuitively, this definition states that as $n \to \infty$ the distribution that $C$ induces over $S_n$ becomes
+increasingly similar to a central distribution for $S_n$.
+In other words, \cDist is a central distribution for $S_{\infty}$.
+
+If we have a consistent estimator sequence for the index of a set, the following theorem provides a way to construct a
+central distribution for that estimator.
+
+Here, by a consistent estimator we mean a sequence of estimators such that, for any fixed index value, the
+distribution of each estimator $\est_n$ becomes increasingly concentrated around the corresponding value of the
+index as $n$ increases.
+
+\begin{theorem}
+    \label{th:central-by-estimator}
+    Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures,
+    where each element of \setQ defines a distribution over each $\est_n$.
+    Assume that \setQ can be indexed by a finite-dimensional vector \param.
+    If \infSeq{\est} is a consistent sequence of estimators for \param, and there exists a sequence of
+    constants \infSeq{\lambda} such that the sequence
+    $\infSeq[]{\lambda_n -\entropy{Q}{\est_n \mid \paramVal}}$ converges
+    for every value of \paramVal, then
+    \begin{equation*}
+        \cPrior(\paramVal) \propto \lim_{n \to \infty} \exp
+        \left\{ \lambda_n -\entropy{Q}{\est_n \mid \paramVal} \right\},
+    \end{equation*}
+    is a central prior of \setQ for \infSeq{\est}.
+\end{theorem}
+
+\begin{proof}
+    To Do!!!
+\end{proof}
+
+A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed
+outcomes.
+To do so, we must convert it into a distribution over the primary variables of interest.
+Theorem~\ref{th:estimator-to-var} provides a simple way for carrying out this conversion.
+
+As an illustrative example, consider a binomial experiment.
+Theorem~\ref{th:central-by-estimator} allows us to determine a central distribution over the number of successes.
+However, for inference, we typically require a distribution over specific ordered sequences of successes and failures.
+Theorem~\ref{th:estimator-to-var} enables this by offering a natural approach: we assign a uniform
+distribution over all sequences with the same number of successes and failures.
+
+When dealing with layered ignorance and attempting to determine the central distribution of a set of sets of
+distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of
+such sets is finite.
+
+In this setting, the central distribution is simply the uniform distribution.
+
+\begin{corollary}
+    \label{cor:center-of-countable}
+    Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
+    random variable $I$, then $c(i) \propto \lambda$ is a central prior of \setQ for \infSeq{\est}, where $\lambda$
+    is a constant.
+\end{corollary}

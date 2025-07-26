@@ -64,10 +64,10 @@ set.
     Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
     We say a distribution $C$ is a \emph{central distribution} of \setQ for $X$, if for every probability
     distribution $P$, we have
-    \[
+    \begin{equation}
         \supD[\cDist] \leq \supD[P],
         \label{eq:central-def}
-    \]
+    \end{equation}
     where $\measure{D}{\mathrm{KL}}{}$ denotes the Kullback–Leibler (KL) divergence.
 \end{definition}
 
@@ -84,12 +84,13 @@ That is, the distribution that best represents the set in the specified sense ma
 \end{definition}
 
 \begin{theorem}
-    Any distribution that can be expressed as a convex combination of some elements of \setQ is an
+    Any distribution that can be expressed as a convex combination of elements of \setQ is an
     interior distribution of \setQ.
 \end{theorem}
 
 \begin{proof}
     Let $R = \sum_i \alpha_i Q_i$, where $Q_i \in \setQ$, $\alpha_i \geq 0$, and $\sum_i \alpha_i = 1$.
+
     Fix an arbitrary probability distribution $P$.
     By the convexity of KL divergence in its first argument, we have:
     \[
@@ -152,37 +153,12 @@ model parameters.
     central distribution of \setQ for $(X,T)$.
 \end{proof}
 
-Intuitively, a central distribution serves as a representative or summary of a set of distributions.
-While it may not belong to the set itself, it reflects the overall behavior of the set in a way that is meaningful for
-inference or comparison with other distributions.
-
-\begin{definition}[Central Divergence]
-    \label{def:central-divergence}
-    For any distribution $P$, we define the \emph{central divergence} of $P$ from a set of distributions \setQ, with
-    respect to a random variable $X$, as follows:
-    \begin{equation*}
-        \myDiv = \inf_{\cDist} \kl[{\cDist}],
-    \end{equation*}
-    where $\cDist$ denotes a central distribution of \setQ for $X$.
-\end{definition}
-
-Note that when \setQ has a unique central distribution, the central divergence is simply defined as the KL divergence
-from that unique central distribution.
-
-\begin{definition}
-    \label{def:set-of-sets}
-    Let $X$ be a random variable, and let \setQQ be a set whose elements are sets of distributions over $X$.
-    Let \cDist[\setQ] be a central distribution of $\setQ \in \setQQ$ for $X$.
-    We say \ccDist is a central distribution of \setQQ, if for every probability distribution $P$ we have:
-    \begin{equation*}
-        \sup_{\setQ \in \setQQ} \myDiv[\ccDist(X)]  \leq \sup_{\setQ \in \setQQ} \myDiv,
-    \end{equation*}
-    where $\myDiv[\, \cdot \,]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
-\end{definition}
 
 \input{minimax}
 
 \input{infty}
+
+We now present some examples of central distributions and demonstrate how they can be used for feature selection.
 
 \begin{example}[Fused Multinomial Model]
     \label{ex:fused-multinomial}
@@ -197,7 +173,7 @@ from that unique central distribution.
 
     For a sequence $S_n$, let $n_y$ denote the number of times label $y \in \mathcal{Y}$ appears.
     Let $|f^{-1}(y)|$ denote the number of outcomes in $\mathcal{X}$ that are mapped to label $y$ by $f$.
-    Then the probability of observing $S_n$ under $Q_\theta \in \setQ$ is:
+    Then the probability of observing $S_n$ under $Q_\theta \in \setQ$, denoted $Q(S_n \mid \theta)$, is:
     \[
         Q(S_n \mid \theta) = \prodm \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y} \cdot
     \]
@@ -208,7 +184,7 @@ from that unique central distribution.
     \[
         P(S_n \mid T_n) = \frac{1}{n!} \prodm \frac{n_y!}{|f^{-1}(y)|^{n_y}} \cdot
     \]
-    Note that this distribution is independent of the parameter $\theta$.
+    Note that this distribution is independent of $Q_\theta$.
     Therefore, by Theorem~\ref{th:estimator-to-var}, a central distribution for $S_n$ can be obtained from a central distribution
     for $T_n$.
 
@@ -222,7 +198,8 @@ from that unique central distribution.
         C(T_n) = \frac{\gm{\hf[m]}\gm{n+1}}{\gm{n + \hf[m]}}
         \prodm \frac{\gm{y + \hf}}{\gm{\hf}\gm{y+1}} \cdot
     \]
-    Note that here, $C$ denotes a central distribution for $T_\infty$.
+    Note that here, $C$ denotes a central distribution for $T_\infty$, and $C(T_n)$ refers to the marginal
+    distribution induced on $T_n$.
 
     By Theorem~\ref{th:estimator-to-var}, we can derive a central distribution for \infSeq{S}, which induces the
     following distribution over each $S_n$:
@@ -261,6 +238,11 @@ from that unique central distribution.
     \[
         C_{\setQQ}(S_n) \propto \sum_i C_{f_i}(S_n) \cdot
     \]
+
+    To establish this, observe that we can construct a consistent estimator for the model indicator $I$ by checking
+    for the equality of different outcomes.
+    Specifically, the estimator identifies outcomes with equal frequency in the data and returns the indicator for
+    the model that supports this equality.
 
     \input{results}
 \end{example}

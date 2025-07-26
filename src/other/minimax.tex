@@ -1,3 +1,8 @@
+The central distribution is essentially the solution to a convex-concave game.
+Since the solution to a convex-concave game corresponds to a saddle point,
+by defining the appropriate function, we can characterize the central
+distribution using standard convex optimization techniques.
+
 \begin{definition} [Saddle Point]
     Consider a function $f:\set{w} \times \set{z} \to \field{R}$.
     We refer to a pair $(w^*, z^*)$ as a \emph{saddle point} for $f$, if we have
@@ -7,9 +12,13 @@
     for all \inSet{w} and \inSet{z}.
 \end{definition}
 
+Next, we will establish the connection between the saddle point and the central distribution.
+One significant insight provided by the next theorem is that it suggests inference and searching for a central
+distribution can be combined and performed simultaneously when finding a saddle point.
+
 \begin{theorem}
     \label{th:saddle_is_central}
-    Let $X$ be a discrete random variable, and \setQ be a finite set of distributions for $X$.
+    Let $X$ be a discrete random variable, and \setQ be a finite set of distributions over $X$.
     Consider the following function:
     \begin{equation*}
         f(P, R)= \fExp,
@@ -40,7 +49,7 @@
     \[
         \supD[\saddP] \leq \supD[\cDist] \cdot
     \]
-    Consequently, $\saddP$ is also a central distribution of \setQ for $X$.
+    Consequently, \[\supD[\saddP] = \supD[\cDist]\] and $\saddP$ is also a central distribution of \setQ for $X$.
 \end{proof}
 
 \begin{lemma}
@@ -99,8 +108,8 @@
         \hat{f}(P,\hat{R}) = c - \sum_{i,x} \hat{R}(i) Q_i(x) \ln P(x),
     \end{equation}
     where $c$ is not a function of $P$.
-    Since $\hat{R}$ is a solution to the second optimization problem, it satisfies the constraints
-    of the second problem and therefore is a probability distribution.
+    Since $\hat{R}$ is a solution to the second optimization problem, it satisfies the corresponding constraints and
+    is therefore a valid probability distribution.
     Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(P,\, \cdot \,)$  is
     the negative of a linear combination of concave $\ln P(x)$ functions with nonnegative coefficients.
     This function is convex.
@@ -139,6 +148,9 @@
     Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
 \end{proof}
 
+With the next theorem, we finally see why we refer to these distributions as ``central.''
+Exactly like the center of a circle, the central distribution is equidistant from the boundary.
+
 \begin{theorem} [Centrality]
     \label{th:lambda-centrality}
     Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
@@ -158,10 +170,10 @@
     By Equation~\ref{eq:saddle_lm_rmu_is_zero}, that implies $\mu(i) = 0$,
     and Lemma~\ref{lm:saddle_conditions} conditions can be simplified to
     \begin{gather*}
-        \klExp[Q][\saddP][x] = \lambda, \\
-        \saddP(x) = \sum_i \saddR(i) Q(x),
+        \klExp[Q_i][\saddP][x] = \lambda, \\
+        \saddP(x) = \sum_i \saddR(i) Q_i(x),
     \end{gather*}
-    which must hold for every \inSet{Q} and a positive probability distribution \saddR.
+    which must hold for every $Q_i \in \setQ$ and a positive probability distribution \saddR.
 
     Since \cDist satisfies these condition, Lemma~\ref{lm:saddle_conditions} and
     Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
@@ -173,17 +185,37 @@ We can treat this vector as a random variable and interpret $Q_{\paramVal}$ as a
 distribution $Q(\xIt)$.
 Then, the weight function, $\saddR(i)$, will essentially become a prior distribution for \paramVal.
 
+The next theorem shows that there is a strong relationship between central distributions and
+Bernardo's reference priors~\cite{BERNARDO200517}.
+
 \begin{theorem}
     Let $X$ be a discrete random variable and \setQ be a set of distributions over $X$, indexed by a
     finite-dimensional random vector \param.
-    Let \cPrior be a positive prior distribution for \param such that for $\like(\xIt) \in \setQ$ we have
-    \begin{equation*}
+    Let \cPrior be a strictly positive prior distribution for \param such that for $\like(\xIt) \in \setQ$ we have
+    \begin{equation}
+        \label{eq:central-prior}
         \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\} \cdot
-    \end{equation*}
+    \end{equation}
     Then, $\cDist(x) = \mrg$ is a central distribution of \setQ for $X$.
     We also refer to \cPrior as a central prior for $X$.
 \end{theorem}
 
 \begin{proof}
-    To Do!!!
+    \renewcommand{\c}{\cPrior(\paramVal{})}
+    From Equation~\ref{eq:central-prior}, it follows that there exists a constant $\lambda$ such that
+    \begin{equation*}
+        \c = \exp \left\{-\lambda +  \sum_{x} \like(\xIt) \ln
+                      \frac{\like(\xIt) \c}{\cDist(x)} \right\} \cdot
+    \end{equation*}
+    Since $\c$ is strictly positive, we have
+    \begin{align*}
+        \c &= \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] + \ln \c \right\} \\
+        &= \c \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\},
+    \end{align*}
+    which implies
+    \[
+        \kl[Q_{\paramVal{}}][C] = \lambda \cdot
+    \]
+    Since this holds for all \paramVal, and \cPrior is strictly positive by Theorem~\ref{th:lambda-centrality}, it
+    follows that \cDist is a central distribution of \setQ for $X$.
 \end{proof}

@@ -1,26 +1,8 @@
-To establish this, observe that we can construct a consistent estimator for the model indicator $I$ by checking
-for the equality of different outcomes.
-Specifically, the estimator identifies outcomes with equal frequency in the data and returns the indicator for
-the model that supports this equality.
-
-To see how this idea works in practice, we carried out a synthetic experiment with the following setup.
-We considered binary attributes and generated each feature independently with equal probability for 0 and 1.
+To see how this central distribution works in practice, we carried out a synthetic experiment with the following setup.
+We considered binary attributes and generated each attribute independently with equal probability for 0 and 1.
 The class label was defined as a deterministic function of a fixed subset of 3 out of 12 total attributes, as
 shown in Table~\ref{tab:functions}.
-The same relevant features and labeling function were used across all trials.
-
-For each experiment, we generated a training set of size 20 and a test set of size 60.
-A larger test set was used to reduce variability in performance estimates, taking advantage of the synthetic
-nature of the data.
-To assess robustness to irrelevant features, we progressively removed one attribute at a time from the full set
-of 12, starting with irrelevant ones and stopping just before removing any of the three relevant features.
-
-At each step, we trained and tested two versions of the central distribution: one assuming a deterministic label
-function (CD-Det) and one allowing for a conditional (non-deterministic) label distribution (CD-Prob).
-As a baseline, we also trained a decision tree classifier (DTree).
-All methods were trained on the same training data and evaluated on the same test data.
-Each configuration was repeated for 75 independent trials, and we reported the average accuracy (correct
-predictions divided by total test instances) over these trials.
+The same subset of relevant attributes and labeling function were used across all trials.
 
 \begin{table}[htbp]
     \centering
@@ -40,6 +22,19 @@ predictions divided by total test instances) over these trials.
         \bottomrule
     \end{tabular}\label{tab:functions}
 \end{table}
+
+For each experiment, we generated a training set of size 20 and a test set of size 60.
+A larger test set was used to reduce variability in performance estimates, taking advantage of the synthetic
+nature of the data.
+To assess robustness to irrelevant features, we progressively removed one attribute at a time from the full set
+of 12, starting with irrelevant ones and stopping just before removing any of the three relevant attributes.
+
+At each step, we trained and tested two versions of the central distribution: one assuming a deterministic label
+function (CD-Det) and one allowing for a conditional (non-deterministic) label distribution (CD-Prob).
+As a baseline, we also trained a decision tree classifier (DTree).
+All methods were trained on the same training data and evaluated on the same test data.
+Each configuration was repeated for 75 independent trials, and we reported the average accuracy (correct
+predictions divided by total test instances) over these trials.
 
 \begin{figure}[htbp]
     \centering
@@ -115,7 +110,7 @@ predictions divided by total test instances) over these trials.
 \end{figure}
 
 The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, reveal notable differences in
-performance depending on the underlying class assignment rule.
+performance depending on the underlying class assignment function.
 For function $f_1$, both deterministic and probabilistic methods achieve high accuracy, with the deterministic
 version of the central distribution slightly outperforming the other.
 In contrast, function $f_2$ introduces more ambiguity in the label assignment, leading to a clearer separation
@@ -123,6 +118,13 @@ in performance between these two methods.
 In this case, the deterministic central distribution remains the most accurate overall, while the probabilistic
 version shows reduced performance due to label overlap.
 
+While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not
+substantial in our primary experiments with 20 training samples.
+However, we observed that the benefit of attribute removal becomes more noticeable when the training set is
+smaller.
+In particular, additional experiments with 10 training samples showed a clearer performance gain as
+irrelevant features were removed, indicating that the impact of irrelevant attributes is more pronounced in
+low-data regimes (see Figure~\ref{fig:f2-10samples-results})
 
 \begin{figure}[htbp]
     \centering
@@ -156,10 +158,3 @@ version shows reduced performance due to label overlap.
     \end{tikzpicture}\label{fig:f2-10samples-results}
 \end{figure}
 
-While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not
-substantial in our primary experiments with 20 training samples.
-However, we observed that the benefit of attribute removal becomes more noticeable when the training set is
-smaller.
-In particular, additional experiments with only 10 training samples showed a clearer performance gain as
-irrelevant features were removed, indicating that the impact of irrelevant attributes is more pronounced in
-low-data regimes (see Figure~\ref{fig:f2-10samples-results})

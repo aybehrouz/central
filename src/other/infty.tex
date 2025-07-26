@@ -1,3 +1,32 @@
+Intuitively, a central distribution acts as a representative or summary of a set of distributions.
+While it may not belong to the set itself, it reflects the overall behavior of the set in a way that is meaningful
+for inference and for evaluating other distributions.
+It provides a meaningful way to compare distributions based on our partial knowledge.
+
+\begin{definition}[Central Divergence]
+    \label{def:central-divergence}
+    For any distribution $P$, we define the \emph{central divergence} of $P$ from a set of distributions \setQ, with
+    respect to a random variable $X$, as follows:
+    \begin{equation*}
+        \myDiv = \inf_{\cDist} \kl[{\cDist}],
+    \end{equation*}
+    where $\cDist$ denotes a central distribution of \setQ for $X$.
+\end{definition}
+
+Note that when \setQ has a unique central distribution, the central divergence is simply defined as the KL divergence
+from that unique central distribution.
+
+\begin{definition}
+    \label{def:set-of-sets}
+    Let $X$ be a random variable, and let \setQQ be a set whose elements are sets of distributions over $X$.
+    Let \cDist[\setQ] be a central distribution of $\setQ \in \setQQ$ for $X$.
+    We say \ccDist is a central distribution of \setQQ, if for every probability distribution $P$ we have:
+    \begin{equation*}
+        \sup_{\setQ \in \setQQ} \myDiv[\ccDist(X)]  \leq \sup_{\setQ \in \setQQ} \myDiv,
+    \end{equation*}
+    where $\myDiv[\, \cdot \,]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
+\end{definition}
+
 Suppose we wish to model an exchangeable sequence of random variables.
 Let $S_n$ denote the sequence of the first $n$ variables: $S_n = (\seqExp{X})$.
 As discussed earlier, exchangeability can be interpreted as a form of partial knowledge, which allows us to
@@ -20,7 +49,7 @@ This requires constructing a central distribution that is well-defined over $S_{
     where each element of \setQ defines a distribution over each $S_n$.
     Assume \cDist[n] is a central distribution for $S_n$.
     Let \cDist be a probability measure that defines a distribution over every $S_n$.
-    \cDist is a central probability measure of \setQ for \infSeq{S}, if we have
+    \cDist is a central distribution of \setQ for \infSeq{S}, if we have
     \begin{equation*}
         \lim_{n \to \infty} \kl[{\cDist[n]}][\cDist][S_n] = 0 \cdot
     \end{equation*}
@@ -53,9 +82,17 @@ index as $n$ increases.
     is a central prior of \setQ for \infSeq{\est}.
 \end{theorem}
 
-\begin{proof}
-    To Do!!!
-\end{proof}
+When dealing with layered ignorance and attempting to determine the central distribution of a set of sets of
+distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of
+such sets is finite.
+
+In this setting, and under appropriate conditions, the central distribution reduces to the uniform distribution.
+
+\begin{corollary}
+    \label{cor:center-of-countable}
+    Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
+    random variable $I$, then $c(i) \propto 1$ is a central prior of \setQ for \infSeq{\est}.
+\end{corollary}
 
 A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed
 outcomes.
@@ -67,16 +104,3 @@ Theorem~\ref{th:central-by-estimator} allows us to determine a central distribut
 However, for inference, we typically require a distribution over specific ordered sequences of successes and failures.
 Theorem~\ref{th:estimator-to-var} enables this by offering a natural approach: we assign a uniform
 distribution over all sequences with the same number of successes and failures.
-
-When dealing with layered ignorance and attempting to determine the central distribution of a set of sets of
-distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of
-such sets is finite.
-
-In this setting, the central distribution is simply the uniform distribution.
-
-\begin{corollary}
-    \label{cor:center-of-countable}
-    Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
-    random variable $I$, then $c(i) \propto \lambda$ is a central prior of \setQ for \infSeq{\est}, where $\lambda$
-    is a constant.
-\end{corollary}

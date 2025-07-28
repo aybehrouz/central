@@ -173,7 +173,7 @@ Exactly like the center of a circle, the central distribution is equidistant fro
         \klExp[Q_i][\saddP][x] = \lambda, \\
         \saddP(x) = \sum_i \saddR(i) Q_i(x),
     \end{gather*}
-    which must hold for every $Q_i \in \setQ$ and a positive probability distribution \saddR.
+    which must hold for every $Q_i \in \setQ$ and some strictly positive probability distribution \saddR.
 
     Since \cDist satisfies these condition, Lemma~\ref{lm:saddle_conditions} and
     Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
@@ -183,7 +183,7 @@ These theorems were proved under the assumption that \setQ is finite; however, t
 \setQ can be indexed by a finite-dimensional real vector \param.
 We can treat this vector as a random variable and interpret $Q_{\paramVal}$ as a conditional
 distribution $Q(\xIt)$.
-Then, the weight function, $\saddR(i)$, will essentially become a prior distribution for \paramVal.
+Then, the weight function, $\saddR(i)$, will essentially become a prior distribution over \paramVal.
 
 The next theorem shows that there is a strong relationship between central distributions and
 Bernardo's reference priors~\cite{BERNARDO200517}.
@@ -216,6 +216,6 @@ Bernardo's reference priors~\cite{BERNARDO200517}.
     \[
         \kl[Q_{\paramVal{}}][C] = \lambda \cdot
     \]
-    Since this holds for all \paramVal, and \cPrior is strictly positive by Theorem~\ref{th:lambda-centrality}, it
+    Since this holds for all \paramVal, and \cPrior is strictly positive, by Theorem~\ref{th:lambda-centrality} it
     follows that \cDist is a central distribution of \setQ for $X$.
 \end{proof}

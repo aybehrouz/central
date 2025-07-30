@@ -1,4 +1,4 @@
-To see how this central distribution works in practice, we carried out a synthetic experiment with the following setup.
+To see how this approach works in practice, we carried out a synthetic experiment with the following setup.
 We considered binary attributes and generated each attribute independently with equal probability for 0 and 1.
 The class label was defined as a deterministic function of a fixed subset of 3 out of 12 total attributes, as
 shown in Table~\ref{tab:functions}.
@@ -31,6 +31,8 @@ of 12, starting with irrelevant ones and stopping just before removing any of th
 
 At each step, we trained and tested two versions of the central distribution: one assuming a deterministic label
 function (CD-Det) and one allowing for a conditional (non-deterministic) label distribution (CD-Prob).
+Both versions are constructed by aggregating over $2^{12}$ fused multinomial models, corresponding to all subsets of
+the 12 attributes.
 As a baseline, we also trained a decision tree classifier (DTree).
 All methods were trained on the same training data and evaluated on the same test data.
 Each configuration was repeated for 75 independent trials, and we reported the average accuracy (correct

@@ -16,6 +16,10 @@ It provides a meaningful way to compare distributions based on our partial knowl
 Note that when \setQ has a unique central distribution, the central divergence is simply defined as the KL divergence
 from that unique central distribution.
 
+Sometimes, partial knowledge is represented by multiple sets of distributions.
+Our current definition of the central distribution does not account for this case.
+The following definition extends the concept to handle such situations.
+
 \begin{definition}
     \label{def:set-of-sets}
     Let $X$ be a random variable, and let \setQQ be a set whose elements are sets of distributions over $X$.
@@ -27,7 +31,10 @@ from that unique central distribution.
     where $\myDiv[\, \cdot \,]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
 \end{definition}
 
-Suppose we wish to model an exchangeable sequence of random variables.
+This definition establishes the connection between the central distribution and feature selection, as will become
+clearer later.
+
+Suppose we want to model an exchangeable sequence of random variables.
 Let $S_n$ denote the sequence of the first $n$ variables: $S_n = (\seqExp{X})$.
 As discussed earlier, exchangeability can be interpreted as a form of partial knowledge, which allows us to
 represent our uncertainty using a central distribution over $S_n$.
@@ -60,10 +67,10 @@ increasingly similar to a central distribution for $S_n$.
 In other words, \cDist is a central distribution for $S_{\infty}$.
 
 If we have a consistent estimator sequence for the index of a set, the following theorem provides a way to construct a
-central distribution for that estimator.
+central distribution for that sequence.
 
 Here, by a consistent estimator we mean a sequence of estimators such that, for any fixed index value, the
-distribution of each estimator $\est_n$ becomes increasingly concentrated around the corresponding value of the
+distribution of $\est_n$ becomes increasingly concentrated around the corresponding value of the
 index as $n$ increases.
 
 \begin{theorem}

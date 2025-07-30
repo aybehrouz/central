@@ -37,8 +37,8 @@ In this work, we adopt the perspective that such sets provide a meaningful repre
 knowledge, and that this representation can likewise be used for inference.
 
 Importantly, the act of choosing this set reflects some degree of knowledge.
-If even that is uncertain, we may similarly represent our uncertainty by a set of sets of distributions---capturing
-deeper layers of ignorance.
+If even that knowledge is partial, we may similarly represent our uncertainty by a set of sets of
+distributions---capturing deeper layers of ignorance.
 
 In Bayesian theory, any type of knowledge must ultimately be encoded in a single probability measure.
 Thus, to use our partial knowledge for performing inference in a Bayesian manner, we must find a principled way to
@@ -236,7 +236,7 @@ We now present some examples of central distributions and demonstrate how they c
     Definition~\ref{def:set-of-sets} provides a way to define a central distribution for situations like this one.
 
     By Theorem~\ref{th:lambda-centrality} we know that this central distribution would be a weighted average of
-    central distributions of individual fused multinomial models.
+    the central distributions of individual fused multinomial models.
     Since, we have a finite number of models, Corollary~\ref{cor:center-of-countable} implies that these weights
     are uniform:
     \[
@@ -247,6 +247,11 @@ We now present some examples of central distributions and demonstrate how they c
     for the equality of different outcomes.
     Specifically, the estimator identifies outcomes with equal frequency in the data and returns the indicator for
     the model that supports this equality.
+
+    As shown in Equation~\ref{eq:bayes-action}, the optimal Bayesian decision rule depends on the chosen loss function.
+    In this example, we adopt the zero-one loss, which leads to predicting the label with the highest conditional
+    probability.
+    These probabilities are computed using the central distribution we previously derived.
 
     \input{results}
 \end{example}

@@ -58,7 +58,7 @@ This requires constructing a central distribution that is well-defined over $S_{
     Let \cDist be a probability measure that defines a distribution over every $S_n$.
     \cDist is a central distribution of \setQ for \infSeq{S}, if we have
     \begin{equation*}
-        \lim_{n \to \infty} \kl[{\cDist[n]}][\cDist][S_n] = 0 \cdot
+        \toInf \kl[{\cDist[n]}][\cDist][S_n] = 0 \cdot
     \end{equation*}
 \end{definition}
 
@@ -66,12 +66,63 @@ Intuitively, this definition states that as $n \to \infty$ the distribution that
 increasingly similar to a central distribution for $S_n$.
 In other words, \cDist is a central distribution for $S_{\infty}$.
 
+We now present a limiting version of Theorem~\ref{th:lambda-centrality}.
+
+\begin{theorem}
+    \label{th:limiting-centrality}
+    Let \infSeq{S} be a sequence of random variables and \infSeq{\lambda} be a sequence of constants.
+    If \cDist is a weighted average of elements of \setQ with strictly positive weights
+    such that for every $Q \in \setQ$ we have
+    \[
+        \toInf \left(\kl[][\cDist][S_n] - \lambda_n  \right) = 0,
+    \]
+    then \cDist is a central distribution of \setQ for \infSeq{S}.
+\end{theorem}
+
+\begin{proof}
+    For the purpose of this proof, we additionally assume—perhaps unnecessarily—that for each \(S_n\), there exists
+    a central distribution $\cDist_n$ that satisfies the conditions of Theorem~\ref{th:lambda-centrality}.
+    That is, there exists a constant \(\mu_n\) such that for every \inSet{Q}
+    \[
+        \kl[][\cDist_n][S_n] = \mu_n \cdot
+    \]
+
+    For each \(n\), by the definition of central distribution, we have
+    \[
+        \sup_{\inSet{Q}} \kl[][\cDist][S_n] \geq \mu_n \cdot
+    \]
+
+    Moreover, by Theorem~\ref{th:lambda-crossing}, it follows that
+    \[
+        \inf_{\inSet{Q}} \kl[][\cDist][S_n] \leq \mu_n \cdot
+    \]
+
+    Now, by the squeeze theorem, the sequence \infSeq[]{\mu_n - \lambda_n} must converge to $0$.
+    Therefore, for any arbitrary \(Q \in \setQ\), we have
+    \begin{align*}
+        \toInf \sum Q(S_n) \ln \frac{\cDist_n(S_n)}{\cDist(S_n)} &=
+        \toInf (\kl[][\cDist][S_n] - \kl[][\cDist_n][S_n]) \\
+        &= \toInf (\kl[][\cDist][S_n] - \lambda_n -\mu_n + \lambda_n) \\
+        &= \toInf(\kl[][\cDist][S_n] - \lambda_n) - \toInf(\mu_n - \lambda_n) \\
+        &= 0 \cdot
+    \end{align*}
+    Since $\kl[\cDist_n][\cDist][S_n]$ is a weighted average of
+    $\sum Q(S_n) \ln \frac{\cDist_n(S_n)}{\cDist(S_n)}$, we can conclude that
+    \[
+        \toInf \kl[\cDist_n][\cDist][S_n] = 0,
+    \]
+    which implies the limiting distribution \cDist is a central distribution of \setQ for
+    the sequence \infSeq{S}.
+\end{proof}
+
+
+
 If we have a consistent estimator sequence for the index of a set, the following theorem provides a way to construct a
 central distribution for that sequence.
-
 Here, by a consistent estimator we mean a sequence of estimators such that, for any fixed index value, the
 distribution of $\est_n$ becomes increasingly concentrated around the corresponding value of the
 index as $n$ increases.
+A similar result can also be found in~\cite{BERNARDO200517}.
 
 \begin{theorem}
     \label{th:central-by-estimator}
@@ -79,15 +130,39 @@ index as $n$ increases.
     where each element of \setQ defines a distribution over each $\est_n$.
     Assume that \setQ can be indexed by a finite-dimensional vector \param.
     If \infSeq{\est} is a consistent sequence of estimators for \param, and there exists a sequence of
-    constants \infSeq{\lambda} such that the sequence
-    $\infSeq[]{\lambda_n -\entropy{Q}{\est_n \mid \paramVal}}$ converges
+    constants \infSeq{\mu} such that the sequence
+    $\infSeq[]{\frac{P(\paramVal \mid\est_n = \paramVal)}{\mu_n}}$ converges
     for every value of \paramVal, then
-    \begin{equation*}
-        \cPrior(\paramVal) \propto \lim_{n \to \infty} \exp
-        \left\{ \lambda_n -\entropy{Q}{\est_n \mid \paramVal} \right\},
-    \end{equation*}
+    \begin{equation}
+        \label{eq:central-limit}
+        \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = \paramVal)}{\mu_n},
+    \end{equation}
     is a central prior of \setQ for \infSeq{\est}.
 \end{theorem}
+
+\begin{proof}
+    \newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
+    Since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$
+    concentrates around $\est_n = \paramVal$.
+    Moreover, since $\ln$ is a continuous function, it follows from Equation~\ref{eq:central-limit} that
+    \begin{equation*}
+        \toInf \left( \sum_{t_n} \estLike \ln P(\paramVal \mid \est_n) - \ln \mu_n \right) + \ln k
+        = \ln \cPrior(\paramVal),
+    \end{equation*}
+    where $k$ is a normalizing constant converting proportionality into equality.
+    As the posterior distribution of a consistent estimator is asymptotically independent of the prior, we may
+    replace the prior with $c(\paramVal)$:
+    \begin{equation*}
+        \toInf \left( \sum_{t_n} \estLike \ln \frac{c(\paramVal \mid \est_n)}{c(\paramVal)}
+                   - \ln \mu_n + \ln k \right) = 0 \cdot
+    \end{equation*}
+    Applying Bayes’ rule and letting $\lambda_n = \ln \mu_n - \ln k$, for every value of \paramVal we obtain:
+    \begin{equation*}
+        \toInf \left( \Dkl{\estLike}{C(\est_n)} - \lambda_n \right) = 0 \cdot
+    \end{equation*}
+    Therefore, by Theorem~\ref{th:limiting-centrality}, we conclude that \cPrior is a central
+    prior of \setQ for \infSeq{\est}.
+\end{proof}
 
 When dealing with layered ignorance and attempting to determine the central distribution of a set of sets of
 distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of

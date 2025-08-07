@@ -1,6 +1,6 @@
 The central distribution is essentially the solution to a convex-concave game.
 Since the solution to a convex-concave game corresponds to a saddle point,
-by defining the appropriate function, we can characterize the central
+by defining the appropriate objective function, we can characterize the central
 distribution using standard convex optimization techniques.
 
 \begin{definition} [Saddle Point]
@@ -17,11 +17,13 @@ One significant insight provided by the next theorem is that it suggests inferen
 distribution can be combined and performed simultaneously when finding a saddle point.
 
 \begin{theorem}
+    % I've been unable to prove that the central distribution is a saddle point for f, or characterize conditions
+    % that imply that.
     \label{th:saddle_is_central}
     Let $X$ be a discrete random variable, and \setQ be a finite set of distributions over $X$.
     Consider the following function:
     \begin{equation*}
-        f(P, R)= \fExp,
+        f(P, R)= \sum_i \kl[Q_i] R(i),
     \end{equation*}
     where $Q_i \in \setQ$, and $P$, $R$ are probability distributions.
 
@@ -57,7 +59,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \label{lm:saddle_conditions}
     Let $f$ be the function defined in theorem~\ref{th:saddle_is_central}.
     The point \saddle is a saddle point for $f$, if and only if there are constants $\lambda$, $\eta$ and a
-    function $\mu$, such that for every $i$, the following conditions hold:
+    function $\mu$, such that for every $i$, $x$ the following conditions hold:
     \begin{gather}
         \label{eq:kkt_lambda}
         \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
@@ -72,6 +74,13 @@ distribution can be combined and performed simultaneously when finding a saddle 
         \label{eq:saddle_lm_rmu_is_zero}
         \mu(i) \saddR(i) = 0 \cdot
     \end{gather}
+
+    Furthermore, for a fixed probability distribution $R$, a distribution $\hat{P}$ minimizes $f(\none,R)$, if and
+    only if for all $x$ it satisfies
+    \begin{equation}
+        \label{eq:saddle_lm_minimizer_dist}
+        \hat{P}(x) = \sum_i Q_i(x)R(i) \cdot
+    \end{equation}
 \end{lemma}
 
 \begin{proof}
@@ -101,7 +110,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     differentiable.
 
     Additionally, $\hat{f}$ is differentiable function with respect to both $R$ and $P$.
-    For any fixed $P$, $\hat{f}(P,\, \cdot \,)$ is an affine function and is concave.
+    For any fixed $P$, $\hat{f}(P,\none)$ is an affine function and is concave.
 
     On the other hand, for a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
     \begin{equation}
@@ -111,7 +120,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     where $c$ is not a function of $P$.
     Since $\hat{R}$ is a solution to the second optimization problem, it satisfies the corresponding constraints and
     is therefore a valid probability distribution.
-    Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(P,\, \cdot \,)$  is
+    Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(P,\none)$  is
     the negative of a linear combination of concave $\ln P(x)$ functions with nonnegative coefficients.
     This function is convex.
 
@@ -147,16 +156,57 @@ distribution can be combined and performed simultaneously when finding a saddle 
         \eta = 1 \cdot
     \]
     Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
+
+    To prove the second part of the theorem,
+    we observe that Equations~\ref{eq:kkt_proof_R_is_pxIe} and~\ref{eq:kkt_proof_p_sums_one} are the KKT conditions
+    for the minimization problem in~\ref{eq:twin_optimization}, when $R$ is a probability distribution.
+    Therefore, these conditions provide necessary and sufficient conditions for a point
+    to be a minimizer of $f(\none,R)$, where $R$ is a fixed distribution.
 \end{proof}
 
-With the next theorem, we finally see why we refer to these distributions as ``central.''
+\begin{lemma}
+    \label{lm:c-is-maximizer}
+    Let \setQ be a finite set of probability distributions over a discrete random variable $X$.
+    Define the function $g$ as:
+    \[
+        g(R) = \sum_i \kl[Q_i][R] R(i),
+    \]
+    where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I) \cdot\]
+    Let $f$ be the function defined in theorem~\ref{th:saddle_is_central}.
+    If \saddle is a saddle point for $f$, then the joint distribution $Q_i(X)\saddR(I)$ is a maximizer of $g$.
+\end{lemma}
+
+\begin{proof}
+    Let \saddle be a saddle point of $f$.
+    By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg}, and thus:
+    \[
+        g(\saddR) = f\saddle \cdot
+    \]
+    Now, let $R$ be an arbitrary probability distribution.
+    From Lemma~\ref{lm:saddle_conditions}, it follows that $g(R)$ indeed corresponds to the minimum of $f(\none, R)$,
+    which implies
+    \[
+        g(R) \leq f(\saddP,R) \cdot
+    \]
+    On the other hand, since \saddle is a saddle point, we also have
+    \[
+        f(\saddP, R) \leq f\saddle \cdot
+    \]
+    Combining the two inequalities, we get:
+    \[
+        g(R) \leq g(\saddR) \cdot
+    \]
+    Since $R$ was an arbitrary distribution, this shows that $g(\saddR)$ is the maximum of $g$, as desired.
+\end{proof}
+
+The following theorem provides the rationale behind the term ``central distribution.''
 Exactly like the center of a circle, the central distribution is equidistant from the boundary.
 
 \begin{theorem} [Centrality]
     \label{th:lambda-centrality}
     Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
     Suppose \cDist is a convex combination of elements of \setQ, with all weights strictly positive.
-    If for every \inSet{Q} and some constant $\lambda$ we have:
+    If for some constant $\lambda$ and every \inSet{Q} we have:
     \begin{equation*}
         \kl[][\cDist] = \lambda,
     \end{equation*}
@@ -178,6 +228,27 @@ Exactly like the center of a circle, the central distribution is equidistant fro
 
     Since \cDist satisfies these condition, Lemma~\ref{lm:saddle_conditions} and
     Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
+\end{proof}
+
+\begin{theorem}
+    \label{th:lambda-crossing}
+    Assuming the conditions of Theorem~\ref{th:lambda-centrality} and using the same $\lambda$,
+    if $P$ is a convex combination of elements in \setQ, then there exists some $Q_0 \in \setQ$ such that
+    \begin{equation*}
+        \kl[Q_0][] \leq \lambda \cdot
+    \end{equation*}
+\end{theorem}
+
+\begin{proof}
+    We proceed by contradiction.
+    Suppose that for every \inSet{Q}, we have $\kl > \lambda$.
+    This implies that $g(P) > \lambda = g(C)$,
+    where $C$ is the distribution specified in Theorem~\ref{th:lambda-centrality}.
+
+    However, by the conditions of Theorem~\ref{th:lambda-centrality}, the distribution $C$ is a saddle point of $f$.
+    This leads to a contradiction, since Lemma~\ref{lm:c-is-maximizer} asserts that $C$ must be a
+    maximizer of $g$.
+    Therefore, our assumption must be false.
 \end{proof}
 
 These theorems were proved under the assumption that \setQ is finite; however, they can be extended to cases where

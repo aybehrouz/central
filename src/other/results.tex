@@ -116,18 +116,13 @@ The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, rev
 performance depending on the underlying class assignment function.
 For function $f_1$, both deterministic and probabilistic methods achieve high accuracy, with the deterministic
 version of the central distribution slightly outperforming the other.
-In contrast, function $f_2$ introduces more ambiguity in the label assignment, leading to a clearer separation
-in performance between these two methods.
+In contrast, function $f_2$ is more difficult to predict, leading to a clearer separation in performance between the
+two methods.
+This difficulty primarily arises from strong non-deterministic dependencies between subsets of input bits and the
+assigned label.
+For instance, when the first input bit of the function is 1, the label is often D, creating a misleading association.
 In this case, the deterministic central distribution remains the most accurate overall, while the probabilistic
-version shows reduced performance due to label overlap.
-
-While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not
-substantial in our primary experiments with 20 training samples.
-However, we observed that the benefit of attribute removal becomes more noticeable when the training set is
-smaller.
-In particular, additional experiments with 10 training samples showed a clearer performance gain as
-irrelevant features were removed, indicating that the impact of irrelevant attributes is more pronounced in
-low-data regimes (see Figure~\ref{fig:f2-10samples-results})
+version shows reduced performance due to misleading patterns.
 
 \begin{figure}[htbp]
     \centering
@@ -160,4 +155,12 @@ low-data regimes (see Figure~\ref{fig:f2-10samples-results})
         \end{axis}
     \end{tikzpicture}\label{fig:f2-10samples-results}
 \end{figure}
+
+While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not
+substantial in our primary experiments with 20 training samples.
+However, we observed that the benefit of attribute removal becomes more noticeable when the training set is
+smaller.
+In particular, additional experiments with 10 training samples showed a clearer performance gain as
+irrelevant features were removed, indicating that the impact of irrelevant attributes is more pronounced in
+low-data regimes (see Figure~\ref{fig:f2-10samples-results})
 

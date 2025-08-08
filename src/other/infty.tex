@@ -1,7 +1,7 @@
 Intuitively, a central distribution acts as a representative or summary of a set of distributions.
 While it may not belong to the set itself, it reflects the overall behavior of the set in a way that is meaningful
-for inference and for evaluating other distributions.
-It provides a meaningful way to compare distributions based on our partial knowledge.
+for inference and also for evaluating other distributions.
+In other words, it provides a meaningful way for comparing distributions based on our partial knowledge.
 
 \begin{definition}[Central Divergence]
     \label{def:central-divergence}
@@ -28,7 +28,7 @@ The following definition extends the concept to handle such situations.
     \begin{equation*}
         \sup_{\setQ \in \setQQ} \myDiv[\ccDist(X)]  \leq \sup_{\setQ \in \setQQ} \myDiv,
     \end{equation*}
-    where $\myDiv[\, \cdot \,]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
+    where $\myDiv[\none]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
 \end{definition}
 
 This definition establishes the connection between the central distribution and feature selection, as will become
@@ -66,7 +66,8 @@ Intuitively, this definition states that as $n \to \infty$ the distribution that
 increasingly similar to a central distribution for $S_n$.
 In other words, \cDist is a central distribution for $S_{\infty}$.
 
-We now present a limiting version of Theorem~\ref{th:lambda-centrality}.
+We now present an asymptotic version of Theorem~\ref{th:lambda-centrality}, applicable to infinite sequences of
+random variables.
 
 \begin{theorem}
     \label{th:limiting-centrality}
@@ -92,7 +93,7 @@ We now present a limiting version of Theorem~\ref{th:lambda-centrality}.
         \sup_{\inSet{Q}} \kl[][\cDist][S_n] \geq \mu_n \cdot
     \]
 
-    Moreover, by Theorem~\ref{th:lambda-crossing}, it follows that
+    Moreover, by Theorem~\ref{th:imperfection}, it follows that
     \[
         \inf_{\inSet{Q}} \kl[][\cDist][S_n] \leq \mu_n \cdot
     \]
@@ -109,9 +110,9 @@ We now present a limiting version of Theorem~\ref{th:lambda-centrality}.
     Since $\kl[\cDist_n][\cDist][S_n]$ is a weighted average of
     $\sum Q(S_n) \ln \frac{\cDist_n(S_n)}{\cDist(S_n)}$, we can conclude that
     \[
-        \toInf \kl[\cDist_n][\cDist][S_n] = 0,
+        \toInf \kl[\cDist_n][\cDist][S_n] = 0 \cdot
     \]
-    which implies the limiting distribution \cDist is a central distribution of \setQ for
+    This implies that the limiting distribution \cDist is a central distribution of \setQ for
     the sequence \infSeq{S}.
 \end{proof}
 
@@ -160,7 +161,7 @@ A similar result can also be found in~\cite{BERNARDO200517}.
     \begin{equation*}
         \toInf \left( \Dkl{\estLike}{C(\est_n)} - \lambda_n \right) = 0 \cdot
     \end{equation*}
-    Therefore, by Theorem~\ref{th:limiting-centrality}, we conclude that \cPrior is a central
+    Thus, by Theorem~\ref{th:limiting-centrality}, we can conclude that $\cPrior(\paramVal)$ is a central
     prior of \setQ for \infSeq{\est}.
 \end{proof}
 
@@ -173,7 +174,7 @@ In this setting, and under appropriate conditions, the central distribution redu
 \begin{corollary}
     \label{cor:center-of-countable}
     Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
-    random variable $I$, then $c(i) \propto 1$ is a central prior of \setQ for \infSeq{\est}.
+    random variable $I$, then $C(i) \propto 1$ is a central prior of \setQ for \infSeq{\est}.
 \end{corollary}
 
 A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed

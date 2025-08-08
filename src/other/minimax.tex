@@ -32,9 +32,9 @@ distribution can be combined and performed simultaneously when finding a saddle 
 
 \begin{proof}
     Since $X$ is a discrete random variable, \setQ has a central distribution for $X$.
-    Let \cDist be a central distribution of \setQ, and \saddle be a saddle point for $f$.
-    Clearly, the point $(\cDist, \saddR)$, is in the domain of $f$, and
-    since \saddle is a saddle point for $f$, we have
+    Let \cDist be a central distribution of \setQ for $X$, and \saddle be a saddle point of $f$.
+    As $C$ is a probability distribution, the point $(\cDist, \saddR)$ lies within the domain of $f$.
+    By the definition of a saddle point, this implies that
     \begin{equation}
         \label{eq:th_proof_saddle_lq_dx}
         f\saddle \leq f(\cDist, \saddR) \cdot
@@ -51,8 +51,8 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \[
         \supD[\saddP] \leq \supD[\cDist] \cdot
     \]
-    Since \cDist is a central distribution, we have \[\supD[\saddP] = \supD[\cDist],\] and $\saddP$ is also a central
-    distribution of \setQ for $X$.
+    Since \cDist is a central distribution, we must have \[\supD[\saddP] = \supD[\cDist],\] and $\saddP$ is also a
+    central distribution of \setQ for $X$.
 \end{proof}
 
 \begin{lemma}
@@ -157,7 +157,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \]
     Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
 
-    To prove the second part of the theorem,
+    To prove the second part of the lemma,
     we observe that Equations~\ref{eq:kkt_proof_R_is_pxIe} and~\ref{eq:kkt_proof_p_sums_one} are the KKT conditions
     for the minimization problem in~\ref{eq:twin_optimization}, when $R$ is a probability distribution.
     Therefore, these conditions provide necessary and sufficient conditions for a point
@@ -230,10 +230,10 @@ Exactly like the center of a circle, the central distribution is equidistant fro
     Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
 \end{proof}
 
-\begin{theorem}
-    \label{th:lambda-crossing}
+\begin{theorem}[Imperfection]
+    \label{th:imperfection}
     Assuming the conditions of Theorem~\ref{th:lambda-centrality} and using the same $\lambda$,
-    if $P$ is a convex combination of elements in \setQ, then there exists some $Q_0 \in \setQ$ such that
+    if $P$ is a convex combination of elements of \setQ, then there exists some $Q_0 \in \setQ$ such that
     \begin{equation*}
         \kl[Q_0][] \leq \lambda \cdot
     \end{equation*}
@@ -242,11 +242,16 @@ Exactly like the center of a circle, the central distribution is equidistant fro
 \begin{proof}
     We proceed by contradiction.
     Suppose that for every \inSet{Q}, we have $\kl > \lambda$.
-    This implies that $g(P) > \lambda = g(C)$,
-    where $C$ is the distribution specified in Theorem~\ref{th:lambda-centrality}.
+    This implies that
+    \[
+        g(P) > \lambda = g(C),
+    \]
+    where $C$ is the distribution specified in Theorem~\ref{th:lambda-centrality}, and $g$ is the function defined in
+    Lemma~\ref{lm:c-is-maximizer}.
 
-    However, by the conditions of Theorem~\ref{th:lambda-centrality}, the distribution $C$ is a saddle point of $f$.
-    This leads to a contradiction, since Lemma~\ref{lm:c-is-maximizer} asserts that $C$ must be a
+    However, by the conditions of Theorem~\ref{th:lambda-centrality}, the distribution $C$ corresponds to a saddle
+    point of $f$.
+    This leads to a contradiction, since Lemma~\ref{lm:c-is-maximizer} asserts that a saddle point of $f$ must be a
     maximizer of $g$.
     Therefore, our assumption must be false.
 \end{proof}
@@ -255,13 +260,13 @@ These theorems were proved under the assumption that \setQ is finite; however, t
 \setQ can be indexed by a finite-dimensional real vector \param.
 We can treat this vector as a random variable and interpret $Q_{\paramVal}$ as a conditional
 distribution $Q(\xIt)$.
-Then, the weight function, $\saddR(i)$, will essentially become a prior distribution over \paramVal.
+Then, the weight function, $R(i)$, will essentially become a prior distribution over \paramVal.
 
 The next theorem shows that there is a strong relationship between central distributions and
 Bernardo's reference priors~\cite{BERNARDO200517}.
 
 \begin{theorem}
-    Let $X$ be a discrete random variable and \setQ be a set of distributions over $X$, indexed by a
+    Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$, indexed by a
     finite-dimensional random vector \param.
     Let \cPrior be a strictly positive prior distribution for \param such that for $\like(\xIt) \in \setQ$ we have
     \begin{equation}

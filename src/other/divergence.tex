@@ -36,7 +36,7 @@ measuring divergence between distributions.
             \kl[][][X, Y][ ] = \kl[][][][ ] + \sum_x \kl[][][Y|x][ ]Q(x)\cdot
         \]
     \end{description}
-    If $\measure{D}{}{\,\cdot\,}$ satisfies these properties, then it is the Kullback-Leibler divergence.
+    If $\measure{D}{}{\none}$ satisfies these properties, then it is the Kullback-Leibler divergence.
 \end{theorem}
 
 \begin{proof}
@@ -64,7 +64,7 @@ measuring divergence between distributions.
         \end{cases}
     \end{equation*}
     Notice that both $P(\T|X)$ and $P(\TX)$ are uniform distributions, and
-    $\entropy{P}{\TIx} = \ln P(x)$, $\entropy{P}{\TX} = 0$.
+    \[\entropy{P}{\TIx} = \ln P(x),\ \entropy{P}{\TX} = 0 \cdot\]
 
     We define $Q(\TIx)$ to be an arbitrary distribution that has the same support as $P(\TIx)$.
     This ensures that $Q(\TX)$ and $P(\TX)$ have the same support as well.
@@ -115,7 +115,7 @@ We now briefly review some KL divergence properties needed in subsequent section
 \end{lemma}
 
 \begin{proof}
-    $R$ is a probability distribution, and the Kullback-Leibler divergence is non-negative:
+    The Kullback–Leibler divergence is nonnegative and is defined when $R$ is a probability distribution:
     \begin{equation*}
         \kl[][R] \geq 0 \cdot
     \end{equation*}

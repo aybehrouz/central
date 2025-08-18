@@ -19,6 +19,8 @@ from that unique central distribution.
 Sometimes, partial knowledge is represented by multiple sets of distributions.
 Our current definition of the central distribution does not account for this case.
 The following definition extends the concept to handle such situations.
+While not directly about feature selection, this extension plays a key role in enabling the connection between
+central distributions and feature selection, a connection that will become clearer later.
 
 \begin{definition}
     \label{def:set-of-sets}
@@ -30,9 +32,6 @@ The following definition extends the concept to handle such situations.
     \end{equation*}
     where $\myDiv[\none]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
 \end{definition}
-
-This definition establishes the connection between the central distribution and feature selection, as will become
-clearer later.
 
 Suppose we want to model an exchangeable sequence of random variables.
 Let $S_n$ denote the sequence of the first $n$ variables: $S_n = (\seqExp{X})$.
@@ -148,24 +147,22 @@ random variables.
     Now, by the squeeze theorem, the sequence \infSeq[]{\mu_n - \lambda_n} must converge to $0$.
     Therefore, for any arbitrary \(Q \in \setQ\), we have
     \begin{align*}
-        \toInf \sum Q(S_n) \ln \frac{\cDist_n(S_n)}{\cDist(S_n)} &=
+        \toInf \sum_{s_n} Q(s_n) \ln \frac{\cDist_n(s_n)}{\cDist(s_n)} &=
         \toInf (\kl[][\cDist][S_n] - \kl[][\cDist_n][S_n]) \\
         &= \toInf (\kl[][\cDist][S_n] - \lambda_n -\mu_n + \lambda_n) \\
         &= \toInf(\kl[][\cDist][S_n] - \lambda_n) - \toInf(\mu_n - \lambda_n) \\
         &= 0 \cdot
     \end{align*}
     Since $\kl[\cDist_n][\cDist][S_n]$ is a weighted average of
-    $\sum Q(S_n) \ln \frac{\cDist_n(S_n)}{\cDist(S_n)}$, we can conclude that
+    $\sum_{s_n} Q(s_n) \ln \frac{\cDist_n(s_n)}{\cDist(s_n)} $, we can conclude that
     \[
         \toInf \kl[\cDist_n][\cDist][S_n] = 0 \cdot
     \]
-    This implies that the limiting distribution \cDist is a central distribution of \setQ for
-    the sequence \infSeq{S}.
+    Therefore, \cDist is a central distribution of \setQ for the sequence \infSeq{S}.
 \end{proof}
 
-
-
-If we have a consistent estimator sequence for the index of a set, the following theorem provides a way to construct a
+If we have a consistent estimator sequence \infSeq{T} for the index of a set,
+the following theorem provides a way to construct a
 central distribution for that sequence.
 Here, by a consistent estimator we mean a sequence of estimators such that, for any fixed index value, the
 distribution of $\est_n$ becomes increasingly concentrated around the corresponding value of the
@@ -194,14 +191,14 @@ A similar result can also be found in~\cite{BERNARDO200517}.
     concentrates around $\est_n = \paramVal$.
     Moreover, since $\ln$ is a continuous function, it follows from Equation~\ref{eq:central-limit} that
     \begin{equation*}
-        \toInf \left( \sum_{t_n} \estLike \ln P(\paramVal \mid \est_n) - \ln \mu_n \right) + \ln k
+        \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln P(\paramVal \mid t_n) - \ln \mu_n \right) + \ln k
         = \ln \cPrior(\paramVal),
     \end{equation*}
     where $k$ is a normalizing constant converting proportionality into equality.
     As the posterior distribution of a consistent estimator is asymptotically independent of the prior, we may
     replace the prior with $c(\paramVal)$:
     \begin{equation*}
-        \toInf \left( \sum_{t_n} \estLike \ln \frac{c(\paramVal \mid \est_n)}{c(\paramVal)}
+        \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{c(\paramVal \mid t_n)}{c(\paramVal)}
                    - \ln \mu_n + \ln k \right) = 0 \cdot
     \end{equation*}
     Applying Bayes’ rule and letting $\lambda_n = \ln \mu_n - \ln k$, for every value of \paramVal we obtain:
@@ -229,7 +226,7 @@ method for this conversion.
     we write $Q(S_n \mid \pv)$ to denote the distribution $Q_{\pv}$ applied to $S_n$.
     Explicitly,
     \[
-        Q(S_n \mid \pv) = \pv^k (1-\pv)^{n-k}.
+        Q(S_n \mid \pv) = \pv^k (1-\pv)^{n-k} \cdot
     \]
 
     Define $T_n$ to be the proportion of successes in $n$ trials.
@@ -245,11 +242,11 @@ method for this conversion.
     Using Stirling’s formula, we derive its asymptotic form:
     \begin{equation*}
         P\left( \pv \, \middle| \, T_n = \tfrac{k}{n} \right) \sim
-        \frac{(n+1)n^{(n+\hf)}}{\sqrt{2 \pi} (n-k)^{(n-k+\hf)} k^{(k+\hf)}} \, \pv^k (1 - \pv)^{n - k}.
+        \frac{(n+1)n^{(n+\hf)}}{\sqrt{2 \pi} (n-k)^{(n-k+\hf)} k^{(k+\hf)}} \, \pv^k (1 - \pv)^{n - k} \cdot
     \end{equation*}
     We now let $T_n \to \pv$:
     \begin{equation*}
-        P\left(\pv \mid T_n = \pv \right) \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf}.
+        P\left(\pv \mid T_n = \pv \right) \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
     \end{equation*}
     Therefore, if we define
     \[
@@ -257,9 +254,9 @@ method for this conversion.
     \]
     the following limit exists:
     \[
-        \toInf \frac{P\left(\pv \mid T_n = \pv \right)}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf}.
+        \toInf \frac{P\left(\pv \mid T_n = \pv \right)}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
     \]
-    By Theorem~\ref{th:central-by-estimator} this implies that $c(\pv) \propto \pv^{-\hf}(1 - \pv)^{-\hf}$ is a
+    By Theorem~\ref{th:central-by-estimator}, this implies that $c(\pv) \propto \pv^{-\hf}(1 - \pv)^{-\hf}$ is a
     central prior for \infSeq{T}.
 
     Now we apply Theorem~\ref{th:estimator-to-infseq} to obtain a central distribution for $\infSeq{S}$.
@@ -272,7 +269,7 @@ method for this conversion.
     \[
         Q(S_n \mid \pv)
         = Q\!\left(S_n,\, T_n = \tfrac{k}{n} \mid \pv\right)
-        = \frac{1}{\binom{n}{k}} Q(T_n \mid \pv).
+        = \frac{1}{\binom{n}{k}} Q(T_n \mid \pv) \cdot
     \]
     Let $C^*$ denote the central distribution of $\infSeq{S}$.
     By Theorem~\ref{th:estimator-to-infseq}, the distribution induced by $C^*$ on each $S_n$ is given by:

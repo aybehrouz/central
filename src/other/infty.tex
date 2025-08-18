@@ -52,6 +52,7 @@ be derived.
 This requires constructing a central distribution that is well-defined over $S_{\infty}$.
 
 \begin{definition}
+    \label{def:infseq-central}
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $S_n$.
     Assume \cDist[n] is a central distribution for $S_n$.
@@ -65,6 +66,52 @@ This requires constructing a central distribution that is well-defined over $S_{
 Intuitively, this definition states that as $n \to \infty$ the distribution that $C$ induces over $S_n$ becomes
 increasingly similar to a central distribution for $S_n$.
 In other words, \cDist is a central distribution for $S_{\infty}$.
+
+Our next goal is to extend Theorem~\ref{th:estimator-to-var} so that it also applies in this asymptotic setting,
+thereby providing a characterization of central distributions for infinite sequences.
+
+\begin{theorem}
+    \label{th:estimator-to-infseq}
+    Let \infSeq{S} and \infSeq{T} be two sequences of random variables.
+    Let \setQ be a set of probability measures, where each \inSet{Q} defines a joint distribution
+    over $(S_n, T_n)$.
+    Assume there exists a natural number $M$ and a fixed conditional distribution $R$
+    such that, for all \inSet{Q} and $n \geq M$,
+    \[
+        Q(S_n, T_n) = R(S_n \mid T_n)Q(T_n).
+    \]
+
+
+    Let $C$ be a central distribution of \setQ for \infSeq{T} (Definition~\ref{def:infseq-central}).
+    Define a probability measure $C^*$ by
+    \[
+        C^*(S_n, T_n) = R(S_n \mid T_n)C(T_n), \quad n \geq M.
+    \]
+    Then $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
+\end{theorem}
+
+\begin{proof}
+    By Theorem~\ref{th:estimator-to-var}, for each $n \geq M$ we have
+    \[
+        C_n(S_n, T_n) = R(S_n \mid T_n) C_n(T_n),
+    \]
+    where $C_n(T_n)$ is a central distribution for $T_n$, and $C_n(S_n,  T_n)$ is a central distribution for
+    $(S_n, T_n)$.
+    Therefore,
+    \begin{align*}
+        \kl[{C_n}][C^*][S_n, T_n] &= \kl[{R(S_n \mid T_n)C_n}][R(S_n \mid T_n)C][T_n] \\
+        &= \kl[{C_n}][C][T_n].
+    \end{align*}
+    Since $C$ is a central distribution for \infSeq{T} we have
+    \[
+        \toInf \kl[{C_n}][C][T_n] = 0.
+    \]
+    It follows that
+    \[
+        \toInf \kl[{C_n}][C^*][S_n, T_n] = 0,
+    \]
+    so $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
+\end{proof}
 
 We now present an asymptotic version of Theorem~\ref{th:lambda-centrality}, applicable to infinite sequences of
 random variables.
@@ -165,6 +212,77 @@ A similar result can also be found in~\cite{BERNARDO200517}.
     prior of \setQ for \infSeq{\est}.
 \end{proof}
 
+A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed
+outcomes.
+To do so, we must convert it into a distribution over the primary variables of interest.
+Theorems~\ref{th:estimator-to-var} and~\ref{th:estimator-to-infseq} provide a simple
+method for this conversion.
+
+\begin{example}[Binomial Experiment]
+    \newcommand{\pv}{\paramVal}
+    Consider a binomial experiment with $n$ Bernoulli trials.
+    Denote the sequence of outcomes by $S_n$, and let $k$ be the number of successes observed in $S_n$
+
+    Let \setQ be the set of distributions corresponding to different values of the success
+    probability $\pv \in [0,1]$.
+    We can consider $\pv$ as an index parameter for \setQ, and
+    we write $Q(S_n \mid \pv)$ to denote the distribution $Q_{\pv}$ applied to $S_n$.
+    Explicitly,
+    \[
+        Q(S_n \mid \pv) = \pv^k (1-\pv)^{n-k}.
+    \]
+
+    Define $T_n$ to be the proportion of successes in $n$ trials.
+    Note that $T_n$ is a consistent estimator for $\pv$.
+    Therefore, we can use Theorem~\ref{th:central-by-estimator} to find a central distribution for the sequence
+    \infSeq{T}.
+
+    Assuming a uniform prior on $\pv$, Bayes’ rule gives the posterior distribution
+    \[
+        P\left( \pv \, \middle| \, T_n = \tfrac{k}{n} \right) = (n+1)\binom{n}{k} \pv^k (1 - \pv)^{n - k},
+    \]
+    which is a $\mathrm{Beta}(k+1, n-k+1)$ distribution.
+    Using Stirling’s formula, we derive its asymptotic form:
+    \begin{equation*}
+        P\left( \pv \, \middle| \, T_n = \tfrac{k}{n} \right) \sim
+        \frac{(n+1)n^{(n+\hf)}}{\sqrt{2 \pi} (n-k)^{(n-k+\hf)} k^{(k+\hf)}} \, \pv^k (1 - \pv)^{n - k}.
+    \end{equation*}
+    We now let $T_n \to \pv$:
+    \begin{equation*}
+        P\left(\pv \mid T_n = \pv \right) \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf}.
+    \end{equation*}
+    Therefore, if we define
+    \[
+        \mu_n = \frac{n+1}{\sqrt{2 \pi n}},
+    \]
+    the following limit exists:
+    \[
+        \toInf \frac{P\left(\pv \mid T_n = \pv \right)}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf}.
+    \]
+    By Theorem~\ref{th:central-by-estimator} this implies that $c(\pv) \propto \pv^{-\hf}(1 - \pv)^{-\hf}$ is a
+    central prior for \infSeq{T}.
+
+    Now we apply Theorem~\ref{th:estimator-to-infseq} to obtain a central distribution for $\infSeq{S}$.
+    Since $T_n$ is a deterministic function of $S_n$, the joint distribution $Q(S_n, T_n)$ coincides with the
+    distribution of $S_n$: it assigns probability $Q(S_n)$ when $T_n$ is compatible with $S_n$, and zero otherwise.
+    In other words, knowledge of $(S_n, T_n)$ is equivalent to knowledge of $S_n$.
+
+    In the binomial experiment, all sequences with the same number of successes and failures have equal probability.
+    Therefore,
+    \[
+        Q(S_n \mid \pv)
+        = Q\!\left(S_n,\, T_n = \tfrac{k}{n} \mid \pv\right)
+        = \frac{1}{\binom{n}{k}} Q(T_n \mid \pv).
+    \]
+    Let $C^*$ denote the central distribution of $\infSeq{S}$.
+    By Theorem~\ref{th:estimator-to-infseq}, the distribution induced by $C^*$ on each $S_n$ is given by:
+    \begin{equation*}
+        C^*(S_n)
+        %= C^*\!\left(S_n,\, T_n = \tfrac{k}{n}\right)
+        = \frac{\gm{k+\hf} \gm{n-k+\hf}}{\gm{n+1}\gm{\hf}^2} \cdot
+    \end{equation*}
+\end{example}
+
 When dealing with layered ignorance and attempting to determine the central distribution of a set of sets of
 distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of
 such sets is finite.
@@ -176,14 +294,3 @@ In this setting, and under appropriate conditions, the central distribution redu
     Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
     random variable $I$, then $C(i) \propto 1$ is a central prior of \setQ for \infSeq{\est}.
 \end{corollary}
-
-A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed
-outcomes.
-To do so, we must convert it into a distribution over the primary variables of interest.
-Theorem~\ref{th:estimator-to-var} provides a simple way for carrying out this conversion.
-
-As an illustrative example, consider a binomial experiment.
-Theorem~\ref{th:central-by-estimator} allows us to determine a central distribution over the number of successes.
-However, for inference, we typically require a distribution over specific ordered sequences of successes and failures.
-Theorem~\ref{th:estimator-to-var} enables this by offering a natural approach: we assign a uniform
-distribution over all sequences with the same number of successes and failures.

@@ -248,6 +248,7 @@ Exactly like the center of a circle, the central distribution is equidistant fro
     \]
     where $C$ is the distribution specified in Theorem~\ref{th:lambda-centrality}, and $g$ is the function defined in
     Lemma~\ref{lm:c-is-maximizer}.
+    Note that $g(P)$ is defined, because $P$ is a convex combination of elements of \setQ.
 
     However, by the conditions of Theorem~\ref{th:lambda-centrality}, the distribution $C$ corresponds to a saddle
     point of $f$.
@@ -278,16 +279,16 @@ Bernardo's reference priors~\cite{BERNARDO200517}.
 \end{theorem}
 
 \begin{proof}
-    \renewcommand{\c}{\cPrior(\paramVal{})}
+    \newcommand{\cp}{\cPrior(\paramVal{})}
     From Equation~\ref{eq:central-prior}, it follows that there exists a constant $\lambda$ such that
     \begin{equation*}
-        \c = \exp \left\{-\lambda +  \sum_{x} \like(\xIt) \ln
-                      \frac{\like(\xIt) \c}{\cDist(x)} \right\} \cdot
+        \cp = \exp \left\{-\lambda +  \sum_{x} \like(\xIt) \ln
+                       \frac{\like(\xIt) \cp}{\cDist(x)} \right\} \cdot
     \end{equation*}
-    Since $\c$ is strictly positive, we have
+    Since $\cp$ is strictly positive, we have
     \begin{align*}
-        \c &= \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] + \ln \c \right\} \\
-        &= \c \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\},
+        \cp &= \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
+        &= \cp \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\},
     \end{align*}
     which implies
     \[

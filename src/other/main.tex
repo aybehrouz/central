@@ -18,6 +18,8 @@
 \usepackage{pgfplots}
 \usepackage{booktabs}
 \usepackage{caption}
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}
 \usepackage{mathtools} % should be the last import
 
 \newtheorem{theorem}{Theorem}
@@ -76,6 +78,10 @@
 
 % Document
 \begin{document}
+    \input{regression}
+\end{document}
+
+\begin{document}
     \maketitle
 
     \section{Introduction}\label{sec:intro}
@@ -89,6 +95,10 @@
     \newpage
     \section{Central Distribution}\label{sec:central}
     \input{central}
+
+    \newpage
+    \input{regression}
+    \newpage
 
     \bibliography{main}
     \bibliographystyle{plain}

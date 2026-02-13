@@ -1,0 +1,176 @@
+\section{Model}
+
+\newcommand{\vect}[2]{\mathbf{#1}_{#2}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert^2}
+\newcommand{\trans}[1]{#1^\top}
+\newcommand{\Gam}[3]{\mathrm{Gamma} \left( #1 \;\middle|\; #2, #3\right)}
+\newcommand{\Nor}[3]{\mathcal{N} \left( #1 \;\middle|\; #2, #3 \right)}
+\newcommand{\avgz}{\overline{z}}
+\newcommand{\avgzz}{\overline{zz}}
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+
+% Nodes
+        \node[latent] (mu) {$\mu$};
+        \node[latent, right=of mu] (tau) {$\tau$};
+        \node[latent, below=of mu] (z) {$z_i$};
+        \node[obs, below=of z] (X) {$X_{ij}$};
+        \node[latent, right=of X] (W) {$\vect{w}{j}$};
+
+% Edges
+        \edge {mu,tau} {z};
+        \edge {z,W} {X};
+
+% Plates
+        \plate {plate1} {(z)(X)} {$n$};
+        \plate {plate2} {(X)(W)} {$m$};
+
+    \end{tikzpicture}
+    \caption{Graphical model without explicit deterministic feature mapping.}
+\end{figure}
+
+
+Let $\vect{z}{} = \{z_1, \dots, z_n\}$ be a vector of independent and identically distributed latent variables,
+\begin{equation}
+    p(\vect{z}{}) = \prod_{i=1}^n \Nor{z_i}{\mu}{\tau^{-1}}.
+\end{equation}
+
+Let $\{\phi_1(\cdot), \dots, \phi_k(\cdot)\}$ denote a collection of basis functions.
+Define the design matrix $Z \in \mathbb{R}^{n \times k}$ implicitly by
+\begin{equation}
+    Z_{i\ell} = \phi_\ell(z_i).
+\end{equation}
+
+Let $W \in \mathbb{R}^{k \times m}$ be a weight matrix,
+and $X \in \mathbb{R}^{n \times m}$ denote the observed data matrix.
+Conditioned on $\vect{z}{}$ and $W$, the entries of $X$ are independent Gaussian random variables:
+\begin{equation}
+    p(X \mid \vect{z}{}, W)
+    =
+    \prod_{i=1}^n \prod_{j=1}^m \Nor{X_{ij}}{(ZW)_{ij}}{\beta^{-1}},
+\end{equation}
+where $\beta$ is a known precision parameter.
+
+Thus, conditioned on $\vect{z}{}$, the columns of $X$ are independent and each column
+$\vect{x}{j}$ corresponds to a separate linear regression model with its own weight vector $\vect{w}{j}$.
+
+In order to formulate a variational treatment of this model,
+we assume central prior for latent variable parameters:
+\[
+    p(\mu,\tau) \propto \tau^{-1},
+\]
+and place independent Gaussian priors on the columns of $W$:
+\begin{equation}
+    w_j \sim \mathcal{N}\big(0, \alpha_j^{-1} I \big),
+    \qquad j = 1, \dots, m,
+\end{equation}
+where $\alpha_j > 0$ is the known precision hyperparameter associated with column $j$.
+
+We consider a variational distribution which factorizes between the latent
+variables and the parameters so that
+\[
+    q(\vect{z}{}, W, \mu, \tau) = q(\vect{z}{})q(W)q(\mu)q(\tau).
+\]
+
+Let us consider the derivation of the update equation for the factor $q(W)$.
+Using conditional independence the log of the optimized factor is given by
+\begin{align*}
+    \ln q^*(W)
+    &= \Ex{q(\vect{z}{}, \mu, \tau)}{\ln p(W \mid \vect{z}{}, X, \mu, \tau)} + \text{const} \\
+    &= \Ex{q(\vect{z}{})}{\sum_j \ln p(\vect{w}{j} \mid \vect{z}{}, X)} + \text{const}.
+\end{align*}
+Therefore, we have
+\begin{equation*}
+    \ln q^*(W) = \sum_j \ln q^*(\vect{w}{j}),
+\end{equation*}
+where
+\begin{equation*}
+    \ln q^*(\vect{w}{j}) = \Ex{q(\vect{z}{})}{\ln p(\vect{w}{j} \mid \vect{z}{}, X)} + \text{const}.
+\end{equation*}
+We obtain $q(\vect{w}{j})$ using the fact that each $\vect{w}{j}$ is a weight vector of a bayesian linear regression
+model:
+\begin{align*}
+    \ln p(\vect{w}{j} \mid \vect{z}{}, X) &= -\hf[\beta] \norm{Z\vect{w}{j} - \vect{x}{j}} -
+    \hf[\alpha_j] \trans{\vect{w}{j}} \vect{w}{j} + \text{const} \\
+    &= -\trans{\vect{w}{j}} (\hf[\beta] \trans{Z}Z + \hf[\alpha_j] I) \vect{w}{j} +
+    \beta \trans{\vect{x}{j}} Z \vect{w}{j} + \text{const}.
+\end{align*}
+Taking the expectation with respect to $q(\vect{z}{})$, we obtain
+\begin{equation*}
+    \ln q^*(\vect{w}{j}) = -\trans{\vect{w}{j}} (\hf[\beta] \Ex{q(\vect{z}{})}{\trans{Z}Z} + \hf[\alpha_j] I) \vect{w}{j} +
+    \beta \trans{\vect{x}{j}} \Ex{q(\vect{z}{})}{Z} \vect{w}{j} + \text{const}.
+\end{equation*}
+
+The expression above is quadratic in $\vect{w}{j}$.
+Since the logarithm of a multivariate Gaussian distribution is a quadratic
+function of its argument, it follows that
+\begin{equation*}
+    q^*(\vect{w}{j}) = \mathcal{N}(\vect{w}{j} \mid \mu_j, \Sigma_j),
+\end{equation*}
+where
+\begin{align*}
+    \Sigma_j^{-1} &= \beta \Ex{q(\vect{z}{})}{\trans{Z}Z} + \alpha_j I, \\
+    \mu_j &= \beta \Sigma_j \trans{\Ex{q(\vect{z}{})}{Z}} \vect{x}{j}.
+\end{align*}
+
+\begin{align*}
+    \ln q^*(\vect{z}{}) &= \Ex{q(W,\mu,\tau)}{\ln p(X \mid \vect{z}{}, W) +
+    \ln p(\vect{z}{} \mid \mu, \tau)} + \text{const} \\
+    &= \Ex{q(W)}{\ln p(X \mid \vect{z}{}, W)} +
+    \Ex{q(\mu,\tau)}{\ln p(\vect{z}{} \mid \mu, \tau)} + \text{const}.
+\end{align*}
+
+\begin{align*}
+    \ln p(X \mid \vect{z}{}, W)
+    &= \sum_{j} \ln \mathcal{N} (\vect{x}{j} \mid Z \vect{w}{j},  \beta^{-1}I) \\
+    &= -\hf[\beta] \sum_j \norm{Z\vect{w}{j} - \vect{x}{j}} + \text{const} \\
+    &= \beta \sum_{i} \left(-\hf \trans{\phi (z_i)} \sum_j \vect{w}{j} \trans{\vect{w}{j}} \phi (z_i)  +
+                          \trans{\phi(z_i)} \sum_j X_{ij} \vect{w}{j} \right) + \text{const}.
+\end{align*}
+
+\begin{align*}
+    \ln p(\vect{z}{} \mid \mu, \tau) &= -\hf[\tau] \sum_i (z_i - \mu) ^ 2 + \text{const} \\
+    &= \sum_i \left( -\hf[\tau] z_i^2 + \tau \mu z_i \right) + \text{const}
+\end{align*}
+
+\begin{equation*}
+    \ln q^*(\vect{z}{}) = \sum_i \ln q^*(z_i)
+\end{equation*}
+
+\begin{align*}
+    \ln q^*(z_i) &= \beta \trans{\phi (z_i)}
+    \sum_j \left(-\hf  \Ex{q(\vect{w}{j})}{\vect{w}{j} \trans{\vect{w}{j}}} \phi (z_i) +
+    X_{ij} \Ex{q(\vect{w}{j})}{\vect{w}{j}} \right) \\
+    &\quad + \left( -\hf \Ex{q(\tau)}{\tau} z_i^2 + \Ex{q(\mu, \tau)}{\tau \mu} z_i \right)
+    + \text{const}.
+\end{align*}
+
+\begin{align*}
+    \ln q^*(\mu, \tau) &= \Ex{q(\vect{z}{}, W)}{\ln p(\mu, \tau \mid \vect{z}{}, X, W)} + \text{const} \\
+    &= \Ex{q(\vect{z}{})}{ \ln p(\mu, \tau \mid \vect{z}{}) } + \text{const} \\
+    &= - \frac{\tau}{2} \left(\sum_{i} \Ex{q(z_i)}{z_i^2} - 2\mu \sum_{i} \Ex{q(z_i)}{z_i} + n\mu^2 \right) \\
+    &\quad + \left(\frac{n}{2}-1\right)\ln\tau  + \text{const}.
+\end{align*}
+
+\[
+    \ln p(\mu, \tau \mid \vect{z}{})
+    =
+    \left(\frac{n}{2}-1\right)\ln\tau - \frac{\tau}{2}
+    \left(\sum_{i=1}^n z_i^2 - 2\mu \sum_{i=1}^n z_i + n\mu^2 \right)
+    + \text{const}.
+\]
+
+\begin{align*}
+    \avgz &= \Ex{q(z_i)}{z_i}, \\
+    \avgzz &= \Ex{q(z_i)}{z_i^2}.
+\end{align*}
+
+\begin{equation*}
+    q^*(\mu, \tau) = \Nor{\mu}{\avgz}{\frac{1}{n \tau}} \Gam{\tau}{\hf[n-1]}{\hf[n(\avgzz - \avgz^{2})]}.
+\end{equation*}
+
+\begin{equation*}
+    \Ex{q(\mu, \tau)}{\mu \tau} = \frac{(n - 1) \avgz}{n(\avgzz - \avgz^{2})} \cdot
+\end{equation*}

@@ -1,6 +1,6 @@
 \section{Latent Regression Model}
 
-\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\vect}[1]{\bm{#1}}
 \newcommand{\normsq}[1]{\left\lVert #1 \right\rVert^2}
 \newcommand{\trans}[1]{#1^\top}
 \newcommand{\Gam}[3]{\mathrm{Gamma} \left( #1 \;\middle|\; #2, #3\right)}
@@ -59,7 +59,7 @@ $Z^{(c)} \in \mathbb{R}^{N_c \times K}$ with entries
 
 We collect the decoder weights in a shared matrix
 \[
-    W = [\vect{w}_1, \dots, \vect{w}_M]
+    W = [\vect{w}_1 \ \dots \ \vect{w}_M]
     \in \mathbb{R}^{K \times M},
 \]
 where each column $\vect{w}_j \in \mathbb{R}^K$ corresponds to the weights for the $j$-th observed dimension
@@ -138,7 +138,7 @@ and the design matrix $Z \in \mathbb{R}^{N \times K}$ is defined by
     Z_{ik} = \phi_k(z_i).
 \]
 
-We see the Bayesian network of this model in~\ref{fig:regression_bayes_net}.
+We see the Bayesian network of this model in Figure~\ref{fig:regression_bayes_net}.
 Exact posterior inference in this model is intractable
 due to the nonlinear dependence of the likelihood on $\vect{z}$.
 We therefore proceed by introducing a variational approximation.
@@ -202,23 +202,36 @@ Taking the expectation with respect to $q(\vect{z})$, we obtain
 \begin{equation*}
     \ln q^*(\vect{w}_j) = -\hf \trans{\vect{w}_j} (\beta \Ex{q(\vect{z})}{\trans{Z}Z} + \alpha_j I)
     \vect{w}_j +
-    \beta \trans{\vect{x}_j} \Ex{q(\vect{z})}{Z} \vect{w}_j + \text{const}.
+    \beta \trans{\vect{w}_j} \trans{\Ex{q(\vect{z})}{Z}} \vect{x}_j + \text{const}.
 \end{equation*}
 The expression above is quadratic in $\vect{w}_j$.
-Completing the square yields the Gaussian parameters below.
+Completing the square yields
 \begin{equation*}
-    q^*(\vect{w}_j) = \mathcal{N}(\vect{w}_j \mid \mu_j, \Sigma_j),
+    q^*(\vect{w}_j) = \mathcal{N}(\vect{w}_j \mid \vect{\mu}_j, \Sigma_j).
 \end{equation*}
-We therefore have
+The corresponding moments are
 \begin{align*}
-    \Ex{q(\vect{w}_j)}{\vect{w}_j} &= \mu_j, \\
-    \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} &= \Sigma_j + \mu_j \trans{\mu_j},
+    \Ex{q(\vect{w}_j)}{\vect{w}_j} &= \vect{\mu}_j, \\
+    \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} &= \vect{\mu}_j \trans{\vect{\mu}_j} + \Sigma_j,
 \end{align*}
-where
+with
 \begin{align*}
     \Sigma_j^{-1} &= \beta \Ex{q(\vect{z})}{\trans{Z}Z} + \alpha_j I, \\
-    \mu_j &= \beta \Sigma_j \trans{\Ex{q(\vect{z})}{Z}} \vect{x}_j.
+    \vect{\mu}_j &= \beta \Sigma_j \trans{\Ex{q(\vect{z})}{Z}} \vect{x}_j.
 \end{align*}
+Collecting the columns, we obtain
+\[
+    \Ex{q(W)}{W} = [ \vect{\mu}_1 \ \dots \ \vect{\mu}_M ].
+\]
+Furthermore,
+\begin{align*}
+    \sum_j \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} &=
+    \Ex{q(W)}{W} \trans{\Ex{q(W)}{W}} + \sum_{j=1}^M \Sigma_j.
+\end{align*}
+Note that if $\Sigma_j = \Sigma$ for all $j$, the mean simplifies to
+\[
+    \Ex{q(W)}{W} = \beta \Sigma \trans{\Ex{q(\vect{z})}{Z}} X.
+\]
 
 We now consider the update equation for the factor $q(\mu, \tau)$:
 \begin{align*}
@@ -261,20 +274,22 @@ All expressions that are independent of $\vect{z}$ are treated as constants.
     \ln p(\vect{z} \mid \mu, \tau) &= -\hf[\tau] \sum_i (z_i - \mu) ^ 2 + \text{const} \\
     &= \sum_i \left( -\hf[\tau] z_i^2 + \tau \mu z_i \right) + \text{const}.
 \end{align*}
-Substituting these expansions into the variational update expression yields:
+Substituting these expansions into the variational update expression and taking the expectation yields:
 \begin{equation*}
     \ln q^*(\vect{z}) = \sum_i \ln q^*(z_i),
 \end{equation*}
 where
 \begin{align*}
     \ln q^*(z_i) &=
-    \beta \trans{\phi (z_i)}
-    \left(-\hf \sum_j \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} \phi (z_i) +
-        \sum_j X_{ij} \Ex{q(\vect{w}_j)}{\vect{w}_j} \right) \\
+    \beta
+    \left(-\hf \trans{\phi (z_i)} \sum_j \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} \phi (z_i) +
+        \trans{\phi (z_i)} \Ex{q(W)}{W} \trans{\vect{x}_i} \right) \\
     &\quad + \left( -\hf \Ex{q(\tau)}{\tau} z_i^2 + \Ex{q(\mu, \tau)}{\tau \mu} z_i \right)
     + \text{const}.
 \end{align*}
-Because the expression separates as a sum over
+Recall that $\trans{\vect{x}_i}$ is a column vector representing $i$-th row of the observation matrix $X$.
+
+Because the update expression separates as a sum over
 $i$, the optimal factor $q(\vect{z})$ factorizes as $\prod_i q(z_i)$.
 
 The update equations require expectations of the form
@@ -285,5 +300,5 @@ The update equations require expectations of the form
     \Ex{q(z_k)}{z_k^2},
 \end{equation*}
 for all relevant indices $i,j,k$.
-Since the basis mapping is nonlinear, $q(z_i)$ is not Gaussian and these expectations must be approximated
-numerically.
+Since the basis mapping is nonlinear, the optimal factor $q(z_i)$ is generally non-Gaussian and
+these expectations must be approximated numerically.

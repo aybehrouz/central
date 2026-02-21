@@ -211,8 +211,8 @@ Completing the square yields
 \end{equation*}
 The corresponding moments are
 \begin{align*}
-    \Ex{q(\vect{w}_j)}{\vect{w}_j} &= \vect{\mu}_j, \\
-    \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} &= \vect{\mu}_j \trans{\vect{\mu}_j} + \Sigma_j,
+    \Ex{}{\vect{w}_j} &= \vect{\mu}_j, \\
+    \Ex{}{\vect{w}_j \trans{\vect{w}_j}} &= \vect{\mu}_j \trans{\vect{\mu}_j} + \Sigma_j,
 \end{align*}
 with
 \begin{align*}
@@ -221,16 +221,16 @@ with
 \end{align*}
 Collecting the columns, we obtain
 \[
-    \Ex{q(W)}{W} = [ \vect{\mu}_1 \ \dots \ \vect{\mu}_M ].
+    \Ex{}{W} = [ \vect{\mu}_1 \ \dots \ \vect{\mu}_M ].
 \]
 Furthermore,
 \begin{align*}
-    \sum_j \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} &=
-    \Ex{q(W)}{W} \trans{\Ex{q(W)}{W}} + \sum_{j=1}^M \Sigma_j.
+    \sum_j \Ex{}{\vect{w}_j \trans{\vect{w}_j}} &=
+    \Ex{}{W} \trans{\Ex{q(W)}{W}} + \sum_{j=1}^M \Sigma_j.
 \end{align*}
 Note that if $\Sigma_j = \Sigma$ for all $j$, the mean simplifies to
 \[
-    \Ex{q(W)}{W} = \beta \Sigma \trans{\Ex{q(\vect{z})}{Z}} X.
+    \Ex{}{W} = \beta \Sigma \trans{\Ex{q(\vect{z})}{Z}} X.
 \]
 
 We now consider the update equation for the factor $q(\mu, \tau)$:
@@ -251,8 +251,8 @@ We observe that $q^*(\mu, \tau)$, for $N > 1$ follows a Normal–Inverse–Gamma
 \end{equation*}
 This implies
 \begin{align*}
-    \Ex{q(\tau)}{\tau} &= \frac{(N - 1)}{N(\avgzz - \avgz^{2})}, \\
-    \Ex{q(\mu, \tau)}{\mu \tau} &= \avgz \Ex{q(\tau)}{\tau}.
+    \Ex{}{\tau} &= \frac{(N - 1)}{N(\avgzz - \avgz^{2})}, \\
+    \Ex{}{\mu \tau} &= \avgz \Ex{}{\tau}.
 \end{align*}
 
 Finally, we derive the update equation for $q(\vect{z})$:
@@ -283,16 +283,29 @@ where
     \ln q^*(z_i) &=
     \beta
     \left(-\hf \trans{\phi (z_i)} \sum_j \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} \phi (z_i) +
-        \trans{\phi (z_i)} \Ex{q(W)}{W} \trans{\vect{x}_i} \right) \\
+        \trans{\phi (z_i)} \Ex{q(W)}{W} \trans{X_{i,:}} \right) \\
     &\quad + \left( -\hf \Ex{q(\tau)}{\tau} z_i^2 + \Ex{q(\mu, \tau)}{\tau \mu} z_i \right)
     + \text{const}.
 \end{align*}
-Recall that $\trans{\vect{x}_i}$ is a column vector representing $i$-th row of the observation matrix $X$.
+Here $X_{i,:}$ denotes the $i$-th row of the observation matrix $X$.
 
 Because the update expression separates as a sum over
-$i$, the optimal factor $q(\vect{z})$ factorizes as $\prod_i q(z_i)$.
+$i$, the optimal factor $q^*(\vect{z})$ factorizes as $\prod_i q^*(z_i)$.
+Define
+\begin{align*}
+    S^{-1} &= \sum_j \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}}, \\
+    \vect{m}_i &= S \Ex{q(W)}{W} \trans{X_{i,:}}\,.
+\end{align*}
+Then, up to normalization,
+\begin{equation*}
+    q^*(z_i) \propto
+    \Nor{\phi(z_i)}{\vect{m}_i}{\frac{1}{\beta}S}
+    \Nor{z_i}{\Ex{q(\mu)}{\mu}}{\Ex{q(\tau)}{\tau}^{-1}}.
+\end{equation*}
+Note that since the basis mapping is nonlinear,
+this does not generally imply that $q^*(z_i)$ is Gaussian in $z_i$.
 
-The update equations require expectations of the form
+As seen previously, the update equations require expectations of the form
 \begin{equation*}
     \Ex{q(z_k)}{\phi_i(z_k)\phi_j(z_k)}, \quad
     \Ex{q(z_k)}{\phi_i(z_k)}, \quad
@@ -300,5 +313,4 @@ The update equations require expectations of the form
     \Ex{q(z_k)}{z_k^2},
 \end{equation*}
 for all relevant indices $i,j,k$.
-Since the basis mapping is nonlinear, the optimal factor $q(z_i)$ is generally non-Gaussian and
-these expectations must be approximated numerically.
+These expectations typically do not admit closed forms and must be approximated numerically.

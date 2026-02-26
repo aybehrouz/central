@@ -70,16 +70,16 @@ Conditioned on $\vect{z}^{(c)}$ and $W$, observations are generated as
     p(X^{(c)} \mid \vect{z}^{(c)}, W)
     =
     \prod_{i=1}^{N_c}\prod_{j=1}^M
-    \Nor{x_{ij}^{(c)}}{\phi(\vect{z}_i^{(c)})^\top \vect{w}_j}{\beta^{-1}},
+    \Nor{x_{ij}^{(c)}}{\phi(\vect{z}_i^{(c)})^\top \vect{w}_j}{\beta_j^{-1}},
 \]
 or equivalently,
 \[
     \vect{x}_j^{(c)}
     \sim
-    \mathcal{N}\!\left(Z^{(c)} \vect{w}_j, \beta^{-1} I_{N_c} \right),
+    \mathcal{N}\!\left(Z^{(c)} \vect{w}_j, \beta_j^{-1} I_{N_c} \right),
 \]
-where $\beta > 0$ is the observation precision and
-$\vect{x}_j^{(c)}$ denotes the $j$-th column of $X^{(c)}$.
+where $\vect{x}_j^{(c)}$ denotes the $j$-th column of $X^{(c)}$
+and $\beta_j > 0$ is the observation precision of that column.
 
 To regularize the decoder,
 we assume noninformative priors for the latent parameters
@@ -193,18 +193,19 @@ Therefore, we have the following induced factorization for $q(W, \mu, \tau)$:
 We obtain $q(\vect{w}_j)$ using the fact that each $\vect{w}_j$ is a weight vector of a Bayesian linear regression
 model:
 \begin{align*}
-    \ln p(\vect{w}_j \mid \vect{z}, X) &= -\hf[\beta] \normsq{Z\vect{w}_j - \vect{x}_j} -
+    \ln p(\vect{w}_j \mid \vect{z}, X) &= -\hf[\beta_j] \normsq{Z\vect{w}_j - \vect{x}_j} -
     \hf[\alpha_j] \trans{\vect{w}_j} \vect{w}_j + \text{const} \\
-    &= -\hf \trans{\vect{w}_j} (\beta \trans{Z}Z + \alpha_j I) \vect{w}_j +
-    \beta \trans{\vect{x}_j} Z \vect{w}_j + \text{const}.
+    &= -\hf \trans{\vect{w}_j} (\beta_j \trans{Z}Z + \alpha_j I) \vect{w}_j +
+    \beta_j \trans{\vect{x}_j} Z \vect{w}_j + \text{const}.
 \end{align*}
 Taking the expectation with respect to $q(\vect{z})$, we obtain
 \begin{equation*}
-    \ln q^*(\vect{w}_j) = -\hf \trans{\vect{w}_j} (\beta \Ex{q(\vect{z})}{\trans{Z}Z} + \alpha_j I)
+    \ln q^*(\vect{w}_j) = -\hf \trans{\vect{w}_j} (\beta_j \Ex{}{\trans{Z}Z} + \alpha_j I)
     \vect{w}_j +
-    \beta \trans{\vect{w}_j} \trans{\Ex{q(\vect{z})}{Z}} \vect{x}_j + \text{const}.
+    \beta_j \trans{\vect{w}_j} \trans{\Ex{}{Z}} \vect{x}_j + \text{const},
 \end{equation*}
-The expression above is quadratic in $\vect{w}_j$.
+where expectations of matrices are taken element-wise.
+The resulting expression is quadratic in $\vect{w}_j$.
 Completing the square yields
 \begin{equation*}
     q^*(\vect{w}_j) = \mathcal{N}(\vect{w}_j \mid \vect{\mu}_j, \Sigma_j).
@@ -216,34 +217,44 @@ The corresponding moments are
 \end{align*}
 with
 \begin{align*}
-    \Sigma_j^{-1} &= \beta \Ex{q(\vect{z})}{\trans{Z}Z} + \alpha_j I, \\
-    \vect{\mu}_j &= \beta \Sigma_j \trans{\Ex{q(\vect{z})}{Z}} \vect{x}_j.
+    \Sigma_j^{-1} &= \beta_j \Ex{}{\trans{Z}Z} + \alpha_j I, \\
+    \vect{\mu}_j &= \beta_j \Sigma_j \trans{\Ex{}{Z}} \vect{x}_j.
 \end{align*}
-Collecting the columns, we obtain
+Since the design matrix satisfies $Z_{ik} = \phi_k(z_i)$, we have
+\[
+    \Ex{}{\trans{Z}Z} = \sum_{i=1}^{N} \Ex{}{\phi(z_i) \trans{\phi(z_i)}}.
+\]
+
+Collecting the posterior means into a matrix gives
 \[
     \Ex{}{W} = [ \vect{\mu}_1 \ \dots \ \vect{\mu}_M ].
 \]
-Furthermore,
-\begin{align*}
-    \sum_j \Ex{}{\vect{w}_j \trans{\vect{w}_j}} &=
-    \Ex{}{W} \trans{\Ex{q(W)}{W}} + \sum_{j=1}^M \Sigma_j.
-\end{align*}
-Note that if $\Sigma_j = \Sigma$ for all $j$, the mean simplifies to
+To simplify later expressions, define the diagonal precision matrix
 \[
-    \Ex{}{W} = \beta \Sigma \trans{\Ex{q(\vect{z})}{Z}} X.
+    B = \operatorname{diag}(\beta_1, \dots, \beta_M).
+\]
+Then, we have
+\begin{align*}
+    \sum_{j=1}^M \beta_j \Ex{}{\vect{w}_j \trans{\vect{w}_j}} &=
+    \Ex{}{W} B \trans{\Ex{}{W}} + \sum_{j=1}^M \beta_j \Sigma_j.
+\end{align*}
+This quantity will appear in the update for the latent variables.
+Note that if $\alpha_j = 0$ for all $j$, the mean simplifies to
+\[
+    \Ex{}{W} =  \Ex{}{\trans{Z}Z}^{-1} \trans{\Ex{}{Z}} X.
 \]
 
 We now consider the update equation for the factor $q(\mu, \tau)$:
 \begin{align*}
     \ln q^*(\mu, \tau)
     &= \Ex{q(\vect{z})}{ \ln p(\mu, \tau \mid \vect{z}) } + \text{const} \\
-    &= - \frac{\tau}{2} \left(\sum_{i} \Ex{q(z_i)}{z_i^2} - 2\mu \sum_{i} \Ex{q(z_i)}{z_i} + N\mu^2 \right) \\
+    &= - \frac{\tau}{2} \left(\sum_{i} \Ex{}{z_i^2} - 2\mu \sum_{i} \Ex{}{z_i} + N\mu^2 \right) \\
     &\quad + \left(\frac{N}{2}-1\right)\ln\tau  + \text{const}.
 \end{align*}
 We define
 \begin{align*}
-    \avgz &= \frac{1}{N} \sum_i \Ex{q(z_i)}{z_i}, \\
-    \avgzz &= \frac{1}{N} \sum_i \Ex{q(z_i)}{z_i^2}.
+    \avgz &= \frac{1}{N} \sum_i \Ex{}{z_i}, \\
+    \avgzz &= \frac{1}{N} \sum_i \Ex{}{z_i^2}.
 \end{align*}
 We observe that $q^*(\mu, \tau)$, for $N > 1$ follows a Normal–Inverse–Gamma distribution:
 \begin{equation*}
@@ -267,10 +278,10 @@ We expand the terms $\ln p(X \mid \vect{z}, W)$ and $\ln p(\vect{z} \mid \mu, \t
 All expressions that are independent of $\vect{z}$ are treated as constants.
 \begin{align*}
     \ln p(X \mid \vect{z}, W)
-    &= \sum_{j} \ln \mathcal{N} (\vect{x}_j \mid Z \vect{w}_j,  \beta^{-1}I) \\
-    &= -\hf[\beta] \sum_j \normsq{Z\vect{w}_j - \vect{x}_j} + \text{const} \\
-    &= \beta \sum_{i} \left(-\hf \trans{\phi (z_i)} \sum_j \vect{w}_j \trans{\vect{w}_j} \phi (z_i)  +
-                          \trans{\phi(z_i)} \sum_j X_{ij} \vect{w}_j \right) + \text{const}. \\ \\
+    &= \sum_{j} \ln \mathcal{N} (\vect{x}_j \mid Z \vect{w}_j,  \beta_j^{-1}I) \\
+    &= -\hf \sum_j \beta_j \normsq{Z\vect{w}_j - \vect{x}_j} + \text{const} \\
+    &= \sum_{i} \left(-\hf \trans{\phi (z_i)} \sum_j \beta_j \vect{w}_j \trans{\vect{w}_j} \phi (z_i)  +
+                    \trans{\phi(z_i)} \sum_j \beta_j X_{ij} \vect{w}_j \right) + \text{const}. \\ \\
     \ln p(\vect{z} \mid \mu, \tau) &= -\hf[\tau] \sum_i (z_i - \mu) ^ 2 + \text{const} \\
     &= \sum_i \left( -\hf[\tau] z_i^2 + \tau \mu z_i \right) + \text{const}.
 \end{align*}
@@ -281,36 +292,35 @@ Substituting these expansions into the variational update expression and taking 
 where
 \begin{align*}
     \ln q^*(z_i) &=
-    \beta
-    \left(-\hf \trans{\phi (z_i)} \sum_j \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}} \phi (z_i) +
-        \trans{\phi (z_i)} \Ex{q(W)}{W} \trans{X_{i,:}} \right) \\
-    &\quad + \left( -\hf \Ex{q(\tau)}{\tau} z_i^2 + \Ex{q(\mu, \tau)}{\tau \mu} z_i \right)
+    \left(-\hf \trans{\phi (z_i)} \sum_j \beta_j \Ex{}{\vect{w}_j \trans{\vect{w}_j}} \phi (z_i) +
+        \trans{\phi (z_i)} \Ex{}{W} B \trans{X_{i,:}} \right) \\
+    &\quad + \left( -\hf \Ex{}{\tau} z_i^2 + \Ex{}{\tau \mu} z_i \right)
     + \text{const}.
 \end{align*}
 Here $X_{i,:}$ denotes the $i$-th row of the observation matrix $X$.
 
 Because the update expression separates as a sum over
-$i$, the optimal factor $q^*(\vect{z})$ factorizes as $\prod_i q^*(z_i)$.
+$i$, the optimal factor $q(\vect{z})$ factorizes as $\prod_i q(z_i)$.
 Define
 \begin{align*}
-    S^{-1} &= \sum_j \Ex{q(\vect{w}_j)}{\vect{w}_j \trans{\vect{w}_j}}, \\
-    \vect{m}_i &= S \Ex{q(W)}{W} \trans{X_{i,:}}\,.
+    S^{-1} &= \sum_j \beta_j \Ex{}{\vect{w}_j \trans{\vect{w}_j}}, \\
+    \vect{m}_i &= S \Ex{}{W} B \trans{X_{i,:}}\,.
 \end{align*}
 Then, up to normalization,
 \begin{equation*}
     q^*(z_i) \propto
-    \Nor{\phi(z_i)}{\vect{m}_i}{\frac{1}{\beta}S}
-    \Nor{z_i}{\Ex{q(\mu)}{\mu}}{\Ex{q(\tau)}{\tau}^{-1}}.
+    \Nor{\phi(z_i)}{\vect{m}_i}{S}
+    \Nor{z_i}{\Ex{}{\mu}}{\Ex{}{\tau}^{-1}}.
 \end{equation*}
 Note that since the basis mapping is nonlinear,
 this does not generally imply that $q^*(z_i)$ is Gaussian in $z_i$.
 
 As seen previously, the update equations require expectations of the form
 \begin{equation*}
-    \Ex{q(z_k)}{\phi_i(z_k)\phi_j(z_k)}, \quad
-    \Ex{q(z_k)}{\phi_i(z_k)}, \quad
-    \Ex{q(z_k)}{z_k}, \quad
-    \Ex{q(z_k)}{z_k^2},
+    \Ex{}{\phi_i(z_k)\phi_j(z_k)}, \quad
+    \Ex{}{\phi_i(z_k)}, \quad
+    \Ex{}{z_k}, \quad
+    \Ex{}{z_k^2},
 \end{equation*}
 for all relevant indices $i,j,k$.
 These expectations typically do not admit closed forms and must be approximated numerically.

@@ -1,4 +1,4 @@
-\section{Latent Regression Model}
+\subsection{Latent Regression Model}\label{subsec:latent-regression-model2}
 
 \newcommand{\vect}[1]{\bm{#1}}
 \newcommand{\normsq}[1]{\left\lVert #1 \right\rVert^2}
@@ -7,7 +7,6 @@
 \newcommand{\Nor}[3]{\mathcal{N} \left( #1 \;\middle|\; #2, #3 \right)}
 \newcommand{\avgz}{\overline{z}}
 \newcommand{\avgzz}{\overline{zz}}
-%\newcommand{\Ex}[2]{E_{#1} \left\[{#2} \right\]}
 
 We consider $C$ classes (or datasets), indexed by $c = 1, \dots, C$.
 For each class $c$, we observe a data matrix
@@ -106,7 +105,7 @@ all classes are coupled through the common decoder $W$,
 while retaining class-specific latent geometry via
 $(\vect{\mu}^{(c)}, \tau_c)$.
 
-\subsection{Variational Inference for the Single-Class Case}
+\subsubsection{Variational Inference for the Single-Class Case}
 
 To simplify the exposition, we now consider the single-class case.
 Since only one class is present, we remove the superscript $(c)$
@@ -229,7 +228,7 @@ Collecting the posterior means into a matrix gives
 \[
     \Ex{}{W} = [ \vect{\mu}_1 \ \dots \ \vect{\mu}_M ].
 \]
-To simplify later expressions, define the diagonal precision matrix
+Moreover, to simplify later expressions, define the diagonal precision matrix
 \[
     B = \operatorname{diag}(\beta_1, \dots, \beta_M).
 \]

@@ -1,37 +1,3 @@
-Intuitively, a central distribution acts as a representative or summary of a set of distributions.
-While it may not belong to the set itself, it reflects the overall behavior of the set in a way that is meaningful
-for inference and also for evaluating other distributions.
-In other words, it provides a meaningful way for comparing distributions based on our partial knowledge.
-
-\begin{definition}[Central Divergence]
-    \label{def:central-divergence}
-    For any distribution $P$, we define the \emph{central divergence} of $P$ from a set of distributions \setQ, with
-    respect to a random variable $X$, as follows:
-    \begin{equation*}
-        \myDiv = \inf_{\cDist} \kl[{\cDist}],
-    \end{equation*}
-    where $\cDist$ denotes a central distribution of \setQ for $X$.
-\end{definition}
-
-Note that when \setQ has a unique central distribution, the central divergence is simply defined as the KL divergence
-from that unique central distribution.
-
-Sometimes, partial knowledge is represented by multiple sets of distributions.
-Our current definition of the central distribution does not account for this case.
-The following definition extends the concept to handle such situations.
-While not directly about feature selection, this extension plays a key role in enabling the connection between
-central distributions and feature selection, a connection that will become clearer later.
-
-\begin{definition}
-    \label{def:set-of-sets}
-    Let $X$ be a random variable, and let \setQQ be a set whose elements are sets of distributions over $X$.
-    Let \cDist[\setQ] be a central distribution of $\setQ \in \setQQ$ for $X$.
-    We say \ccDist is a central distribution of \setQQ, if for every probability distribution $P$ we have:
-    \begin{equation*}
-        \sup_{\setQ \in \setQQ} \myDiv[\ccDist(X)]  \leq \sup_{\setQ \in \setQQ} \myDiv,
-    \end{equation*}
-    where $\myDiv[\none]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
-\end{definition}
 
 Suppose we want to model an exchangeable sequence of random variables.
 Let $S_n$ denote the sequence of the first $n$ variables: $S_n = (\seqExp{X})$.
@@ -139,7 +105,7 @@ random variables.
         \sup_{\inSet{Q}} \kl[][\cDist][S_n] \geq \mu_n \cdot
     \]
 
-    Moreover, by Theorem~\ref{th:imperfection}, it follows that
+    Moreover, by Lemma~\ref{lm:imperfection}, it follows that
     \[
         \inf_{\inSet{Q}} \kl[][\cDist][S_n] \leq \mu_n \cdot
     \]
@@ -169,45 +135,45 @@ distribution of $\est_n$ becomes increasingly concentrated around the correspond
 index as $n$ increases.
 A similar result can also be found in~\cite{BERNARDO200517}.
 
-\begin{theorem}
-    \label{th:central-by-estimator}
-    Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures,
-    where each element of \setQ defines a distribution over each $\est_n$.
-    Assume that \setQ can be indexed by a finite-dimensional vector \param.
-    If \infSeq{\est} is a consistent sequence of estimators for \param, and there exists a sequence of
-    constants \infSeq{\mu} such that the sequence
-    $\infSeq[]{\frac{P(\paramVal \mid\est_n = \paramVal)}{\mu_n}}$ converges
-    for every value of \paramVal, then
-    \begin{equation}
-        \label{eq:central-limit}
-        \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = \paramVal)}{\mu_n},
-    \end{equation}
-    is a central prior of \setQ for \infSeq{\est}.
-\end{theorem}
+\subsection{Asymptotic Construction of Central Priors}
 
-\begin{proof}
-    \newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
-    Since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$
-    concentrates around $\est_n = \paramVal$.
-    Moreover, since $\ln$ is a continuous function, it follows from Equation~\ref{eq:central-limit} that
-    \begin{equation*}
-        \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln P(\paramVal \mid t_n) - \ln \mu_n \right) + \ln k
-        = \ln \cPrior(\paramVal),
-    \end{equation*}
-    where $k$ is a normalizing constant converting proportionality into equality.
-    As the posterior distribution of a consistent estimator is asymptotically independent of the prior, we may
-    replace the prior with $c(\paramVal)$:
-    \begin{equation*}
-        \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{c(\paramVal \mid t_n)}{c(\paramVal)}
-                   - \ln \mu_n + \ln k \right) = 0 \cdot
-    \end{equation*}
-    Applying Bayes’ rule and letting $\lambda_n = \ln \mu_n - \ln k$, for every value of \paramVal we obtain:
-    \begin{equation*}
-        \toInf \left( \Dkl{\estLike}{C(\est_n)} - \lambda_n \right) = 0 \cdot
-    \end{equation*}
-    Thus, by Theorem~\ref{th:limiting-centrality}, we can conclude that $\cPrior(\paramVal)$ is a central
-    prior of \setQ for \infSeq{\est}.
-\end{proof}
+Under regular parametric conditions, posterior distributions based on consistent estimators become asymptotically
+insensitive to the choice of smooth positive prior.
+Motivated by this phenomenon, we heuristically derive the asymptotic form of the central prior for a consistent
+sequence of estimators \infSeq{\est} as
+\begin{equation}
+    \label{eq:central-limit}
+    \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = t) \vert_{t = \paramVal}}{\mu_n},
+\end{equation}
+where \infSeq{\mu} is a sequence of constants such that the sequence
+$\infSeq[]{\frac{P(\paramVal \mid\est_n = t) \vert_{t = \paramVal}}{\mu_n}}$ converges
+for every value of \paramVal.
+
+This construction recovers known reference priors in standard examples and serves as a practical recipe for
+identifying candidate central priors.
+
+\newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
+
+Since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$
+concentrates around $\est_n = \paramVal$.
+Moreover, since $\ln$ is a continuous function, it follows from Equation~\ref{eq:central-limit} that
+\begin{equation*}
+    \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln P(\paramVal \mid t_n) - \ln \mu_n \right) + \ln k
+    = \ln \cPrior(\paramVal),
+\end{equation*}
+where $k$ is a normalizing constant converting proportionality into equality.
+As the posterior distribution of a consistent estimator is asymptotically independent of the prior, we may
+replace the prior with $c(\paramVal)$:
+\begin{equation*}
+    \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{c(\paramVal \mid t_n)}{c(\paramVal)}
+               - \ln \mu_n + \ln k \right) = 0 \cdot
+\end{equation*}
+Applying Bayes’ rule and letting $\lambda_n = \ln \mu_n - \ln k$, for every value of \paramVal we obtain:
+\begin{equation*}
+    \toInf \left( \Dkl{\estLike}{C(\est_n)} - \lambda_n \right) = 0 \cdot
+\end{equation*}
+Thus, by Theorem~\ref{th:limiting-centrality}, we can conclude that $\cPrior(\paramVal)$ is a central
+prior of \setQ for \infSeq{\est}.
 
 A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed
 outcomes.
@@ -231,7 +197,7 @@ method for this conversion.
 
     Define $T_n$ to be the proportion of successes in $n$ trials.
     Note that $T_n$ is a consistent estimator for $\pv$.
-    Therefore, we can use Theorem~\ref{th:central-by-estimator} to find a central distribution for the sequence
+    Therefore, we can use Equation~\ref{eq:central-limit} to find a central distribution for the sequence
     \infSeq{T}.
 
     Assuming a uniform prior on $\pv$, Bayes’ rule gives the posterior distribution
@@ -256,8 +222,7 @@ method for this conversion.
     \[
         \toInf \frac{P\left(\pv \mid T_n = \pv \right)}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
     \]
-    By Theorem~\ref{th:central-by-estimator}, this implies that $c(\pv) \propto \pv^{-\hf}(1 - \pv)^{-\hf}$ is a
-    central prior for \infSeq{T}.
+    This implies that $c(\pv) \propto \pv^{-\hf}(1 - \pv)^{-\hf}$ is a central prior for \infSeq{T}.
 
     Now we apply Theorem~\ref{th:estimator-to-infseq} to obtain a central distribution for $\infSeq{S}$.
     Since $T_n$ is a deterministic function of $S_n$, the joint distribution $Q(S_n, T_n)$ coincides with the
@@ -283,11 +248,4 @@ method for this conversion.
 When dealing with layered ignorance and attempting to determine the central distribution of a set of sets of
 distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of
 such sets is finite.
-
-In this setting, and under appropriate conditions, the central distribution reduces to the uniform distribution.
-
-\begin{corollary}
-    \label{cor:center-of-countable}
-    Under the assumptions of Theorem~\ref{th:central-by-estimator}, if \setQ is a countable set indexed by a discrete
-    random variable $I$, then $C(i) \propto 1$ is a central prior of \setQ for \infSeq{\est}.
-\end{corollary}
+In that setting, and under appropriate conditions, the central distribution reduces to the uniform distribution.

@@ -88,8 +88,9 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \begin{equation*}
         \hat{f}(P, R) = \fExp,
     \end{equation*}
-    where $P$, $R$ are arbitrary real functions instead of probability distributions.
-    This enables us to formulate the saddle point of $f$ as the solution to a constrained optimization problem.
+    where the requirement that $P$ and $R$ be probability distributions is omitted.
+    This enables us to formulate the saddle point of $f$ as the solution to a constrained optimization problem
+    defined for $\hat{f}$.
 
     Let \saddle be a simultaneous solution to the following two optimization problems:
 
@@ -106,7 +107,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     Clearly, if $\saddle$ exists, it will be a saddle point for $f$.
 
     Both of these optimization problems are convex~\cite{0521833787} and differentiable.
-    To establish this, consider that all the constraint functions are affine, and therefore are convex and
+    To establish this, consider that all the constraint functions are affine, and therefore are concave-convex and
     differentiable.
 
     Additionally, $\hat{f}$ is differentiable function with respect to both $R$ and $P$.
@@ -120,7 +121,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     where $c$ is not a function of $P$.
     Since $\hat{R}$ is a solution to the second optimization problem, it satisfies the corresponding constraints and
     is therefore a valid probability distribution.
-    Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(P,\none)$  is
+    Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(\none, \hat{R})$  is
     the negative of a linear combination of concave $\ln P(x)$ functions with nonnegative coefficients.
     This function is convex.
 
@@ -129,8 +130,8 @@ distribution can be combined and performed simultaneously when finding a saddle 
     to find feasible points that meet all the constraints.
     Therefore, Slater’s condition is satisfied, and the KKT conditions provide necessary
     and sufficient conditions for optimality~\cite{0521833787}.
-    In other words, If a point $\saddle$ satisfies the KKT conditions for both problems, it will be a saddle
-    point for $f$, and vice versa.
+    In other words, If there exists a point $\saddle$ that satisfies the KKT conditions for both problems, it will be a
+    saddle point for $f$, and vice versa.
 
     The KKT conditions are as follows for every $x$, $i$ and constants $\lambda$, $\eta$:
     \begin{gather}
@@ -199,7 +200,8 @@ distribution can be combined and performed simultaneously when finding a saddle 
     Since $R$ was an arbitrary distribution, this shows that $g(\saddR)$ is the maximum of $g$, as desired.
 \end{proof}
 
-The following theorem provides the rationale behind the term ``central distribution.''
+The following theorem gives a standard sufficient condition for centrality in the KL-minimax setting which is
+the rationale behind the term ``central distribution.''
 Exactly like the center of a circle, the central distribution is equidistant from the boundary.
 
 \begin{theorem} [Centrality]
@@ -230,14 +232,15 @@ Exactly like the center of a circle, the central distribution is equidistant fro
     Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
 \end{proof}
 
-\begin{theorem}[Imperfection]
-    \label{th:imperfection}
+
+\begin{lemma}
+    \label{lm:imperfection}
     Assuming the conditions of Theorem~\ref{th:lambda-centrality} and using the same $\lambda$,
     if $P$ is a convex combination of elements of \setQ, then there exists some $Q_0 \in \setQ$ such that
     \begin{equation*}
         \kl[Q_0][] \leq \lambda \cdot
     \end{equation*}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     We proceed by contradiction.
@@ -297,3 +300,6 @@ Bernardo's reference priors~\cite{BERNARDO200517}.
     Since this holds for all \paramVal, and \cPrior is strictly positive, by Theorem~\ref{th:lambda-centrality} it
     follows that \cDist is a central distribution of \setQ for $X$.
 \end{proof}
+
+The above condition defines an implicit fixed-point equation for the central prior.
+Existence and uniqueness are not addressed here and may depend on the structure of the model family.

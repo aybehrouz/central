@@ -1,0 +1,33 @@
+When we lack prior knowledge of an environment, it is still not difficult to identify some distributions that are
+not suitable choices for \prior.
+For instance, any distribution that assigns zero probability to certain values of \paramValue is not a good choice.
+If we use such a prior, evidence can never convince us that the value of \paramValue lies within those
+excluded values.
+
+We must point out that, in this context, we cannot objectively claim that there exists an underlying process
+within the environment for generating different values of \paramValue, which does not consider zero
+probability for any value of \paramValue.
+Our argument is subjective here.
+We consider some priors to be unsafe because they have some characteristics that appear to be problematic:
+in the obtained posterior, some values of the parameter are excluded regardless of the evidence.
+
+We can generalize this idea and use a similar subjective approach to determine a somewhat “safe”
+prior distribution.
+Recall that our probabilistic model for the environment consists of a set of acceptable probability measures \set{P}.
+Suppose that we choose a probability measure $C \in \set{P}$, and determine the optimal Bayesian strategy in $C$.
+If the expected loss of this strategy in every other probability measure
+$P \in \set{P}$ is close to the optimal strategy, we can say that using $C$ is safe, in the
+sense that the optimal strategy obtained using $C$, is a near optimal strategy in any other acceptable probability
+measure in our model.
+
+
+The probability measure that we choose, represents our beliefs about the environment.
+It can be argued that this choice must depend solely on the environment.
+As long as the environment is the same, we must not change this choice.
+For example, if our loss function changes, or if the evidence that we get from the environment becomes more or
+less informative, none of these should change our beliefs about the environment, and therefore our chosen
+probability measure.
+We will use this principle several times in this discussion and refer to it as the \emph{principle of objectivity}.
+
+
+

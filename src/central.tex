@@ -1,34 +1,329 @@
+\newcommandx{\supD}[3][1=P, 2=\setQ, 3=X]{\sup_{Q \in #2} \kl[Q][#1][#3]}
+\newcommand{\argSupD}[1][\setQ]{\arg\min_{P}\sup_{Q \in #1}}
+\newcommand{\myDiv}[1][P(X)]{\measure{D}{\mathrm{CD}}{\set{H} \,\middle\|\, #1}}
+\newcommandx{\klExp}[3][1=Q, 2=P, 3=x]{\sum_{#3} #1(#3) \ln \frac{#1(#3)}{#2(#3)}}
+\newcommand{\inSet}[1]{\mathFix{#1 \in \set{#1}}}
 
-When we lack prior knowledge of an environment, it is still not difficult to identify some distributions that are
-not suitable choices for \prior.
-For instance, any distribution that assigns zero probability to certain values of \paramValue is not a good choice.
-If we use such a prior, evidence can never convince us that the value of \paramValue lies within those
-excluded values.
+\newcommand{\saddle}{\mathFix{(\saddP, \saddR)}}
+\newcommand{\fExp}{\sum_i R(i) \klExp[Q_i]}
+\newcommand{\cDist}[1][]{\mathFix{\sub{C}{#1}}}
+\newcommand{\ccDist}[1][]{\mathFix{\sub{C^{*}}{#1}}}
+\newcommand{\cPrior}{\mathFix{c}}
+\newcommand{\like}{Q}
+\newcommand{\sadd}[1]{\mathFix{#1^{*}}}
+\newcommand{\saddR}{\sadd{R}}
+\newcommand{\saddP}{\sadd{P}}
+\newcommand{\est}{T}
 
-We must point out that, in this context, we cannot objectively claim that there exists an underlying process
-within the environment for generating different values of \paramValue, which does not consider zero
-probability for any value of \paramValue.
-Our argument is subjective here.
-We consider some priors to be unsafe because they have some characteristics that appear to be problematic:
-in the obtained posterior, some values of the parameter are excluded regardless of the evidence.
+\newcommand{\fun}[1][]{\ifthenelse{\isempty{#1}}{}{(#1)}}
 
-We can generalize this idea and use a similar subjective approach to determine a somewhat “safe”
-prior distribution.
-Recall that our probabilistic model for the environment consists of a set of acceptable probability measures \set{P}.
-Suppose that we choose a probability measure $C \in \set{P}$, and determine the optimal Bayesian strategy in $C$.
-If the expected loss of this strategy in every other probability measure
-$P \in \set{P}$ is close to the optimal strategy, we can say that using $C$ is safe, in the
-sense that the optimal strategy obtained using $C$, is a near optimal strategy in any other acceptable probability
-measure in our model.
+Consider a random variable $X$.
+In probabilistic modeling, our knowledge about
+$X$ is represented by a probability distribution, which serves as a basis for making inferences.
+
+However, in many situations, our information may be too limited to justify choosing a single distribution.
+Instead, we may only be able to specify a set of plausible distributions.
+Such a set represents some form of \emph{uncertainty} or \emph{partial knowledge}: although it does not identify a
+single distribution, it constrains the range of plausible probabilistic models.
+
+A well-known example of this idea is the exchangeability assumption used in de Finetti’s theorem.
+A sequence of random variables \infSeqExp{X} is said to be exchangeable, if the ordering of the variables carries no
+information.
+That is, the joint probability distribution remains invariant under permutations of the variables.
+This assumption imposes a constraint, effectively introducing a set of plausible distributions.
+Thus, exchangeability can be seen as a specific form of partial knowledge.
+
+In this work, we adopt the view that a set of probability distributions can represent a meaningful state of partial
+knowledge, and that such set-valued uncertainty may itself be used as the basis for inference.
+
+More generally, partial knowledge may possess a hierarchical structure.
+In the simplest case, uncertainty is represented by a single set of candidate distributions.
+In richer settings, however, this uncertainty may be organized into nested collections, where elements of a set may
+themselves be sets of distributions.
+Such nesting can continue recursively, yielding a hierarchical uncertainty structure.
+
+Crucially, the choice of hierarchical organization is itself informative: grouping distributions into subsets
+expresses that certain alternatives are regarded as belonging to a common epistemic category and should therefore be
+aggregated before being compared with alternatives in other groups.
+Consequently, the hierarchy encodes information beyond the collection of leaf distributions alone.
+
+This hierarchical organization may be interpreted as introducing multiple layers of latent structural decisions,
+where higher-level choices restrict the admissible lower-level alternatives.
+
+Within a Bayesian framework, inference ultimately requires a single probability measure.
+Therefore, to use hierarchical partial knowledge in Bayesian inference, we require a principled method for
+transforming a nested set-valued uncertainty representation into a single probability distribution while preserving
+the informational structure encoded by the hierarchy.
+
+We adopt the principle that the probability measure used to represent prior beliefs about the environment should
+depend only on the available information about the environment itself, and not on agent specific considerations such as
+the loss function or the informativeness of observations.
+We refer to this modeling assumption as \emph{the principle of objectivity}.
+
+From a minimax perspective, when uncertainty is represented by a set of candidate distributions, a natural
+representative distribution is one that minimizes the worst-case divergence to the members of the set.
+Such a distribution may be viewed as the most conservative or robust single-distribution summary of the available
+partial knowledge.
+
+\begin{definition}[Central Distribution]
+    Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
+    We say a distribution $C$ is a \emph{central distribution} of \setQ for $X$, if for every probability
+    distribution $P$, we have
+    \begin{equation}
+        \supD[\cDist] \leq \supD[P],
+        \label{eq:central-def}
+    \end{equation}
+    where $\measure{D}{\mathrm{KL}}{}$ denotes the Kullback–Leibler (KL) divergence.
+\end{definition}
+
+Note that, under this definition, the central distribution of \setQ is not necessarily an element of \setQ.
+That is, the distribution that best represents the set in the specified sense may lie outside the set it summarizes.
+
+Sometimes partial knowledge is represented by a hierarchical structure of sets of distributions.
+Our current definition of the central distribution does not account for this case.
+The following recursive definitions extend the concept to handle such situations.
+While not directly about feature selection, this extension plays a key role in enabling the connection between
+central distributions and feature selection, a connection that will become clearer later.
+
+\begin{definition}[Hierarchy of Distributions]
+    A \emph{hierarchy of distributions} over $X$ is defined recursively as follows:
+    \begin{itemize}
+        \item Any set of probability distributions over $X$ is a hierarchy of distributions over $X$.
+        \item Any set whose elements are hierarchies of distributions over $X$ is itself a hierarchy of
+        distributions over $X$.
+    \end{itemize}
+\end{definition}
+
+Intuitively, a central distribution acts as a representative or summary of a set of distributions.
+While it may not belong to the set itself, it reflects the overall behavior of the set in a way that is meaningful
+for inference and also for evaluating a distribution based on our partial knowledge.
+
+The concept of a central distribution is not intended to yield a unique object; rather, all distributions satisfying
+the definition can be regarded as equally good representatives.
+However, when multiple central distributions exist, subsequent constructions should not depend on an arbitrary
+choice among them.
+To ensure that the notion of central divergence is well-defined independently of which representative is selected,
+we define it using the best divergence attained over the set of all central distributions.
+
+\begin{definition}[Central Divergence]
+    \label{def:central-divergence}
+    For any distribution $P$, we define the \emph{central divergence} of $P$ from a hierarchy of distributions \set{H},
+    with respect to a random variable $X$, as follows:
+    \begin{equation*}
+        \myDiv = \inf_{\cDist} \kl[{\cDist}],
+    \end{equation*}
+    where $\cDist$ denotes a central distribution of \set{H} for $X$.
+\end{definition}
+
+The above definition applies only when the hierarchy is a single set of distributions.
+The following definition extends the construction recursively to general hierarchical uncertainty structures.
+
+\begin{definition}
+    \label{def:hierarchy-of-distributions}
+    Let $X$ be a random variable, and let \set{H^*} be a set whose elements are hierarchy of distributions over $X$.
+    We say \ccDist is a central distribution of \set{H^*}, if for every probability distribution $P$ we have:
+    \begin{equation*}
+        \sup_{\set{H} \in \set{H^*}} \myDiv[\ccDist(X)]  \leq \sup_{\set{H} \in \set{H^*}} \myDiv,
+    \end{equation*}
+    where $\myDiv[\none]$ refers to the central divergence as defined in Definition~\ref{def:central-divergence}.
+\end{definition}
+
+A simple example illustrates that hierarchical organization can affect the resulting representative distribution
+even when the underlying admissible sets remain unchanged.
+
+Let \(X\) be a random variable with three possible outcomes \(x_1,x_2,x_3\).
+For each \(i\), let \(S_i\) denote the set of all probability distributions over \(X\) that assign zero probability to \(x_i\).
+
+By symmetry, the central distribution of each set \(S_i\) is the uniform distribution over its support:
+\[
+    C_{S_1}=\left(0,\frac12,\frac12\right),\qquad
+    C_{S_2}=\left(\frac12,0,\frac12\right),\qquad
+    C_{S_3}=\left(\frac12,\frac12,0\right).
+\]
+
+If the three sets \(S_1,S_2,S_3\) are treated symmetrically as elements of a single set, then their central
+distribution is
+\[
+    C_{\{S_1,S_2,S_3\}}=
+    \left(\frac13,\frac13,\frac13\right).
+\]
+
+Now consider instead a hierarchical organization in which \(S_1\) and \(S_2\) are grouped together, while \(S_3\)
+forms its own separate branch.
+
+Taking the central distribution of these two representatives yields
+\begin{align*}
+    C_{\{\{S_1,S_2\}, S_3\}}
+    &= \frac12 C_{\{S_1,S_2\}} + \frac12 C_{S_3} \\
+    &= \frac14 C_{S_1} + \frac14 C_{S_2} + \frac12 C_{S_3} \\
+    &= \left(\frac38,\frac38,\frac14\right).
+\end{align*}
+
+Thus, although the underlying admissible sets are identical in both constructions, the resulting representative
+distribution differs.
+
+This demonstrates that hierarchical organization carries informational content beyond the collection of leaf sets
+alone.
+Consequently, flattening a hierarchy into a single unstructured set may discard meaningful epistemic structure.
+
+In many learning problems, uncertainty concerns not only the parameters of a predictive model but also its
+structural form.
+In particular, when the relevance of potential features is unknown, each candidate feature subset determines a distinct
+family of distributions in which the target variable depends only on that feature subset.
+
+Feature selection may therefore be viewed as uncertainty over a collection of distributions.
+The hierarchical central distribution framework provides a natural mechanism for representing and aggregating such
+uncertainty.
+By organizing candidate features hierarchically, one may encode preferences over structural hypotheses, such as
+favoring sparse subsets, grouping related attributes, or privileging particular interactions.
+
+Candidate feature subsets typically induce overlapping families of admissible distributions.
+Distributions exhibiting simpler dependency structure may belong simultaneously to many such families, whereas more
+specific dependency patterns belong to fewer.
+As a result, hierarchical aggregation through central distributions can induce a preference toward structurally
+simpler models by assigning greater representation to distributions compatible with multiple structural hypotheses.
+
+With the notion of hierarchical central distributions established, we now develop the theoretical machinery needed
+to characterize and compute them.
+The following results provide optimization-theoretic characterizations of central distributions that form the
+foundation of the subsequent analysis.
+
+\begin{definition}[Interior Distribution]
+    \label{def:interior}
+    Let \setQ be a set of probability distributions over a random variable $X$.
+    A distribution $R$ is called an \emph{interior distribution} of \setQ if, for every probability distribution $P$,
+    there exists some $\inSet{Q}$ such that
+    \begin{equation*}
+        \kl[R] \leq \kl[Q],
+    \end{equation*}
+\end{definition}
+
+\begin{theorem}
+    Any distribution that can be expressed as a convex combination of elements of \setQ is an
+    interior distribution of \setQ.
+\end{theorem}
+
+\begin{proof}
+    Let $R = \sum_i \alpha_i Q_i$, where $Q_i \in \setQ$, $\alpha_i \geq 0$, and $\sum_i \alpha_i = 1$.
+
+    Fix an arbitrary probability distribution $P$.
+    By the convexity of KL divergence in its first argument, we have:
+    \[
+        \kl[R] \leq \sum_i \alpha_i \kl[Q_i] \cdot
+    \]
+    Now, note that the right-hand side is a weighted average of the KL divergences.
+    So, there must be at least one index $j$ such that
+    \[
+        \kl[R] \leq \kl[Q_j] \cdot
+    \]
+    Since $Q_j \in \setQ$, the condition in Definition~\ref{def:interior} is satisfied,
+    and $R$ is indeed an interior distribution of \setQ.
+\end{proof}
+
+\begin{theorem}
+    Let $R$ be an interior distribution of \setQ.
+    If $C$ is a central distribution of \setQ, it is also a central distribution of $\setQ \cup \{R\}$ and vice versa.
+\end{theorem}
+
+\begin{proof}
+    This theorem follows directly from the definition of an interior distribution, which implies that for any
+    probability distribution $P$, we have
+    \[
+        \supD = \supD[][\setQ \cup \{R\}] \cdot \qedhere
+    \]
+\end{proof}
+
+One important consequence of this theorem is that, in order to identify a central distribution within a parametric
+model, it suffices to restrict attention to the set of likelihood distributions induced by different values of the
+model parameters.
+
+The next theorem is a standard result that is typically used in the derivation of central distributions.
+
+\begin{theorem}
+    \label{th:estimator-to-var}
+    Let $X$ and $T$ be two random variables, and let \setQ be a set of distributions over the pair $(X,T)$.
+    Assume that for every \inSet{Q}, we have
+    \[
+        Q(X, T) = R(\XIT) Q(T),
+    \]
+    where $R$ is a fixed conditional distribution.
+    If $C$ is a central distribution of \setQ for $T$, then $R(\XIT)C(T)$ is a central
+    distribution of \setQ for $(X,T)$.
+\end{theorem}
+
+\begin{proof}
+    Let $C$ be a central distribution of \setQ for $T$.
+    For an arbitrary probability distribution $P$ we have
+    \begin{equation}
+        \label{eq:th5-proof}
+        \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) C(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)} \cdot
+    \end{equation}
+
+    Since the KL divergence is nonnegative, for every probability distribution $P$ and every \inSet{Q}, we have
+    \[
+        \Dkl{Q(X,T)}{R(\XIT) P(T)} \leq \Dkl{Q(X,T)}{P(X,T)},
+    \]
+    which implies
+    \[
+        \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{P(X,T)} \cdot
+    \]
+    Therefore, combining this inequality with Inequality~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a
+    central distribution of \setQ for $(X,T)$.
+\end{proof}
 
 
-The probability measure that we choose, represents our beliefs about the environment.
-It can be argued that this choice must depend solely on the environment.
-As long as the environment is the same, we must not change this choice.
-For example, if our loss function changes, or if the evidence that we get from the environment becomes more or
-less informative, none of these should change our beliefs about the environment, and therefore our chosen
-probability measure.
-We will use this principle several times in this discussion and refer to it as the \emph{principle of objectivity}.
+\input{minimax}
 
+\input{infty}
 
+\begin{example}[Fused Multinomial Model]
+    \label{ex:fused-multinomial}
+    \newcommand{\prodm}{\prod_{y=1}^m}
+    \newcommand{\Qt}{Q_{\theta}}
+    Let \infSeq{S} be a sequence where each $S_n = (\seqExp{X})$ represents $n$ independent trials of an
+    experiment with $k$ possible outcomes,
+    and \setQ be a set of probability distributions over $S_n$ indexed by a real vector \paramVal.
+    Let $f: \set{X} \to \set{Y}$ be a deterministic function that maps each outcome of $X_i$
+    to a label $Y_i = f(X_i)$, where $\set{Y} = \{1, \dots, m\}$.
+    Assume that for all $i$ and $\Qt \in \setQ$, if $f(x_i) = f(x'_i)$ we have \[\Qt(\seqExp{x}) = \Qt(\seqExp{x'}).\]
+    That is, the conditional distribution $\Qt(X_i \mid Y_i = y)$ is uniform over the preimage $f^{-1}(y)$.
 
+    We can consider $\theta = (\theta_1, \dots, \theta_m)$ to be a probability vector over $\mathcal{Y}$,
+    where each $\theta_y$ specifies the probability of observing label $y$.
+    For a sequence $S_n$, let $n_y$ denote the number of times label $y \in \mathcal{Y}$ appears.
+    Let $|f^{-1}(y)|$ denote the number of outcomes in $\mathcal{X}$ that are mapped to label $y$ by $f$.
+    Then the probability of observing $S_n$ under $\Qt \in \setQ$, denoted $Q(S_n \mid \theta)$, is:
+    \[
+        Q(S_n \mid \theta) = \prodm \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y} \cdot
+    \]
+
+    Now, consider the estimator sequence $T_n = \frac{1}{n} \left( \seqExp[m]{n} \right)$, which is a consistent
+    estimator for $\theta$.
+    The conditional distribution $Q(S_n \mid T_n)$ is then given by:
+    \[
+        Q(S_n \mid T_n) = \frac{1}{n!} \prodm \frac{n_y!}{|f^{-1}(y)|^{n_y}} \cdot
+    \]
+    Note that this distribution is independent of $Q_\theta$.
+    Therefore, by Theorem~\ref{th:estimator-to-var}, a central distribution for $S_n$ can be obtained from a central distribution
+    for $T_n$.
+
+    As $n \to \infty$, the distribution of $T_n$ converges to a multivariate Gaussian distribution.
+    Using this fact and Equation~\ref{eq:central-limit}, we can determine a central prior for \infSeq{T}:
+    \[
+        c(\theta) \propto \prodm \theta_y^{-\hf}
+    \]
+    This is a Dirichlet prior and induces a Dirichlet-multinomial distribution for each $T_n$:
+    \[
+        C(T_n) = \frac{\gm{\hf[m]}\gm{n+1}}{\gm{n + \hf[m]}}
+        \prodm \frac{\gm{n_y + \hf}}{\gm{\hf}\gm{n_y+1}} \cdot
+    \]
+    Note that here, $C$ denotes a central distribution for $T_\infty$, and $C(T_n)$ refers to the marginal
+    distribution induced on $T_n$.
+
+    By Theorem~\ref{th:estimator-to-var}, we can derive a central distribution for \infSeq{S}, which induces the
+    following distribution over each $S_n$:
+    \[
+        C_f(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}
+        \prodm \frac{\gm{n_y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}} \cdot
+    \]
+\end{example}

@@ -1,0 +1,323 @@
+Unfortunately, the expected loss of a strategy is a functional of the loss function.
+Therefore, based on the principle of objectivity, we should not directly use the expected loss of the optimal Bayesian
+strategy for evaluating probability measures.
+We need a measure that quantifies the similarity between two probability measures while it ignores the
+specific loss function we are using.
+
+Suppose that for an environment, we have decided on a probabilistic model \M, and without any particular prior
+knowledge, we have chosen a probability measure $P$ from our model.
+In particular, we are interested in the distribution of a random variable \X.
+
+Imagine that we ask an expert---a person familiar with the environment---to evaluate our probability measure $P$.
+Presumably, that expert has his own beliefs about the environment, and thinks that we should, instead of $P$, use a
+different probability measure $Q$.
+When evaluating $P$, he would try to measure the loss of using the incorrect distribution $P(\X)$,
+while he believes the correct distribution is $Q(\X)$.
+
+Let us assume that a real number can be used to measure this loss, and denote it as $\D[\X]$.
+It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
+Therefore, $\D$ effectively is a measure of the divergence of $P(\X)$ from $Q(\X)$, when $Q$ is
+the believed true probability measure.
+
+Interestingly, if we make certain assumptions about the properties of this divergence measure,
+it turns out that---up to a constant factor---it must be equal to the Kullback–Leibler (KL) divergence.
+
+Alternatively, by adopting a more minimal set of properties, we can prove that if we accept Shannon’s entropy as a
+measure of the uncertainty of a distribution, we should also consider KL divergence as the appropriate method for
+measuring divergence between distributions.
+
+\begin{theorem}
+    Let \X be a discrete random variable.
+    Suppose that $\D[\X]$ is a divergence measure that quantifies the divergence of $P(\X)$ from $Q(\X)$.
+    Consider the following properties:
+
+    \begin{description}
+        \item[Consistency with entropy] Let $\varOmega$ be a continuous random variable, and $Q$ be a probability
+        measure.
+        If $U(\varOmega)$ is the uniform distribution with the same support as $Q(\varOmega)$, then we have
+        \[
+            \D[\varOmega][Q][U] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
+        \]
+        where $\entropy{}{}$ denotes Shannon's entropy.
+        \item[Additivity] For any two discrete random variables $\XY$, and probability measures $P,Q$
+        \[
+            \D[\XY] = \D + \sumx \D[\YIx]Q(\rval[]{x})\cdot
+        \]
+    \end{description}
+    If \measure{D} satisfies these properties, then it is the Kullback-Leibler divergence.
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\T}{\varOmega}
+    \renewcommand{\t}{\omega}
+
+    \newcommand{\TIx}{\T \mid \rval[]{x}}
+    \newcommand{\TX}{\T, \X}
+    \newcommand{\tx}{\t, \rval[]{x}}
+    \newcommand{\tent}[1]{\int q(#1) \ln q(#1) d\t}
+
+    \newcommand{\Qx}{Q(\rval[]{x})}
+    Let $P(\X)$ and $Q(\X)$ be two arbitrary distributions for a discrete random variable \X.
+    We define a new continuous random variable $\T$ and let
+    \begin{equation*}
+        p(\T = \t \mid \rvEq) =
+        \begin{cases}
+            \frac{1}{P(\rval[]{x})} & 0 \leq \t \leq P(\rvEq), \\
+            0                       & \text{otherwise}\cdot
+        \end{cases}
+    \end{equation*}
+    Notice that both $P(\T \mid \X)$ and $P(\TX)$ are uniform distributions, and
+    $\entropy{P}{\TIx} = \ln P(\rval[]{x})$, $\entropy{P}{\TX} = 0$.
+
+    We define $Q(\TIx)$ to be an arbitrary distribution that has the same support as $P(\TIx)$.
+    This ensures that $Q(\TX)$ and $P(\TX)$ have the same support as well.
+    Thus, we have
+    \begin{align*}
+        \D[\TX] & = \entropy{P}{\TX} - \entropy{Q}{\TX}    \\
+        & = \sumx \tent{\tx}                       \\
+        & = \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
+    \end{align*}
+    and
+    \begin{align*}
+        \D[\TIx] & = \entropy{P}{\TIx} - \entropy{Q}{\TIx} \\
+        & = \ln P(\rval[]{x}) + \tent{\tIx}\cdot
+    \end{align*}
+    Now, we use the additivity property to obtain a formula for our divergence measure:
+    \begin{align*}
+        \D & = \D[\TX] - \sumx \D[\TIx]\Qx                                                              \\
+        & = \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(\rval[]{x}) \right) \\
+        & = \sumx \Qx  \left( \ln \Qx \int q(\tIx) d\t - \ln P(\rval[]{x}) \right)                   \\
+        & = \sumx \Qx \ln \frac{\Qx}{P(\rval[]{x})}\cdot \qedhere
+    \end{align*}
+\end{proof}
+
+In this theorem, the first property simply states that the entropy of a distribution should be related to the
+divergence of the uniform distribution from it.
+The more the divergence is, the less the entropy must be.
+
+The second property tells us that the divergence is an additive quantity.
+We know that the divergence of $P(\XY)$ from $Q(\XY)$ is a measure of the generic loss of using $P(\XY)$
+when we believe $Q(\XY)$ is the true distribution.
+To calculate this loss, we can assume that \X happens before \Y.
+In that way, this loss would include the loss of using $P(\X)$, and then, if we observe
+$\assign{X}$, which can happen with the probability $Q(\x)$, it would also include the loss of
+using $P(\Y \mid \assign{x})$.
+This property indicates that for combining these individual terms we should use addition.
+
+Thus, if $Q$ is the probability measure that represents our beliefs, we can use $\D$ to evaluate any other
+probability measure $P$, with respect to a random variable \X.
+In other words, we evaluate $P(\X)$ by $Q(\X)$.
+
+If we have two random variables, \X and \Y, there would be two distinct cases that should not be
+confused:
+We may want to evaluate $P(\XY)$, or we may want to evaluate $P(\X)$ and $P(\Y)$ separately.
+Evaluating the joint distribution $P(\XY)$ is straightforward and can be done by defining a new random variable
+$\rv{Z} = (\XY)$.
+
+The second case, however, is more challenging and the correct approach is not immediately clear.
+Here, we may use a similar argument to what we used for the additive property:
+Suppose that we are evaluating the loss of using $P(\XY)$, when \X and \Y are independent.
+If \X happens first, we will use the marginal $P(\X)$.
+Therefore, the loss of using $P(\XY)$ includes the loss of using $P(\X)$.
+Then, when \Y happens, since \X and \Y are independent, we will be using the marginal $P(\Y)$,
+and the loss of using $P(\XY)$ also includes the loss of using $P(\Y)$.
+Therefore, it appears that separately evaluating the marginal distributions $P(\X)$ and $P(\Y)$, should be the same as
+evaluating $P(\XY)$ when \X and \Y are independent.
+Hence, we may use
+\[
+    \D[\X] + \D[\Y].
+\]
+Separate evaluation of marginals is essential for the divergence measure that we will define shortly.
+
+The KL divergence provides a method for measuring the agreement of a model about a specific distribution.
+This agreement can be called convergence.
+
+\begin{definition}[$\epsilon$-convergence]
+    \label{def:e-convergence}
+    In a probabilistic model \model, let \X and \E be discrete random variables.
+    We say $\XIE$ (\X conditioned on \E) \emph{\econverges by $P \in \set{p}$},
+    if for any probability measure $Q \in \set{p}$ we have:
+    \begin{equation*}
+        \Ex{Q}{\D[\XIe]} < \epsilon,
+    \end{equation*}
+    where $\Ex{Q}{\,\cdot\,}$ denotes expectation relative to $Q$ and $\D[\XIe]$ is the Kullback-Leibler divergence
+    of $P(\XIe)$ from $Q(\XIe)$:
+    \[
+        \D[\XIe] = \sum_{\rval{x}} Q(\xIe) \ln \frac{Q(\xIe)}{P(\xIe)},
+    \]
+    with the convention that $\ln (0) \equiv 0$.
+\end{definition}
+
+$\epsilon$-convergence is closely related to the concept of Bayesian convergence, where the posterior converges to
+the same distribution regardless of the prior distribution.
+
+As an example, consider a scenario where we are trying to predict the outcome of a four-sided dice.
+This dice is unfair, with each face marked by a binary number: $00$, $01$, $10$, and $11$.
+Before making our prediction, we can roll the dice multiple times, with each roll being independent.
+
+If we let \E be a vector representing the first 10 dice rolls and \X be the outcome of the next roll,
+\XIE \econverges by $P_u$ for $\epsilon \geq 0.109$, where $P_u$ is the probability measure induced by considering a
+uniform prior for the multinomial parameters.
+If \E represents the first 20 outcomes, then we can choose any $\epsilon \geq 0.073$.
+
+Here, the selected prior for the multinomial parameters affects the minimum value of $\epsilon$.
+In other words, different probability measures in our model have different $\epsilon$-convergence properties.
+The minimum $\epsilon$ gives us an assessment of the safety of a probability measure,
+with respect to a particular \XIE conditional.
+If this value is sufficiently small, any other probability measure in the model agrees that our distribution for \XIE is
+safe, in the sense that it has a small expected divergence.
+
+When we are interested in the distribution of several random variables, we may consider the sum of their KL
+divergences, as we discussed earlier, to construct a measure that accounts for various random variables.
+
+\begin{definition}[Query Set]
+    A \emph{query set} is a set of pairs of discrete random variables, all defined on the same sample space.
+\end{definition}
+
+\begin{definition}[Divergence Measure]
+    Let \Xpairs, be a query set in a probabilistic model \model.
+    We define the \emph{divergence measure of $P \in \set{P}$ for \Qset} as follows:
+    \begin{align}
+        \label{eq:div_def}
+        \Dx & = \supQ \DxExpand,                    \\
+        \nonumber
+        & = \supQ \sumixe Q(\assign[i]{x} , \assign[i]{e}) \ln
+        \frac{Q(\assign[i]{x} \mid \assign[i]{e})}{P(\assign[i]{x} \mid \assign[i]{e})} \cdot
+    \end{align}
+\end{definition}
+
+\begin{proposition}
+    \XIE \econverges by $P$, if and only if \[\Dx[P][\{(\XE)\}] < \epsilon \cdot\]
+\end{proposition}
+Note that we usually simplify our notation and instead of writing the full assignment to a random variable, we only
+write the assigned value.
+For example, instead of $Q(\assign[i]{x} , \assign[i]{e})$ we write: $Q(\xe[i])$.
+
+For a parametric model (as defined in Definition~\ref{def:param-model}), it seems reasonable to define a conditional
+form of our divergence measure, conditioned on the value of the parameter.
+
+To do so, in Equation~\ref{eq:div_def}, we replace normal expectation with conditional expectation.
+There will be no longer a need to maximize over different distributions, since in a parametric model the parameter
+fully determines the distribution of the sample space.
+
+\begin{definition}[Conditional Divergence Measure]
+    \label{def:cond_divergence}
+    Assume \pmodel is a parametric model, and $\Xpairs$ is a query set.
+    We define the \emph{conditional divergence measure of $P \in \set{P}$ for \Qset given $\paramValue$} as follows:
+    \begin{align}
+        \DxCond & = \DxCondExpand           \\
+        & = \DxCondExpandFull \cdot
+        \label{eq:cond_div_measure}
+    \end{align}
+\end{definition}
+
+\begin{proposition}
+    For the conditional divergence we have:
+    \begin{itemize}
+        \item $\begin{aligned}
+                   \DxCond \geq 0
+        \end{aligned}$
+        \item $\begin{aligned}
+                   \Dx = \supQ \intProd[q]{\left(\DxCond - \DxCond[Q] \right)}
+        \end{aligned}$
+    \end{itemize}
+\end{proposition}
+
+Subjectively, the probability measure that has the lowest divergence can be considered the ``safest'' choice
+in a model.
+It is safe in the sense that it has the best possible performance in the worst case, and more importantly, when
+convergence is possible in a model, if we use this probability measure, we are guaranteed to
+have a convergent distribution for our query set.
+
+\begin{definition}[Central Distribution]
+    In a model \model, we define the \emph{central distribution} for a query set \Qset, to be a probability
+    measure $\central \in \set{P}$ which minimizes the divergence measure for \Qset:
+    \begin{equation*}
+        \central = \arg\minP \Dx\cdot
+        \label{eq:center}
+    \end{equation*}
+\end{definition}
+
+In this definition, the query set \Xpairs plays a crucial role.
+Specifically, \Qset defines the set of random variables in which we are interested.
+Each \X[i] represents a random variable whose distribution is important to us, and each \E[i] corresponds to the
+evidence that is available for that variable.
+
+However, if we choose our query set based on our specific experimental setup, it would violate the
+principle of objectivity.
+To avoid that, we have to use the same query set for any possible problem that could be
+defined within an environment.
+
+One natural way to do this is to let the query set include all potentially relevant conditional pairs.
+For example, in our dice problem, we might let each \X[i] be the outcome of the $i$-th dice roll, and define each \E[i]
+as a vector of the previous dice outcomes: $\E[i] = (\seqRv{i-1})$.
+We may assume that our query set contains $n$ pairs.
+The choice of $n$ should be based on our assumptions about the complexity of the problem.
+It shows where we think the convergence becomes trivial and, if necessary, could approach infinity.
+
+Now let us calculate the conditional divergence measure (Definition~\ref{def:cond_divergence}) for this query set:
+\begin{align*}
+    \DxCond & = \KlCond[][{\x[1]}][ ]                  \\
+    & + \KlCond[][{\x[2]}][{\x[1]}]            \\
+    & + \ \cdots                               \\
+    & + \KlCond[][{\x[n]}][\seqRval{n-1}]\cdot
+\end{align*}
+After factoring out $\pi(\seqRval{n} \mid \paramValue)$ from every term:
+\[
+    \sum_{\seqRval{n}} \pi(\seqRval{n} \mid \paramValue) \ln
+    \frac
+    {\pi(\xIt[1]) \pi(\x[2] \mid \x[1], \paramValue)
+    \ldots \pi(\x[n] \mid \seqRval{n-1}, \paramValue)}
+    {P(\x[1]) P(\x[2] \mid \x[1]) \ldots P(\x[n] \mid \seqRval{n-1})},
+\]
+we use the chain rule for conditional probability:
+\begin{equation}
+    \DxCond = \KlCond[][\seqRval{n}][ ] \cdot
+    \label{eq:joint_form}
+\end{equation}
+
+This means that we can alternatively define our query set as $\Qset = \{ (\XE) \}$,
+where \X represents the vector of $n$ dice rolls: $\X = (\seqRv{n})$, and \E is a dummy certain event with $P(\E) = 1$.
+This query set essentially corresponds to the entire sample set for $n$ dice rolls.
+We usually simplify our notation and omit dummy events and write: $\Qset = \{\X\}$.
+
+\newcommand{\XcondYseq}{\X[i] \mid \seqRv[Y]{i-1}}
+\newcommand{\YcondYseq}{\Y[i] \mid \seqRv[Y]{i-1}}
+
+The fact that our query set includes the entire sample set does not necessarily mean its central distribution has good
+convergence properties for every random variable.
+In our dice example, suppose we are interested in predicting the next dice outcome based on the number of previous
+odd and even outcomes.
+Let \Y[i] represent the least significant bit of the $i$-th dice roll, indicating whether the number is odd or even.
+If we want our central distribution to exhibit good convergence properties for  $P(\XcondYseq)$,
+we need to explicitly include these conditional pairs in our query set, in the same way we did for $\X[i]|\seqRv{i-1}$.
+
+Intuitively, it seems that in any noninformative distribution we should have
+\[
+    P(\XcondYseq) = \frac{1}{2} P(\YcondYseq) \cdot
+\]
+For example, consider $P(\X[4] = 01 \mid 0,1,1)$, which represents the probability of observing $01$ on the 4th
+roll, given that we have previously seen two odd numbers and one even number.
+It is reasonable to expect that this probability equals $P(\X[4] = 11 \mid 0,1,1)$.
+On the other hand,
+\[
+    P(\Y[4] = 1 \mid 0,1,1) = P(\X[4] = 01 \mid 0,1,1) + P(\X[4] = 11 \mid 0,1,1),
+\]
+which implies
+\[
+    P(\X[4] = 01 \mid 0,1,1) = P(\X[4] = 11 \mid 0,1,1) = \frac{1}{2} P(\Y[4] = 1 \mid 0,1,1) \cdot
+\]
+This suggests that adding $\YcondYseq$ conditionals to our query set,
+would have the same effect as adding $\XcondYseq$ conditionals.
+
+If we add conditionals of the form $\YcondYseq$ to our query set, we will get
+$\Qset = \{\X, \Y\}$, where \X represents the sample space of $n$ rolls of a four sided dice,
+and \Y represents the sample space of $n$ rolls of a two-sided odd-even dice.
+
+The central distribution for this new query set shows some interesting properties.
+In this distribution, for smaller values of $i$, $P(\X[i] \mid \seqRv{i-1})$
+tends to get somewhat combined with $P(\XcondYseq)$.
+For example when $i = 2$, if the single observed dice roll is $01$, the posterior probabilities of
+$00,10$ and $11$ are not equal, and $P(11 \mid 01) = 0.158$, which is slightly higher than
+$P(00 \mid 01) = P(10 \mid 01) = 0.133$.
+We can say that the central distribution identifies that $01$ and $11$ are both odd numbers.

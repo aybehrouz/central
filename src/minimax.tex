@@ -1,128 +1,128 @@
-\newcommand{\Pentry}{p_{\x[i]|\e[i]}}
-\newcommand{\PPentry}{\sad{\Pentry}}
-\newcommand{\sad}[1]{#1^{*}}
-\newcommand{\rDist}{r}
-\newcommand{\fExpand}{\intProd[\r]{\left( \fInside{\Pentry} \right)}}
-\newcommand{\fInside}[1]{\sumixe \pi(\xeIt[i]) \ln \frac{\pi(\xIet[i])}{#1}}
-
-\newcommand{\RR}{\sad{R}}
-\newcommand{\Rdist}{R}
-\newcommand{\Rvector}{\sad{R}_\Qset}
-\newcommand{\RRvector}{\mathbf{\sad{R}_\Qset}}
-\newcommand{\Cvector}{\mathbf{\central}}
-
-\newcommandx{\f}[2][1 = \r, 2 = \Pvector, usedefault]{ f \ifthenelse{\isempty{#1}}{}{(#2, #1)}}
-\newcommand{\fsad}{\f[\rr][\PPvector]}
-\newcommandx{\fAlt}[2][1 = \r, 2 = \Pvector, usedefault]{\hat{f} \ifthenelse{\isempty{#1}}{}{(#2, #1)}}
-\renewcommand{\r}{r}
-\newcommand{\Pvector}{\mathbf{P_{\Qset}}}
-\newcommand{\PvecSingle}{\mathbf{P}}
-\newcommand{\rr}{\sad{\r}}
-\newcommand{\PPvector}{\mathbf{\sad{P}_{\Qset}}}
-\newcommand{\saddle}{(\PPvector, \rr)}
-\newcommand{\rFixed}{\tilde{\r}}
-\newcommand{\RFixed}{\tilde{R}}
-
-\newcommand{\pDmax}{q}
-\newcommand{\PDmax}{Q}
-\newcommand{\PvecDmax}{\mathbf{Q_{\Qset}}}
-\newcommand{\PvecDmaxEntry}{q_{\xIe[i]}}
-
-The central distribution is essentially the solution to a minimax game.
-By relaxing some constraints, this game can be converted into a convex-concave game.
-It turns out that the solution to the relaxed problem always satisfies the constraints of the original problem, and is
-feasible.
+The central distribution is essentially the solution to a convex-concave game.
 Since the solution to a convex-concave game corresponds to a saddle point,
-by defining the appropriate function, we can characterize the central
+by defining the appropriate objective function, we can characterize the central
 distribution using standard convex optimization techniques.
 
 \begin{definition} [Saddle Point]
-    Consider a function $f:\set{w} \times \set{Z} \to \field{R}$.
-    We refer to a pair $(w^*, z^*)$ as a saddle point for $f$, if we have
+    Consider a function $f:\set{w} \times \set{z} \to \field{R}$.
+    We refer to a pair $(w^*, z^*)$ as a \emph{saddle point} for $f$, if we have
     \[
         f(w^*, z) \leq f(w^*, z^*) \leq f(w, z^*),
     \]
-    for all $w \in \set{W}$ and $z \in \set{Z}$.
+    for all \inSet{w} and \inSet{z}.
 \end{definition}
+
+Next, we will establish the connection between the saddle point and the central distribution.
+One significant insight provided by the next theorem is that it suggests inference and searching for a central
+distribution can be combined and performed simultaneously when finding a saddle point.
+
+\begin{theorem}
+    % I've been unable to prove that the central distribution is a saddle point for f, or characterize conditions
+    % that imply that.
+    \label{th:saddle_is_central}
+    Let $X$ be a discrete random variable, and \setQ be a finite set of distributions over $X$.
+    Consider the following function:
+    \begin{equation*}
+        f(P, R)= \sum_i \kl[Q_i] R(i),
+    \end{equation*}
+    where $Q_i \in \setQ$, and $P$, $R$ are probability distributions.
+
+    If \saddle is a saddle point of $f$, then \saddP is a central distribution of \setQ for $X$.
+\end{theorem}
+
+\begin{proof}
+    Since $X$ is a discrete random variable, \setQ has a central distribution for $X$.
+    Let \cDist be a central distribution of \setQ for $X$, and \saddle be a saddle point of $f$.
+    As $C$ is a probability distribution, the point $(\cDist, \saddR)$ lies within the domain of $f$.
+    By the definition of a saddle point, this implies that
+    \begin{equation}
+        \label{eq:th_proof_saddle_lq_dx}
+        f\saddle \leq f(\cDist, \saddR) \cdot
+    \end{equation}
+    Because \saddR is a probability distribution, the definition of $f$ implies:
+    \[
+        f(\cDist, \saddR) \leq \supD[\cDist] \cdot
+    \]
+    On the other hand,
+    \[
+        f\saddle = \max_{R} f(\saddP, R) = \supD[\saddP] \cdot
+    \]
+    Thus, Inequality~\ref{eq:th_proof_saddle_lq_dx} implies
+    \[
+        \supD[\saddP] \leq \supD[\cDist] \cdot
+    \]
+    Since \cDist is a central distribution, we must have \[\supD[\saddP] = \supD[\cDist],\] and $\saddP$ is also a
+    central distribution of \setQ for $X$.
+\end{proof}
 
 \begin{lemma}
     \label{lm:saddle_conditions}
-    Let \Mt be a parametric model, and \Xpairs be a query set.
-    Let $\f[ ]$ be the function defined by:
-    \begin{equation*}
-        \f = \fExpand,
-    \end{equation*}
-    where $\r$ is a probability distribution, and $\Pvector$ is a vector of real numbers with an
-    entry $\Pentry$ for every $i$, \x[i], and \e[i], such that $\sum_{\x[i]} \Pentry = 1$.
-    Additionally, let $\Rdist$ denote the probability measure induced by $\r$.
-
-    The point $\saddle$ is a saddle point for $\f[ ]$, if and only if there is a constant $\lambda$ and a function $\mu$,
-    such that for any $i$, \x[i], \e[i], and \paramValue the following conditions hold:
+    Let $f$ be the function defined in theorem~\ref{th:saddle_is_central}.
+    The point \saddle is a saddle point for $f$, if and only if there are constants $\lambda$, $\eta$ and a
+    function $\mu$, such that for every $i$, $x$ the following conditions hold:
     \begin{gather}
-        \nonumber
-        \fInside{\PPentry} - \mu(\paramValue) = \lambda, \\
-        \label{eq:saddle_lm_pxIe}
-        \PPentry = \RR(\xIe[i]), \\
-        \nonumber
-        \intProd[\rr]{} = 1, \\
+        \label{eq:kkt_lambda}
+        \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
+        \label{eq:kkt_w_avg}
+        \saddP(x) = \sum_i \saddR(i) Q_i(x) \\
+        \label{eq:kkt_r_sums_one}
+        \sum_i \saddR(i) = 1, \\
         \label{eq:saddle_lm_r_geq_0}
-        \rr(\paramValue) \geq 0, \\
+        \saddR(i) \geq 0, \\
         \nonumber
-        \mu(\paramValue) \geq 0, \\
+        \mu(i) \geq 0, \\
         \label{eq:saddle_lm_rmu_is_zero}
-        \mu(\paramValue) \rr(\paramValue) = 0 \cdot
+        \mu(i) \saddR(i) = 0 \cdot
     \end{gather}
 
-    Furthermore, a point $(\PvecDmax, \rFixed)$ minimizes $\f[\rFixed]$, with respect to $\Pvector$, if and only if it
-    satisfies
+    Furthermore, for a fixed probability distribution $R$, a distribution $\hat{P}$ minimizes $f(\none,R)$, if and
+    only if for all $x$ it satisfies
     \begin{equation}
-        \label{eq:saddle_lm_max_coverage}
-        \PvecDmaxEntry = \RFixed(\xIe[i]),
+        \label{eq:saddle_lm_minimizer_dist}
+        \hat{P}(x) = \sum_i Q_i(x)R(i) \cdot
     \end{equation}
-    for all $i$, \x[i], and \e[i].
 \end{lemma}
 
 \begin{proof}
-    We define
+    Similar to $f$, we define $\hat{f}$ as follows:
     \begin{equation*}
-        \fAlt = \fExpand,
+        \hat{f}(P, R) = \fExp,
     \end{equation*}
-    where $\r$ is a real function of the model parameter \paramValue, and $\Pvector$ is a vector of real
-    numbers with an entry $\Pentry$ for every $i, \xe[i]$.
+    where the requirement that $P$ and $R$ be probability distributions is omitted.
+    This enables us to formulate the saddle point of $f$ as the solution to a constrained optimization problem
+    defined for $\hat{f}$.
 
-    Let $\saddle$ be a simultaneous solution to the following two optimization problems:
+    Let \saddle be a simultaneous solution to the following two optimization problems:
 
     \begin{equation}
         \begin{aligned}
-            &\text{minimize} & &\fAlt[\r] & &\text{w.r.t.} \ \Pvector \\
-            &\text{subject to} & &\sum_{\x[i]} \Pentry = 1,  & &\text{for all}\  i,\e[i] \\
+            &\text{minimize} & &\hat{f}(P,R) & &\text{w.r.t.} \ P \\
+            &\text{subject to} & &\sum_{x} P(x) = 1, \\
             \\
-            &\text{maximize} & &\fAlt[][\Pvector] & &\text{w.r.t.} \ \r \\
-            &\text{subject to} & &\r(\paramValue) \geq 0, & &\text{for all} \ \paramValue  \\
-            & & &\intProd[\r]{} = 1 &
+            &\text{maximize} & &\hat{f}(P,R) & &\text{w.r.t.} \ R \\
+            &\text{subject to} & &R(i) \geq 0, & &\text{for all} \ i  \\
+            & & &\sum_{i} R(i) = 1 &
         \end{aligned}\label{eq:twin_optimization}
     \end{equation}
-    Clearly, if $\saddle$ exists, it will be a saddle point for $\f[ ]$.
+    Clearly, if $\saddle$ exists, it will be a saddle point for $f$.
 
     Both of these optimization problems are convex~\cite{0521833787} and differentiable.
-    To establish this, consider that all the constraint functions are affine, and therefore are convex and
+    To establish this, consider that all the constraint functions are affine, and therefore are concave-convex and
     differentiable.
-    Note that for the constraint $\r(\paramValue) \geq 0$, for each \paramValue, we can define an affine
-    constraint function of the form \[ \int \delta(\paramValue - t) \r(t) dt \geq 0,\] where $\delta$ is
-    the Dirac delta function.
 
-    Additionally, $\fAlt[ ]$ is differentiable function with respect to both $\r$ and $\Pvector$.
-    For any fixed $\Pvector$, $\fAlt[\cdot]$ is an affine function and is concave.
-    For a fixed solution to the second optimization problem denoted by $\rFixed$, we can write
+    Additionally, $\hat{f}$ is differentiable function with respect to both $R$ and $P$.
+    For any fixed $P$, $\hat{f}(P,\none)$ is an affine function and is concave.
+
+    On the other hand, for a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
     \begin{equation}
         \label{eq:simplified_f}
-        \fAlt[\rFixed][\Pvector] = c - \sumixe \RFixed(\xe[i]) \ln \Pentry,
+        \hat{f}(P,\hat{R}) = c - \sum_{i,x} \hat{R}(i) Q_i(x) \ln P(x),
     \end{equation}
-    where $c$ and $\RFixed(\xe[i]) = \marginal[\rFixed]{\xe[i]}$ are not functions of $\Pvector$.
-    Since $\rFixed$ is a solution to the second optimization problem, it satisfies the constraints
-    of the second problem and is a distribution.
-    Therefore, for all $i, \xe[i]$ we have $\RFixed(\xe[i]) \geq 0$, and $\fAlt[\rFixed][\cdot]$ is
-    the negative of a linear combination of concave $\ln \Pentry$ functions with nonnegative coefficients.
+    where $c$ is not a function of $P$.
+    Since $\hat{R}$ is a solution to the second optimization problem, it satisfies the corresponding constraints and
+    is therefore a valid probability distribution.
+    Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(\none, \hat{R})$  is
+    the negative of a linear combination of concave $\ln P(x)$ functions with nonnegative coefficients.
     This function is convex.
 
     Thus, both optimization problems are convex and differentiable, with affine constraints.
@@ -130,210 +130,180 @@ distribution using standard convex optimization techniques.
     to find feasible points that meet all the constraints.
     Therefore, Slater’s condition is satisfied, and the KKT conditions provide necessary
     and sufficient conditions for optimality~\cite{0521833787}.
-    In other words, If a point $\saddle$ satisfies the KKT conditions for both problems, it will be a saddle
-    point for $\f[ ]$, and vice versa.
-    The following KKT conditions are obtained for every \paramValue, $i$, \x[i], and \e[i]:
+    In other words, If there exists a point $\saddle$ that satisfies the KKT conditions for both problems, it will be a
+    saddle point for $f$, and vice versa.
+
+    The KKT conditions are as follows for every $x$, $i$ and constants $\lambda$, $\eta$:
     \begin{gather}
         \label{eq:kkt_proof_R_is_pxIe}
-        \intProd[\rr]{\pi(\xeIt[i])} = \lambda(\e[i]) \PPentry, \\
-        \label{eq:kkt_proof_pxIe_sums_one}
-        \sum_{\x[i]} \PPentry = 1, \\
+        \sum_i \saddR(i) Q_i(x) = \eta \saddP(x) \\
+        \label{eq:kkt_proof_p_sums_one}
+        \sum_{x} \saddP(x) = 1, \\
         \nonumber
-        \fInside{\PPentry} - \mu(\paramValue) = \lambda, \\
+        \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
         \label{eq:kkt_proof_r_sums_one}
-        \intProd[\rr]{} = 1, \\
+        \sum_i \saddR(i) = 1, \\
         \nonumber
-        \rr(\paramValue) \geq 0, \\
+        \saddR(i) \geq 0, \\
         \nonumber
-        \mu(\paramValue) \geq 0, \\
+        \mu(i) \geq 0, \\
         \nonumber
-        \mu(\paramValue) \rr(\paramValue) = 0 \cdot
+        \mu(i) \saddR(i) = 0 \cdot
     \end{gather}
 
-    By summing Equation~\ref{eq:kkt_proof_R_is_pxIe} over \x[i] and using Equation~\ref{eq:kkt_proof_r_sums_one},
-    we obtain
+    By summing Equation~\ref{eq:kkt_proof_R_is_pxIe} over $x$ and using Equation~\ref{eq:kkt_proof_r_sums_one},
+    we have
     \[
-        \lambda(\e[i]) = \marginal[\rr]{\e[i]} \cdot
+        \eta = 1 \cdot
     \]
-    Then, we can combine Equation~\ref{eq:kkt_proof_R_is_pxIe} and~\ref{eq:kkt_proof_pxIe_sums_one} as follows:
-    \[
-        \PPentry = \frac{\marginal[\rr]{\xe[i]}}{\marginal[\rr]{\e[i]}} = \RR(\xIe[i]) \cdot
-    \]
+    Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
 
-    Equations~\ref{eq:kkt_proof_R_is_pxIe} and~\ref{eq:kkt_proof_r_sums_one} are the KKT conditions for the
-    minimization problem in~\ref{eq:twin_optimization}.
-    Therefore, by assuming $\rDist$ is a probability distribution, these conditions provide
-    necessary and sufficient conditions for a point to be a minimizer of $\f[\rFixed][\cdot]$ for a fixed $\rFixed$.
-    Equation~\ref{eq:saddle_lm_max_coverage} combines these two equations and the assumption that
-    $\rDist$ is a distribution into a single expression.
-%
-%    \newcommand{\KLforEi}{\D[{\XIe[i]}][\RFixed][\PvecSingle]}
-%
-%    Using simple algebra, we observe that for any arbitrary fixed distribution $\rFixed$, we have
-%    \[
-%        \min_{\Pvector} \f[\rFixed] = \max_{\Pvector} \sumixe \RFixed(\xe[i]) \ln \Pentry,
-%    \]
-%    where $\RFixed(\xe[i]) = \marginal[\rFixed]{\xe[i]}$.
-%
-%    Since $\Pentry \geq 0$ and $\sum_{\x[i]} \Pentry = 1$, we can define the Kullback–Leibler
-%    divergence between $\Pentry$ entries with the same \e[i] and $\RFixed(\XIe[i])$.
-%    We denote this value by $\KLforEi$.
-%    The KL divergence is always nonnegative, and therefore
-%    \[
-%        \sum_i \Ex{\RFixed}{\KLforEi} \geq 0,
-%    \]
-%    which can be simplified to
-%    \[
-%        \sumixe \RFixed(\xe[i]) \ln \Pentry \leq \sumixe \RFixed(\xe[i]) \ln \RFixed(\xIe[i])\cdot
-%    \]
-%    We can reach the upper bound at the right hand side by letting $\Pentry \coloneqq \RFixed(\xe[i])$.
+    To prove the second part of the lemma,
+    we observe that Equations~\ref{eq:kkt_proof_R_is_pxIe} and~\ref{eq:kkt_proof_p_sums_one} are the KKT conditions
+    for the minimization problem in~\ref{eq:twin_optimization}, when $R$ is a probability distribution.
+    Therefore, these conditions provide necessary and sufficient conditions for a point
+    to be a minimizer of $f(\none,R)$, where $R$ is a fixed distribution.
 \end{proof}
 
-Next, we will establish the connection between the saddle point and the central distribution.
-We also show that there is a strong relationship between central distributions and
-Bernardo's reference priors~\cite{BERNARDO200517}.
-
-One significant insight provided by the next theorem is that it suggests inference and searching for a central
-distribution can be combined and performed simultaneously by finding a saddle point for $\f[ ]$.
-
-\begin{definition} [Coverage]
-    Let \pmodel be a parametric model, and \Qset be a query set.
-    Let $p$ be a prior distribution, and $\inP{P}$ be the probability measure induced by $p$.
-    We define the \emph{coverage of $p$ for \Qset} as
-    \begin{equation*}
-        \Cx = \CxExpand \cdot
-    \end{equation*}
-\end{definition}
-
-The coverage $\Cx$ is the dual of the divergence $\Dx$.
-For a query set, as we decrease the divergence, the coverage increases.
-
-\begin{theorem}
-    \label{th:saddle_is_central}
-    Let \pmodel be a generic parametric model and \Xpairs be a query set.
-    Consider the function $\f[ ]$ introduced in Lemma~\ref{lm:saddle_conditions}.
-    If $\f[ ]$ has a saddle point, denoted by $\saddle$, then $\RR$, the probability measure induced by
-    $\rr$, is a central distribution for \Qset.
-    Moreover, $\rr$ has the maximum coverage in \Mt.
-\end{theorem}
+\begin{lemma}
+    \label{lm:c-is-maximizer}
+    Let \setQ be a finite set of probability distributions over a discrete random variable $X$.
+    Define the function $g$ as:
+    \[
+        g(R) = \sum_i \kl[Q_i][R] R(i),
+    \]
+    where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I) \cdot\]
+    Let $f$ be the function defined in theorem~\ref{th:saddle_is_central}.
+    If \saddle is a saddle point for $f$, then the joint distribution $Q_i(X)\saddR(I)$ is a maximizer of $g$.
+\end{lemma}
 
 \begin{proof}
-    \newcommand{\PP}{P^{*}}
-    Suppose \central is a central distribution for \Qset, and $\saddle$ is a saddle point for $\f[ ]$.
-    Clearly, the point $(\Cvector, \rr)$, where  $\Cvector$ is the vector of $\central(\xIe[i])$
-    probabilities, is in the domain of $\f[ ]$.
-    Since $\saddle$ is a saddle point for $\f[ ]$, we have
-    \begin{equation}
-        \label{eq:th_proof_saddle_lq_dx}
-        \f[\rr][\PPvector] \leq \f[\rr][\Cvector] \cdot
-    \end{equation}
-    Notice that the definition of $\f[ ]$ implies:
+    Let \saddle be a saddle point of $f$.
+    By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg}, and thus:
     \[
-        \f[\rr][\Cvector] = \intProd[\rr]{\DxCond[\central]} \cdot
+        g(\saddR) = f\saddle \cdot
     \]
-    Because $\rr$ is a probability distribution and integrates to one we have
+    Now, let $R$ be an arbitrary probability distribution.
+    From Lemma~\ref{lm:saddle_conditions}, it follows that $g(R)$ indeed corresponds to the minimum of $f(\none, R)$,
+    which implies
     \[
-        \intProd[\rr]{\DxCond[\central]} \leq \supParam \DxCond[\central] = \Dx[\central],
+        g(R) \leq f(\saddP,R) \cdot
     \]
-    and
+    On the other hand, since \saddle is a saddle point, we also have
     \[
-        \f[\rr][\PPvector] \leq \Dx[\central] \cdot
+        f(\saddP, R) \leq f\saddle \cdot
     \]
-
-    \Mt is a generic parametric model, and therefore $\inP{\RR}$, where $\RR$ is the probability measure induced by $\rr$.
-    Given that $\saddle$ is a saddle point for $\f[ ]$, by Lemma~\ref{lm:saddle_conditions}, the entries of $\PPvector$
-    satisfy Equation~\ref{eq:saddle_lm_pxIe}.
-    Consequently, for the divergence measure of $\RR$, we can write
-    \begin{align*}
-        \Dx[\RR] &= \supParam \DxCond[\RR] \\
-        &= \max_{\r} \intProd[\r]{\DxCond[\RR]}\\
-        &= \max_{\r} \f[\r][\PPvector] \\
-        &= \fsad,
-    \end{align*}
-    where $\r$ denotes a probability distribution.
-    Thus, Inequality~\ref{eq:th_proof_saddle_lq_dx} implies
+    Combining the two inequalities, we get:
     \[
-        \Dx[\RR] \leq \Dx[\central] \cdot
+        g(R) \leq g(\saddR) \cdot
     \]
-    Since $\inP{\RR}$, we must have $\Dx[\RR] = \Dx[\central]$, and $\RR$ is a central distribution for \Qset.
-
-
-    Let $\pDmax$ be an arbitrary prior distribution, and $\PDmax$ be the induced probability measure
-    by $\pDmax$.
-    Let $\PvecDmax$ represent the vector of $\PDmax(\xIe[i])$ probabilities.
-    By the definition of $\f[ ]$, we have
-    \[
-        \Cx[\pDmax] = \f[\pDmax][\PvecDmax] \cdot
-    \]
-    The point $(\PvecDmax, \pDmax)$ satisfies Equation~\ref{eq:saddle_lm_max_coverage}, and
-    by Lemma~\ref{lm:saddle_conditions}, minimizes $\f[\pDmax][\cdot]$.
-    Therefore,
-    \[
-        \f[\pDmax][\PvecDmax] \leq \f[\pDmax][\PPvector] \cdot
-    \]
-    On the other hand, $\saddle$ is a saddle point for $\f[ ]$, and
-    \[
-        \f[\pDmax][\PPvector] \leq \fsad \cdot
-    \]
-    By Lemma~\ref{lm:saddle_conditions}, any saddle point for $\f[ ]$, satisfies Equation~\ref{eq:saddle_lm_pxIe}.
-    That implies
-    \[
-        \Cx[\rr] = \fsad \cdot
-    \]
-    Thus, we have
-    \[
-        \Cx[\pDmax] \leq \Cx[\rr],
-    \]
-    and $\rr$ has the maximum coverage.
+    Since $R$ was an arbitrary distribution, this shows that $g(\saddR)$ is the maximum of $g$, as desired.
 \end{proof}
 
-Back to our dice example, we continue from Equation~\ref{eq:joint_form}, and calculate the coverage of a prior
-distribution $p$ for the query set $\Qset = \{\X\}$, where \X is the sample space of $n$ dice rolls:
-\begin{align*}
-    \Cx &= \CxExpand \\
-    &= \int \KlCond[][\seqRval{n}][ ] \dt \\
-    &= \int \sum_{\seqRval{n}} p(\seqRval{n}, \paramValue) \ln
-    \frac{p(\paramValue \mid \seqRval{n})}{p(\paramValue)} d\paramValue \cdot
-\end{align*}
-
-We see that the central distribution for our dice example, when we consider a query set equivalent to the
-sample space, is the probability measure that is obtained by using the reference prior~\cite{BERNARDO200517} for
-the multinomial parameters.
-
-With the next theorem, we finally see why we refer to these distributions as ``central.''
+The following theorem gives a standard sufficient condition for centrality in the KL-minimax setting which is
+the rationale behind the term ``central distribution.''
 Exactly like the center of a circle, the central distribution is equidistant from the boundary.
 
 \begin{theorem} [Centrality]
-    \label{th:lambda}
-    Let \pmodel be a generic parametric model, and \Xpairs be a query set.
-    Suppose $\inP{\central}$ is a probability measure induced by a strictly positive prior distribution.
-    If there is a constant $\lambda$ such that
+    \label{th:lambda-centrality}
+    Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
+    Suppose \cDist is a convex combination of elements of \setQ, with all weights strictly positive.
+    If for some constant $\lambda$ and every \inSet{Q} we have:
     \begin{equation*}
-        \DxCond[\central] = \lambda,
+        \kl[][\cDist] = \lambda,
     \end{equation*}
-    then \central is a central distribution for \Qset.
+    then \cDist is a central distribution of \setQ for $X$.
 \end{theorem}
 
 \begin{proof}
-    Lemma~\ref{lm:saddle_conditions} provides a set of sufficient conditions for a saddle point of $\f[ ]$.
-    Note that more restrictive conditions can also be imposed to derive an alternative set of sufficient conditions
-    for a saddle point.
-    Consequently, we can replace Inequality~\ref{eq:saddle_lm_r_geq_0} with the more
-    restrictive $\rr(\paramValue) > 0$ condition.
-    By Equation~\ref{eq:saddle_lm_rmu_is_zero}, that implies $\mu(\paramValue) = 0$,
+    Lemma~\ref{lm:saddle_conditions} provides a set of sufficient conditions for a saddle point.
+    Note that more restrictive conditions can also be imposed to derive an alternative set of sufficient conditions.
+    We can replace Inequality~\ref{eq:saddle_lm_r_geq_0} with the more
+    restrictive $\saddR(i) > 0$ condition.
+    By Equation~\ref{eq:saddle_lm_rmu_is_zero}, that implies $\mu(i) = 0$,
     and Lemma~\ref{lm:saddle_conditions} conditions can be simplified to
     \begin{gather*}
-        \fInside{\PPentry} = \lambda, \\
-        \PPentry = \RR(\xIe[i]), \\
-        \intProd[\rr]{} = 1,\quad \rr(\paramValue) > 0 \cdot
+        \klExp[Q_i][\saddP][x] = \lambda, \\
+        \saddP(x) = \sum_i \saddR(i) Q_i(x),
     \end{gather*}
+    which must hold for every $Q_i \in \setQ$ and some strictly positive probability distribution \saddR.
 
-    Let $\inP{\central}$ be a probability measure, induced by a strictly positive prior $\cMass{}$.
-    If for some constant $\lambda$, we have $\DxCond[\central] = \lambda$, we see that the point $(\Cvector, \cMass{})$
-    satisfies these simplified conditions, where $\Cvector$ is the corresponding vector of $\central(\xIe[i])$
-    probabilities.
-
-    Therefore, Lemma~\ref{lm:saddle_conditions} implies that $(\Cvector, \cMass{})$ is a saddle point for $\f[ ]$.
-    Since \Mt is a generic parametric model, Theorem~\ref{th:saddle_is_central} implies \central is a central
-    distribution for \Qset.
+    Since \cDist satisfies these condition, Lemma~\ref{lm:saddle_conditions} and
+    Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
 \end{proof}
+
+
+\begin{lemma}
+    \label{lm:imperfection}
+    Assuming the conditions of Theorem~\ref{th:lambda-centrality} and using the same $\lambda$,
+    if $P$ is a convex combination of elements of \setQ, then there exists some $Q_0 \in \setQ$ such that
+    \begin{equation*}
+        \kl[Q_0][] \leq \lambda \cdot
+    \end{equation*}
+\end{lemma}
+
+\begin{proof}
+    We proceed by contradiction.
+    Suppose that for every \inSet{Q}, we have $\kl > \lambda$.
+    This implies that
+    \[
+        g(P) > \lambda = g(C),
+    \]
+    where $C$ is the distribution specified in Theorem~\ref{th:lambda-centrality}, and $g$ is the function defined in
+    Lemma~\ref{lm:c-is-maximizer}.
+    Note that $g(P)$ is defined, because $P$ is a convex combination of elements of \setQ.
+
+    However, by the conditions of Theorem~\ref{th:lambda-centrality}, the distribution $C$ corresponds to a saddle
+    point of $f$.
+    This leads to a contradiction, since Lemma~\ref{lm:c-is-maximizer} asserts that a saddle point of $f$ must be a
+    maximizer of $g$.
+    Therefore, our assumption must be false.
+\end{proof}
+
+These theorems were proved under the assumption that \setQ is finite; however, they can be extended to cases where
+\setQ can be indexed by a finite-dimensional real vector \param:
+\[
+    \setQ = \left\{ Q_{\theta} \mid \theta \in \Theta \right\}.
+\]
+We can treat \param as a random variable and interpret $Q_{\paramVal}$ as a conditional
+distribution $Q(\xIt)$.
+Then, the weight function, $R(i)$, will essentially become a prior distribution over \paramVal.
+
+The next theorem highlights a formal connection between the central-distribution framework and Bernardo’s reference
+prior methodology~\cite{BERNARDO200517}.
+
+\begin{theorem}
+    Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$, indexed by a
+    finite-dimensional random vector \param.
+    Let \cPrior be a strictly positive prior distribution for \param such that for $\like(\xIt) \in \setQ$ we have
+    \begin{equation}
+        \label{eq:central-prior}
+        \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\} \cdot
+    \end{equation}
+    Then, $\cDist(x) = \mrg$ is a central distribution of \setQ for $X$.
+    We also refer to \cPrior as a central prior for $X$.
+\end{theorem}
+
+\begin{proof}
+    \newcommand{\cp}{\cPrior(\paramVal{})}
+    From Equation~\ref{eq:central-prior}, it follows that there exists a constant $\lambda$ such that
+    \begin{equation*}
+        \cp = \exp \left\{-\lambda +  \sum_{x} \like(\xIt) \ln
+                       \frac{\like(\xIt) \cp}{\cDist(x)} \right\} \cdot
+    \end{equation*}
+    Since $\cp$ is strictly positive, we have
+    \begin{align*}
+        \cp &= \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
+        &= \cp \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\},
+    \end{align*}
+    which implies
+    \[
+        \kl[Q_{\paramVal{}}][C] = \lambda \cdot
+    \]
+    Since this holds for all \paramVal, and \cPrior is strictly positive, by Theorem~\ref{th:lambda-centrality} it
+    follows that \cDist is a central distribution of \setQ for $X$.
+\end{proof}
+
+The above condition defines an implicit fixed-point characterization of a central prior.
+This result should be interpreted as a sufficient characterization rather than a general existence or uniqueness
+theorem.

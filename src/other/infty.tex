@@ -83,97 +83,115 @@ random variables.
 
 \begin{theorem}
     \label{th:limiting-centrality}
-    Let \infSeq{S} be a sequence of random variables and \infSeq{\lambda} be a sequence of constants.
-    If \cDist is a weighted average of elements of \setQ with strictly positive weights
-    such that for every $Q \in \setQ$ we have
+    Let \infSeq{S} be a sequence of random variables.
+    Suppose \cDist is a weighted average of elements of \setQ with strictly positive weights,
+    and there exists a sequence of constants \infSeq{\lambda} such that
     \[
-        \toInf \left(\kl[][\cDist][S_n] - \lambda_n  \right) = 0,
+        \toInf  \sup_{\inSet{Q}} \left|\kl[][\cDist][S_n] - \lambda_n \right| = 0,
     \]
     then \cDist is a central distribution of \setQ for \infSeq{S}.
 \end{theorem}
 
 \begin{proof}
-    For the purpose of this proof, we additionally assume—perhaps unnecessarily—that for each \(S_n\), there exists
+    For the purpose of this proof, we additionally assume that for each \(S_n\), there exists
     a central distribution $\cDist_n$ that satisfies the conditions of Theorem~\ref{th:lambda-centrality}.
     That is, there exists a constant \(\mu_n\) such that for every \inSet{Q}
     \[
-        \kl[][\cDist_n][S_n] = \mu_n \cdot
+        \kl[][\cDist_n][S_n] = \mu_n .
     \]
 
     For each \(n\), by the definition of central distribution, we have
+    \begin{equation}
+        \sup_{\inSet{Q}} \kl[][\cDist][S_n] \geq \mu_n,
+        \label{eq:th_lim_central_proof_sup}
+    \end{equation}
+    and, by Lemma~\ref{lm:imperfection}, it also follows that
+    \begin{equation}
+        \inf_{\inSet{Q}} \kl[][\cDist][S_n] \leq \mu_n .
+        \label{eq:th_lim_central_proof_inf}
+    \end{equation}
+    On the other hand, for each $n$ we have
     \[
-        \sup_{\inSet{Q}} \kl[][\cDist][S_n] \geq \mu_n \cdot
+        \left| \sup_{\inSet{Q}} \kl[][\cDist][S_n] - \lambda_n \right|
+        \leq \sup_{\inSet{Q}}  \left|\kl[][\cDist][S_n] - \lambda_n \right|,
     \]
-
-    Moreover, by Lemma~\ref{lm:imperfection}, it follows that
+    and
     \[
-        \inf_{\inSet{Q}} \kl[][\cDist][S_n] \leq \mu_n \cdot
+        \left|\inf_{\inSet{Q}} \kl[][\cDist][S_n] - \lambda_n \right|
+        \leq \sup_{\inSet{Q}}  \left|\kl[][\cDist][S_n] - \lambda_n \right|.
     \]
-
+    This implies that the left hand sides of
+    Equations~\ref{eq:th_lim_central_proof_sup} and~\ref{eq:th_lim_central_proof_inf}  both converge to $\lambda_n$.
     Now, by the squeeze theorem, the sequence \infSeq[]{\mu_n - \lambda_n} must converge to $0$.
     Therefore, for any arbitrary \(Q \in \setQ\), we have
     \begin{align*}
         \toInf \sum_{s_n} Q(s_n) \ln \frac{\cDist_n(s_n)}{\cDist(s_n)} &=
         \toInf (\kl[][\cDist][S_n] - \kl[][\cDist_n][S_n]) \\
-        &= \toInf (\kl[][\cDist][S_n] - \lambda_n -\mu_n + \lambda_n) \\
+        &= \toInf (\kl[][\cDist][S_n] -\mu_n + \lambda_n - \lambda_n) \\
         &= \toInf(\kl[][\cDist][S_n] - \lambda_n) - \toInf(\mu_n - \lambda_n) \\
-        &= 0 \cdot
+        &= 0 .
     \end{align*}
-    Since $\kl[\cDist_n][\cDist][S_n]$ is a weighted average of
-    $\sum_{s_n} Q(s_n) \ln \frac{\cDist_n(s_n)}{\cDist(s_n)} $, we can conclude that
+    Since $\cDist_n$ satisfies the conditions of Theorem~\ref{th:lambda-centrality},
+    $\kl[\cDist_n][\cDist][S_n]$ is a weighted average of
+    $\sum_{s_n} Q(s_n) \ln \frac{\cDist_n(s_n)}{\cDist(s_n)} $, and we can conclude
     \[
-        \toInf \kl[\cDist_n][\cDist][S_n] = 0 \cdot
+        \toInf \kl[\cDist_n][\cDist][S_n] = 0 .
     \]
     Therefore, \cDist is a central distribution of \setQ for the sequence \infSeq{S}.
 \end{proof}
 
-If we have a consistent estimator sequence \infSeq{T} for the index of a set,
-the following theorem provides a way to construct a
-central distribution for that sequence.
-Here, by a consistent estimator we mean a sequence of estimators such that, for any fixed index value, the
-distribution of $\est_n$ becomes increasingly concentrated around the corresponding value of the
-index as $n$ increases.
-A similar result can also be found in~\cite{BERNARDO200517}.
+\newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
 
-\subsection{Asymptotic Construction of Central Priors}
+Assume \setQ is a set of distributions that can be indexed by a parameter vector \param, and \infSeq{\est} is a
+consistent estimator sequence for \param.
+Let $P(\paramVal \mid\est_n = t)$ denote the posterior distribution obtained from an arbitrary smooth positive
+prior.
 
 Under regular parametric conditions, posterior distributions based on consistent estimators become asymptotically
 insensitive to the choice of smooth positive prior.
-Motivated by this phenomenon, we heuristically derive the asymptotic form of the central prior for a consistent
-sequence of estimators \infSeq{\est} as
+
+Motivated by this phenomenon, we heuristically derive the asymptotic form of a central prior by considering the
+posterior density evaluated at the point $t=\paramVal$.
+A similar asymptotic construction also appears in~\cite{BERNARDO200517}.
+
+Specifically, we define
+
 \begin{equation}
     \label{eq:central-limit}
     \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = t) \vert_{t = \paramVal}}{\mu_n},
 \end{equation}
-where \infSeq{\mu} is a sequence of constants such that the sequence
-$\infSeq[]{\frac{P(\paramVal \mid\est_n = t) \vert_{t = \paramVal}}{\mu_n}}$ converges
-for every value of \paramVal.
+where \infSeq{\mu} is a sequence of positive constants chosen so that the limit exists for every value of \paramVal.
 
-This construction recovers known reference priors in standard examples and serves as a practical recipe for
-identifying candidate central priors.
-
-\newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
-
-Since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$
-concentrates around $\est_n = \paramVal$.
-Moreover, since $\ln$ is a continuous function, it follows from Equation~\ref{eq:central-limit} that
+Let $k$ denote the normalizing constant converting proportionality into equality.
+Since the logarithm is a continuous function, Equation~\ref{eq:central-limit} implies
 \begin{equation*}
-    \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln P(\paramVal \mid t_n) - \ln \mu_n \right) + \ln k
-    = \ln \cPrior(\paramVal),
+    \toInf \left(\ln \frac{P(\paramVal \mid\est_n = t) \vert_{t = \paramVal}}{\cPrior(\paramVal)}
+               - \ln \mu_n + \ln k \right) = 0,
 \end{equation*}
-where $k$ is a normalizing constant converting proportionality into equality.
-As the posterior distribution of a consistent estimator is asymptotically independent of the prior, we may
-replace the prior with $c(\paramVal)$:
+
+Since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$ becomes increasingly concentrated
+around $\est_n = \paramVal$ as $n \to \infty$.
+Furthermore, under the usual regularity conditions, the posterior distribution becomes asymptotically
+insensitive to the choice of smooth positive prior.
+Motivated by this asymptotic prior-insensitivity, we heuristically replace the original prior with $c(\paramVal)$,
+we obtain
 \begin{equation*}
-    \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{c(\paramVal \mid t_n)}{c(\paramVal)}
+    \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln
+               \frac{Q(t_n \mid \paramVal)}{C(t_n)}
                - \ln \mu_n + \ln k \right) = 0 \cdot
 \end{equation*}
-Applying Bayes’ rule and letting $\lambda_n = \ln \mu_n - \ln k$, for every value of \paramVal we obtain:
+Letting
+\[
+    \lambda_n = \ln \mu_n - \ln k,
+\]
+this suggests that, for each fixed \paramVal:
 \begin{equation*}
-    \toInf \left( \Dkl{\estLike}{C(\est_n)} - \lambda_n \right) = 0 \cdot
+    \toInf  \left( \Dkl{\estLike}{C(\est_n)} - \lambda_n \right) = 0 \cdot
 \end{equation*}
-Thus, by Theorem~\ref{th:limiting-centrality}, we can conclude that $\cPrior(\paramVal)$ is a central
-prior of \setQ for \infSeq{\est}.
+Under additional regularity assumptions ensuring that this convergence is uniform over \paramVal, the assumptions of
+Theorem~\ref{th:limiting-centrality} are satisfied.
+Thus, the above asymptotic argument suggests that $\cPrior(\paramVal)$ acts as a central prior of \setQ for the
+estimator sequence \infSeq{\est}.
 
 A central distribution over an estimator cannot, by itself, be used to perform inference at the level of observed
 outcomes.
@@ -245,7 +263,9 @@ method for this conversion.
     \end{equation*}
 \end{example}
 
-When dealing with layered ignorance and attempting to determine the central distribution of a set of sets of
-distributions, as defined in Definition~\ref{def:set-of-sets}, we typically consider the case where the number of
-such sets is finite.
-In that setting, and under appropriate conditions, the central distribution reduces to the uniform distribution.
+When dealing with layered ignorance and attempting to determine the central distribution of a hierarchy of
+distributions, as defined in Definition~\ref{def:hierarchy-of-distributions}, we typically encounter the case where the number of
+elements at a given level of the hierarchy is finite.
+In that setting, and under appropriate regularity conditions,
+the central distribution reduces to an equally weighted average of the corresponding representative central
+distributions.

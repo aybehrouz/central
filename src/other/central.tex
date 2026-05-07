@@ -47,7 +47,10 @@ expresses that certain alternatives are regarded as belonging to a common episte
 aggregated before being compared with alternatives in other groups.
 Consequently, the hierarchy encodes information beyond the collection of leaf distributions alone.
 
-Within a Bayesian framework, however, inference ultimately requires a single probability measure.
+This hierarchical organization may be interpreted as introducing multiple layers of latent structural decisions,
+where higher-level choices restrict the admissible lower-level alternatives.
+
+Within a Bayesian framework, inference ultimately requires a single probability measure.
 Therefore, to use hierarchical partial knowledge in Bayesian inference, we require a principled method for
 transforming a nested set-valued uncertainty representation into a single probability distribution while preserving
 the informational structure encoded by the hierarchy.
@@ -95,17 +98,19 @@ Intuitively, a central distribution acts as a representative or summary of a set
 While it may not belong to the set itself, it reflects the overall behavior of the set in a way that is meaningful
 for inference and also for evaluating a distribution based on our partial knowledge.
 
-The concept of a central distribution is not intended to yield a unique object;
-rather, all distributions satisfying the definition can be regarded as equally good representatives.
-Therefore, while the subsequent definitions seem to depend on uniqueness, it can be made well-defined by
-consistently choosing some central distribution, as all choices are interchangeable.
+The concept of a central distribution is not intended to yield a unique object; rather, all distributions satisfying
+the definition can be regarded as equally good representatives.
+However, when multiple central distributions exist, subsequent constructions should not depend on an arbitrary
+choice among them.
+To ensure that the notion of central divergence is well-defined independently of which representative is selected,
+we define it using the best divergence attained over the set of all central distributions.
 
 \begin{definition}[Central Divergence]
     \label{def:central-divergence}
     For any distribution $P$, we define the \emph{central divergence} of $P$ from a hierarchy of distributions \set{H},
     with respect to a random variable $X$, as follows:
     \begin{equation*}
-        \myDiv = \kl[{\cDist}],
+        \myDiv = \inf_{\cDist} \kl[{\cDist}],
     \end{equation*}
     where $\cDist$ denotes a central distribution of \set{H} for $X$.
 \end{definition}
@@ -114,9 +119,8 @@ The above definition applies only when the hierarchy is a single set of distribu
 The following definition extends the construction recursively to general hierarchical uncertainty structures.
 
 \begin{definition}
-    \label{def:set-of-sets}
+    \label{def:hierarchy-of-distributions}
     Let $X$ be a random variable, and let \set{H^*} be a set whose elements are hierarchy of distributions over $X$.
-    Let \cDist[\set{H}] be a central distribution of $\set{H} \in \set{H^*}$ for $X$.
     We say \ccDist is a central distribution of \set{H^*}, if for every probability distribution $P$ we have:
     \begin{equation*}
         \sup_{\set{H} \in \set{H^*}} \myDiv[\ccDist(X)]  \leq \sup_{\set{H} \in \set{H^*}} \myDiv,
@@ -165,7 +169,7 @@ Consequently, flattening a hierarchy into a single unstructured set may discard 
 In many learning problems, uncertainty concerns not only the parameters of a predictive model but also its
 structural form.
 In particular, when the relevance of potential features is unknown, each candidate feature subset determines a distinct
-family of distributions in which the target variable depends only on that feature set.
+family of distributions in which the target variable depends only on that feature subset.
 
 Feature selection may therefore be viewed as uncertainty over a collection of distributions.
 The hierarchical central distribution framework provides a natural mechanism for representing and aggregating such
@@ -173,7 +177,7 @@ uncertainty.
 By organizing candidate features hierarchically, one may encode preferences over structural hypotheses, such as
 favoring sparse subsets, grouping related attributes, or privileging particular interactions.
 
-Candidate feature sets typically induce overlapping families of admissible distributions.
+Candidate feature subsets typically induce overlapping families of admissible distributions.
 Distributions exhibiting simpler dependency structure may belong simultaneously to many such families, whereas more
 specific dependency patterns belong to fewer.
 As a result, hierarchical aggregation through central distributions can induce a preference toward structurally
@@ -272,8 +276,6 @@ The next theorem is a standard result that is typically used in the derivation o
 
 \input{infty}
 
-We now present some examples of central distributions and demonstrate how they can be used for feature selection.
-
 \begin{example}[Fused Multinomial Model]
     \label{ex:fused-multinomial}
     \newcommand{\prodm}{\prod_{y=1}^m}
@@ -306,7 +308,7 @@ We now present some examples of central distributions and demonstrate how they c
     for $T_n$.
 
     As $n \to \infty$, the distribution of $T_n$ converges to a multivariate Gaussian distribution.
-    Using this fact and Theorem~\ref{th:central-by-estimator}, we can determine a central prior for \infSeq{T}:
+    Using this fact and Equation~\ref{eq:central-limit}, we can determine a central prior for \infSeq{T}:
     \[
         c(\theta) \propto \prodm \theta_y^{-\hf}
     \]

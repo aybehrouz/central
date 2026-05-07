@@ -261,13 +261,16 @@ Exactly like the center of a circle, the central distribution is equidistant fro
 \end{proof}
 
 These theorems were proved under the assumption that \setQ is finite; however, they can be extended to cases where
-\setQ can be indexed by a finite-dimensional real vector \param.
-We can treat this vector as a random variable and interpret $Q_{\paramVal}$ as a conditional
+\setQ can be indexed by a finite-dimensional real vector \param:
+\[
+    \setQ = \left\{ Q_{\theta} \mid \theta \in \Theta \right\}.
+\]
+We can treat \param as a random variable and interpret $Q_{\paramVal}$ as a conditional
 distribution $Q(\xIt)$.
 Then, the weight function, $R(i)$, will essentially become a prior distribution over \paramVal.
 
-The next theorem shows that there is a strong relationship between central distributions and
-Bernardo's reference priors~\cite{BERNARDO200517}.
+The next theorem highlights a formal connection between the central-distribution framework and Bernardo’s reference
+prior methodology~\cite{BERNARDO200517}.
 
 \begin{theorem}
     Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$, indexed by a
@@ -301,5 +304,6 @@ Bernardo's reference priors~\cite{BERNARDO200517}.
     follows that \cDist is a central distribution of \setQ for $X$.
 \end{proof}
 
-The above condition defines an implicit fixed-point equation for the central prior.
-Existence and uniqueness are not addressed here and may depend on the structure of the model family.
+The above condition defines an implicit fixed-point characterization of a central prior.
+This result should be interpreted as a sufficient characterization rather than a general existence or uniqueness
+theorem.

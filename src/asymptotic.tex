@@ -269,3 +269,56 @@ elements at a given level of the hierarchy is finite.
 In that setting, and under appropriate regularity conditions,
 the central distribution reduces to an equally weighted average of the corresponding representative central
 distributions.
+
+
+\begin{example}[Fused Multinomial Model]
+    \label{ex:fused-multinomial}
+    \newcommand{\prodm}{\prod_{y=1}^m}
+    \newcommand{\Qt}{Q_{\theta}}
+    Let \infSeq{S} be a sequence where each $S_n = (\seqExp{X})$ represents $n$ independent trials of an
+    experiment with $k$ possible outcomes,
+    and \setQ be a set of probability distributions over $S_n$ indexed by a real vector \paramVal.
+    Let $f: \set{X} \to \set{Y}$ be a deterministic function that maps each outcome of $X_i$
+    to a label $Y_i = f(X_i)$, where $\set{Y} = \{1, \dots, m\}$.
+    Assume that for all $i$ and $\Qt \in \setQ$, if $f(x_i) = f(x'_i)$ we have \[\Qt(\seqExp{x}) = \Qt(\seqExp{x'}).\]
+    That is, the conditional distribution $\Qt(X_i \mid Y_i = y)$ is uniform over the preimage $f^{-1}(y)$.
+
+    We can consider $\theta = (\theta_1, \dots, \theta_m)$ to be a probability vector over $\mathcal{Y}$,
+    where each $\theta_y$ specifies the probability of observing label $y$.
+    For a sequence $S_n$, let $n_y$ denote the number of times label $y \in \mathcal{Y}$ appears.
+    Let $|f^{-1}(y)|$ denote the number of outcomes in $\mathcal{X}$ that are mapped to label $y$ by $f$.
+    Then the probability of observing $S_n$ under $\Qt \in \setQ$, denoted $Q(S_n \mid \theta)$, is:
+    \[
+        Q(S_n \mid \theta) = \prodm \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y} \cdot
+    \]
+
+    Now, consider the estimator sequence $T_n = \frac{1}{n} \left( \seqExp[m]{n} \right)$, which is a consistent
+    estimator for $\theta$.
+    The conditional distribution $Q(S_n \mid T_n)$ is then given by:
+    \[
+        Q(S_n \mid T_n) = \frac{1}{n!} \prodm \frac{n_y!}{|f^{-1}(y)|^{n_y}} \cdot
+    \]
+    Note that this distribution is independent of $Q_\theta$.
+    Therefore, by Theorem~\ref{th:estimator-to-var}, a central distribution for $S_n$ can be obtained from a central distribution
+    for $T_n$.
+
+    As $n \to \infty$, the distribution of $T_n$ converges to a multivariate Gaussian distribution.
+    Using this fact and Equation~\ref{eq:central-limit}, we can determine a central prior for \infSeq{T}:
+    \[
+        c(\theta) \propto \prodm \theta_y^{-\hf}
+    \]
+    This is a Dirichlet prior and induces a Dirichlet-multinomial distribution for each $T_n$:
+    \[
+        C(T_n) = \frac{\gm{\hf[m]}\gm{n+1}}{\gm{n + \hf[m]}}
+        \prodm \frac{\gm{n_y + \hf}}{\gm{\hf}\gm{n_y+1}} \cdot
+    \]
+    Note that here, $C$ denotes a central distribution for $T_\infty$, and $C(T_n)$ refers to the marginal
+    distribution induced on $T_n$.
+
+    By Theorem~\ref{th:estimator-to-var}, we can derive a central distribution for \infSeq{S}, which induces the
+    following distribution over each $S_n$:
+    \[
+        C_f(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}
+        \prodm \frac{\gm{n_y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}} \cdot
+    \]
+\end{example}

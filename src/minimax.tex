@@ -1,3 +1,8 @@
+With the notion of hierarchical central distributions established, we now develop the theoretical machinery needed
+to characterize and compute them.
+The following results provide optimization-theoretic characterizations of central distributions that form the
+foundation of the subsequent analysis.
+
 The central distribution is essentially the solution to a convex-concave game.
 Since the solution to a convex-concave game corresponds to a saddle point,
 by defining the appropriate objective function, we can characterize the central
@@ -259,51 +264,3 @@ Exactly like the center of a circle, the central distribution is equidistant fro
     maximizer of $g$.
     Therefore, our assumption must be false.
 \end{proof}
-
-These theorems were proved under the assumption that \setQ is finite; however, they can be extended to cases where
-\setQ can be indexed by a finite-dimensional real vector \param:
-\[
-    \setQ = \left\{ Q_{\theta} \mid \theta \in \Theta \right\}.
-\]
-We can treat \param as a random variable and interpret $Q_{\paramVal}$ as a conditional
-distribution $Q(\xIt)$.
-Then, the weight function, $R(i)$, will essentially become a prior distribution over \paramVal.
-
-The next theorem highlights a formal connection between the central-distribution framework and Bernardo’s reference
-prior methodology~\cite{BERNARDO200517}.
-
-\begin{theorem}
-    Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$, indexed by a
-    finite-dimensional random vector \param.
-    Let \cPrior be a strictly positive prior distribution for \param such that for $\like(\xIt) \in \setQ$ we have
-    \begin{equation}
-        \label{eq:central-prior}
-        \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\} \cdot
-    \end{equation}
-    Then, $\cDist(x) = \mrg$ is a central distribution of \setQ for $X$.
-    We also refer to \cPrior as a central prior for $X$.
-\end{theorem}
-
-\begin{proof}
-    \newcommand{\cp}{\cPrior(\paramVal{})}
-    From Equation~\ref{eq:central-prior}, it follows that there exists a constant $\lambda$ such that
-    \begin{equation*}
-        \cp = \exp \left\{-\lambda +  \sum_{x} \like(\xIt) \ln
-                       \frac{\like(\xIt) \cp}{\cDist(x)} \right\} \cdot
-    \end{equation*}
-    Since $\cp$ is strictly positive, we have
-    \begin{align*}
-        \cp &= \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
-        &= \cp \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\},
-    \end{align*}
-    which implies
-    \[
-        \kl[Q_{\paramVal{}}][C] = \lambda \cdot
-    \]
-    Since this holds for all \paramVal, and \cPrior is strictly positive, by Theorem~\ref{th:lambda-centrality} it
-    follows that \cDist is a central distribution of \setQ for $X$.
-\end{proof}
-
-The above condition defines an implicit fixed-point characterization of a central prior.
-This result should be interpreted as a sufficient characterization rather than a general existence or uniqueness
-theorem.

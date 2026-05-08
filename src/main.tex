@@ -72,6 +72,10 @@
 \newcommand{\hf}[1][1]{\frac{#1}{2}}
 \newcommand{\toInf}[1][n]{\lim_{#1 \to \infty}}
 
+% Toggle this:
+\newif\iffullversion
+\fullversiontrue
+%\fullversionfalse
 
 \title{The Central Distribution: A Minimax-KL Approach to Noninformative Priors and Feature Selection}
 \author{Behrouz \\ aybehrouz@gmail.com}
@@ -84,30 +88,44 @@
 
 
     \section{Introduction}\label{sec:intro}
-
-    \subsection{The Optimal Strategy}
     \input{intro}
-
+    \iffullversion
     \subsection{Divergence}\label{sec:dive}
     \input{divergence}
-
-    \newpage
-
+    \fi
 
     \section{Central Distribution}\label{sec:central}
     \input{central}
 
-    \newpage
+    \subsection{Minimax Characterization}\label{subsec:minimax}
+    \input{minimax}
 
+    \subsection{Parametric Families and Central Priors}\label{subsec:parametric}
+    \input{parametric}
+
+    \subsection{Asymptotic Central Distributions}\label{subsec:asymptotic-cd}
+    \input{asymptotic}
+
+    \newpage
 
     \section{Illustrative Examples}\label{sec:examples}
     \input{examples}
-%
+
+    \subsection{Attribute Selection}\label{subsec:attribute-selection}
+    \input{att_selection}
+    \iffullversion
+
+    \subsection{Latent Regression Model}\label{subsec:latent-regression-model2}
+    \input{regression}
+    \fi
+
+    \iffullversion
 %    \appendix
 %    \section{Expectation as a Linear Map}
 %    {
 %        \input{linear}
 %    }\label{sec:expectation-as-a-linear-map}
+    \fi
 
     \newpage
 

@@ -48,11 +48,11 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \[
         f(\cDist, \saddR) \leq \supD[\cDist] \cdot
     \]
-    On the other hand,
+    On the other hand by the definition of saddle point,
     \[
         f\saddle = \max_{R} f(\saddP, R) = \supD[\saddP] \cdot
     \]
-    Thus, Inequality~\ref{eq:th_proof_saddle_lq_dx} implies
+    Thus, Equation~\ref{eq:th_proof_saddle_lq_dx} implies
     \[
         \supD[\saddP] \leq \supD[\cDist] \cdot
     \]
@@ -62,7 +62,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
 
 \begin{lemma}
     \label{lm:saddle_conditions}
-    Let $f$ be the function defined in theorem~\ref{th:saddle_is_central}.
+    Let $f$ be the function defined in Theorem~\ref{th:saddle_is_central}.
     The point \saddle is a saddle point for $f$, if and only if there are constants $\lambda$, $\eta$ and a
     function $\mu$, such that for every $i$, $x$ the following conditions hold:
     \begin{gather}
@@ -115,7 +115,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     To establish this, consider that all the constraint functions are affine, and therefore are concave-convex and
     differentiable.
 
-    Additionally, $\hat{f}$ is differentiable function with respect to both $R$ and $P$.
+    Additionally, $\hat{f}$ is a differentiable function with respect to both $R$ and $P$.
     For any fixed $P$, $\hat{f}(P,\none)$ is an affine function and is concave.
 
     On the other hand, for a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
@@ -178,7 +178,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
         g(R) = \sum_i \kl[Q_i][R] R(i),
     \]
     where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I) \cdot\]
-    Let $f$ be the function defined in theorem~\ref{th:saddle_is_central}.
+    Let $f$ be the function defined in Theorem~\ref{th:saddle_is_central}.
     If \saddle is a saddle point for $f$, then the joint distribution $Q_i(X)\saddR(I)$ is a maximizer of $g$.
 \end{lemma}
 
@@ -223,7 +223,7 @@ Exactly like the center of a circle, the central distribution is equidistant fro
 \begin{proof}
     Lemma~\ref{lm:saddle_conditions} provides a set of sufficient conditions for a saddle point.
     Note that more restrictive conditions can also be imposed to derive an alternative set of sufficient conditions.
-    We can replace Inequality~\ref{eq:saddle_lm_r_geq_0} with the more
+    We can replace Equation~\ref{eq:saddle_lm_r_geq_0} with the more
     restrictive $\saddR(i) > 0$ condition.
     By Equation~\ref{eq:saddle_lm_rmu_is_zero}, that implies $\mu(i) = 0$,
     and Lemma~\ref{lm:saddle_conditions} conditions can be simplified to

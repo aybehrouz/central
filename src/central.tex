@@ -96,14 +96,15 @@ central distributions and feature selection, a connection that will become clear
 
 Intuitively, a central distribution acts as a representative or summary of a set of distributions.
 While it may not belong to the set itself, it reflects the overall behavior of the set in a way that is meaningful
-for inference and also for evaluating a distribution based on our partial knowledge.
+for inference and also induces a notion of divergence for evaluating probability distributions under partial
+knowledge.
 
 The concept of a central distribution is not intended to yield a unique object; rather, all distributions satisfying
 the definition can be regarded as equally good representatives.
-However, when multiple central distributions exist, subsequent constructions should not depend on an arbitrary
+However, when multiple central distributions exist, our constructions should not depend on an arbitrary
 choice among them.
-To ensure that the notion of central divergence is well-defined independently of which representative is selected,
-we define it using the best divergence attained over the set of all central distributions.
+To avoid such dependence, we define the central divergence using the best divergence attained over the set of all
+central distributions.
 
 \begin{definition}[Central Divergence]
     \label{def:central-divergence}
@@ -115,12 +116,13 @@ we define it using the best divergence attained over the set of all central dist
     where $\cDist$ denotes a central distribution of \set{H} for $X$.
 \end{definition}
 
-The above definition applies only when the hierarchy is a single set of distributions.
+So far, this definition applies only when the hierarchy is a single set of distributions.
 The following definition extends the construction recursively to general hierarchical uncertainty structures.
 
 \begin{definition}
     \label{def:hierarchy-of-distributions}
-    Let $X$ be a random variable, and let \set{H^*} be a set whose elements are hierarchy of distributions over $X$.
+    Let $X$ be a random variable, and let \set{H^*} be a hierarchy of distributions over $X$ whose elements are
+    hierarchies of distributions.
     We say \ccDist is a central distribution of \set{H^*}, if for every probability distribution $P$ we have:
     \begin{equation*}
         \sup_{\set{H} \in \set{H^*}} \myDiv[\ccDist(X)]  \leq \sup_{\set{H} \in \set{H^*}} \myDiv,
@@ -162,14 +164,14 @@ Taking the central distribution of these two representatives yields
 Thus, although the underlying admissible sets are identical in both constructions, the resulting representative
 distribution differs.
 
-This demonstrates that hierarchical organization carries informational content beyond the collection of leaf sets
+This demonstrates that hierarchical structure carries informational content beyond the collection of leaf sets
 alone.
 Consequently, flattening a hierarchy into a single unstructured set may discard meaningful epistemic structure.
 
 In many learning problems, uncertainty concerns not only the parameters of a predictive model but also its
 structural form.
-In particular, when the relevance of potential features is unknown, each candidate feature subset determines a distinct
-family of distributions in which the target variable depends only on that feature subset.
+In particular, when the relevance of potential features is unknown, each candidate feature subset determines a
+distinct set of distributions in which the target variable depends only on that feature subset.
 
 Feature selection may therefore be viewed as uncertainty over a collection of distributions.
 The hierarchical central distribution framework provides a natural mechanism for representing and aggregating such
@@ -181,7 +183,7 @@ Candidate feature subsets typically induce overlapping families of admissible di
 Distributions exhibiting simpler dependency structure may belong simultaneously to many such families, whereas more
 specific dependency patterns belong to fewer.
 As a result, hierarchical aggregation through central distributions can induce a preference toward structurally
-simpler models by assigning greater representation to distributions compatible with multiple structural hypotheses.
+simpler models by assigning more weight to distributions compatible with multiple structural hypotheses.
 
 With the notion of hierarchical central distributions established, we now develop the theoretical machinery needed
 to characterize and compute them.
@@ -259,15 +261,19 @@ The next theorem is a standard result that is typically used in the derivation o
         \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) C(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)} \cdot
     \end{equation}
 
-    Since the KL divergence is nonnegative, for every probability distribution $P$ and every \inSet{Q}, we have
+    Since the KL divergence is nonnegative, for every probability distribution $P$ and every \inSet{Q} we have
     \[
-        \Dkl{Q(X,T)}{R(\XIT) P(T)} \leq \Dkl{Q(X,T)}{P(X,T)},
+        \sum_t \Dkl{R(X \mid t)}{P(X \mid t)} Q(t) \geq 0.
     \]
-    which implies
+    That implies
+    \[
+        \Dkl{Q(X,T)}{P(X,T)} - \Dkl{Q(X,T)}{R(\XIT) P(T)} \geq 0.
+    \]
+    Taking the supremum over \inSet{Q} preserves the inequality, since it holds pointwise for every \inSet{Q}:
     \[
         \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{P(X,T)} \cdot
     \]
-    Therefore, combining this inequality with Inequality~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a
+    Combining this inequality with Inequality~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a
     central distribution of \setQ for $(X,T)$.
 \end{proof}
 

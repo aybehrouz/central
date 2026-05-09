@@ -1,20 +1,22 @@
+Suppose we are interested in modeling an infinite sequence of random variables.
+Let $S_n$ denote the first $n$ variables: \[S_n = (\seqExp{X}).\]
 
-Suppose we want to model an exchangeable sequence of random variables.
-Let $S_n$ denote the sequence of the first $n$ variables: $S_n = (\seqExp{X})$.
-As discussed earlier, exchangeability can be interpreted as a form of partial knowledge, which allows us to
-represent our uncertainty using a central distribution over $S_n$.
+In many settings, our uncertainty about $S_n$ can be represented by a central distribution.
+A prominent example arises when the sequence is assumed to be exchangeable.
+As discussed earlier, exchangeability can be viewed as a form of partial knowledge that defines a set of plausible
+distributions, from which a central distribution for $S_n$ can be constructed.
 
 However, this central distribution generally depends on the sequence length $n$.
-According to the principle of objectivity, our beliefs should not depend on the specifics of our experimental setup,
-and in particular, should not vary with the length of the sequence.
+According to the principle of objectivity, our beliefs should depend only on the available information and not on
+arbitrary aspects of the experimental setup, such as the number of variables under consideration.
 
-It is important to note that a distribution defined over a longer sequence induces marginal distributions over its
-shorter subsequences.
-This observation suggests that, in order to satisfy the principle of objectivity, we may instead determine a central
-distribution over an infinite exchangeable sequence, from which the distributions of all finite initial segments can
-be derived.
+A distribution defined over a longer sequence naturally induces marginal distributions over all shorter initial
+segments.
+This suggests that, rather than constructing a separate central distribution for each
+$S_n$, we should seek a single probability measure over the infinite sequence, from which the distributions of all
+finite initial segments can be obtained as marginals.
 
-This requires constructing a central distribution that is well-defined over $S_{\infty}$.
+This motivates the construction of a central distribution that is well defined over $S_{\infty}$.
 
 \begin{definition}
     \label{def:infseq-central}
@@ -32,54 +34,8 @@ Intuitively, this definition states that as $n \to \infty$ the distribution that
 increasingly similar to a central distribution for $S_n$.
 In other words, \cDist is a central distribution for $S_{\infty}$.
 
-Our next goal is to extend Theorem~\ref{th:estimator-to-var} so that it also applies in this asymptotic setting,
+Our next goal is to extend Theorem~\ref{th:lambda-centrality} so that it also applies in this asymptotic setting,
 thereby providing a characterization of central distributions for infinite sequences.
-
-\begin{theorem}
-    \label{th:estimator-to-infseq}
-    Let \infSeq{S} and \infSeq{T} be two sequences of random variables.
-    Let \setQ be a set of probability measures, where each \inSet{Q} defines a joint distribution
-    over $(S_n, T_n)$.
-    Assume there exists a natural number $M$ and a fixed conditional distribution $R$
-    such that, for all \inSet{Q} and $n \geq M$,
-    \[
-        Q(S_n, T_n) = R(S_n \mid T_n)Q(T_n).
-    \]
-
-
-    Let $C$ be a central distribution of \setQ for \infSeq{T} (Definition~\ref{def:infseq-central}).
-    Define a probability measure $C^*$ by
-    \[
-        C^*(S_n, T_n) = R(S_n \mid T_n)C(T_n), \quad n \geq M.
-    \]
-    Then $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
-\end{theorem}
-
-\begin{proof}
-    By Theorem~\ref{th:estimator-to-var}, for each $n \geq M$ we have
-    \[
-        C_n(S_n, T_n) = R(S_n \mid T_n) C_n(T_n),
-    \]
-    where $C_n(T_n)$ is a central distribution for $T_n$, and $C_n(S_n,  T_n)$ is a central distribution for
-    $(S_n, T_n)$.
-    Therefore,
-    \begin{align*}
-        \kl[{C_n}][C^*][S_n, T_n] &= \kl[{R(S_n \mid T_n)C_n}][R(S_n \mid T_n)C][T_n] \\
-        &= \kl[{C_n}][C][T_n].
-    \end{align*}
-    Since $C$ is a central distribution for \infSeq{T} we have
-    \[
-        \toInf \kl[{C_n}][C][T_n] = 0.
-    \]
-    It follows that
-    \[
-        \toInf \kl[{C_n}][C^*][S_n, T_n] = 0,
-    \]
-    so $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
-\end{proof}
-
-We now present an asymptotic version of Theorem~\ref{th:lambda-centrality}, applicable to infinite sequences of
-random variables.
 
 \begin{theorem}
     \label{th:limiting-centrality}
@@ -140,11 +96,58 @@ random variables.
     Therefore, \cDist is a central distribution of \setQ for the sequence \infSeq{S}.
 \end{proof}
 
+We now present an asymptotic version of Theorem~\ref{th:estimator-to-var}, applicable to infinite sequences of
+random variables.
+
+\begin{theorem}
+    \label{th:estimator-to-infseq}
+    Let \infSeq{S} and \infSeq{T} be two sequences of random variables.
+    Let \setQ be a set of probability measures, where each \inSet{Q} defines a joint distribution
+    over $(S_n, T_n)$.
+    Assume there exists a natural number $M$ and a fixed conditional distribution $R$
+    such that, for all \inSet{Q} and $n \geq M$,
+    \[
+        Q(S_n, T_n) = R(S_n \mid T_n)Q(T_n).
+    \]
+
+
+    Let $C$ be a central distribution of \setQ for \infSeq{T} (Definition~\ref{def:infseq-central}).
+    Define a probability measure $C^*$ by
+    \[
+        C^*(S_n, T_n) = R(S_n \mid T_n)C(T_n), \quad n \geq M.
+    \]
+    Then $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
+\end{theorem}
+
+\begin{proof}
+    By Theorem~\ref{th:estimator-to-var}, for each $n \geq M$ we have
+    \[
+        C_n(S_n, T_n) = R(S_n \mid T_n) C_n(T_n),
+    \]
+    where $C_n(T_n)$ is a central distribution for $T_n$, and $C_n(S_n,  T_n)$ is a central distribution for
+    $(S_n, T_n)$.
+    Therefore,
+    \begin{align*}
+        \kl[{C_n}][C^*][S_n, T_n] &= \kl[{R(S_n \mid T_n)C_n}][R(S_n \mid T_n)C][T_n] \\
+        &= \kl[{C_n}][C][T_n].
+    \end{align*}
+    Since $C$ is a central distribution for \infSeq{T} we have
+    \[
+        \toInf \kl[{C_n}][C][T_n] = 0.
+    \]
+    It follows that
+    \[
+        \toInf \kl[{C_n}][C^*][S_n, T_n] = 0,
+    \]
+    so $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
+\end{proof}
+
+
 \newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
 
 Assume \setQ is a set of distributions that can be indexed by a parameter vector \param, and \infSeq{\est} is a
 consistent estimator sequence for \param.
-Let $P(\paramVal \mid\est_n = t)$ denote the posterior distribution obtained from an arbitrary smooth positive
+Let $P(\paramVal \mid\est_n)$ denote the posterior distribution obtained from an arbitrary smooth positive
 prior.
 
 Under regular parametric conditions, posterior distributions based on consistent estimators become asymptotically
@@ -158,19 +161,25 @@ Specifically, we define
 
 \begin{equation}
     \label{eq:central-limit}
-    \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = t) \vert_{t = \paramVal}}{\mu_n},
+    \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\mu_n},
 \end{equation}
 where \infSeq{\mu} is a sequence of positive constants chosen so that the limit exists for every value of \paramVal.
 
 Let $k$ denote the normalizing constant converting proportionality into equality.
 Since the logarithm is a continuous function, Equation~\ref{eq:central-limit} implies
 \begin{equation*}
-    \toInf \left(\ln \frac{P(\paramVal \mid\est_n = t) \vert_{t = \paramVal}}{\cPrior(\paramVal)}
+    \toInf \left(\ln \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\cPrior(\paramVal)}
                - \ln \mu_n + \ln k \right) = 0,
 \end{equation*}
 
 Since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$ becomes increasingly concentrated
-around $\est_n = \paramVal$ as $n \to \infty$.
+around $\est_n = t|_{t=\paramVal}$ as $n \to \infty$.
+Therefore, we may write
+\begin{equation*}
+    \toInf \left(\sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{P(\paramVal \mid t_n)}{\cPrior(\paramVal)}
+               - \ln \mu_n + \ln k \right) = 0.
+\end{equation*}
+
 Furthermore, under the usual regularity conditions, the posterior distribution becomes asymptotically
 insensitive to the choice of smooth positive prior.
 Motivated by this asymptotic prior-insensitivity, we heuristically replace the original prior with $c(\paramVal)$,
@@ -184,7 +193,7 @@ Letting
 \[
     \lambda_n = \ln \mu_n - \ln k,
 \]
-this suggests that, for each fixed \paramVal:
+we observe that, for each fixed \paramVal:
 \begin{equation*}
     \toInf  \left( \Dkl{\estLike}{C(\est_n)} - \lambda_n \right) = 0 \cdot
 \end{equation*}
@@ -198,6 +207,13 @@ outcomes.
 To do so, we must convert it into a distribution over the primary variables of interest.
 Theorems~\ref{th:estimator-to-var} and~\ref{th:estimator-to-infseq} provide a simple
 method for this conversion.
+
+When dealing with layered ignorance and seeking the central distribution of a hierarchy of distributions, as defined
+in Definition~\ref{def:hierarchy-of-distributions}, we typically encounter situations in which a given level of the
+hierarchy contains only finitely many alternatives.
+In such cases, and under appropriate regularity conditions, if there exists a consistent estimator for the index
+identifying these alternatives, then the central distribution reduces to an equally weighted average of the
+corresponding representative central distributions.
 
 \begin{example}[Binomial Experiment]
     \newcommand{\pv}{\paramVal}
@@ -262,14 +278,6 @@ method for this conversion.
         = \frac{\gm{k+\hf} \gm{n-k+\hf}}{\gm{n+1}\gm{\hf}^2} \cdot
     \end{equation*}
 \end{example}
-
-When dealing with layered ignorance and attempting to determine the central distribution of a hierarchy of
-distributions, as defined in Definition~\ref{def:hierarchy-of-distributions}, we typically encounter the case where the number of
-elements at a given level of the hierarchy is finite.
-In that setting, and under appropriate regularity conditions,
-the central distribution reduces to an equally weighted average of the corresponding representative central
-distributions.
-
 
 \begin{example}[Fused Multinomial Model]
     \label{ex:fused-multinomial}

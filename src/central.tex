@@ -65,7 +65,7 @@ representative distribution is one that minimizes the worst-case divergence to t
 Such a distribution may be viewed as the most conservative or robust single-distribution summary of the available
 partial knowledge.
 
-\begin{definition}[Central Distribution]
+\begin{definition}[Central Distribution]\label{def:central-dist}
     Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
     We say a distribution $C$ is a \emph{central distribution} of \setQ for $X$, if for every probability
     distribution $P$, we have
@@ -86,6 +86,7 @@ While not directly about feature selection, this extension plays a key role in e
 central distributions and feature selection, a connection that will become clearer later.
 
 \begin{definition}[Hierarchy of Distributions]
+    \label{def:hierarchy-of-distributions}
     A \emph{hierarchy of distributions} over $X$ is defined recursively as follows:
     \begin{itemize}
         \item Any set of probability distributions over $X$ is a hierarchy of distributions over $X$.
@@ -95,9 +96,10 @@ central distributions and feature selection, a connection that will become clear
 \end{definition}
 
 Intuitively, a central distribution acts as a representative or summary of a set of distributions.
-While it may not belong to the set itself, it reflects the overall behavior of the set in a way that is meaningful
-for inference and also induces a notion of divergence for evaluating probability distributions under partial
-knowledge.
+While it may not belong to the set itself, it reflects the overall properties of the set in a way that is
+meaningful for inference.
+It also allows probability distributions to be evaluated under partial knowledge, thereby inducing a notion of
+divergence.
 
 The concept of a central distribution is not intended to yield a unique object; rather, all distributions satisfying
 the definition can be regarded as equally good representatives.
@@ -120,7 +122,7 @@ So far, this definition applies only when the hierarchy is a single set of distr
 The following definition extends the construction recursively to general hierarchical uncertainty structures.
 
 \begin{definition}
-    \label{def:hierarchy-of-distributions}
+    \label{def:center-of-H}
     Let $X$ be a random variable, and let \set{H^*} be a hierarchy of distributions over $X$ whose elements are
     hierarchies of distributions.
     We say \ccDist is a central distribution of \set{H^*}, if for every probability distribution $P$ we have:
@@ -152,14 +154,16 @@ distribution is
 
 Now consider instead a hierarchical organization in which \(S_1\) and \(S_2\) are grouped together, while \(S_3\)
 forms its own separate branch.
-
-Taking the central distribution of these two representatives yields
-\begin{align*}
-    C_{\{\{S_1,S_2\}, S_3\}}
-    &= \frac12 C_{\{S_1,S_2\}} + \frac12 C_{S_3} \\
-    &= \frac14 C_{S_1} + \frac14 C_{S_2} + \frac12 C_{S_3} \\
-    &= \left(\frac38,\frac38,\frac14\right).
-\end{align*}
+By numerically solving the minimax problem in
+Definition~\ref{def:central-dist}, we obtain
+\[
+    C_{\{S_1,S_2\}} = \left(0.25, 0.25, 0.5\right).
+\]
+Applying the same procedure to the two distributions
+$C_{\{S_1,S_2\}}$ and $C_{S_3}$ yields
+\[
+    C_{\{\{S_1,S_2\}, S_3\}} = \left(0.4, 0.4, 0.2\right).
+\]
 
 Thus, although the underlying admissible sets are identical in both constructions, the resulting representative
 distribution differs.

@@ -17,7 +17,7 @@ distribution using standard convex optimization techniques.
     for all \inSet{w} and \inSet{z}.
 \end{definition}
 
-Next, we will establish the connection between the saddle point and the central distribution.
+Next, we establish the connection between saddle points and central distributions.
 One significant insight provided by the next theorem is that it suggests inference and searching for a central
 distribution can be combined and performed simultaneously when finding a saddle point.
 
@@ -32,7 +32,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \end{equation*}
     where $Q_i \in \setQ$, and $P$, $R$ are probability distributions.
 
-    If \saddle is a saddle point of $f$, then \saddP is a central distribution of \setQ for $X$.
+    If \saddle is a saddle point for $f$, then \saddP is a central distribution of \setQ for $X$.
 \end{theorem}
 
 \begin{proof}
@@ -111,7 +111,8 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \end{equation}
     Clearly, if $\saddle$ exists, it will be a saddle point for $f$.
 
-    Both of these optimization problems are convex~\cite{0521833787} and differentiable.
+    Both of these optimization problems are convex and differentiable in the sense of convex
+    optimization; see~\cite{0521833787}.
     To establish this, consider that all the constraint functions are affine, and therefore are concave-convex and
     differentiable.
 
@@ -189,8 +190,8 @@ distribution can be combined and performed simultaneously when finding a saddle 
         g(\saddR) = f\saddle \cdot
     \]
     Now, let $R$ be an arbitrary probability distribution.
-    From Lemma~\ref{lm:saddle_conditions}, it follows that $g(R)$ indeed corresponds to the minimum of $f(\none, R)$,
-    which implies
+    From the second part of Lemma~\ref{lm:saddle_conditions}, it follows that $g(R)$ indeed corresponds to the
+    minimum of $f(\none, R)$, which implies
     \[
         g(R) \leq f(\saddP,R) \cdot
     \]

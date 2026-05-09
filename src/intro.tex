@@ -7,8 +7,7 @@
 \newcommand{\post}{\pi(x_i \mid \paramVal)}
 
 
-We begin by revisiting a fundamental decision-making problem, and how it is treated within the framework of Bayesian
-decision theory.
+We begin by revisiting a fundamental decision-making problem and its treatment within Bayesian decision theory.
 
 Consider an environment where an agent must select an action from a set of available actions.
 The loss associated with each action depends on the unknown state of the environment
@@ -16,7 +15,7 @@ and can be quantified by a real number.
 Specifically, let $a$ denote an action, and $x$ represent the unknown environment state.
 The loss function  $\util$ quantifies the loss for each action.
 
-Furthermore, we assume that an evidence $e$ of this unknown environment state exists, and the agent can leverage
+We assume that some evidence $e$ about the unknown environment state is available, and the agent can leverage
 this evidence to determine the best action.
 In other words, our agent aims to find an optimal strategy, where a strategy defines the distribution of each
 action conditioned on the observed evidence: $S(A \mid E)$.
@@ -49,7 +48,7 @@ The strategy with the lower expected loss is the better one.
 Note that, in reality, we cannot freely choose any random variable as our evidence.
 We can only choose evidence that is a deterministic function of the evidence provided by the environment,
 allowing us to determine its value after observing the original evidence.
-Utilizing a strategy that uses a simpler evidence, resembles feature selection in machine learning.
+Using a strategy based on a simpler form of evidence resembles feature selection in machine learning.
 For instance, in a learning task where our evidence is an image, we might substitute the image with the first
 three coefficients of its Fourier transform.
 Naturally, these coefficients are a function of the original evidence.
@@ -64,7 +63,7 @@ decision theory.
 
 The key point here is that the space of strategies using $E'$ is a subset of the strategies that use $E$.
 When we are searching for the best strategy based on $E$, we are implicitly evaluating all simpler forms as well.
-It is possible that this is the reason the Bayesian framework does not favor the simpler evidence $E'$.
+This may explain why the standard Bayesian framework does not favor the simpler evidence $E'$.
 
 Plausibly, if we choose an appropriate prior distribution, when we are finding the optimal
 strategy, the relevant information should be automatically extracted from the evidence by the Bayesian framework.
@@ -72,7 +71,7 @@ In other words, an appropriate prior should enable feature selection.
 However, when applied in a conventional Bayesian setting, many commonly used noninformative priors,
 such as the flat prior, do not naturally promote feature selection.
 
-Throughout this discussion, we introduce the central distribution, a minimax-KL representative of a set (or
+In this paper, we introduce the central distribution, a minimax-KL representative of a set (or
 hierarchy) of probability distributions.
-We show its connection to reference priors, derive asymptotic central priors, and demonstrate how hierarchical
-central distributions naturally perform feature selection.
+We establish its connection to reference priors~\cite{BERNARDO200517}, develop asymptotic central priors, and show
+how hierarchical central distributions naturally perform feature selection.

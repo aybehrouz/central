@@ -27,7 +27,7 @@ Such a set represents some form of \emph{uncertainty} or \emph{partial knowledge
 single distribution, it constrains the range of plausible probabilistic models.
 
 A well-known example of this idea is the exchangeability assumption used in de Finetti’s theorem.
-A sequence of random variables \infSeqExp{X} is said to be exchangeable, if the ordering of the variables carries no
+A sequence of random variables \infSeqExp{X} is said to be exchangeable if the ordering of the variables carries no
 information.
 That is, the joint probability distribution remains invariant under permutations of the variables.
 This assumption imposes a constraint, effectively introducing a set of plausible distributions.
@@ -40,7 +40,7 @@ More generally, partial knowledge may possess a hierarchical structure.
 In the simplest case, uncertainty is represented by a single set of candidate distributions.
 In richer settings, however, this uncertainty may be organized into nested collections, where elements of a set may
 themselves be sets of distributions.
-Such nesting can continue recursively, yielding a hierarchical uncertainty structure.
+Such nesting can continue recursively, yielding a hierarchical structure.
 
 Crucially, the choice of hierarchical organization is itself informative: grouping distributions into subsets
 expresses that certain alternatives are regarded as belonging to a common epistemic category and should therefore be
@@ -56,7 +56,7 @@ transforming a nested set-valued uncertainty representation into a single probab
 the informational structure encoded by the hierarchy.
 
 We adopt the principle that the probability measure used to represent prior beliefs about the environment should
-depend only on the available information about the environment itself, and not on agent specific considerations such as
+depend only on the available information about the environment itself, and not on agent-specific considerations such as
 the loss function or the informativeness of observations.
 We refer to this modeling assumption as \emph{the principle of objectivity}.
 
@@ -180,7 +180,7 @@ distinct set of distributions in which the target variable depends only on that 
 Feature selection may therefore be viewed as uncertainty over a collection of distributions.
 The hierarchical central distribution framework provides a natural mechanism for representing and aggregating such
 uncertainty.
-By organizing candidate features hierarchically, one may encode preferences over structural hypotheses, such as
+By organizing candidate feature sets hierarchically, one can encode preferences over structural hypotheses, such as
 favoring sparse subsets, grouping related attributes, or privileging particular interactions.
 
 Candidate feature subsets typically induce overlapping families of admissible distributions.

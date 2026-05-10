@@ -14,7 +14,7 @@ Then, the weight function, $R(i)$, will essentially become a prior distribution 
     A distribution $R$ is called an \emph{interior distribution} of \setQ if, for every probability distribution $P$,
     there exists some $\inSet{Q}$ such that
     \begin{equation*}
-        \kl[R] \leq \kl[Q],
+        \kl[R] \leq \kl[Q].
     \end{equation*}
 \end{definition}
 
@@ -130,9 +130,8 @@ prior methodology~\cite{BERNARDO200517}.
     follows that \cDist is a central distribution of \setQ for $X$.
 \end{proof}
 
-The above condition defines an implicit fixed-point characterization of a central prior.
-This result should be interpreted as a sufficient characterization rather than a general existence or uniqueness
-theorem.
+This theorem provides a sufficient fixed-point characterization of central priors; it does not address existence or
+uniqueness in full generality.
 
 Although this theorem is proved directly from Theorem~\ref{th:lambda-centrality}, Lemma~\ref{lm:c-is-maximizer}
 suggests an alternative route to the connection with Bernardo's reference prior methodology.

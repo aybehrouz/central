@@ -1,10 +1,10 @@
-With the notion of hierarchical central distributions established, we now develop the theoretical machinery needed
+With the concept of hierarchical central distributions established, we now develop the theoretical machinery needed
 to characterize and compute them.
 The following results provide optimization-theoretic characterizations of central distributions that form the
 foundation of the subsequent analysis.
 
 The central distribution is essentially the solution to a convex-concave game.
-Since the solution to a convex-concave game corresponds to a saddle point,
+Because solutions of convex-concave games correspond to saddle points,
 by defining the appropriate objective function, we can characterize the central
 distribution using standard convex optimization techniques.
 
@@ -48,7 +48,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \[
         f(\cDist, \saddR) \leq \supD[\cDist] \cdot
     \]
-    On the other hand by the definition of saddle point,
+    On the other hand, by the definition of a saddle point,
     \[
         f\saddle = \max_{R} f(\saddP, R) = \supD[\saddP] \cdot
     \]
@@ -93,7 +93,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \begin{equation*}
         \hat{f}(P, R) = \fExp,
     \end{equation*}
-    where the requirement that $P$ and $R$ be probability distributions is omitted.
+    where the constraints that $P$ and $R$ be probability distributions are omitted.
     This enables us to formulate the saddle point of $f$ as the solution to a constrained optimization problem
     defined for $\hat{f}$.
 
@@ -136,7 +136,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     to find feasible points that meet all the constraints.
     Therefore, Slater’s condition is satisfied, and the KKT conditions provide necessary
     and sufficient conditions for optimality~\cite{0521833787}.
-    In other words, If there exists a point $\saddle$ that satisfies the KKT conditions for both problems, it will be a
+    In other words, if there exists a point $\saddle$ that satisfies the KKT conditions for both problems, it will be a
     saddle point for $f$, and vice versa.
 
     The KKT conditions are as follows for every $x$, $i$ and constants $\lambda$, $\eta$:
@@ -208,7 +208,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
 
 The following theorem gives a standard sufficient condition for centrality in the KL-minimax setting which is
 the rationale behind the term ``central distribution.''
-Exactly like the center of a circle, the central distribution is equidistant from the boundary.
+Like the center of a circle, the central distribution is equidistant from the boundary.
 
 \begin{theorem} [Centrality]
     \label{th:lambda-centrality}
@@ -234,7 +234,7 @@ Exactly like the center of a circle, the central distribution is equidistant fro
     \end{gather*}
     which must hold for every $Q_i \in \setQ$ and some strictly positive probability distribution \saddR.
 
-    Since \cDist satisfies these condition, Lemma~\ref{lm:saddle_conditions} and
+    Since \cDist satisfies these conditions, Lemma~\ref{lm:saddle_conditions} and
     Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
 \end{proof}
 

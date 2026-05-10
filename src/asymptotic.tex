@@ -49,7 +49,7 @@ thereby providing a characterization of central distributions for infinite seque
 \end{theorem}
 
 \begin{proof}
-    For the purpose of this proof, we additionally assume that for each \(S_n\), there exists
+    For this proof, we additionally assume that for each \(S_n\), there exists
     a central distribution $\cDist_n$ that satisfies the conditions of Theorem~\ref{th:lambda-centrality}.
     That is, there exists a constant \(\mu_n\) such that for every \inSet{Q}
     \[
@@ -76,7 +76,7 @@ thereby providing a characterization of central distributions for infinite seque
         \left|\inf_{\inSet{Q}} \kl[][\cDist][S_n] - \lambda_n \right|
         \leq \sup_{\inSet{Q}}  \left|\kl[][\cDist][S_n] - \lambda_n \right|.
     \]
-    This implies that the left hand sides of
+    This implies that the left-hand sides of
     Equations~\ref{eq:th_lim_central_proof_sup} and~\ref{eq:th_lim_central_proof_inf}  both converge to $\lambda_n$.
     Now, by the squeeze theorem, the sequence \infSeq[]{\mu_n - \lambda_n} must converge to $0$.
     Therefore, for any arbitrary \(Q \in \setQ\), we have
@@ -158,7 +158,6 @@ posterior density evaluated at the point $t=\paramVal$.
 A similar asymptotic construction also appears in~\cite{BERNARDO200517}.
 
 Specifically, we define
-
 \begin{equation}
     \label{eq:central-limit}
     \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\mu_n},

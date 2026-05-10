@@ -173,7 +173,7 @@ Since the logarithm is a continuous function, Equation~\ref{eq:central-limit} im
 \end{equation*}
 
 Since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$ becomes increasingly concentrated
-around $\est_n = t|_{t=\paramVal}$ as $n \to \infty$.
+around $\paramVal$ as $n \to \infty$.
 Therefore, we may write
 \begin{equation*}
     \toInf \left(\sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{P(\paramVal \mid t_n)}{\cPrior(\paramVal)}
@@ -217,22 +217,13 @@ corresponding representative central distributions.
 
 \begin{example}[Binomial Experiment]
     \newcommand{\pv}{\paramVal}
-    Consider a binomial experiment with $n$ Bernoulli trials.
-    Denote the sequence of outcomes by $S_n$, and let $k$ be the number of successes observed in $S_n$
-
-    Let \setQ be the set of distributions corresponding to different values of the success
-    probability $\pv \in [0,1]$.
-    We can consider $\pv$ as an index parameter for \setQ, and
-    we write $Q(S_n \mid \pv)$ to denote the distribution $Q_{\pv}$ applied to $S_n$.
-    Explicitly,
-    \[
-        Q(S_n \mid \pv) = \pv^k (1-\pv)^{n-k} \cdot
-    \]
-
-    Define $T_n$ to be the proportion of successes in $n$ trials.
-    Note that $T_n$ is a consistent estimator for $\pv$.
-    Therefore, we can use Equation~\ref{eq:central-limit} to find a central distribution for the sequence
-    \infSeq{T}.
+    Consider a binomial experiment consisting of $n$ independent Bernoulli Trials.
+    Let \setQ denote the family of probability distributions corresponding to different values of the success
+    probability $\pv \in [0,1]$, with \pv serving as the indexing parameter for \setQ.
+    Let $T_n$ be the sample proportion of successes in the $n$ trials.
+    Since $T_n$ is a consistent estimator of \pv, we can apply Equation~\ref{eq:central-limit} to determine a
+    central distribution for the
+    sequence \infSeq{T}.
 
     Assuming a uniform prior on $\pv$, Bayes’ rule gives the posterior distribution
     \[
@@ -246,37 +237,17 @@ corresponding representative central distributions.
     \end{equation*}
     We now let $T_n \to \pv$:
     \begin{equation*}
-        P\left(\pv \mid T_n = \pv \right) \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
+        P(\paramVal \mid\est_n = t)|_{t = \paramVal} \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
     \end{equation*}
     Therefore, if we define
     \[
         \mu_n = \frac{n+1}{\sqrt{2 \pi n}},
     \]
-    the following limit exists:
+    the following limit exists for $\paramVal \in (0,1)$:
     \[
-        \toInf \frac{P\left(\pv \mid T_n = \pv \right)}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
+        \toInf \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
     \]
     This implies that $c(\pv) \propto \pv^{-\hf}(1 - \pv)^{-\hf}$ is a central prior for \infSeq{T}.
-
-    Now we apply Theorem~\ref{th:estimator-to-infseq} to obtain a central distribution for $\infSeq{S}$.
-    Since $T_n$ is a deterministic function of $S_n$, the joint distribution $Q(S_n, T_n)$ coincides with the
-    distribution of $S_n$: it assigns probability $Q(S_n)$ when $T_n$ is compatible with $S_n$, and zero otherwise.
-    In other words, knowledge of $(S_n, T_n)$ is equivalent to knowledge of $S_n$.
-
-    In the binomial experiment, all sequences with the same number of successes and failures have equal probability.
-    Therefore,
-    \[
-        Q(S_n \mid \pv)
-        = Q\!\left(S_n,\, T_n = \tfrac{k}{n} \mid \pv\right)
-        = \frac{1}{\binom{n}{k}} Q(T_n \mid \pv) \cdot
-    \]
-    Let $C^*$ denote the central distribution of $\infSeq{S}$.
-    By Theorem~\ref{th:estimator-to-infseq}, the distribution induced by $C^*$ on each $S_n$ is given by:
-    \begin{equation*}
-        C^*(S_n)
-        %= C^*\!\left(S_n,\, T_n = \tfrac{k}{n}\right)
-        = \frac{\gm{k+\hf} \gm{n-k+\hf}}{\gm{n+1}\gm{\hf}^2} \cdot
-    \end{equation*}
 \end{example}
 
 \begin{example}[Fused Multinomial Model]
@@ -303,28 +274,30 @@ corresponding representative central distributions.
     Now, consider the estimator sequence $T_n = \frac{1}{n} \left( \seqExp[m]{n} \right)$, which is a consistent
     estimator for $\theta$.
     The conditional distribution $Q(S_n \mid T_n)$ is then given by:
-    \[
+    \begin{equation}
         Q(S_n \mid T_n) = \frac{1}{n!} \prodm \frac{n_y!}{|f^{-1}(y)|^{n_y}} \cdot
-    \]
+        \label{eq:fused-multinomial-conditional}
+    \end{equation}
     Note that this distribution is independent of $Q_\theta$.
-    Therefore, by Theorem~\ref{th:estimator-to-var}, a central distribution for $S_n$ can be obtained from a central distribution
+    Therefore, by Theorem~\ref{th:estimator-to-infseq}, a central distribution for $S_n$ can be obtained from a central distribution
     for $T_n$.
 
     As $n \to \infty$, the distribution of $T_n$ converges to a multivariate Gaussian distribution.
     Using this fact and Equation~\ref{eq:central-limit}, we can determine a central prior for \infSeq{T}:
     \[
-        c(\theta) \propto \prodm \theta_y^{-\hf}
+        c(\theta) \propto \prodm \theta_y^{-\hf}.
     \]
     This is a Dirichlet prior and induces a Dirichlet-multinomial distribution for each $T_n$:
     \[
         C(T_n) = \frac{\gm{\hf[m]}\gm{n+1}}{\gm{n + \hf[m]}}
         \prodm \frac{\gm{n_y + \hf}}{\gm{\hf}\gm{n_y+1}} \cdot
     \]
-    Note that here, $C$ denotes a central distribution for $T_\infty$, and $C(T_n)$ refers to the marginal
-    distribution induced on $T_n$.
+    Note that $C$ is a central distribution for the sequence \infSeq{T}, viewed as a probability measure on the
+    infinite sequence $T_\infty$.
+    The notation $C(T_n)$ denotes the marginal distribution of $T_n$.
 
-    By Theorem~\ref{th:estimator-to-var}, we can derive a central distribution for \infSeq{S}, which induces the
-    following distribution over each $S_n$:
+    By Theorem~\ref{th:estimator-to-infseq} and Equation~\ref{eq:fused-multinomial-conditional}, we can derive a
+    central distribution for \infSeq{S}, which induces the following distribution over each $S_n$:
     \[
         C_f(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}
         \prodm \frac{\gm{n_y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}} \cdot

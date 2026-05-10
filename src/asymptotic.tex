@@ -87,13 +87,18 @@ thereby providing a characterization of central distributions for infinite seque
         &= \toInf(\kl[][\cDist][S_n] - \lambda_n) - \toInf(\mu_n - \lambda_n) \\
         &= 0 .
     \end{align*}
-    Since $\cDist_n$ satisfies the conditions of Theorem~\ref{th:lambda-centrality},
-    $\kl[\cDist_n][\cDist][S_n]$ is a weighted average of
-    $\sum_{s_n} Q(s_n) \ln \frac{\cDist_n(s_n)}{\cDist(s_n)} $, and we can conclude
+    Since $\cDist_n$ satisfies the conditions of Theorem~\ref{th:lambda-centrality}, it is a convex combination of
+    elements of \setQ.
+    Therefore, $\kl[\cDist_n][\cDist][S_n]$ is a convex combination of
     \[
-        \toInf \kl[\cDist_n][\cDist][S_n] = 0 .
+        Q_i(s_n) \ln \frac{\cDist_n(s_n)}{\cDist(s_n)}, \quad Q_i \in \setQ.
     \]
-    Therefore, \cDist is a central distribution of \setQ for the sequence \infSeq{S}.
+    By the previous result, we can conclude
+    \[
+        \toInf \kl[\cDist_n][\cDist][S_n] = 0.
+    \]
+    Therefore, by Definition~\ref{def:infseq-central}, \cDist is a central distribution of \setQ for the
+    sequence \infSeq{S}.
 \end{proof}
 
 We now present an asymptotic version of Theorem~\ref{th:estimator-to-var}, applicable to infinite sequences of

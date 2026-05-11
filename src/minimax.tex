@@ -167,8 +167,12 @@ distribution can be combined and performed simultaneously when finding a saddle 
     To prove the second part of the lemma,
     we observe that Equations~\ref{eq:kkt_proof_R_is_pxIe} and~\ref{eq:kkt_proof_p_sums_one} are the KKT conditions
     for the minimization problem in~\ref{eq:twin_optimization}, when $R$ is a probability distribution.
-    Therefore, these conditions provide necessary and sufficient conditions for a point
-    to be a minimizer of $f(\none,R)$, where $R$ is a fixed distribution.
+    Since the optimization problem satisfies Slater's condition,
+    these KKT conditions are necessary and sufficient. Hence
+    \[
+        \hat P(x)=\sum_i Q_i(x)R(i)
+    \]
+    if and only if $\hat P$ minimizes $f(\none,R)$, where $R$ is any fixed distribution.
 \end{proof}
 
 \begin{lemma}

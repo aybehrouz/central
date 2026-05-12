@@ -108,6 +108,7 @@
 
     \section{Introduction}\label{sec:intro}
     \input{intro}
+
     \iffullversion
     \subsection{Divergence}\label{sec:dive}
     \input{divergence}
@@ -132,11 +133,16 @@
 
     \subsection{Attribute Selection}\label{subsec:attribute-selection}
     \input{att_selection}
-    \iffullversion
 
+    \iffullversion
     \subsection{Latent Regression Model}\label{subsec:latent-regression-model2}
     \input{regression}
     \fi
+
+    \newpage
+
+    \bibliography{main}
+    \bibliographystyle{plain}
 
     \iffullversion
 %    \appendix
@@ -146,8 +152,6 @@
 %    }\label{sec:expectation-as-a-linear-map}
     \fi
 
-    \newpage
-
-    \bibliography{main}
-    \bibliographystyle{plain}
 \end{document}
+
+\typeout{get arXiv to do 4 passes: Label(s) may have changed. Rerun}

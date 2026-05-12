@@ -165,10 +165,12 @@ distribution can be combined and performed simultaneously when finding a saddle 
     Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
 
     To prove the second part of the lemma,
-    we observe that Equations~\ref{eq:kkt_proof_R_is_pxIe} and~\ref{eq:kkt_proof_p_sums_one} are the KKT conditions
-    for the minimization problem in~\ref{eq:twin_optimization}, when $R$ is a probability distribution.
-    Since the optimization problem satisfies Slater's condition,
-    these KKT conditions are necessary and sufficient. Hence
+    we observe that when $R$ is a probability distribution, Equations~\ref{eq:kkt_proof_R_is_pxIe}
+    and~\ref{eq:kkt_proof_p_sums_one} are the KKT conditions for the minimization problem
+    in Equation~\ref{eq:twin_optimization}.
+    Since this minimization problem is convex and satisfies Slater's condition,
+    the KKT conditions are necessary and sufficient.
+    Hence
     \[
         \hat P(x)=\sum_i Q_i(x)R(i)
     \]
@@ -176,7 +178,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
 \end{proof}
 
 \begin{lemma}
-    \label{lm:c-is-maximizer}
+    \label{lm:saddle-is-maximizer}
     Let \setQ be a finite set of probability distributions over a discrete random variable $X$.
     Define the function $g$ as:
     \[
@@ -210,7 +212,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     Since $R$ was an arbitrary distribution, this shows that $g(\saddR)$ is the maximum of $g$, as desired.
 \end{proof}
 
-The following theorem gives a standard sufficient condition for centrality in the KL-minimax setting which is
+The following theorem gives a standard sufficient condition for optimality in the KL-minimax setting which is
 the rationale behind the term ``central distribution.''
 Like the center of a circle, the central distribution is equidistant from the boundary.
 
@@ -242,6 +244,12 @@ Like the center of a circle, the central distribution is equidistant from the bo
     Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
 \end{proof}
 
+\begin{corollary}
+    \label{cor:C-maximizes-g}
+    Under the assumptions of Theorem~\ref{th:lambda-centrality}, the
+    distribution $C$ is a maximizer of the function $g$ defined in
+    Lemma~\ref{lm:saddle-is-maximizer}.
+\end{corollary}
 
 \begin{lemma}
     \label{lm:imperfection}
@@ -260,12 +268,9 @@ Like the center of a circle, the central distribution is equidistant from the bo
         g(P) > \lambda = g(C),
     \]
     where $C$ is the distribution specified in Theorem~\ref{th:lambda-centrality}, and $g$ is the function defined in
-    Lemma~\ref{lm:c-is-maximizer}.
+    Lemma~\ref{lm:saddle-is-maximizer}.
     Note that $g(P)$ is defined, because $P$ is a convex combination of elements of \setQ.
 
-    However, by the conditions of Theorem~\ref{th:lambda-centrality}, the distribution $C$ corresponds to a saddle
-    point of $f$.
-    This leads to a contradiction, since Lemma~\ref{lm:c-is-maximizer} asserts that a saddle point of $f$ must be a
-    maximizer of $g$.
-    Therefore, our assumption must be false.
+    However, by Corollary~\ref{cor:C-maximizes-g}, the distribution $C$ maximizes $g$, which contradicts the
+    inequality $g(P) > g(C)$.
 \end{proof}

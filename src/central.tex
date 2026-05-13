@@ -22,7 +22,7 @@ In probabilistic modeling, our knowledge about
 $X$ is represented by a probability distribution, which serves as a basis for making inferences.
 
 However, in many situations, our information may be too limited to justify choosing a single distribution.
-Instead, we may only be able to specify a set of plausible distributions.
+Instead, we may be able to specify only a set of plausible distributions.
 Such a set represents some form of \emph{uncertainty} or \emph{partial knowledge}: although it does not identify a
 single distribution, it constrains the range of plausible probabilistic models.
 
@@ -52,7 +52,7 @@ where higher-level choices restrict the admissible lower-level alternatives.
 
 Within a Bayesian framework, inference ultimately requires a single probability measure.
 Therefore, to use hierarchical partial knowledge in Bayesian inference, we require a principled method for
-transforming a nested set-valued uncertainty representation into a single probability distribution while preserving
+transforming a nested set-valued uncertainty into a single probability distribution while preserving
 the informational structure encoded by the hierarchy.
 
 We adopt the principle that the probability measure used to represent prior beliefs about the environment should
@@ -67,7 +67,7 @@ partial knowledge.
 
 \begin{definition}[Central Distribution]\label{def:central-dist}
     Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
-    We say a distribution $C$ is a \emph{central distribution} of \setQ for $X$, if for every probability
+    We call a distribution $C$ a \emph{central distribution} of \setQ for $X$ if, for every probability
     distribution $P$, we have
     \begin{equation}
         \supD[\cDist] \leq \supD[P],
@@ -98,8 +98,8 @@ central distributions and feature selection, a connection that will become clear
 Intuitively, a central distribution acts as a representative or summary of a set of distributions.
 While it may not belong to the set itself, it reflects the overall properties of the set in a way that is
 meaningful for inference.
-It also allows probability distributions to be evaluated under partial knowledge, thereby inducing a notion of
-divergence.
+It also provides a way to evaluate probability distributions relative to partial knowledge, motivating the
+definition of a corresponding central divergence.
 
 The concept of a central distribution is not intended to yield a unique object; rather, all distributions satisfying
 the definition can be regarded as equally good representatives.
@@ -184,8 +184,8 @@ By organizing candidate feature sets hierarchically, one can encode preferences 
 favoring sparse subsets, grouping related attributes, or privileging particular interactions.
 
 Candidate feature subsets typically induce overlapping families of admissible distributions.
-Distributions exhibiting simpler dependency structure may belong simultaneously to many such families, whereas more
-specific dependency patterns belong to fewer.
+Distributions representing simpler dependency structure may belong simultaneously to many such families, whereas more
+complex dependency patterns belong to fewer.
 As a result, hierarchical aggregation through central distributions can induce a preference toward structurally
 simpler models by assigning more weight to distributions compatible with multiple structural hypotheses.
 

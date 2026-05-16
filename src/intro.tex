@@ -26,8 +26,8 @@ According to Bayesian decision theory, the optimal strategy is the one that mini
 \end{equation*}
 where $\envDist$ is the joint probability distribution of the environment state and the evidence.
 
-It can be shown that there always exists a deterministic optimal strategy.
-That is, we can consider a strategy as a function of the evidence, rather than as a conditional distribution:
+One can show that there always exists a deterministic optimal strategy.
+Therefore, we can consider a strategy as a function of the evidence, rather than as a conditional distribution:
 \[
     S_{\text{opt}} = \arg\min_S \sum_{x,e} \util[S(e)] \envDist(x, e).
 \]
@@ -48,6 +48,7 @@ The strategy with the lower expected loss is the better one.
 Note that, in reality, we cannot freely choose any random variable as our evidence.
 We can only choose evidence that is a deterministic function of the evidence provided by the environment,
 allowing us to determine its value after observing the original evidence.
+
 Using a strategy based on a simpler form of evidence resembles feature selection in machine learning.
 For instance, in a learning task where our evidence is an image, we might substitute the image with the first
 three coefficients of its Fourier transform.

@@ -12,36 +12,41 @@ Then, we define the labeling function $f$ as follows:
 \[
     f(\seqExp{A}, Y) = (A_2, A_5, Y) \cdot
 \]
-In a fused multinomial model with this labeling function, $Y$ will be conditionally independent
-from other attributes, given $A_2, A_5$.
-Additionally, $P(\seqExp{A} \mid A_2, A_5)$ will be uniform.
-
-For every possible subset of attributes a distinct fused multinomial model of this form is needed.
-Each model corresponds to a set of plausible distributions.
-Definition~\ref{def:central-dist} provides a way to define a central distribution for situations like this one.
-
-By Theorem~\ref{th:lambda-centrality} we know that this central distribution would be a weighted average of
-the central distributions of individual fused multinomial models.
-Since we have a finite number of models, these weights are uniform:
+In a fused multinomial model with this labeling function, given $A_2, A_5$, the target class $Y$ is conditionally
+independent from other attributes.
+Additionally,
 \[
-    C_{\setQQ}(S_n) \propto \sum_i C_{f_i}(S_n) \cdot
+    P(\seqExp{A} \mid A_2, A_5) = P(A_1, A_3, A_4, A_6, \ldots , A_n)
+\]
+is a uniform distribution.
+
+For every possible subset of attributes, a distinct fused multinomial model of this form is constructed.
+Each such model corresponds to a set of plausible probability distributions.
+Collecting these sets yields our overall uncertainty representation, which forms a one-level
+hierarchy of distributions (Definition~\ref{def:hierarchy-of-distributions}).
+
+Let $C_{\setQQ}$ denote a central distribution of the full hierarchy, and let $C_{f_i}$ denote the central
+distribution of the fused multinomial model associated with the labeling function $f_i$.
+As discussed earlier, because the number of candidate models is finite, we have
+\[
+    C_{\setQQ}(S_n) \propto \sum_i C_{f_i}(S_n).
 \]
 
-To establish this, observe that we can construct a consistent estimator for the model indicator $I$ by checking
-for the equality of different outcomes.
-Specifically, the estimator identifies outcomes with equal frequency in the data and returns the indicator for
-the model that supports this equality.
+To justify this result, observe that we can construct a consistent estimator for the model indicator $I$ by examining
+equality relationships among the observed frequencies of outcomes.
+Specifically, the estimator identifies outcomes that occur with equal frequencies in the sample and returns the
+indicator corresponding to the model that supports those equalities.
 
-As shown in Equation~\ref{eq:bayes-action}, the optimal Bayesian decision rule depends on the chosen loss function.
-In this example, we adopt the zero-one loss, which leads to predicting the label with the highest conditional
-probability.
-These probabilities are computed using the central distribution we previously derived.
+As shown in Equation~\ref{eq:bayes-action}, the optimal Bayesian decision rule depends on the choice of loss function.
+In this example, we use the zero--one loss, under which the optimal strategy predicts the class label with the highest
+posterior probability.
+These posterior probabilities are computed using the central distribution derived in Example~\ref{ex:fused-multinomial}.
 
 To see how this approach works in practice, we carried out a synthetic experiment with the following setup.
 We considered binary attributes and generated each attribute independently with equal probability for 0 and 1.
 The class label was defined as a deterministic function of a fixed subset of 3 out of 12 total attributes, as
 shown in Table~\ref{tab:functions}.
-The same subset of relevant attributes and labeling function were used across all trials.
+The same subset of relevant attributes and class assignment function were used across all trials.
 
 \begin{table}[htbp]
     \centering
@@ -68,8 +73,9 @@ nature of the data.
 To assess robustness to irrelevant features, we progressively removed one attribute at a time from the full set
 of 12, starting with irrelevant ones and stopping just before removing any of the three relevant attributes.
 
-At each step, we trained and tested two versions of the central distribution: one assuming a deterministic label
-function (CD-Det) and one allowing for a conditional (non-deterministic) label distribution (CD-Prob).
+At each step, we trained and tested two versions of the central distribution: one assuming a deterministic class
+assignment function (CD-Det), where the target class is a deterministic function of the relevant attributes,
+and one allowing for a conditional (probabilistic) class assignment distribution (CD-Prob).
 Both versions are constructed by aggregating over $2^{12}$ fused multinomial models, corresponding to all subsets of
 the 12 attributes.
 As a baseline, we also trained a decision tree classifier (DTree).
@@ -158,8 +164,8 @@ version of the central distribution slightly outperforming the other.
 In contrast, function $f_2$ is more difficult to predict, leading to a clearer separation in performance between the
 two methods.
 This difficulty primarily arises from strong non-deterministic dependencies between subsets of input bits and the
-assigned label.
-For instance, when the first input bit of $f_2$ is 1, the label is often D, creating a misleading
+assigned class.
+For instance, when the first input bit of $f_2$ is 1, the class is often D, creating a misleading
 probabilistic association.
 In this case, the deterministic central distribution remains the most accurate overall, while the probabilistic
 version shows reduced performance due to misleading patterns.

@@ -164,6 +164,9 @@ random variables.
     and therefore $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
 \end{proof}
 
+The following construction is heuristic and is intended to motivate the asymptotic form of central priors under
+standard regularity conditions.
+A complete rigorous treatment is left for future work.
 
 Let \setQ be a family of probability distributions indexed by a parameter vector \param.
 Suppose \infSeq{\est} is a sequence of consistent estimators of \param.
@@ -216,8 +219,8 @@ we observe that
     \uniConverge{\paramVal}{\Dkl{\estLike}{C(\est_n)} - \lambda_n}.
 \end{equation*}
 Under appropriate additional assumptions, the conditions of Theorem~\ref{th:limiting-centrality} are satisfied.
-Thus, the above asymptotic argument indicates that $\cPrior(\paramVal)$ acts as a central prior of \setQ for the
-estimator sequence \infSeq{\est}.
+Thus, under the stated regularity assumptions and heuristic asymptotic arguments, $\cPrior(\paramVal)$ is
+expected to act as a central prior for the estimator sequence \infSeq{\est}.
 
 A central distribution over an estimator sequence cannot by itself be used to perform inference at the level of observed
 outcomes.

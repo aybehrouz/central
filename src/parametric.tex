@@ -5,8 +5,17 @@ extended to cases where \setQ can be indexed by a finite-dimensional real vector
 \]
 We can treat \param as a random variable and interpret $Q_{\paramVal}$ as a conditional
 distribution $Q(\xIt)$.
-Then, the weight function, $R(i)$, will essentially become a prior distribution over the parameter \paramVal.
+Then, the weight function, $R(i)$, will essentially become a prior distribution over the parameter \param.
 
+\begin{definition}[Central Prior]
+    Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$,
+    indexed by a parameter \param.
+    A nonnegative measure $c$ on \param is called a central prior of \setQ for $X$ if,
+    \[
+        \cDist(x) = \mrg
+    \]
+    is a central distribution of \setQ for $X$.
+\end{definition}
 
 \begin{definition}[Interior Distribution]
     \label{def:interior}
@@ -29,12 +38,12 @@ Then, the weight function, $R(i)$, will essentially become a prior distribution 
     Fix an arbitrary probability distribution $P$.
     By the convexity of KL divergence in its first argument, we have:
     \[
-        \kl[R] \leq \sum_i \alpha_i \kl[Q_i] \cdot
+        \kl[R] \leq \sum_i \alpha_i \kl[Q_i].
     \]
     Now, note that the right-hand side is a weighted average of the KL divergences.
     So, there must be at least one index $j$ such that
     \[
-        \kl[R] \leq \kl[Q_j] \cdot
+        \kl[R] \leq \kl[Q_j].
     \]
     Since $Q_j \in \setQ$, the condition in Definition~\ref{def:interior} is satisfied,
     and $R$ is indeed an interior distribution of \setQ.
@@ -49,7 +58,7 @@ Then, the weight function, $R(i)$, will essentially become a prior distribution 
     This theorem follows directly from the definition of an interior distribution, which implies that for any
     probability distribution $P$, we have
     \[
-        \supD = \supD[][\setQ \cup \{R\}] \cdot \qedhere
+        \supD = \supD[][\setQ \cup \{R\}]. \qedhere
     \]
 \end{proof}
 
@@ -73,10 +82,10 @@ The next theorem is a standard result that is typically used in the derivation o
 
 \begin{proof}
     Let $C$ be a central distribution of \setQ for $T$.
-    For an arbitrary probability distribution $P$ we have
+    For any arbitrary probability distribution $P$, the definition of a central distribution implies
     \begin{equation}
         \label{eq:th5-proof}
-        \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) C(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)} \cdot
+        \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) C(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)}.
     \end{equation}
 
     Since the KL divergence is nonnegative, for every probability distribution $P$ and every \inSet{Q} we have
@@ -85,29 +94,29 @@ The next theorem is a standard result that is typically used in the derivation o
     \]
     That implies
     \[
-        \Dkl{Q(X,T)}{P(X,T)} - \Dkl{Q(X,T)}{R(\XIT) P(T)} \geq 0.
+        \Dkl{Q(X,T)}{R(\XIT) P(T)} \leq \Dkl{Q(X,T)}{P(X,T)}.
     \]
     Taking the supremum over \inSet{Q} preserves the inequality, since it holds pointwise for every \inSet{Q}:
     \[
-        \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{P(X,T)} \cdot
+        \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{P(X,T)}.
     \]
     Combining this inequality with Equation~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a
     central distribution of \setQ for $(X,T)$.
 \end{proof}
+
 
 The next theorem highlights a formal connection between the central distribution framework and Bernardo’s reference
 prior methodology~\cite{BERNARDO200517}.
 
 \begin{theorem}
     Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$, indexed by a
-    finite-dimensional random vector \param.
-    Let \cPrior be a strictly positive prior distribution for \param such that for $\like(\xIt) \in \setQ$ we have
+    finite-dimensional vector \param.
+    Let \cPrior be a strictly positive prior distribution for \param such that for all $\like(\xIt) \in \setQ$ we have
     \begin{equation}
         \label{eq:central-prior}
-        \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\} \cdot
+        \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\}.
     \end{equation}
-    Then, $\cDist(x) = \mrg$ is a central distribution of \setQ for $X$.
-    We also refer to \cPrior as a central prior for $X$.
+    Then, \cPrior is a central prior of \setQ for $X$.
 \end{theorem}
 
 \begin{proof}
@@ -115,19 +124,20 @@ prior methodology~\cite{BERNARDO200517}.
     From Equation~\ref{eq:central-prior}, it follows that there exists a constant $\lambda$ such that
     \begin{equation*}
         \cp = \exp \left\{-\lambda +  \sum_{x} \like(\xIt) \ln
-                       \frac{\like(\xIt) \cp}{\cDist(x)} \right\} \cdot
+                       \frac{\like(\xIt) \cp}{\cDist(x)} \right\}.
     \end{equation*}
-    Since $\cp$ is strictly positive, we have
+    Since $\cp$ is strictly positive,
     \begin{align*}
         \cp &= \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
-        &= \cp \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\},
+        &= \cp \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\}
     \end{align*}
-    which implies
+    implies
     \[
-        \kl[Q_{\paramVal{}}][C] = \lambda \cdot
+        \kl[Q_{\paramVal{}}][C] = \lambda\,.
     \]
-    Since this holds for all \paramVal, and \cPrior is strictly positive, by Theorem~\ref{th:lambda-centrality} it
-    follows that \cDist is a central distribution of \setQ for $X$.
+    This holds for all \paramVal, and \cPrior is a strictly positive distribution,
+    by Theorem~\ref{th:lambda-centrality} it follows that \cDist is a central distribution of \setQ for $X$.
+    Thus, by definition, \cPrior is a central prior of \setQ for $X$.
 \end{proof}
 
 This theorem provides a sufficient fixed-point characterization of central priors; it does not address existence or

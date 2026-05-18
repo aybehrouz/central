@@ -36,25 +36,30 @@ distribution can be combined and performed simultaneously when finding a saddle 
 \end{theorem}
 
 \begin{proof}
-    Let \cDist be a central distribution of \setQ for $X$, and \saddle be a saddle point of $f$.
+    Let \cDist be a central distribution of \setQ for $X$, and \saddle be a saddle point for $f$.
     Since $X$ is a discrete random variable and \setQ is finite, \cDist exists.
     As $C$ is a probability distribution, the point $(\cDist, \saddR)$ lies within the domain of $f$.
     By the definition of a saddle point, this implies that
     \begin{equation}
         \label{eq:th_proof_saddle_lq_dx}
-        f\saddle \leq f(\cDist, \saddR) \cdot
+        f\saddle \leq f(\cDist, \saddR).
     \end{equation}
     Because \saddR is a probability distribution, the definition of $f$ implies:
     \[
-        f(\cDist, \saddR) \leq \supD[\cDist] \cdot
+        f(\cDist, \saddR) \leq \supD[\cDist].
     \]
-    On the other hand, by the definition of a saddle point,
+
+    On the other hand, by the definition of a saddle point
     \[
-        f\saddle = \max_{R} f(\saddP, R) = \supD[\saddP] \cdot
+        f\saddle = \max_{R} f(\saddP, R),
+    \]
+    where $R$ is a probability distribution, and therefore
+    \[
+        \max_{R} f(\saddP, R) = \supD[\saddP].
     \]
     Thus, Equation~\ref{eq:th_proof_saddle_lq_dx} implies
     \[
-        \supD[\saddP] \leq \supD[\cDist] \cdot
+        \supD[\saddP] \leq \supD[\cDist].
     \]
     Since \cDist is a central distribution, we must have \[\supD[\saddP] = \supD[\cDist],\] and $\saddP$ is also a
     central distribution of \setQ for $X$.
@@ -77,14 +82,14 @@ distribution can be combined and performed simultaneously when finding a saddle 
         \nonumber
         \mu(i) \geq 0, \\
         \label{eq:saddle_lm_rmu_is_zero}
-        \mu(i) \saddR(i) = 0 \cdot
+        \mu(i) \saddR(i) = 0.
     \end{gather}
 
     Furthermore, for a fixed probability distribution $R$, a distribution $\hat{P}$ minimizes $f(\none,R)$, if and
     only if for all $x$ it satisfies
     \begin{equation}
         \label{eq:saddle_lm_minimizer_dist}
-        \hat{P}(x) = \sum_i Q_i(x)R(i) \cdot
+        \hat{P}(x) = \sum_i Q_i(x)R(i).
     \end{equation}
 \end{lemma}
 
@@ -154,13 +159,13 @@ distribution can be combined and performed simultaneously when finding a saddle 
         \nonumber
         \mu(i) \geq 0, \\
         \nonumber
-        \mu(i) \saddR(i) = 0 \cdot
+        \mu(i) \saddR(i) = 0.
     \end{gather}
 
     By summing Equation~\ref{eq:kkt_proof_R_is_pxIe} over $x$ and using Equation~\ref{eq:kkt_proof_r_sums_one},
     we have
     \[
-        \eta = 1 \cdot
+        \eta = 1\,.
     \]
     Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
 
@@ -184,32 +189,34 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \[
         g(R) = \sum_i \kl[Q_i][R] R(i),
     \]
-    where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I) \cdot\]
+    where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I).\]
     Let $f$ be the function defined in Theorem~\ref{th:saddle_is_central}.
     If \saddle is a saddle point for $f$, then the joint distribution $Q_i(X)\saddR(I)$ is a maximizer of $g$.
 \end{lemma}
 
 \begin{proof}
-    Let \saddle be a saddle point of $f$.
-    By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg}, and thus:
+    Let \saddle be a saddle point for $f$.
+    By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg}.
+    Letting $\saddR(X, I) = Q_i(X) \saddR(I)$ we have
     \[
-        g(\saddR) = f\saddle \cdot
+        g(\saddR) = f\saddle.
     \]
-    Now, let $R$ be an arbitrary probability distribution.
+    Now, let $R$ be an arbitrary probability distribution such that $g(R)$ is defined.
     From the second part of Lemma~\ref{lm:saddle_conditions}, it follows that $g(R)$ indeed corresponds to the
     minimum of $f(\none, R)$, which implies
     \[
-        g(R) \leq f(\saddP,R) \cdot
+        g(R) \leq f(\saddP,R).
     \]
+
     On the other hand, since \saddle is a saddle point, we also have
     \[
-        f(\saddP, R) \leq f\saddle \cdot
+        f(\saddP, R) \leq f\saddle.
     \]
     Combining the two inequalities, we get:
     \[
-        g(R) \leq g(\saddR) \cdot
+        g(R) \leq g(\saddR).
     \]
-    Since $R$ was an arbitrary distribution, this shows that $g(\saddR)$ is the maximum of $g$, as desired.
+    This shows that $g(\saddR)$ is the maximum of $g$, as desired.
 \end{proof}
 
 The following theorem gives a standard sufficient condition for optimality in the KL-minimax setting which is
@@ -256,7 +263,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     Assuming the conditions of Theorem~\ref{th:lambda-centrality} and using the same $\lambda$,
     if $P$ is a convex combination of elements of \setQ, then there exists some $Q_0 \in \setQ$ such that
     \begin{equation*}
-        \kl[Q_0][] \leq \lambda \cdot
+        \kl[Q_0][] \leq \lambda.
     \end{equation*}
 \end{lemma}
 

@@ -1,3 +1,6 @@
+\newcommand{\uniConverge}[2]{\toInf  \sup_{#1} \left| {#2} \right| = 0}
+\newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
+
 Many probabilistic models are naturally formulated in terms of a sequence of random variables whose length is not
 fixed in advance.
 For example, when a coin is tossed repeatedly, there is no natural upper bound on the number of tosses, and any
@@ -35,7 +38,7 @@ This motivates the construction of a central distribution that is well defined o
     Let \cDist be a probability measure that defines a distribution over every $S_n$.
     \cDist is a central distribution of \setQ for \infSeq{S}, if we have
     \begin{equation*}
-        \toInf \kl[{\cDist[n]}][\cDist][S_n] = 0 \cdot
+        \toInf \kl[{\cDist[n]}][\cDist][S_n] = 0.
     \end{equation*}
 \end{definition}
 
@@ -57,7 +60,7 @@ thereby providing a characterization of central distributions for infinite seque
     Let \cDist be a probability measure that defines a distribution over every $S_n$.
     If there exists a sequence of constants \infSeq{\lambda} such that
     \[
-        \toInf  \sup_{\inSet{Q}} \left|\kl[][\cDist][S_n] - \lambda_n \right| = 0,
+        \uniConverge{\inSet{Q}}{\kl[][\cDist][S_n] - \lambda_n},
     \]
     then \cDist is a central distribution of \setQ for \infSeq{S}.
 \end{theorem}
@@ -68,7 +71,7 @@ thereby providing a characterization of central distributions for infinite seque
     \[
         \kl[][\cDist_n][S_n] = \mu_n .
     \]
-    By the definition of central distribution, that implies
+    By the definition of a central distribution we have
     \begin{equation*}
         \sup_{\inSet{Q}} \kl[][\cDist][S_n] \geq \mu_n,
         \label{eq:th_lim_central_proof_sup}
@@ -79,12 +82,12 @@ thereby providing a characterization of central distributions for infinite seque
         \label{eq:th_lim_central_proof_inf}
     \end{equation*}
 
-    On the other hand, we also have
+    On the other hand, clearly
     \[
         \left| \sup_{\inSet{Q}} \kl[][\cDist][S_n] - \lambda_n \right|
         \leq \sup_{\inSet{Q}}  \left|\kl[][\cDist][S_n] - \lambda_n \right|,
     \]
-    and
+    and,
     \[
         \left|\inf_{\inSet{Q}} \kl[][\cDist][S_n] - \lambda_n \right|
         \leq \sup_{\inSet{Q}}  \left|\kl[][\cDist][S_n] - \lambda_n \right|.
@@ -145,12 +148,12 @@ random variables.
     \]
     where $C_n(T_n)$ is a central distribution for $T_n$, and $C_n(S_n,  T_n)$ is a central distribution for
     $(S_n, T_n)$.
-    Therefore,
+    Given that $C^*$ is a probability measure, we have
     \begin{align*}
         \kl[{C_n}][C^*][S_n, T_n] &= \kl[{R(S_n \mid T_n)C_n}][R(S_n \mid T_n)C][T_n] \\
         &= \kl[{C_n}][C][T_n].
     \end{align*}
-    Since $C$ is a central distribution for \infSeq{T} we have
+    Since $C$ is a central distribution for \infSeq{T}, by definition,
     \[
         \toInf \kl[{C_n}][C][T_n] = 0.
     \]
@@ -158,16 +161,13 @@ random variables.
     \[
         \toInf \kl[{C_n}][C^*][S_n, T_n] = 0,
     \]
-    and provided that $C^*$ is a probability measure, by
-    definition, it is a central distribution for \infSeq[]{(S_n, T_n)}.
+    and therefore $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
 \end{proof}
 
-\newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
 
-Assume \setQ is a set of distributions that can be indexed by a parameter vector \param, and \infSeq{\est} is a
-consistent estimator sequence for \param.
-Let $P(\paramVal \mid\est_n)$ denote the posterior distribution obtained from an arbitrary smooth positive
-prior.
+Let \setQ be a family of probability distributions indexed by a parameter vector \param.
+Suppose \infSeq{\est} is a sequence of consistent estimators of \param.
+Let $P(\paramVal \mid\est_n)$ denote the posterior distribution obtained from an arbitrary smooth positive prior.
 
 Under regular parametric conditions, posterior distributions based on consistent estimators become asymptotically
 insensitive to the choice of smooth positive prior.
@@ -187,37 +187,35 @@ uniform over \paramVal.
 Let $k$ denote the normalizing constant converting proportionality into equality.
 Since the logarithm is a continuous function, Equation~\ref{eq:central-limit} implies
 \begin{equation*}
-    \toInf \left(\ln \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\cPrior(\paramVal)}
-               - \ln \mu_n + \ln k \right) = 0.
+    \uniConverge{\paramVal}{\ln \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}
+    {\cPrior(\paramVal)} - \ln \mu_n + \ln k }.
 \end{equation*}
 
-Since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$ becomes increasingly concentrated
-around $\paramVal$ as $n \to \infty$.
+For every \paramVal, since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$ becomes
+increasingly concentrated around $\paramVal$ as $n \to \infty$.
 Therefore, we may write
 \begin{equation*}
-    \toInf \left(\sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{P(\paramVal \mid t_n)}{\cPrior(\paramVal)}
-               - \ln \mu_n + \ln k \right) = 0.
+    \uniConverge{\paramVal}{\sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{P(\paramVal \mid t_n)}
+    {\cPrior(\paramVal)} - \ln \mu_n + \ln k }.
 \end{equation*}
 
 Furthermore, under the usual regularity conditions, the posterior distribution becomes asymptotically
 insensitive to the choice of smooth positive prior.
-Motivated by this asymptotic prior-insensitivity, we heuristically replace the original prior with $c(\paramVal)$,
+Motivated by this asymptotic prior-insensitivity, we heuristically replace $P(\paramVal \mid \est_n)$
+with $c(\paramVal \mid \est_n)$,
 obtaining
 \begin{equation*}
-    \toInf \left( \sum_{t_n} Q(t_n \mid \paramVal) \ln
-               \frac{Q(t_n \mid \paramVal)}{C(t_n)}
-               - \ln \mu_n + \ln k \right) = 0 \cdot
+    \uniConverge{\paramVal}{ \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{Q(t_n \mid \paramVal)}{C(t_n)} - \ln \mu_n + \ln k }.
 \end{equation*}
 Letting
 \[
     \lambda_n = \ln \mu_n - \ln k,
 \]
-we observe that for every \paramVal
+we observe that
 \begin{equation*}
-    \toInf  \left( \Dkl{\estLike}{C(\est_n)} - \lambda_n \right) = 0 \cdot
+    \uniConverge{\paramVal}{\Dkl{\estLike}{C(\est_n)} - \lambda_n}.
 \end{equation*}
-Under appropriate regularity assumptions ensuring that this convergence is uniform over \paramVal, the conditions of
-Theorem~\ref{th:limiting-centrality} are satisfied.
+Under appropriate additional assumptions, the conditions of Theorem~\ref{th:limiting-centrality} are satisfied.
 Thus, the above asymptotic argument indicates that $\cPrior(\paramVal)$ acts as a central prior of \setQ for the
 estimator sequence \infSeq{\est}.
 
@@ -252,21 +250,20 @@ corresponding representative central distributions.
     Using Stirling’s formula, we derive its asymptotic form:
     \begin{equation*}
         P\left( \pv \, \middle| \, T_n = \tfrac{k}{n} \right) \sim
-        \frac{(n+1)n^{(n+\hf)}}{\sqrt{2 \pi} (n-k)^{(n-k+\hf)} k^{(k+\hf)}} \, \pv^k (1 - \pv)^{n - k} \cdot
+        \frac{(n+1)n^{(n+\hf)}}{\sqrt{2 \pi} (n-k)^{(n-k+\hf)} k^{(k+\hf)}} \, \pv^k (1 - \pv)^{n - k}.
     \end{equation*}
     Evaluating the asymptotic expression at $\frac{k}{n} = \pv$, we obtain
     \begin{equation*}
-        P(\paramVal \mid\est_n = t)|_{t = \paramVal} \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
+        P(\paramVal \mid\est_n = t)|_{t = \paramVal} \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf}.
     \end{equation*}
     Therefore, if we define
     \[
         \mu_n = \frac{n+1}{\sqrt{2 \pi n}},
     \]
-    the following limit exists for $\paramVal \in (0,1)$:
+    the following limit exists and the convergence is uniform over $\paramVal \in (0,1)$:
     \[
-        \toInf \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf} \cdot
+        \toInf \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf}.
     \]
-    This implies that $c(\pv) \propto \pv^{-\hf}(1 - \pv)^{-\hf}$ is a central prior for \infSeq{T}.
 \end{example}
 
 \begin{example}[Fused Multinomial Model]
@@ -287,14 +284,14 @@ corresponding representative central distributions.
     Let $|f^{-1}(y)|$ denote the number of outcomes in $\mathcal{X}$ that are mapped to label $y$ by $f$.
     Then the probability of observing $S_n$ under $\Qt \in \setQ$, denoted $Q(S_n \mid \theta)$, is:
     \[
-        Q(S_n \mid \theta) = \prodm \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y} \cdot
+        Q(S_n \mid \theta) = \prodm \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y}.
     \]
 
     Now, consider the estimator sequence $T_n = \frac{1}{n} \left( \seqExp[m]{n} \right)$, which is a consistent
     estimator for $\theta$.
     The conditional distribution $\Qt(S_n \mid T_n)$ is then given by:
     \begin{equation}
-        R(S_n \mid T_n) = \frac{1}{n!} \prodm \frac{n_y!}{|f^{-1}(y)|^{n_y}} \cdot
+        R(S_n \mid T_n) = \frac{1}{n!} \prodm \frac{n_y!}{|f^{-1}(y)|^{n_y}}\,.
         \label{eq:fused-multinomial-conditional}
     \end{equation}
     Note that this distribution is independent of $\theta$.
@@ -309,7 +306,7 @@ corresponding representative central distributions.
     This is a Dirichlet prior and induces a Dirichlet-multinomial distribution for each $T_n$:
     \[
         C(T_n) = \frac{\gm{\hf[m]}\gm{n+1}}{\gm{n + \hf[m]}}
-        \prodm \frac{\gm{n_y + \hf}}{\gm{\hf}\gm{n_y+1}} \cdot
+        \prodm \frac{\gm{n_y + \hf}}{\gm{\hf}\gm{n_y+1}}\,.
     \]
     Note that $C$ is a central distribution for the sequence \infSeq{T}, viewed as a probability measure on the
     infinite sequence $T_\infty$.
@@ -319,6 +316,6 @@ corresponding representative central distributions.
     central distribution for \infSeq{S}, which induces the following distribution over each $S_n$:
     \[
         C(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}
-        \prodm \frac{\gm{n_y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}} \cdot
+        \prodm \frac{\gm{n_y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}}\,.
     \]
 \end{example}

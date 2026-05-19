@@ -38,22 +38,22 @@ Specifically, the estimator identifies outcomes that occur with equal frequencie
 indicator corresponding to the model that supports those equalities.
 
 As shown in Equation~\ref{eq:bayes-action}, the optimal Bayesian decision rule depends on the choice of loss function.
-In this example, we use the zero--one loss, under which the optimal strategy predicts the class label with the highest
+In this example, we use the zero--one loss, under which the optimal strategy predicts the target class with the highest
 posterior probability.
 These posterior probabilities are computed using the central distribution derived in Example~\ref{ex:fused-multinomial}.
 
 To see how this approach works in practice, we carried out a synthetic experiment with the following setup.
 We considered binary attributes and generated each attribute independently with equal probability for 0 and 1.
-The class label was defined as a deterministic function of a fixed subset of 3 out of 12 total attributes, as
+The target class was defined as a deterministic function of a fixed subset of 3 out of 12 total attributes, as
 shown in Table~\ref{tab:functions}.
 The same subset of relevant attributes and class assignment function were used across all trials.
 
 \begin{table}[htbp]
     \centering
-    \caption{Mappings of 3-bit inputs under functions $f_1$ and $f_2$}
+    \caption{Mappings of 3-bit inputs under class functions $Y_1$ and $Y_2$}
     \begin{tabular}{ccc}
         \toprule
-        Input (bits) & $f_1$(Input) & $f_2$(Input) \\
+        Input (bits) & $Y_1$(Input) & $Y_2$(Input) \\
         \midrule
         000          & a            & A            \\
         001          & b            & B            \\
@@ -85,7 +85,7 @@ predictions divided by total test instances) over these trials.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Accuracy vs. Number of Attributes (Function $f_1$, 20 train samples)}
+    \caption{Accuracy vs. Number of Attributes (Function $Y_1$, 20 train samples)}
     \begin{tikzpicture}
         \begin{axis}[
             width=11cm,
@@ -122,7 +122,7 @@ predictions divided by total test instances) over these trials.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Accuracy vs. Number of Attributes (Function $f_2$, 20 train samples)}
+    \caption{Accuracy vs. Number of Attributes (Function $Y_2$, 20 train samples)}
     \begin{tikzpicture}
         \begin{axis}[
             width=11cm,
@@ -159,20 +159,20 @@ predictions divided by total test instances) over these trials.
 
 The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, reveal notable differences in
 performance depending on the underlying class assignment function.
-For function $f_1$, both deterministic and probabilistic methods achieve high accuracy, with the deterministic
+For function $Y_1$, both deterministic and probabilistic methods achieve high accuracy, with the deterministic
 version of the central distribution slightly outperforming the other.
-In contrast, function $f_2$ is more difficult to predict, leading to a clearer separation in performance between the
+In contrast, function $Y_2$ is more difficult to predict, leading to a clearer separation in performance between the
 two methods.
 This difficulty primarily arises from strong non-deterministic dependencies between subsets of input bits and the
 assigned class.
-For instance, when the first input bit of $f_2$ is 1, the class is often D, creating a misleading
+For instance, when the first input bit of $Y_2$ is 1, the class is often D, creating a misleading
 probabilistic association.
 In this case, the deterministic central distribution remains the most accurate overall, while the probabilistic
 version shows reduced performance due to misleading patterns.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Accuracy vs. Number of Attributes (Function $f_2$, 10 train samples)}
+    \caption{Accuracy vs. Number of Attributes (Function $Y_2$, 10 train samples)}
     \begin{tikzpicture}
         \begin{axis}[
             width=11cm,

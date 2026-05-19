@@ -41,6 +41,11 @@ As shown in Equation~\ref{eq:bayes-action}, the optimal Bayesian decision rule d
 In this example, we use the zero--one loss, under which the optimal strategy predicts the target class with the highest
 posterior probability.
 These posterior probabilities are computed using the central distribution derived in Example~\ref{ex:fused-multinomial}.
+In the present construction, we note that each subset-specific fused multinomial model is assigned its corresponding
+Jeffreys' prior.
+Consequently, the resulting predictive distribution can be interpreted as Bayesian model averaging over all
+candidate feature subsets, with each model equipped with its Jeffreys' prior.
+The central distribution framework provides a minimax-KL justification for this aggregation.
 
 To see how this approach works in practice, we carried out a synthetic experiment with the following setup.
 We considered binary attributes and generated each attribute independently with equal probability for 0 and 1.

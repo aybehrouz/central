@@ -24,8 +24,13 @@
 \newcommand{\dualdualMap}[1][M]{\mathFix{{#1}^{**}}}
 \newcommand{\dualMap}[1][M]{\mathFix{{#1}^*}}
 
-In this section, we present a fresh perspective on probability by introducing an alternative axiomatization of probability theory.
-This formulation highlights the deep connections between probability theory and linear algebra.
+While studying linear algebra, one quickly encounters the idea that linear maps often reveal the essential structure
+of a mathematical theory.
+Probability theory provides a familiar example: expectation is a linear operation.
+This observation motivates a simple question: how much of elementary probability theory can be reconstructed if
+expectation, rather than probability, is taken as the starting point?
+In this note, we explore this question by treating expectation as a positive normalized linear functional on a space
+of actions.
 
 \begin{definition} [Sample Space]
     A sample space, denoted by \sampleSet, is the set of all possible outcomes of a random experiment.
@@ -99,13 +104,6 @@ for any outcome that is not in that subset.
     \Expect is an element of the dual space of \actionSet.
 \end{proposition}
 
-The expectation map quantifies our expectation about an action as a real number.
-It must have three properties:
-Most importantly it should be linear.
-That means if the payoff of an action doubles, our expectation from that action should be doubled too.
-If we add
-
-
 \begin{definition} [Conditional Expectation]
     Let \Expect be an expectation for \sampleSet and let \eventInS.
     \Expect conditioned on \event, denoted by \ExpectOnE, is a linear map on \sampleSet with the following properties:
@@ -116,9 +114,13 @@ If we add
     \end{itemize}
 \end{definition}
 
-At this point, we have a complete framework for decision-making under uncertainty.
+Since conditional expectation on \event should depend only on the behavior of an action within \event, we require its
+null
+space to coincide with that induced by restricting actions to \event.
+
+At this point, we have enough structure to reason about uncertainty and evaluate actions.
 Interestingly, we do not need to explicitly define probability.
-However, in order to present a more familiar framework, we provide a definition of conventional probability.
+However, in order to construct a more familiar framework, we provide a definition of conventional probability.
 
 \begin{definition} [Probability]
     \label{def:probability}
@@ -132,7 +134,7 @@ However, in order to present a more familiar framework, we provide a definition 
     Definition~\ref{def:probability} satisfies Kolmogorov's axioms of probability.
 \end{theorem}
 
-We now will establish the familiar relationship between conditional expectation and normal expectation.
+We now establish the familiar relationship between conditional expectation and normal expectation.
 
 \begin{lemma}
     \label{lm:scale}
@@ -160,7 +162,7 @@ We now will establish the familiar relationship between conditional expectation 
 
 \begin{theorem}
     Let \inA{\act} and \eventInS, where \sampleSet is a sample space.
-    If \rstOp is the restriction operator to \event, then we have
+    If $P(\event) \neq 0$ then we have
     \begin{equation*}
         \ExpectOnE[\act] = \frac{\Expect[\rstOp(\act)]}{P(\event)} \cdot
     \end{equation*}
@@ -191,12 +193,11 @@ We now will establish the familiar relationship between conditional expectation 
     \begin{equation*}
         \ExpectOnE[\a] = \lambda \Expect[\rstOp(\a)] \cdot
     \end{equation*}
-
-    On the other hand, for the sure thing \sure, we have
+    Provided that $P(\event) \neq 0$, for the sure thing \sure we have
     \begin{equation*}
         \lambda = \frac{\ExpectOnE[\sure]}{\Expect[\rstOp(\sure)]} = \frac{1}{P(\event)} \cdot
     \end{equation*}
-    This proves the theorem.
+    That proves the theorem.
 \end{proof}
 
 \begin{definition} [Dual Map]

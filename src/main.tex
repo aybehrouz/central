@@ -50,6 +50,10 @@
 \newcommand{\none}{\, \cdot \,}
 
 \newcommand{\Ex}[2]{\measure{E}{#1}{#2}}
+\newcommand{\functional}[2][F]{
+    \mathcal{#1}\ifthenelse{\isempty{#2}}{}{\left[#2\right]}
+}
+\newcommand{\maps}[3][M]{#1 : \set{#2} \to \set{#3}}
 \newcommand{\rvEq}[1][x]{\uppercase{#1} = \lowercase{#1}}
 \newcommand{\setQ}{\set{q}}
 \newcommand{\setQQ}{\set{h^*}}
@@ -74,8 +78,8 @@
 
 % Toggle this:
 \newif\iffullversion
-%\fullversiontrue
-\fullversionfalse
+\fullversiontrue
+%\fullversionfalse
 
 \title{The Central Distribution: A Minimax-KL Approach to Noninformative Priors and Feature Selection}
 \author{Behrouz Ayati \\ aybehrouz@gmail.com}
@@ -109,10 +113,6 @@
     \section{Introduction}\label{sec:intro}
     \input{intro}
 
-    \iffullversion
-    \subsection{Divergence}\label{sec:dive}
-    \input{divergence}
-    \fi
 
     \section{Central Distribution}\label{sec:central}
     \input{central}
@@ -132,20 +132,32 @@
     \subsection{Attribute Selection}\label{subsec:attribute-selection}
     \input{att_selection}
 
-    \iffullversion
-    \subsection{Latent Regression Model}\label{subsec:latent-regression-model2}
-    \input{regression}
-    \fi
-
     \bibliography{main}
     \bibliographystyle{plain}
 
     \iffullversion
-%    \appendix
-%    \section{Expectation as a Linear Map}
-%    {
-%        \input{linear}
-%    }\label{sec:expectation-as-a-linear-map}
+
+    \newpage
+    \appendix
+
+
+    \section{Divergence}\label{sec:dive}
+    \input{divergence}
+
+    \newpage
+
+
+    \section{Expectation as a Linear Map}
+    {
+        \input{linear}
+    }\label{sec:expectation-as-a-linear-map}
+
+    \newpage
+
+
+    \section{Latent Regression Model}\label{subsec:latent-regression-model2}
+    \input{regression}
+
     \fi
 
 \end{document}

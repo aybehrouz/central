@@ -115,17 +115,19 @@ for any outcome that is not in that subset.
 \end{definition}
 
 \begin{proposition}
-    The conditional expectation \ExpectOnE is well-defined if $P(\event) > 0$.
+    The conditional expectation \ExpectOnE is only well-defined when $\Expect[\rstOp(\sure)] \neq 0$.
 \end{proposition}
 
-\begin{proof}
-    If $P(\event) = 0$, the two properties of the definition would contradict one another when evaluated on the
-    sure thing \sure.
-\end{proof}
-
-Since conditional expectation on \event should depend only on the behavior of an action within \event, we require its
-null
-space to coincide with that induced by restricting actions to \event.
+It is important to note that conditioning on \event fundamentally differs from restricting to \event.
+When we restrict an action, we simply ignore its payoffs outside of \event.
+When we condition on \event, however, we act with the certain knowledge that \event has actually occurred.
+As \event becomes increasingly unlikely, the disparity between these two concepts grows, because conditioning forces a
+rare event to become our new baseline.
+Yet, a fundamental exception occurs when our expected payoff within \event is zero.
+No matter how unlikely \event is, knowing that it has occurred cannot transform an expected payoff of zero into a
+non-zero value.
+Therefore, we require the null space of the conditional expectation to
+coincide perfectly with the null space induced by the restriction operator.
 
 At this point, we have enough structure to reason about uncertainty and evaluate actions.
 Interestingly, we do not need to explicitly define probability.
@@ -202,7 +204,7 @@ We now establish the familiar relationship between conditional expectation and n
     \begin{equation*}
         \ExpectOnE[\a] = \lambda \Expect[\rstOp(\a)] \cdot
     \end{equation*}
-    Provided that $P(\event) \neq 0$, for the sure thing \sure we have
+    Provided that \ExpectOnE is well-defined, for the sure thing \sure we have
     \begin{equation*}
         \lambda = \frac{\ExpectOnE[\sure]}{\Expect[\rstOp(\sure)]} = \frac{1}{P(\event)} \cdot
     \end{equation*}

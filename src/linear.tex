@@ -114,6 +114,15 @@ for any outcome that is not in that subset.
     \end{itemize}
 \end{definition}
 
+\begin{proposition}
+    The conditional expectation \ExpectOnE is well-defined if $P(\event) > 0$.
+\end{proposition}
+
+\begin{proof}
+    If $P(\event) = 0$, the two properties of the definition would contradict one another when evaluated on the
+    sure thing \sure.
+\end{proof}
+
 Since conditional expectation on \event should depend only on the behavior of an action within \event, we require its
 null
 space to coincide with that induced by restricting actions to \event.
@@ -162,7 +171,7 @@ We now establish the familiar relationship between conditional expectation and n
 
 \begin{theorem}
     Let \inA{\act} and \eventInS, where \sampleSet is a sample space.
-    If $P(\event) \neq 0$ then we have
+    If \rstOp is the restriction operator to \event, we have
     \begin{equation*}
         \ExpectOnE[\act] = \frac{\Expect[\rstOp(\act)]}{P(\event)} \cdot
     \end{equation*}

@@ -1,12 +1,12 @@
 \newcommandx{\supD}[3][1=P, 2=\setQ, 3=X]{\sup_{Q \in #2} \kl[Q][#1][#3]}
 \newcommand{\argSupD}[1][\setQ]{\arg\min_{P}\sup_{Q \in #1}}
-\newcommand{\myDiv}[1][P(X)]{\measure{D}{\mathrm{CD}}{\set{H}(X) \,\middle\|\, #1}}
 \newcommandx{\klExp}[3][1=Q, 2=P, 3=x]{\sum_{#3} #1(#3) \ln \frac{#1(#3)}{#2(#3)}}
 \newcommand{\inSet}[1]{\mathFix{#1 \in \set{#1}}}
 
 \newcommand{\saddle}{\mathFix{(\saddP, \saddR)}}
 \newcommand{\fExp}{\sum_i R(i) \klExp[Q_i]}
 \newcommand{\cDist}[1][]{\mathFix{\sub{C}{#1}}}
+\newcommand{\uncDist}[1][]{\mathFix{\sub{\tilde{C}}{#1}}}
 \newcommand{\ccDist}[1][]{\mathFix{\sub{C^{*}}{#1}}}
 \newcommand{\cPrior}{\mathFix{c}}
 \newcommand{\like}{Q}
@@ -126,13 +126,11 @@ The following definition extends the construction recursively to general hierarc
 \begin{definition}[Central Distribution]
     \label{def:central-dist}
     Let $X$ be a random variable, and let \setQQ be a hierarchy of distributions over $X$.
-    We call a distribution \ccDist a \emph{central distribution} of \setQQ if,
+    We call a distribution \cDist a \emph{central distribution} of \setQQ if,
     for every probability distribution $P$, we have:
     \begin{equation*}
-        \sup_{\set{H} \in \setQQ} \myDiv[\ccDist(X)]  \leq \sup_{\set{H} \in \setQQ} \myDiv,
+        \sup_{\set{H} \in \setQQ} \myDiv[\cDist(X)]  \leq \sup_{\set{H} \in \setQQ} \myDiv.
     \end{equation*}
-    where $\measure{D}{\mathrm{CD}}{}$ denotes the central divergence as defined in
-    Definition~\ref{def:central-divergence}.
 \end{definition}
 
 Definition~\ref{def:central-dist} generalizes Definition~\ref{def:center-of-set}, which is recovered when the hierarchy
@@ -177,6 +175,12 @@ distribution differs.
 This demonstrates that hierarchical structure carries informational content beyond the collection of leaf distributions
 alone.
 Consequently, flattening a hierarchy into a single unstructured set may discard meaningful epistemic structure.
+
+\begin{theorem}\label{th:central-support}
+    Let \set{h} be a hierarchy of distributions over a discrete random variable $X$,
+    and let \cDist be a central distribution of \set{h}.
+    Then the support of \cDist equals the union of the supports of all distributions in \set{h}.
+\end{theorem}
 
 In many learning problems, uncertainty concerns not only the parameters of a predictive model but also its
 structural form.

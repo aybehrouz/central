@@ -226,12 +226,13 @@ Like the center of a circle, the central distribution is equidistant from the bo
 \begin{theorem} [Centrality]
     \label{th:lambda-centrality}
     Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
-    Suppose \cDist is a convex combination of elements of \setQ, with all weights strictly positive.
-    If for some constant $\lambda$ and every \inSet{Q} we have:
-    \begin{equation*}
+    Suppose \cDist is a convex combination of elements of \setQ, with all mixture weights strictly positive.
+    If there exists a constant $\lambda$ such that
+    \begin{equation}
+        \label{eq:equal-div}
         \kl[][\cDist] = \lambda,
-    \end{equation*}
-    then \cDist is a central distribution of \setQ for $X$.
+    \end{equation}
+    for every \inSet{Q}, then \cDist is the unique central distribution of \setQ for $X$.
 \end{theorem}
 
 \begin{proof}
@@ -246,15 +247,36 @@ Like the center of a circle, the central distribution is equidistant from the bo
         \saddP(x) = \sum_i \saddR(i) Q_i(x),
     \end{gather*}
     which must hold for every $Q_i \in \setQ$ and some strictly positive probability distribution \saddR.
+    Since \cDist is a convex combination of elements of \setQ, the corresponding convex
+    weights define the distribution \saddR and \cDist satisfies these conditions.
 
-    Since \cDist satisfies these conditions, Lemma~\ref{lm:saddle_conditions} and
-    Theorem~\ref{th:saddle_is_central} imply that \cDist is a central distribution of \setQ for $X$.
+    Therefore, by Lemma~\ref{lm:saddle_conditions} and Theorem~\ref{th:saddle_is_central}, \cDist is a central
+    distribution of \setQ for $X$.
+
+    On the other hand, for any probability distribution $C'$, we have
+    \begin{align*}
+        \kl[\cDist][C']
+        &= \sum_i \saddR(i)\left(\kl[Q_i][C'] - \kl[Q_i][\cDist] \right) \\
+        &= \sum_i \saddR(i)\kl[Q_i][C'] - \lambda \\
+        &\leq \supD[C'] - \lambda.
+    \end{align*}
+    If $C'$ is a central distribution of \setQ for $X$,
+    the definition of a central distributing implies
+    \[
+        \supD[C'] = \lambda.
+    \]
+    Therefore, by non-negativity of the KL divergence, we have
+    \[
+        \kl[\cDist][C'] = 0. \qedhere
+    \]
+
+    By Theorem~\ref{th:central-support}, \cDist and $C'$ have the same support.
+    Thus, they are identical distributions.
 \end{proof}
 
 \begin{corollary}
     \label{cor:C-maximizes-g}
-    Under the assumptions of Theorem~\ref{th:lambda-centrality}, the
-    distribution $C$ is a maximizer of the function $g$ defined in
+    Under the assumptions of Theorem~\ref{th:lambda-centrality}, $C$ is a maximizer of the function $g$ defined in
     Lemma~\ref{lm:saddle-is-maximizer}.
 \end{corollary}
 

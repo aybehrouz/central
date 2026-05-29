@@ -1,0 +1,63 @@
+\newcommand{\engFunc}[1][P]{\measure{F}{}{Q,\tilde{#1}}}
+
+
+Suppose we want to approximate the central distribution of a hierarchy of distributions \set{h}.
+To do so, we need a measure that quantifies the quality of an approximation.
+We argue that a natural choice is the central divergence introduced in Definition~\ref{def:central-divergence}.
+
+At first glance, it appears that computing this quantity requires knowledge of the central distribution of \set{h}.
+However, it turns out that the central divergence admits an upper bound that can be estimated without explicitly
+knowing the central distribution.
+
+In variational settings, it is often more convenient to work with unnormalized measures rather than normalized
+distributions.
+Therefore, we state the next theorem in terms of unnormalized measures.
+
+\begin{theorem}\label{th:central-approx}
+    Suppose that the central distribution \cDist from Theorem~\ref{th:centrality} exists,
+    Let $\tilde{P}$ be a nonnegative linear combination of elements of \setQ,
+    and let $P$ be the corresponding normalized distribution.
+    Then
+    \[
+        \myDiv[][Q] \leq \sup_{\inSet{Q}} \engFunc - \inf_{\inSet{Q}} \engFunc,
+    \]
+    where
+    \[
+        \engFunc = \entropy{Q}{X} + \Ex{Q}{\ln \tilde{P}(X)}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    By Theorem~\ref{th:centrality}, since $C$ is the unique central distribution of \setQ,
+    from Equation~\ref{eq:cd-relation-to-lambda}, we have
+    \[
+        \myDiv[][Q] \leq \supD - \lambda.
+    \]
+    On the other hand, since $P$ is a convex combination of elements of \setQ,
+    Lemma~\ref{lm:imperfection} implies that
+    \[
+        \inf_{\inSet{Q}} \kl \leq \lambda.
+    \]
+    Combining these two inequalities yields
+    \begin{equation} \label{eq:cdiv-upper-bound}
+        \myDiv[][Q] \leq \supD - \inf_{\inSet{Q}} \kl.
+    \end{equation}
+
+    Now let $\tilde{P}(X) = Z P(X)$, where $Z > 0$ is a normalization constant.
+    Then, for any $Q$,
+    \[
+        \kl = \ln Z - \engFunc.
+    \]
+    Since $\ln Z$ does not depend on $Q$, the supremum and infimum translate directly into the corresponding
+    expressions in terms of $\measure{F}{}{}$, and the result follows from Equation~\ref{eq:cdiv-upper-bound}.
+\end{proof}
+
+The theorem shows that we seek a $\tilde{P}$ such that $\engFunc$ is approximately constant over \inSet{Q}.
+This constant can be arbitrary, but it is convenient if it is zero, in which case
+\[
+    \Ex{Q}{\ln \tilde{P}(X)} \approx - \entropy{Q}{X}.
+\]
+
+Note that Theorem~\ref{th:central-approx} requires $\tilde{P}$ to be a nonnegative linear
+combination of elements of \setQ.
+The bound is valid only if such a $\tilde{P}$ exists for which the equality condition is satisfied exactly.

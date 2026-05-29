@@ -224,7 +224,7 @@ the rationale behind the term ``central distribution.''
 Like the center of a circle, the central distribution is equidistant from the boundary.
 
 \begin{theorem} [Centrality]
-    \label{th:lambda-centrality}
+    \label{th:centrality}
     Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
     Suppose \cDist is a convex combination of elements of \setQ, with all mixture weights strictly positive.
     If there exists a constant $\lambda$ such that
@@ -254,12 +254,14 @@ Like the center of a circle, the central distribution is equidistant from the bo
     distribution of \setQ for $X$.
 
     On the other hand, for any probability distribution $C'$, we have
-    \begin{align*}
+    \begin{align}\label{eq:cd-relation-to-lambda}
+        \nonumber
         \kl[\cDist][C']
         &= \sum_i \saddR(i)\left(\kl[Q_i][C'] - \kl[Q_i][\cDist] \right) \\
+        \nonumber
         &= \sum_i \saddR(i)\kl[Q_i][C'] - \lambda \\
         &\leq \supD[C'] - \lambda.
-    \end{align*}
+    \end{align}
     If $C'$ is a central distribution of \setQ for $X$,
     the definition of a central distributing implies
     \[
@@ -276,13 +278,13 @@ Like the center of a circle, the central distribution is equidistant from the bo
 
 \begin{corollary}
     \label{cor:C-maximizes-g}
-    Under the assumptions of Theorem~\ref{th:lambda-centrality}, $C$ is a maximizer of the function $g$ defined in
+    Under the assumptions of Theorem~\ref{th:centrality}, $C$ is a maximizer of the function $g$ defined in
     Lemma~\ref{lm:saddle-is-maximizer}.
 \end{corollary}
 
 \begin{lemma}
     \label{lm:imperfection}
-    Assuming the conditions of Theorem~\ref{th:lambda-centrality} and using the same $\lambda$,
+    Assuming the conditions of Theorem~\ref{th:centrality} and using the same $\lambda$,
     if $P$ is a convex combination of elements of \setQ, then there exists some $Q_0 \in \setQ$ such that
     \begin{equation*}
         \kl[Q_0][] \leq \lambda.
@@ -296,7 +298,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     \[
         g(P) > \lambda = g(C),
     \]
-    where $C$ is the distribution specified in Theorem~\ref{th:lambda-centrality}, and $g$ is the function defined in
+    where $C$ is the distribution specified in Theorem~\ref{th:centrality}, and $g$ is the function defined in
     Lemma~\ref{lm:saddle-is-maximizer}.
     Note that $g(P)$ is defined, because $P$ is a convex combination of elements of \setQ.
 

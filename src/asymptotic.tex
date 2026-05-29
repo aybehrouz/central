@@ -46,7 +46,7 @@ Intuitively, this definition states that as $n \to \infty$ the distribution that
 increasingly similar to a central distribution for $S_n$.
 In other words, \cDist is a central distribution for the infinite sequence $S_{\infty}$.
 
-Our next goal is to extend Theorem~\ref{th:lambda-centrality} so that it also applies in this asymptotic setting,
+Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in this asymptotic setting,
 thereby providing a characterization of central distributions for infinite sequences.
 
 \begin{theorem}[Asymptotic Centrality]
@@ -55,7 +55,7 @@ thereby providing a characterization of central distributions for infinite seque
     where each element of \setQ defines a distribution over each $S_n$.
     Assume that there exists a natural number $M$ such that,
     for every $n \geq M$, there exists a distribution $C_n$ satisfying the
-    conditions of Theorem~\ref{th:lambda-centrality} for $S_n$.
+    conditions of Theorem~\ref{th:centrality} for $S_n$.
 
     Let \cDist be a probability measure that defines a distribution over every $S_n$.
     If there exists a sequence of constants \infSeq{\lambda} such that
@@ -66,7 +66,7 @@ thereby providing a characterization of central distributions for infinite seque
 \end{theorem}
 
 \begin{proof}
-    For every $n \geq M$, by Theorem~\ref{th:lambda-centrality}, there exists a constant \(\mu_n\) such that for
+    For every $n \geq M$, by Theorem~\ref{th:centrality}, there exists a constant \(\mu_n\) such that for
     all \inSet{Q}
     \[
         \kl[][\cDist_n][S_n] = \mu_n .
@@ -102,7 +102,7 @@ thereby providing a characterization of central distributions for infinite seque
         &= \toInf(\kl[][\cDist][S_n] - \lambda_n) - \toInf(\mu_n - \lambda_n) \\
         &= 0 .
     \end{align*}
-    Since $\cDist_n$ satisfies the conditions of Theorem~\ref{th:lambda-centrality}, it is a convex combination of
+    Since $\cDist_n$ satisfies the conditions of Theorem~\ref{th:centrality}, it is a convex combination of
     elements of \setQ.
     Therefore, $\kl[\cDist_n][\cDist][S_n]$ can be expressed as a convex combination of the quantities
     \[

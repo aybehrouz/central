@@ -236,11 +236,10 @@ Like the center of a circle, the central distribution is equidistant from the bo
 \end{theorem}
 
 \begin{proof}
-    Lemma~\ref{lm:saddle_conditions} provides a set of sufficient conditions for a saddle point.
+    Lemma~\ref{lm:saddle_conditions} proves a set of sufficient conditions for a saddle point.
     Note that more restrictive conditions can also be imposed to derive an alternative set of sufficient conditions.
-    We can replace Equation~\ref{eq:saddle_lm_r_geq_0} with the more
-    restrictive $\saddR(i) > 0$ condition.
-    By Equation~\ref{eq:saddle_lm_rmu_is_zero}, that implies $\mu(i) = 0$,
+    Suppose additionally that $\saddR(i) > 0$ for every $i$.
+    Then Equation~\ref{eq:saddle_lm_rmu_is_zero} implies $\mu(i) = 0$,
     and Lemma~\ref{lm:saddle_conditions} conditions can be simplified to
     \begin{gather*}
         \klExp[Q_i][\saddP][x] = \lambda, \\
@@ -263,17 +262,15 @@ Like the center of a circle, the central distribution is equidistant from the bo
         &\leq \supD[C'] - \lambda.
     \end{align}
     If $C'$ is a central distribution of \setQ for $X$,
-    the definition of a central distributing implies
+    the definition of a central distribution implies
     \[
         \supD[C'] = \lambda.
     \]
     Therefore, by non-negativity of the KL divergence, we have
     \[
-        \kl[\cDist][C'] = 0. \qedhere
+        \kl[\cDist][C'] = 0.
     \]
-
-    By Theorem~\ref{th:central-support}, \cDist and $C'$ have the same support.
-    Thus, they are identical distributions.
+    Hence \cDist and $C'$ are identical probability distributions.
 \end{proof}
 
 \begin{corollary}

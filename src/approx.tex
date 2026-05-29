@@ -5,16 +5,19 @@ Suppose we want to approximate the central distribution of a hierarchy of distri
 To do so, we need a measure that quantifies the quality of an approximation.
 We argue that a natural choice is the central divergence introduced in Definition~\ref{def:central-divergence}.
 
-At first glance, it appears that computing this quantity requires knowledge of the central distribution of \set{h}.
+At first glance, computing this quantity appears to require explicit knowledge of the central distribution of \set{h}.
 However, it turns out that the central divergence admits an upper bound that can be estimated without explicitly
 knowing the central distribution.
 
 In variational settings, it is often more convenient to work with unnormalized measures rather than normalized
 distributions.
 Therefore, we state the next theorem in terms of unnormalized measures.
+We assume throughout that $\tilde P(x) > 0$ whenever $Q(x) > 0$
+for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
 
 \begin{theorem}\label{th:central-approx}
-    Suppose that the central distribution \cDist from Theorem~\ref{th:centrality} exists,
+    Let \setQ be a finite set of probability distributions over a discrete random variable $X$, and suppose the
+    assumptions of Theorem~\ref{th:centrality} hold.
     Let $\tilde{P}$ be a nonnegative linear combination of elements of \setQ,
     and let $P$ be the corresponding normalized distribution.
     Then
@@ -53,11 +56,15 @@ Therefore, we state the next theorem in terms of unnormalized measures.
 \end{proof}
 
 The theorem shows that we seek a $\tilde{P}$ such that $\engFunc$ is approximately constant over \inSet{Q}.
-This constant can be arbitrary, but it is convenient if it is zero, in which case
+This constant can be arbitrary, but it is convenient to choose it to be zero, in which case
 \[
     \Ex{Q}{\ln \tilde{P}(X)} \approx - \entropy{Q}{X}.
 \]
 
-Note that Theorem~\ref{th:central-approx} requires $\tilde{P}$ to be a nonnegative linear
-combination of elements of \setQ.
-The bound is valid only if such a $\tilde{P}$ exists for which the equality condition is satisfied exactly.
+Note that the bound in Theorem~\ref{th:central-approx} is guaranteed only when $\tilde{P}$ is a non-negative
+linear combination of elements of \setQ.
+Furthermore, there must exist $\tilde{C}$, a strictly positive linear combination of elements of \setQ, such that
+for every \inSet{Q}
+\[
+    \Ex{Q}{\ln \tilde{C}(X)} = - \entropy{Q}{X}.
+\]

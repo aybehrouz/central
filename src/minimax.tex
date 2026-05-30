@@ -242,10 +242,10 @@ Like the center of a circle, the central distribution is equidistant from the bo
     Then Equation~\ref{eq:saddle_lm_rmu_is_zero} implies $\mu(i) = 0$,
     and Lemma~\ref{lm:saddle_conditions} conditions can be simplified to
     \begin{gather*}
-        \klExp[Q_i][\saddP][x] = \lambda, \\
+        \klExp[Q][\saddP][x] = \lambda, \\
         \saddP(x) = \sum_i \saddR(i) Q_i(x),
     \end{gather*}
-    which must hold for every $Q_i \in \setQ$ and some strictly positive probability distribution \saddR.
+    which must hold for every \inSet{Q} and some strictly positive probability distribution \saddR.
     Since \cDist is a convex combination of elements of \setQ, the corresponding convex
     weights define the distribution \saddR and \cDist satisfies these conditions.
 
@@ -275,9 +275,15 @@ Like the center of a circle, the central distribution is equidistant from the bo
 
 \begin{corollary}
     \label{cor:C-maximizes-g}
-    Under the assumptions of Theorem~\ref{th:centrality}, $C$ is a maximizer of the function $g$ defined in
+    Under the assumptions of Theorem~\ref{th:centrality}, \cDist is a maximizer of the function $g$ defined in
     Lemma~\ref{lm:saddle-is-maximizer}.
 \end{corollary}
+
+\begin{proof}
+    In the proof of Theorem~\ref{th:centrality}, we showed that $(\cDist, \saddR)$ is a saddle point for $f$.
+    By letting $C(X, I) = Q_i(X)\saddR(I)$, Lemma~\ref{lm:saddle-is-maximizer} implies that \cDist is a maximizer
+    of the function $g$.
+\end{proof}
 
 \begin{lemma}
     \label{lm:imperfection}

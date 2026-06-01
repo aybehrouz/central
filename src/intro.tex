@@ -31,7 +31,7 @@ Therefore, we can consider a strategy as a function of the evidence, rather than
 \[
     S_{\text{opt}} = \arg\min_S \sum_{x,e} \util[S(e)] \envDist(x, e).
 \]
-A strategy that, for each evidence $e$, selects the action minimizing the expected loss conditioned
+A strategy that for each evidence $e$ selects the action minimizing the expected loss conditioned
 on $e$, is optimal:
 \begin{align}
     \label{eq:bayes-action}
@@ -72,7 +72,8 @@ In other words, an appropriate prior should enable feature selection.
 However, when applied in a conventional Bayesian setting, many commonly used noninformative priors,
 such as the flat prior, do not naturally promote feature selection.
 
-In this paper, we introduce the central distribution, a minimax-KL representative of a set (or
-hierarchy) of probability distributions.
-We establish its connection to reference priors~\cite{BERNARDO200517}, develop asymptotic central priors, and show
-how hierarchical central distributions naturally perform feature selection.
+In this paper, we introduce the central distribution, a minimax-KL representative of a set or
+hierarchy of probability distributions.
+We establish connections between central priors and reference prior methodology~\cite{BERNARDO200517},
+derive asymptotic characterizations of central priors, and investigate the role of hierarchical central
+distributions in Bayesian feature selection.

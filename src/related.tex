@@ -1,0 +1,39 @@
+The problem of constructing objective or noninformative priors has a long history in Bayesian statistics.
+Among the most influential approaches are Jeffreys priors, reference priors, and maximum-entropy based
+methods~\cite{Jeffreys1946, Bernardo1979, jaynes1957}.
+
+Jeffreys introduced a general rule for constructing invariant noninformative priors based on the Fisher information
+matrix~\cite{Jeffreys1946}.
+The resulting priors are widely used because of their parameterization invariance and their connection to asymptotic
+likelihood theory.
+However, Jeffreys priors are derived from local geometric properties of the parameter space and do not directly
+address the problem of representing a set of admissible probability distributions by a single distribution.
+
+The closest connection to the present work is Bernardo's reference prior
+methodology~\cite{BERNARDO200517, Bernardo1979}.
+Reference priors are constructed by maximizing the expected information gained from the data and are intended to
+represent a state of minimal prior information.
+In Section~\ref{subsec:parametric}, we show that central priors satisfy a fixed-point condition closely related to
+the reference prior construction.
+In particular, for a single parameter and a single set of distributions, the resulting central prior coincides with
+the corresponding reference prior.
+
+Several authors have also studied objective Bayesian inference through information-theoretic
+principles~\cite{jaynes1957, 10.1214/aoms/1177729694}.
+Examples include maximum entropy methods, minimum discrimination information principles, and related
+divergence-based approaches.
+These methods typically select a distribution by optimizing an information criterion subject to constraints.
+In contrast, the central distribution is defined as a minimax representative of a set or hierarchy of distributions,
+minimizing the worst-case Kullback–Leibler divergence to the admissible models.
+
+The present work is also related to robust Bayesian statistics and imprecise
+probability~\cite{riosinsua2000robust, Walley1991-WALSRW}.
+In these frameworks uncertainty is represented by sets of probability distributions rather than a single model.
+Existing approaches generally focus on performing inference directly with sets of distributions.
+The central distribution framework instead seeks a single representative distribution that summarizes the available
+set-valued or hierarchical uncertainty while preserving its information-theoretic structure.
+
+To the best of our knowledge, existing objective-prior methodologies do not provide a unified mechanism for
+representing hierarchical uncertainty structures and converting them into a single probability distribution through
+a minimax-KL criterion.
+The central distribution framework is proposed as a step in that direction.

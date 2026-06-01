@@ -34,48 +34,8 @@
 
 \pgfplotsset{compat=1.18}
 
-\newcommand{\mathFix}[1]{\ensuremath{#1}\xspace}
-\newcommand{\sub}[2]{\ifthenelse{\isempty{#2}}{#1}{#1_{#2}}}
-\newcommand{\set}[2][]{\mathFix{\sub{\mathcal{\uppercase{#2}}}{#1}}}
-\newcommand{\measure}[3]{\mathFix{\sub{\mathbb{#1}}{{#2}}}\ifthenelse{\isempty{#3}}{}{\left[ #3 \right] }}
-\newcommand{\pmodel}{\ensuremath{\Mt \equiv \left(\set{S}, \set{P}\right)}\xspace}
-\newcommand{\sampleSet}[1][s]{\set{#1}}
-\newcommand{\field}[1]{\mathFix{\mathbb{#1}}}
-\newcommand{\Mt}{\mathFix{\M_{\param}}}
-\newcommand{\M}{\mathFix{\mathcal{M}}}
-\newcommand{\param}{\mathFix{\Theta}}
-\newcommand{\paramVal}[1][]{\mathFix{\sub{\theta}{#1}}}
-\newcommandx{\kl}[4][1=Q, 2=P, 3=X, 4=\mathrm{KL}, usedefault]{ \Dkl[#4]{#1(#3)}{#2(#3)} }
-\newcommand{\Dkl}[3][\mathrm{KL}]{\measure{D}{#1}{#2 \,\middle\|\, #3}}
-\newcommandx{\myDiv}[2][1=P(X), 2=h, usedefault]{\measure{D}{\mathrm{C}}{\set{#2}(X) \,\middle\|\, #1}}
-\newcommand{\none}{\, \cdot \,}
-
-\newcommand{\Ex}[2]{\measure{E}{#1}{#2}}
-\newcommand{\functional}[2][F]{
-    \mathcal{#1}\ifthenelse{\isempty{#2}}{}{\left[#2\right]}
-}
-\newcommand{\maps}[3][M]{#1 : \set{#2} \to \set{#3}}
-\newcommand{\rvEq}[1][x]{\uppercase{#1} = \lowercase{#1}}
-\newcommand{\setQ}{\set{q}}
-\newcommand{\setQQ}{\set{h^*}}
-
-\newcommand{\theKL}{the Kullback-Leibler divergence}
-\newcommand{\infSeq}[2][n]{\mathFix{\left\{ \sub{#2}{#1} \right\}_{n = 1}^{\infty}}}
-\newcommand{\infSeqExp}[1]{\mathFix{#1_1, #1_2, \ldots}}
-\newcommand{\seqExp}[2][n]{\mathFix{#2_1, #2_2, \ldots, #2_{#1}}}
-\newcommand{\xIt}{x \mid \paramVal}
-\newcommand{\tIx}{\paramVal \mid x}
-\newcommand{\XIY}{X \mid Y}
-\newcommand{\XIT}{X \mid T}
-\newcommand{\XIE}{X \mid E}
-\newcommand{\XY}{X, Y}
-\newcommandx{\mrg}[3][1=x, 2=\paramVal, 3=\cPrior]{\int \like(#1 \mid #2) #3(#2) d#2}
-\newcommand{\assign}[1]{\uppercase{#1} = \lowercase{#1}}
-\newcommandx{\entropy}[2]{\measure{H}{}{#1(#2)}}
-\newcommand{\convex}[2]{\alpha#1 + (1 - \alpha)#2}
-\newcommand{\gm}[1]{\Gamma \left( #1 \right)}
-\newcommand{\hf}[1][1]{\frac{#1}{2}}
-\newcommand{\toInf}[1][n]{\lim_{#1 \to \infty}}
+% Commands
+\include{cmd}
 
 % Toggle this:
 \newif\iffullversion

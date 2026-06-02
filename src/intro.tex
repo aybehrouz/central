@@ -26,18 +26,13 @@ According to Bayesian decision theory, the optimal strategy is the one that mini
 \end{equation*}
 where $\envDist$ is the joint probability distribution of the environment state and the evidence.
 
-One can show that there always exists a deterministic optimal strategy.
-Therefore, we can consider a strategy as a function of the evidence, rather than as a conditional distribution:
-\[
-    S_{\text{opt}} = \arg\min_S \sum_{x,e} \util[S(e)] \envDist(x, e).
-\]
-A strategy that for each evidence $e$ selects the action minimizing the expected loss conditioned
+One can show that there always exists a deterministic optimal strategy,
+and a strategy that for each evidence $e$ selects the action minimizing the expected loss conditioned
 on $e$, is optimal:
-\begin{align}
+\begin{equation}
     \label{eq:bayes-action}
-    S_{\text{opt}}(e) &= \arg\min_a \Ex{\envDist}{\util \mid e} \\
-    &= \arg\min_a\sum_x \util \envDist(x \mid e) \cdot \nonumber
-\end{align}
+    S_{\text{opt}}(e) = \arg\min_a \Ex{\envDist}{\util \mid e}.
+\end{equation}
 
 Now, suppose that we decide to use a different evidence $E'$ instead of $E$.
 Could this change potentially improve our strategy?

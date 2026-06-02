@@ -30,7 +30,7 @@
 
 
 \pubyear{2025}
-\arxiv{2010.00000}
+%\arxiv{2010.00000}
 \volume{TBA}
 \issue{TBA}
 \firstpage{1}
@@ -80,16 +80,40 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \endlocaldefs
 
-\pgfplotsset{compat=1.18}
-
+\pgfplotsset{
+    compat=1.18,
+    journalplot/.style={
+        width=0.6\textwidth,
+        height=0.4\textwidth,
+        xlabel near ticks,
+        ylabel near ticks,
+        tick align=outside,
+        tick pos=left,
+        line width=1pt,
+        label style={
+            font=\small
+        },
+        tick label style={
+            font=\small
+        },
+        legend style={
+            font=\scriptsize,
+            fill=none
+        },
+        legend pos=south east,
+        grid=major,
+        mark options={solid},
+        axis line style={black},
+        tick style={black},
+        enlargelimits=false,
+        clip=true,
+        title style={
+            font=\small
+        }
+    }
+}
 % Commands
 \include{cmd}
-
-% Toggle this:
-\newif\iffullversion
-%\fullversiontrue
-\fullversionfalse
-
 
 \begin{document}
 
@@ -109,7 +133,7 @@
 %% ORCID can be inserted by command:         %%
 %% \orcid{0000-0000-0000-0000}               %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            \author[A]{\fnms{Behrouz}~\snm{Ayati}\ead[label=e1]{aybehrouz@gmail.com}\orcid{0000-0000-0000-0000}}
+            \author[A]{\fnms{Behrouz}~\snm{Ayati}\ead[label=e1]{aybehrouz@gmail.com}\orcid{0009-0006-7828-974X}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Addresses                                %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -140,15 +164,14 @@
 
         \begin{keyword}[class=MSC]
             \kwd[Primary ]{62F15}
-            \kwd[; secondary ]{62C20}
-            \kwd{62B10}
+            \kwd[; secondary ]{62B10}
             \kwd{62H30}
         \end{keyword}
 
         \begin{keyword}
             \kwd{Central distribution}
             \kwd{noninformative prior}
-            \kwd{minimax}
+            \kwd{minimax-KL}
             \kwd{feature selection}
             \kwd{partial knowledge}
             \kwd{hierarchical uncertainty}
@@ -193,22 +216,25 @@
 %% should be provided in the                %%
 %% Acknowledgements section.                %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \begin{acks}[Acknowledgments]
-        The authors would like to thank the anonymous referees, an Associate
-        Editor and the Editor for their constructive comments that improved the
-        quality of this paper.
-    \end{acks}
+%    \begin{acks}[Acknowledgments]
+%        The authors would like to thank the anonymous referees, an Associate
+%        Editor and the Editor for their constructive comments that improved the
+%        quality of this paper.
+%    \end{acks}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Funding information, if any,             %%
 %% should be provided in the                %%
 %% funding section.                         %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \begin{funding}
-        The first author was supported by NSF Grant DMS-??-??????.
-
-        The second author was supported in part by NIH Grant ???????????.
-    \end{funding}
+%    \begin{funding}
+%        The first author was supported by NSF Grant DMS-??-??????.
+%
+%        The second author was supported in part by NIH Grant ???????????.
+%    \end{funding}
+%
+%        The second author was supported in part by NIH Grant ???????????.
+%    \end{funding}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Supplementary Material, including data   %%
@@ -220,44 +246,17 @@
 %% available to the reader on Project       %%
 %% Euclid with the published article.       %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \begin{supplement}
-        \stitle{Title of Supplement A}
-        \sdescription{Short description of Supplement A.}
-    \end{supplement}
-    \begin{supplement}
-        \stitle{Title of Supplement B}
-        \sdescription{Short description of Supplement B.}
-    \end{supplement}
-
+%    \begin{supplement}
+%        \stitle{Title of Supplement A}
+%        \sdescription{Short description of Supplement A.}
+%    \end{supplement}
+%    \begin{supplement}
+%        \stitle{Title of Supplement B}
+%        \sdescription{Short description of Supplement B.}
+%    \end{supplement}
 
     \bibliographystyle{ba}
     \bibliography{main}
 
-    \iffullversion
-
-    \newpage
-    \appendix
-
-
-    \section{Divergence}\label{sec:dive}
-    \input{divergence}
-
-    \newpage
-
-
-    \section{Expectation as a Linear Map}
-    {
-        \input{linear}
-    }\label{sec:expectation-as-a-linear-map}
-
-    \newpage
-
-
-    \section{Latent Regression Model}\label{subsec:latent-regression-model2}
-    \input{regression}
-
-    \fi
-
 \end{document}
 
-\typeout{get arXiv to do 4 passes: Label(s) may have changed. Rerun}

@@ -14,11 +14,6 @@ Then, we define the labeling function $f$ as follows:
 \]
 In a fused multinomial model with this labeling function, given $A_2, A_5$, the target class $Y$ is conditionally
 independent from other attributes.
-Additionally,
-\[
-    P(\seqExp{A} \mid A_2, A_5) = P(A_1, A_3, A_4, A_6, \ldots , A_n)
-\]
-is a uniform distribution.
 
 For every possible subset of attributes, a distinct fused multinomial model of this form is constructed.
 Each such model corresponds to a set of plausible probability distributions.
@@ -92,17 +87,14 @@ predictions divided by total test instances) over these trials.
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            width=0.8\textwidth,
-            height=6cm,
+            journalplot,
+            width=0.5\textwidth,
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,
-            ymin=0.1, ymax=1.0,
+            ymin=0.0, ymax=1.0,
             xtick={3,4,5,6,7,8,9,10,11,12},
-            ytick={0.1,0.3,0.5,0.7,0.9},
-            legend pos=south east,
-            grid=major,
-            mark options={solid}
+            ytick={0.3,0.6,0.9},
         ]
 
             \addplot+[mark=*, blue] coordinates {
@@ -122,24 +114,15 @@ predictions divided by total test instances) over these trials.
 
         \end{axis}
     \end{tikzpicture}
-    \caption{Accuracy vs. Number of Attributes (Function $Y_1$, 20 train samples)}
-    \label{fig:f1-results}
-\end{figure}
-\begin{figure}[htbp]
-    \centering
     \begin{tikzpicture}
         \begin{axis}[
-            width=0.8\textwidth,
-            height=6cm,
+            journalplot,
+            width=0.5\textwidth,
             xlabel={Number of Attributes},
-            ylabel={Accuracy},
             xmin=3, xmax=12,
             ymin=0.1, ymax=1.0,
             xtick={3,4,5,6,7,8,9,10,11,12},
-            ytick={0.1,0.3,0.5,0.7,0.9},
-            legend pos=south east,
-            grid=major,
-            mark options={solid}
+            ytick={0.3,0.6,0.9},,
         ]
 
             % --- CD-Det ---
@@ -162,19 +145,24 @@ predictions divided by total test instances) over these trials.
 
         \end{axis}
     \end{tikzpicture}
-    \caption{Accuracy vs. number of attributes (Function $Y_2$, 20 training samples).}
-    \label{fig:f2-results}
+    \caption{
+        Accuracy versus number of attributes for 20 training samples.
+        Left: under class assignment function $Y_1$.
+        Right: under class assignment function $Y_2$.
+    }
+    \label{fig:f1-f2-results}
 \end{figure}
 
-The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, reveal notable differences in
+The results, shown in Figures~\ref{fig:f1-f2-results}, reveal notable differences in
 performance depending on the underlying class assignment function.
 For function $Y_1$, both deterministic and probabilistic methods achieve high accuracy, with the deterministic
 version of the central distribution slightly outperforming the other.
 In contrast, function $Y_2$ is more difficult to predict, leading to a clearer separation in performance between the
 two methods.
+
 This difficulty primarily arises from strong non-deterministic dependencies between subsets of input bits and the
 assigned class.
-For instance, when the first input bit of $Y_2$ is 1, the class is often D, creating a misleading
+For instance, when the first input bit of $Y_2$ is 1, the class is often $D$, creating a misleading
 probabilistic association.
 In this case, the deterministic central distribution remains the most accurate overall, while the probabilistic
 version shows reduced performance due to misleading patterns.
@@ -183,17 +171,13 @@ version shows reduced performance due to misleading patterns.
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            width=0.8\textwidth,
-            height=6cm,
+            journalplot,
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,
             ymin=0.55, ymax=0.8,
             xtick={3,4,5,6,7,8,9,10,11,12},
             ytick={0.6,0.65,0.7,0.75,0.8},
-            legend pos=south east,
-            grid=major,
-            mark options={solid}
         ]
 
             \addplot+[mark=*, blue] coordinates {
@@ -208,7 +192,7 @@ version shows reduced performance due to misleading patterns.
 
         \end{axis}
     \end{tikzpicture}
-    \caption{Accuracy vs. Number of Attributes (Function $Y_2$, 10 train samples)}
+    \caption{Accuracy versus number of attributes for 10 training samples under class assignment function $Y_2$}
     \label{fig:f2-10samples-results}
 \end{figure}
 

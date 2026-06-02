@@ -1,15 +1,14 @@
 %! Author = aybehrouz
 %! Date = 6/15/23
 
-% Preamble
-\documentclass[a4paper, 12pt]{article}
+% \documentclass[ba,preprint]{imsart}% use this for supplement article
+\documentclass[ba]{imsart}
 
-% Packages
+%% Packages
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{bm}
-\usepackage{hyperref}
 \usepackage{xspace}
 \usepackage{xargs}
 \usepackage{xifthen}
@@ -21,16 +20,65 @@
 \usepackage{caption}
 \usepackage{tikz}
 \usetikzlibrary{bayesnet}
+\RequirePackage{amsthm,amsmath,amsfonts,amssymb}
+\RequirePackage[numbers]{natbib}
+%\RequirePackage[authoryear]{natbib}%% uncomment this for author-year citations
+\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue,backref=page,backref=page]{hyperref}
+\RequirePackage{graphicx}
 \usepackage{mathtools} % should be the last import
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}{Lemma}
-\newtheorem{corollary}{Corollary}[theorem]
 
+
+\pubyear{2025}
+\arxiv{2010.00000}
+\volume{TBA}
+\issue{TBA}
+\firstpage{1}
+\lastpage{1}
+
+\startlocaldefs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Uncomment next line to change            %%
+%% the type of equation numbering           %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\numberwithin{equation}{section}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% For Axiom, Claim, Corollary, Hypothesis, %%
+%% Lemma, Theorem, Proposition              %%
+%% use \theoremstyle{plain}                 %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{axiom}{Axiom}
+\newtheorem{claim}[axiom]{Claim}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% For Assumption, Definition, Example,     %%
+%% Notation, Property, Remark, Fact         %%
+%% use \theoremstyle{definition}            %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem*{proposition}{Proposition}
-\newtheorem{example}{Example}[section]  % or [subsection], or no counter
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem*{example}{Example}
+\newtheorem*{fact}{Fact}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% For Case use \theoremstyle{remark}       %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{remark}
+\newtheorem{case}{Case}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Please put your definitions here:        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\endlocaldefs
 
 \pgfplotsset{compat=1.18}
 
@@ -39,17 +87,36 @@
 
 % Toggle this:
 \newif\iffullversion
-\fullversiontrue
-%\fullversionfalse
+%\fullversiontrue
+\fullversionfalse
 
-\title{The Central Distribution: A Minimax-KL Approach to Noninformative Priors and Feature Selection}
-\author{Behrouz Ayati \\ aybehrouz@gmail.com}
-\date{July 11, 2025}
-
-% Document
 
 \begin{document}
-    \maketitle
+
+    \begin{frontmatter}
+        \title{The Central Distribution: A Minimax-KL Approach to Noninformative Priors and Feature Selection}
+        %\title{A sample article title with some additional note\thanksref{t1}}
+        \runtitle{The Central Distribution}
+        %\thankstext{T1}{A sample additional note to the title.}
+
+        \begin{aug}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Only one address is permitted per author. %%
+%% Only division, organization and e-mail is %%
+%% included in the address.                  %%
+%% Additional information can be included in %%
+%% the Acknowledgments section if necessary. %%
+%% ORCID can be inserted by command:         %%
+%% \orcid{0000-0000-0000-0000}               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            \author[A]{\fnms{Behrouz}~\snm{Ayati}\ead[label=e1]{aybehrouz@gmail.com}\orcid{0000-0000-0000-0000}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Addresses                                %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            \address[A]{Independent Researcher\printead[presep={,\ }]{e1}}
+
+            \runauthor{B. Ayati}
+        \end{aug}
     \begin{abstract}
         We introduce the \emph{central distribution}, a probability distribution that represents a set, or more
         generally a hierarchy, of probability distributions by minimizing the worst-case Kullback--Leibler (KL)
@@ -70,6 +137,24 @@
         This provides a unified information-theoretic framework for constructing noninformative priors and
         performing Bayesian feature selection.
     \end{abstract}
+
+        \begin{keyword}[class=MSC]
+            \kwd[Primary ]{62F15}
+            \kwd[; secondary ]{62C20}
+            \kwd{62B10}
+            \kwd{62H30}
+        \end{keyword}
+
+        \begin{keyword}
+            \kwd{Central distribution}
+            \kwd{noninformative prior}
+            \kwd{minimax}
+            \kwd{feature selection}
+            \kwd{partial knowledge}
+            \kwd{hierarchical uncertainty}
+        \end{keyword}
+
+    \end{frontmatter}
 
     \section{Introduction}\label{sec:intro}
     \input{intro}
@@ -103,8 +188,50 @@
     \section{Conclusion}\label{sec:conclusion}
     \input{conclu}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Acknowledgements                         %%
+%% should be provided in the                %%
+%% Acknowledgements section.                %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \begin{acks}[Acknowledgments]
+        The authors would like to thank the anonymous referees, an Associate
+        Editor and the Editor for their constructive comments that improved the
+        quality of this paper.
+    \end{acks}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Funding information, if any,             %%
+%% should be provided in the                %%
+%% funding section.                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \begin{funding}
+        The first author was supported by NSF Grant DMS-??-??????.
+
+        The second author was supported in part by NIH Grant ???????????.
+    \end{funding}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Supplementary Material, including data   %%
+%% sets and code, should be provided in     %%
+%% {supplement} environment with title      %%
+%% and short description. It cannot be      %%
+%% available exclusively as external link.  %%
+%% All Supplementary Material must be       %%
+%% available to the reader on Project       %%
+%% Euclid with the published article.       %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \begin{supplement}
+        \stitle{Title of Supplement A}
+        \sdescription{Short description of Supplement A.}
+    \end{supplement}
+    \begin{supplement}
+        \stitle{Title of Supplement B}
+        \sdescription{Short description of Supplement B.}
+    \end{supplement}
+
+
+    \bibliographystyle{ba}
     \bibliography{main}
-    \bibliographystyle{plain}
 
     \iffullversion
 

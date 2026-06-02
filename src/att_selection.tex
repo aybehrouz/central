@@ -90,11 +90,10 @@ predictions divided by total test instances) over these trials.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Accuracy vs. Number of Attributes (Function $Y_1$, 20 train samples)}
     \begin{tikzpicture}
         \begin{axis}[
-            width=11cm,
-            height=7cm,
+            width=0.8\textwidth,
+            height=6cm,
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,
@@ -122,16 +121,16 @@ predictions divided by total test instances) over these trials.
             \addlegendentry{DTree}
 
         \end{axis}
-    \end{tikzpicture}\label{fig:f1-results}
+    \end{tikzpicture}
+    \caption{Accuracy vs. Number of Attributes (Function $Y_1$, 20 train samples)}
+    \label{fig:f1-results}
 \end{figure}
-
 \begin{figure}[htbp]
     \centering
-    \caption{Accuracy vs. Number of Attributes (Function $Y_2$, 20 train samples)}
     \begin{tikzpicture}
         \begin{axis}[
-            width=11cm,
-            height=7cm,
+            width=0.8\textwidth,
+            height=6cm,
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,
@@ -143,23 +142,28 @@ predictions divided by total test instances) over these trials.
             mark options={solid}
         ]
 
-            \addplot+[mark=*, blue] coordinates {
+            % --- CD-Det ---
+            \addplot+[blue, mark=*, line width=0.9pt] coordinates {
                 (3, 0.932833) (4, 0.9305) (5, 0.928) (6, 0.928) (7, 0.929333) (8, 0.929167) (9, 0.935333) (10, 0.94) (11, 0.936167) (12, 0.937333)
             };
             \addlegendentry{CD-Det}
 
-            \addplot+[mark=square*, red] coordinates {
+            % --- CD-Prob ---
+            \addplot+[red, mark=square*, line width=0.9pt] coordinates {
                 (3, 0.882333) (4, 0.877833) (5, 0.878167) (6, 0.8735) (7, 0.868) (8, 0.867167) (9, 0.866333) (10, 0.8645) (11, 0.864833) (12, 0.858333)
             };
             \addlegendentry{CD-Prob}
 
-            \addplot+[mark=triangle*, black] coordinates {
+            % --- DTree ---
+            \addplot+[black, mark=triangle*, line width=0.9pt] coordinates {
                 (3, 0.358833) (4, 0.3525) (5, 0.3495) (6, 0.345333) (7, 0.343833) (8, 0.342333) (9, 0.340667) (10, 0.3405) (11, 0.342333) (12, 0.343)
             };
             \addlegendentry{DTree}
 
         \end{axis}
-    \end{tikzpicture}\label{fig:f2-results}
+    \end{tikzpicture}
+    \caption{Accuracy vs. number of attributes (Function $Y_2$, 20 training samples).}
+    \label{fig:f2-results}
 \end{figure}
 
 The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, reveal notable differences in
@@ -177,11 +181,10 @@ version shows reduced performance due to misleading patterns.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Accuracy vs. Number of Attributes (Function $Y_2$, 10 train samples)}
     \begin{tikzpicture}
         \begin{axis}[
-            width=11cm,
-            height=7cm,
+            width=0.8\textwidth,
+            height=6cm,
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,
@@ -204,7 +207,9 @@ version shows reduced performance due to misleading patterns.
             \addlegendentry{CD-Prob}
 
         \end{axis}
-    \end{tikzpicture}\label{fig:f2-10samples-results}
+    \end{tikzpicture}
+    \caption{Accuracy vs. Number of Attributes (Function $Y_2$, 10 train samples)}
+    \label{fig:f2-10samples-results}
 \end{figure}
 
 While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not

@@ -26,18 +26,13 @@ According to Bayesian decision theory, the optimal strategy is the one that mini
 \end{equation*}
 where $\envDist$ is the joint probability distribution of the environment state and the evidence.
 
-One can show that there always exists a deterministic optimal strategy.
-Therefore, we can consider a strategy as a function of the evidence, rather than as a conditional distribution:
-\[
-    S_{\text{opt}} = \arg\min_S \sum_{x,e} \util[S(e)] \envDist(x, e).
-\]
-A strategy that for each evidence $e$ selects the action minimizing the expected loss conditioned
+One can show that there always exists a deterministic optimal strategy,
+and a strategy that for each evidence $e$ selects the action minimizing the expected loss conditioned
 on $e$, is optimal:
-\begin{align}
+\begin{equation}
     \label{eq:bayes-action}
-    S_{\text{opt}}(e) &= \arg\min_a \Ex{\envDist}{\util \mid e} \\
-    &= \arg\min_a\sum_x \util \envDist(x \mid e) \cdot \nonumber
-\end{align}
+    S_{\text{opt}}(e) = \arg\min_a \Ex{\envDist}{\util \mid e}.
+\end{equation}
 
 Now, suppose that we decide to use a different evidence $E'$ instead of $E$.
 Could this change potentially improve our strategy?
@@ -53,8 +48,7 @@ Using a strategy based on a simpler form of evidence resembles feature selection
 For instance, in a learning task where our evidence is an image, we might substitute the image with the first
 three coefficients of its Fourier transform.
 Naturally, these coefficients are a function of the original evidence.
-
-Interestingly, if we assume $E' = f(E)$, it turns out
+However, if we assume $E' = f(E)$, it turns out
 that, according to our Bayesian framework, the optimal strategy for $E$ is always
 better than any strategy that uses $E'$.
 
@@ -66,9 +60,9 @@ The key point here is that the space of strategies using $E'$ is a subset of the
 When we are searching for the best strategy based on $E$, we are implicitly evaluating all simpler forms as well.
 This may explain why the standard Bayesian framework does not favor the simpler evidence $E'$.
 
-Plausibly, if we choose an appropriate prior distribution, when we are finding the optimal
-strategy, the relevant information should be automatically extracted from the evidence by the Bayesian framework.
-In other words, an appropriate prior should enable feature selection.
+Plausibly, with an appropriate choice of prior distribution, the Bayesian framework automatically extracts
+the relevant information from the evidence when determining an optimal strategy.
+In this sense, an appropriate prior may induce feature selection.
 However, when applied in a conventional Bayesian setting, many commonly used noninformative priors,
 such as the flat prior, do not naturally promote feature selection.
 

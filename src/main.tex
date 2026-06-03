@@ -29,13 +29,23 @@
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
+\newtheorem{notation}{Notation}[section]
 \newtheorem*{proposition}{Proposition}
 \newtheorem{example}{Example}[section]  % or [subsection], or no counter
 
-\pgfplotsset{compat=1.18}
+\pgfplotsset{
+    compat=1.18,
+    globalstyle/.style={
+        width=0.7\textwidth,
+        height=0.5\textwidth,
+        legend pos=south east,
+        grid=major,
+        mark options={solid}
+    }
+}
 
 % Commands
-\include{cmd}
+\input{cmd}
 
 % Toggle this:
 \newif\iffullversion
@@ -77,6 +87,11 @@
     \subsection{Related Work}\label{subsec:related-work}
     \input{related}
 
+    \iffullversion
+
+    \subsection{Divergence}\label{subsec:dive}
+    \input{divergence}
+    \fi
 
     \section{Central Distribution}\label{sec:central}
     \input{central}
@@ -107,16 +122,8 @@
     \bibliographystyle{plain}
 
     \iffullversion
-
     \newpage
     \appendix
-
-
-    \section{Divergence}\label{sec:dive}
-    \input{divergence}
-
-    \newpage
-
 
     \section{Expectation as a Linear Map}
     {
@@ -126,9 +133,8 @@
     \newpage
 
 
-    \section{Latent Regression Model}\label{subsec:latent-regression-model2}
+    \section{Latent Regression Model}\label{sec:latent-regression-model2}
     \input{regression}
-
     \fi
 
 \end{document}

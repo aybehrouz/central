@@ -3,6 +3,35 @@ to characterize and compute them.
 The following results provide optimization-theoretic characterizations of central distributions that form the
 foundation of the subsequent analysis.
 
+Before proceeding, we establish that central distributions are well defined in the finite setting considered
+throughout this section.
+
+\begin{theorem}
+    Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
+    distributions over $X$.
+    Then a central distribution of \setQ for $X$ exists.
+\end{theorem}
+
+\begin{proof}
+    For a fixed distribution $Q$, we may write
+    \[
+        \kl = c - \sum_x Q(x) \ln P(x).
+    \]
+    Since $\ln$ is upper semicontinuous on $[0,+\infty)$ and $X$ has finite support, it follows that
+    $\kl$ is lower semicontinuous as a function of $P$.
+
+    Because \setQ is finite, $\sFunc[P(X)][\setQ]$ is the maximum of finitely many lower semicontinuous functions
+    and is therefore itself lower semicontinuous.
+
+    The set of probability distributions over $X$ is a compact simplex.
+    Hence, by the extreme value theorem, $\sFunc[][\setQ]$ attains its minimum.
+    Therefore there exists a probability distribution \cDist such that
+    \[
+        \sFunc[\cDist(X)][\setQ] = \inf_P \sFunc[P(X)][\setQ].
+    \]
+    Thus $C$ is a central distribution of \setQ for $X$.
+\end{proof}
+
 The central distribution is essentially the solution to a convex--concave game.
 Because solutions of convex--concave games correspond to saddle points,
 by defining the appropriate objective function, we can characterize the central
@@ -46,7 +75,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \end{equation}
     Because \saddR is a probability distribution, the definition of $f$ implies:
     \[
-        f(\cDist, \saddR) \leq \supD[\cDist].
+        f(\cDist, \saddR) \leq \sFunc[\cDist].
     \]
 
     On the other hand, by the definition of a saddle point
@@ -55,13 +84,13 @@ distribution can be combined and performed simultaneously when finding a saddle 
     \]
     where $R$ is a probability distribution, and therefore
     \[
-        \max_{R} f(\saddP, R) = \supD[\saddP].
+        \max_{R} f(\saddP, R) = \sFunc[\saddP].
     \]
     Thus, Equation~\ref{eq:th_proof_saddle_lq_dx} implies
     \[
-        \supD[\saddP] \leq \supD[\cDist].
+        \sFunc[\saddP] \leq \sFunc[\cDist].
     \]
-    Since \cDist is a central distribution, we must have \[\supD[\saddP] = \supD[\cDist],\] and $\saddP$ is also a
+    Since \cDist is a central distribution, we must have \[\sFunc[\saddP] = \sFunc[\cDist],\] and $\saddP$ is also a
     central distribution of \setQ for $X$.
 \end{proof}
 
@@ -117,7 +146,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     Clearly, if $\saddle$ exists, it will be a saddle point for $f$.
 
     Both of these optimization problems are convex and differentiable in the sense of convex
-    optimization; see~\cite{0521833787}.
+    optimization; see~\cite{boyd2004convex}.
     To establish this, consider that all the constraint functions are affine, and therefore are convex, concave and
     differentiable.
 
@@ -140,7 +169,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     The constraints simply restrict the feasible set to the set of probability distributions, and it is always possible
     to find feasible points that meet all the constraints.
     Therefore, Slater’s condition is satisfied, and the KKT conditions provide necessary
-    and sufficient conditions for optimality~\cite{0521833787}.
+    and sufficient conditions for optimality~\cite{boyd2004convex}.
     In other words, if there exists a point $\saddle$ that satisfies the KKT conditions for both problems, it will be a
     saddle point for $f$, and vice versa.
 
@@ -259,12 +288,12 @@ Like the center of a circle, the central distribution is equidistant from the bo
         &= \sum_i \saddR(i)\left(\kl[Q_i][C'] - \kl[Q_i][\cDist] \right) \\
         \nonumber
         &= \sum_i \saddR(i)\kl[Q_i][C'] - \lambda \\
-        &\leq \supD[C'] - \lambda.
+        &\leq \sFunc[C'] - \lambda.
     \end{align}
     If $C'$ is a central distribution of \setQ for $X$,
     the definition of a central distribution implies
     \[
-        \supD[C'] = \lambda.
+        \sFunc[C'] = \lambda.
     \]
     Therefore, by non-negativity of the KL divergence, we have
     \[

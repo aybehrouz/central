@@ -66,6 +66,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
+\newtheorem{notation}[theorem]{Notation}
 \newtheorem*{example}{Example}
 \newtheorem*{fact}{Fact}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -82,38 +83,27 @@
 
 \pgfplotsset{
     compat=1.18,
-    journalplot/.style={
+    globalstyle/.style={
         width=0.6\textwidth,
-        height=0.4\textwidth,
+        height=0.45\textwidth,
         xlabel near ticks,
         ylabel near ticks,
         tick align=outside,
-        tick pos=left,
-        line width=1pt,
-        label style={
-            font=\small
-        },
-        tick label style={
-            font=\small
-        },
+        grid=major,
+        grid style={dotted,gray!30},
         legend style={
-            font=\scriptsize,
-            fill=none
+            font=\scriptsize
         },
         legend pos=south east,
-        grid=major,
-        mark options={solid},
-        axis line style={black},
-        tick style={black},
-        enlargelimits=false,
-        clip=true,
-        title style={
-            font=\small
+        legend cell align=left,
+        every axis plot/.append style={
+            line width=1pt
         }
     }
 }
+
 % Commands
-\include{cmd}
+\input{cmd}
 
 \begin{document}
 
@@ -201,10 +191,8 @@
     \subsection{Asymptotic Central Distributions}\label{subsec:asymptotic-cd}
     \input{asymptotic}
 
-    \section{Illustrative Examples}\label{sec:examples}
-    \input{examples}
 
-    \subsection{Attribute Selection}\label{subsec:attribute-selection}
+    \section{An Application to Feature Selection}\label{sec:attribute-selection}
     \input{att_selection}
 
 

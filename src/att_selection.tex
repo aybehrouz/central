@@ -1,5 +1,10 @@
+A natural application of hierarchical central distributions arises in feature selection.
+When the relevant subset of attributes is unknown, each candidate subset induces a distinct family of admissible
+distributions.
+Feature selection can therefore be viewed as uncertainty over a hierarchy of probabilistic models, making it a
+natural setting for the central distribution framework.
 
-In this example, we consider a classification problem where the goal is to
+We consider a classification problem where the goal is to
 predict a target class, denoted by $Y$, from a set of observed nominal attributes $(\seqExp{A})$.
 We assume that $Y$ may depend on an unknown subset of the attributes, rather than the full set.
 
@@ -87,14 +92,14 @@ predictions divided by total test instances) over these trials.
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            journalplot,
+            globalstyle,
             width=0.5\textwidth,
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,
             ymin=0.0, ymax=1.0,
-            xtick={3,4,5,6,7,8,9,10,11,12},
-            ytick={0.3,0.6,0.9},
+            xtick={3,...,12},
+        %ytick={0.3,0.6,0.9},
         ]
 
             \addplot+[mark=*, blue] coordinates {
@@ -116,13 +121,13 @@ predictions divided by total test instances) over these trials.
     \end{tikzpicture}
     \begin{tikzpicture}
         \begin{axis}[
-            journalplot,
+            globalstyle,
             width=0.5\textwidth,
             xlabel={Number of Attributes},
             xmin=3, xmax=12,
             ymin=0.1, ymax=1.0,
-            xtick={3,4,5,6,7,8,9,10,11,12},
-            ytick={0.3,0.6,0.9},,
+            xtick={3,...,12},
+        %ytick={0.3,0.6,0.9},,
         ]
 
             % --- CD-Det ---
@@ -171,7 +176,7 @@ version shows reduced performance due to misleading patterns.
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            journalplot,
+            globalstyle,
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,

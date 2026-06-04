@@ -3,7 +3,7 @@ to characterize and compute them.
 The following results provide optimization-theoretic characterizations of central distributions that form the
 foundation of the subsequent analysis.
 
-Throughout this section, all random variables are assumed to be discrete with finite support.
+Throughout this subsection, all random variables are assumed to be discrete with finite support.
 Before proceeding, we establish the existence of central distributions in the finite setting considered throughout
 this section.
 
@@ -48,8 +48,8 @@ distribution using standard convex optimization techniques.
 \end{definition}
 
 Next, we establish the connection between saddle points and central distributions.
-One significant insight provided by the next theorem is that it suggests inference and searching for a central
-distribution can be combined and performed simultaneously when finding a saddle point.
+One insight provided by the next theorem is that it suggests inference and searching for a central
+distribution can be combined and performed simultaneously.
 
 \begin{theorem}
     % I've been unable to prove that the central distribution is a saddle point for f, or characterize conditions
@@ -102,7 +102,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
     function $\mu$, such that for every $i$, $x$ the following conditions hold:
     \begin{gather}
         \label{eq:kkt_lambda}
-        \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
+        \klExp[Q_i][\saddP][x] + \mu(i) = \lambda, \\
         \label{eq:kkt_w_avg}
         \saddP(x) = \sum_i \saddR(i) Q_i(x) \\
         \label{eq:kkt_r_sums_one}
@@ -181,7 +181,7 @@ distribution can be combined and performed simultaneously when finding a saddle 
         \label{eq:kkt_proof_p_sums_one}
         \sum_{x} \saddP(x) = 1, \\
         \nonumber
-        \klExp[Q_i][\saddP][x] - \mu(i) = \lambda, \\
+        \klExp[Q_i][\saddP][x] + \mu(i) = \lambda, \\
         \label{eq:kkt_proof_r_sums_one}
         \sum_i \saddR(i) = 1, \\
         \nonumber
@@ -191,7 +191,6 @@ distribution can be combined and performed simultaneously when finding a saddle 
         \nonumber
         \mu(i) \saddR(i) = 0.
     \end{gather}
-
     By summing Equation~\ref{eq:kkt_proof_R_is_pxIe} over $x$ and using Equation~\ref{eq:kkt_proof_r_sums_one},
     we have
     \[
@@ -278,7 +277,6 @@ Like the center of a circle, the central distribution is equidistant from the bo
     which must hold for every \inSet{Q} and some strictly positive probability distribution \saddR.
     Since \cDist is a convex combination of elements of \setQ, the corresponding convex
     weights define the distribution \saddR and \cDist satisfies these conditions.
-
     Therefore, by Lemma~\ref{lm:saddle_conditions} and Theorem~\ref{th:saddle_is_central}, \cDist is a central
     distribution of \setQ for $X$.
 
@@ -326,7 +324,10 @@ Like the center of a circle, the central distribution is equidistant from the bo
 
 \begin{proof}
     We proceed by contradiction.
-    Suppose that for every \inSet{Q}, we have $\kl > \lambda$.
+    Suppose that for every \inSet{Q}, we have
+    \[
+        \kl > \lambda.
+    \]
     This implies that
     \[
         g(P) > \lambda = g(C),

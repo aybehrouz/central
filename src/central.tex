@@ -18,7 +18,7 @@
 \newcommand{\fun}[1][]{\ifthenelse{\isempty{#1}}{}{(#1)}}
 
 Consider a random variable $X$.
-In probabilistic modeling, our knowledge about
+In Bayesian modeling, our knowledge about
 $X$ is represented by a probability distribution, which serves as a basis for making inferences.
 
 However, in many situations, our information may be too limited to justify choosing a single distribution.
@@ -45,20 +45,20 @@ Such nesting can continue recursively, yielding a hierarchical structure.
 Crucially, the choice of hierarchical organization is itself informative: grouping distributions into subsets
 expresses that certain alternatives are regarded as belonging to a common epistemic category and should therefore be
 aggregated before being compared with alternatives in other groups.
-Consequently, the hierarchy encodes information beyond the collection of leaf distributions alone.
+Therefore, the hierarchy encodes information beyond the collection of leaf distributions alone.
 
 This hierarchical organization may be interpreted as introducing multiple layers of latent structural decisions,
 where higher-level choices restrict the admissible lower-level alternatives.
 
 Within a Bayesian framework, inference ultimately requires a single probability measure.
-Therefore, to use hierarchical partial knowledge in Bayesian inference, we require a principled method for
+Hence, to use hierarchical partial knowledge in Bayesian inference, we require a principled method for
 transforming a nested set-valued uncertainty into a single probability distribution while preserving
 the informational structure encoded by the hierarchy.
 
 We adopt the principle that the probability measure used to represent prior beliefs about the environment should
 depend only on the available information about the environment itself, and not on agent-specific considerations such as
 the loss function or the informativeness of observations.
-We refer to this modeling assumption as the \emph{principle of objectivity}.
+We call this modeling assumption the \emph{principle of objectivity}.
 
 From a minimax perspective, when uncertainty is represented by a set of candidate distributions, a natural
 representative distribution is one that minimizes the worst-case divergence to the members of the set.
@@ -194,12 +194,12 @@ Consequently, flattening a hierarchy into a single unstructured set may discard 
 In many learning problems, uncertainty concerns not only the parameters of a predictive model but also its
 structural form.
 In particular, when the relevance of potential features is unknown, each candidate feature subset determines a
-distinct set of distributions in which the target variable depends only on that feature subset.
+distinct set of plausible models in which the target variable depends only on that feature subset.
 
 Feature selection may therefore be viewed as uncertainty over a collection of distributions.
 The hierarchical central distribution framework provides a natural mechanism for representing and aggregating such
 uncertainty.
-By organizing candidate feature sets hierarchically, one can encode preferences over structural hypotheses, such as
+By organizing candidate models hierarchically, one can encode preferences over structural hypotheses, such as
 favoring sparse subsets, grouping related attributes, or privileging particular interactions.
 
 Candidate feature subsets typically induce overlapping families of admissible distributions.

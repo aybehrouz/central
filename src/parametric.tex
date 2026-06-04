@@ -1,11 +1,16 @@
-In the previous subsection theorems were proved under the assumption that \setQ is finite; however, they can be
-extended to cases where \setQ can be indexed by a finite-dimensional real vector \param:
+The results of the previous subsection were established under the assumption that \setQ is finite.
+Many of the underlying constructions, however, naturally extend to parametric families where \setQ can be indexed by
+a finite-dimensional real vector \param:
 \[
     \setQ = \left\{ Q_{\theta} \mid \theta \in \Theta \right\}.
 \]
+
+We do not pursue the most general extension here.
+Instead, we use this parametric formulation to motivate the notion of a central prior and to study its relationship
+with central distributions.
 We can treat \param as a random variable and interpret $Q_{\paramVal}$ as a conditional
 distribution $Q(\xIt)$.
-Then, the weight function, $R(i)$, will essentially become a prior distribution over the parameter \param.
+In this setting, the weight function $R(i)$ appearing in the finite case becomes a prior distribution over \param.
 
 \begin{definition}[Central Prior]
     Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$,

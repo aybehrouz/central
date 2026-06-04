@@ -3,8 +3,9 @@ to characterize and compute them.
 The following results provide optimization-theoretic characterizations of central distributions that form the
 foundation of the subsequent analysis.
 
-Before proceeding, we establish that central distributions are well defined in the finite setting considered
-throughout this section.
+Throughout this section, all random variables are assumed to be discrete with finite support.
+Before proceeding, we establish the existence of central distributions in the finite setting considered throughout
+this section.
 
 \begin{theorem}
     Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
@@ -293,7 +294,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     If $C'$ is a central distribution of \setQ for $X$,
     the definition of a central distribution implies
     \[
-        \sFunc[C'] = \lambda.
+        \sFunc[C'] = \sFunc[\cDist] = \lambda.
     \]
     Therefore, by non-negativity of the KL divergence, we have
     \[

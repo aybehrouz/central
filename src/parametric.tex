@@ -1,11 +1,16 @@
-In the previous subsection theorems were proved under the assumption that \setQ is finite; however, they can be
-extended to cases where \setQ can be indexed by a finite-dimensional real vector \param:
+The results of the previous subsection were established under the assumption that \setQ is finite.
+Many of the underlying constructions, however, naturally extend to parametric families where \setQ can be indexed by
+a finite-dimensional real vector \param:
 \[
     \setQ = \left\{ Q_{\theta} \mid \theta \in \Theta \right\}.
 \]
+
+We do not pursue the most general extension here.
+Instead, we use this parametric formulation to motivate the notion of a central prior and to study its relationship
+with central distributions.
 We can treat \param as a random variable and interpret $Q_{\paramVal}$ as a conditional
 distribution $Q(\xIt)$.
-Then, the weight function, $R(i)$, will essentially become a prior distribution over the parameter \param.
+In this setting, the weight function $R(i)$ appearing in the finite case becomes a prior distribution over \param.
 
 \begin{definition}[Central Prior]
     Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$,
@@ -58,7 +63,7 @@ Then, the weight function, $R(i)$, will essentially become a prior distribution 
     This theorem follows directly from the definition of an interior distribution, which implies that for any
     probability distribution $P$, we have
     \[
-        \supD = \supD[][\setQ \cup \{R\}]. \qedhere
+        \sFunc[P][\setQ] = \sFunc[P][\setQ \cup \{R\}]. \qedhere
     \]
 \end{proof}
 
@@ -85,7 +90,7 @@ The next theorem is a standard result that is typically used in the derivation o
     For any arbitrary probability distribution $P$, the definition of a central distribution implies
     \begin{equation}
         \label{eq:th5-proof}
-        \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) C(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)}.
+        \sFunc[R(\XIT) C(T)] \leq \sFunc[R(\XIT) P(T)].
     \end{equation}
 
     Since the KL divergence is nonnegative, for every probability distribution $P$ and every \inSet{Q} we have
@@ -98,7 +103,7 @@ The next theorem is a standard result that is typically used in the derivation o
     \]
     Taking the supremum over \inSet{Q} preserves the inequality, since it holds pointwise for every \inSet{Q}:
     \[
-        \sup_{Q \in \setQ} \Dkl{Q(X,T)}{R(\XIT) P(T)} \leq \sup_{Q \in \setQ} \Dkl{Q(X,T)}{P(X,T)}.
+        \sFunc[R(\XIT) P(T)] \leq \sFunc[P(X,T)].
     \]
     Combining this inequality with Equation~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a
     central distribution of \setQ for $(X,T)$.

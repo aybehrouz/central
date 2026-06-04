@@ -1,6 +1,3 @@
-%! Author = aybehrouz
-%! Date = 7/10/25
-
 
 \newcommand{\util}[1][a]{\ell(#1, x)}
 \newcommand{\envDist}{P^*}
@@ -40,30 +37,27 @@ Within the framework of Bayesian decision theory, we can easily answer this ques
 To compare any two strategies, we can simply compare their expected loss.
 The strategy with the lower expected loss is the better one.
 
-Note that, in reality, we cannot freely choose any random variable as our evidence.
-We can only choose evidence that is a deterministic function of the evidence provided by the environment,
-allowing us to determine its value after observing the original evidence.
+In practice, we cannot choose arbitrary evidence.
+We can only use evidence that is a deterministic function of the evidence provided by the environment, allowing its
+value to be determined after observing the original evidence.
 
-Using a strategy based on a simpler form of evidence resembles feature selection in machine learning.
-For instance, in a learning task where our evidence is an image, we might substitute the image with the first
-three coefficients of its Fourier transform.
-Naturally, these coefficients are a function of the original evidence.
+Using a simpler form of evidence resembles feature selection in machine learning.
+For example, if the evidence is an image, we might replace it with the first three Fourier coefficients of the
+image.
+Since these coefficients are a function of the original evidence, they satisfy $E' = f(E)$.
+Under our Bayesian framework, however, the optimal strategy based on $E$ is always at least as good as any strategy
+based on $E'$.
 
-Interestingly, if we assume $E' = f(E)$, it turns out
-that, according to our Bayesian framework, the optimal strategy for $E$ is always
-better than any strategy that uses $E'$.
-
-From a certain perspective, it could be argued that adopting a strategy which uses simpler evidence may lead to
-ignoring some parts of useful available information, and therefore is not justified by Bayesian
-decision theory.
+One might argue that adopting a strategy based on simpler evidence may discard useful information and is therefore not
+justified by Bayesian decision theory.
 
 The key point here is that the space of strategies using $E'$ is a subset of the strategies that use $E$.
 When we are searching for the best strategy based on $E$, we are implicitly evaluating all simpler forms as well.
 This may explain why the standard Bayesian framework does not favor the simpler evidence $E'$.
 
-Plausibly, if we choose an appropriate prior distribution, when we are finding the optimal
-strategy, the relevant information should be automatically extracted from the evidence by the Bayesian framework.
-In other words, an appropriate prior should enable feature selection.
+With an appropriate choice of prior distribution, the Bayesian framework should automatically extract
+the relevant information from the evidence when determining an optimal strategy.
+In this sense, an appropriate prior could induce feature selection.
 However, when applied in a conventional Bayesian setting, many commonly used noninformative priors,
 such as the flat prior, do not naturally promote feature selection.
 

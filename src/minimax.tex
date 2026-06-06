@@ -16,7 +16,7 @@ this section.
 \begin{proof}
     For a fixed distribution $Q$, we may write
     \[
-        \kl = c - \sum_x Q(x) \ln P(x).
+        \klx = c - \sum_x Q(x) \ln P(x).
     \]
     Since $\ln$ is upper semicontinuous on $[0,+\infty)$ and $X$ has finite support, it follows that
     $\kl$ is lower semicontinuous as a function of $P$.
@@ -56,7 +56,7 @@ Next, we establish the connection between saddle points and central distribution
     Let $X$ be a discrete random variable, and \setQ be a finite set of distributions over $X$.
     Consider the following function:
     \begin{equation*}
-        f(P, R)= \sum_i \kl[Q_i] R(i),
+        f(P, R)= \sum_i \klx[Q_i] R(i),
     \end{equation*}
     where $P$ and $R$ are probability distributions, $Q_i \in \setQ$ and the index $i$ ranges over all elements of \setQ.
 
@@ -214,7 +214,7 @@ Next, we establish the connection between saddle points and central distribution
     Let \setQ be a finite set of probability distributions over a discrete random variable $X$.
     Define the function $g$ as:
     \[
-        g(R) = \sum_i \kl[Q_i][R] R(i),
+        g(R) = \sum_i \klx[Q_i][R] R(i),
     \]
     where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I).\]
     Let $f$ be the function defined in Theorem~\ref{th:saddle_is_central}.
@@ -261,11 +261,11 @@ Like the center of a circle, the central distribution is equidistant from the bo
     Assume that there exists a constant $\lambda$ such that
     \begin{equation}
         \label{eq:equal-div}
-        \kl[Q_i][\cDist] = \lambda
+        \klx[Q_i][\cDist] = \lambda
     \end{equation}
     whenever $R(i) > 0$, and
     \[
-        \kl[Q_i][\cDist] \leq \lambda
+        \klx[Q_i][\cDist] \leq \lambda
     \]
     whenever $R(i) = 0$.
     Then \cDist is the unique central distribution of \setQ for $X$.
@@ -308,7 +308,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     Assume the conditions of Theorem~\ref{th:centrality} and let $\lambda$ be the corresponding constant.
     Then, for any probability distribution $P$,
     \begin{equation*}
-        \myDiv[][Q] \leq \sFunc[P(X)][\setQ] - \lambda.
+        \myDiv[P][Q][] \leq \sFunc - \lambda.
     \end{equation*}
 \end{corollary}
 
@@ -316,7 +316,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     By Theorem~\ref{th:centrality}, \cDist is the unique central distribution of \setQ,
     and
     \[
-        \myDiv[][Q] = \kl[\cDist].
+        \myDiv[P][Q][] = \kl[\cDist].
     \]
     The result then follows immediately from Equation~\ref{eq:cd-relation-to-lambda}.
 \end{proof}

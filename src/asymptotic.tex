@@ -59,7 +59,7 @@ thereby providing a characterization of central distributions for infinite seque
     Let \cDist be a probability measure that defines a distribution over every $S_n$.
     If there exists a sequence of constants \infSeq{\lambda} such that
     \[
-        \uniConverge{\inSet{Q}}{\kl[][\cDist][S_n] - \lambda_n},
+        \uniConverge{\inSet{Q}}{\klx[][\cDist][S_n] - \lambda_n},
     \]
     then \cDist is a central distribution of \setQ for \infSeq{S}.
 \end{theorem}
@@ -75,21 +75,21 @@ thereby providing a characterization of central distributions for infinite seque
     \end{equation*}
     and, by Corollary~\ref{cor:imperfection}, it also follows that
     \begin{equation*}
-        \mu_n \geq \inf_{\inSet{Q}} \kl[][\cDist][S_n].
+        \mu_n \geq \inf_{\inSet{Q}} \klx[][\cDist][S_n].
         \label{eq:th_lim_central_proof_inf}
     \end{equation*}
 
     On the other hand, clearly
     \[
-        \left|\inf_{\inSet{Q}} \kl[][\cDist][S_n] - \lambda_n \right|
-        \leq \sup_{\inSet{Q}}  \left|\kl[][\cDist][S_n] - \lambda_n \right|,
+        \left|\inf_{\inSet{Q}} \klx[][\cDist][S_n] - \lambda_n \right|
+        \leq \sup_{\inSet{Q}}  \left|\klx[][\cDist][S_n] - \lambda_n \right|,
     \]
     and
     \[
         \left| \sFunc[\cDist(S_n)] - \lambda_n \right|
-        \leq \sup_{\inSet{Q}}  \left|\kl[][\cDist][S_n] - \lambda_n \right|.
+        \leq \sup_{\inSet{Q}}  \left|\klx[][\cDist][S_n] - \lambda_n \right|.
     \]
-    Hence, both \infSeq[]{\inf_{\inSet{Q}} \kl[][\cDist][S_n] - \lambda_n}
+    Hence, both \infSeq[]{\inf_{\inSet{Q}} \klx[][\cDist][S_n] - \lambda_n}
     and \infSeq[]{ \sFunc[\cDist(S_n)] - \lambda_n} converge to $0$.
     By the squeeze theorem, the sequence \infSeq[]{\mu_n - \lambda_n} also converges to $0$.
     We my write
@@ -106,7 +106,7 @@ thereby providing a characterization of central distributions for infinite seque
     \]
     and the squeeze theorem implies
     \[
-        \toInf \kl[\cDist_n][\cDist][S_n] = 0.
+        \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \]
     Thus, by Definition~\ref{def:infseq-central}, \cDist is a central distribution of \setQ for \infSeq{S}.
 \end{proof}
@@ -143,16 +143,16 @@ random variables.
     $(S_n, T_n)$.
     Given that $C^*$ is a probability measure, we have
     \begin{align*}
-        \kl[{C_n}][C^*][S_n, T_n] &= \kl[{R(S_n \mid T_n)C_n}][R(S_n \mid T_n)C][T_n] \\
-        &= \kl[{C_n}][C][T_n].
+        \klx[{C_n}][C^*][S_n, T_n] &= \klx[{R(S_n \mid T_n)C_n}][R(S_n \mid T_n)C][T_n] \\
+        &= \klx[{C_n}][C][T_n].
     \end{align*}
     Since $C$ is a central distribution for \infSeq{T}, by definition,
     \[
-        \toInf \kl[{C_n}][C][T_n] = 0.
+        \toInf \klx[{C_n}][C][T_n] = 0.
     \]
     It follows that
     \[
-        \toInf \kl[{C_n}][C^*][S_n, T_n] = 0,
+        \toInf \klx[{C_n}][C^*][S_n, T_n] = 0,
     \]
     and therefore $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
 \end{proof}

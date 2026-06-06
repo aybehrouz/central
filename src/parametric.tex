@@ -26,7 +26,7 @@ In this setting, the weight function $R(i)$ appearing in the finite case becomes
     \label{def:interior}
     Let \setQ be a set of probability distributions over a random variable $X$.
     A distribution $R$ is called an \emph{interior distribution} of \setQ if
-    the sets \setQ and $\setQ \cup \{R\}$ have the same central distributions.
+    the sets \setQ and $\setQ \cup \{R\}$ have the same central distributions for $X$.
 \end{definition}
 
 \begin{theorem}
@@ -34,7 +34,7 @@ In this setting, the weight function $R(i)$ appearing in the finite case becomes
     and let \cDist denote the unique central distribution of \setQ (as defined therein).
     If for some \inSet{Q}
     \[
-        \kl[][\cDist] < \lambda,
+        \klx[][\cDist] < \lambda,
     \]
     then $Q$ is an interior distribution of \setQ.
 \end{theorem}
@@ -47,6 +47,7 @@ In this setting, the weight function $R(i)$ appearing in the finite case becomes
 \end{proof}
 
 \begin{theorem}
+    Let $X$ be a random variable and let \setQ be a set of probability distributions over $X$.
     Any distribution that can be expressed as a convex combination of elements of \setQ is an
     interior distribution of \setQ.
 \end{theorem}
@@ -134,12 +135,12 @@ prior methodology~\cite{BERNARDO200517}.
     \end{equation*}
     Since $\cp$ is strictly positive,
     \begin{align*}
-        \cp &= \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
-        &= \cp \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\}
+        \cp &= \exp \left\{-\lambda +  \klx[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
+        &= \cp \exp \left\{-\lambda +  \klx[Q_{\paramVal{}}][C] \right\}
     \end{align*}
     implies
     \[
-        \kl[Q_{\paramVal{}}][C] = \lambda\,.
+        \klx[Q_{\paramVal{}}][C] = \lambda\,.
     \]
     This holds for all \paramVal.
     By Theorem~\ref{th:centrality} it follows that \cDist is a central distribution of \setQ for $X$,

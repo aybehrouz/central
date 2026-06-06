@@ -6,7 +6,7 @@ The expert may hold different beliefs and instead favor another probability meas
 From the expert’s perspective, evaluating $P$ involves assessing the potential loss incurred by using
 the (in their view) incorrect distribution $P(X)$ when the true distribution is believed to be $Q(X)$.
 
-Let us assume that a real number can be used to measure this loss, and denote it as $\kl[][][][ ]$.
+Let us assume that a real number can be used to measure this loss, and denote it as $\klx[][][][ ]$.
 It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
 Therefore, $\measure{D}{}{}$ effectively is a measure of the divergence of $P(X)$ from $Q(X)$, when $Q$ is
 the believed true probability measure.
@@ -20,7 +20,7 @@ method for measuring divergence between distributions.
 
 \begin{theorem}
     Let $X$ be a discrete random variable.
-    Suppose $\kl[][][][ ]$ is some divergence measure that quantifies the divergence of $P(X)$ from $Q(X)$.
+    Suppose $\klx[][][][ ]$ is some divergence measure that quantifies the divergence of $P(X)$ from $Q(X)$.
     Consider the following properties:
 
     \begin{description}
@@ -28,19 +28,19 @@ method for measuring divergence between distributions.
         measure.
         If $U(\varOmega)$ is the uniform distribution with the same support as $Q(\varOmega)$, then we have
         \[
-            \kl[Q][U][\varOmega][ ] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
+            \klx[Q][U][\varOmega][ ] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
         \]
         where $\measure{H}{}{}$ denotes Shannon's entropy.
         \item[Additivity] For any two discrete random variables $X, Y$ and probability measures $P,Q$
         \[
-            \kl[][][X, Y][ ] = \kl[][][][ ] + \sum_x \kl[][][Y|x][ ]Q(x)\cdot
+            \klx[][][X, Y][ ] = \klx[][][][ ] + \sum_x \klx[][][Y|x][ ]Q(x)\cdot
         \]
     \end{description}
     If $\measure{D}{}{\none}$ satisfies these properties, then it is the Kullback--Leibler divergence.
 \end{theorem}
 
 \begin{proof}
-    \newcommand{\D}[1][]{\kl[][][#1][ ]}
+    \newcommand{\D}[1][]{\klx[][][#1][ ]}
     \newcommand{\T}{\varOmega}
     \renewcommand{\t}{\omega}
     \renewcommand{\tIx}{\t \mid x}
@@ -110,14 +110,14 @@ We now briefly review some KL divergence properties needed in subsequent section
     Let $X$ be a random variable, and let $P$, $Q$, and $R$ be probability distributions over $X$.
     The Kullback–-Leibler divergence satisfies the following inequality:
     \begin{equation*}
-        \kl \geq \klRatio \cdot
+        \klx \geq \klRatio \cdot
     \end{equation*}
 \end{lemma}
 
 \begin{proof}
     The Kullback–-Leibler divergence is nonnegative and is defined when $R$ is a probability distribution:
     \begin{equation*}
-        \kl[][R] \geq 0 \cdot
+        \klx[][R] \geq 0 \cdot
     \end{equation*}
     By adding $\klRatio$ to both sides of the above inequality, the desired inequality follows.
 \end{proof}
@@ -126,7 +126,7 @@ We now briefly review some KL divergence properties needed in subsequent section
     Let $Q_1$, $Q_2$ and $P$ be probability distributions.
     If for some $0 \leq \alpha \leq 1$ we have $Q = \convex{Q_1}{Q_2}$, then:
     \begin{equation*}
-        \kl \leq \convex{\kl[Q_1]}{\kl[Q_2]} \cdot
+        \klx \leq \convex{\klx[Q_1]}{\klx[Q_2]} \cdot
     \end{equation*}
     That is, the KL divergence is convex in its first argument.
 \end{theorem}

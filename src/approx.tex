@@ -1,8 +1,10 @@
 \newcommand{\engFunc}[1][P]{\measure{F}{}{Q,\tilde{#1}}}
+\newcommand{\infR}{\inf_{Q \in \set{R}}}
+\newcommand{\supR}{\sup_{Q \in \set{R}}}
 
 Suppose we want to approximate the central distribution of a hierarchy of distributions \set{h}.
 To do so, we need a measure that quantifies the quality of an approximation.
-We argue that a natural choice is the central divergence introduced in Definition~\ref{def:central-divergence}.
+A natural choice is the central divergence introduced in Definition~\ref{def:central-divergence}.
 Since central distributions are intended to serve as representatives of hierarchies of distributions,
 central divergence may be viewed as a measure of how well a probability distribution represents a hierarchy.
 
@@ -19,11 +21,11 @@ for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
 \begin{theorem}\label{th:central-approx}
     Let \setQ be a finite set of probability distributions over a discrete random variable $X$, and suppose the
     assumptions of Theorem~\ref{th:centrality} hold.
-    Let $\tilde{P}$ be a nonnegative linear combination of elements of \setQ,
+    Let $\tilde{P}$ be a linear combination of elements of $\set{R} \subseteq \setQ$ with strictly positive weights,
     and let $P$ be the corresponding normalized distribution.
     Then
     \[
-        \myDiv[][Q] \leq \sup_{\inSet{Q}} \engFunc - \inf_{\inSet{Q}} \engFunc,
+        \myDiv[][Q] \leq \supR \engFunc - \inf_{\inSet{Q}} \engFunc,
     \]
     where
     \[
@@ -33,20 +35,20 @@ for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
 
 \begin{proof}
     By Theorem~\ref{th:centrality}, $C$ is the unique central distribution of \setQ,
-    and therefore from Equation~\ref{eq:cd-relation-to-lambda}, we have
+    and therefore from Corollary~\ref{cor:cdiv-lambda-bound}, we have
     \[
-        \myDiv[][Q] \leq \sFunc - \lambda.
+        \myDiv[][Q] \leq \sFunc[][\setQ] - \lambda.
     \]
 
-    On the other hand, since $P$ is a convex combination of elements of \setQ,
-    Lemma~\ref{lm:imperfection} implies that
+    On the other hand, since $P$ is a convex combination of elements of \set{R} with strictly positive weights,
+    Corollary~\ref{cor:imperfection} implies that
     \[
-        \inf_{\inSet{Q}} \kl \leq \lambda.
+        \lambda \geq \infR \kl.
     \]
 
     Combining these two inequalities yields
     \begin{equation} \label{eq:cdiv-upper-bound}
-        \myDiv[][Q] \leq \sFunc - \inf_{\inSet{Q}} \kl.
+        \myDiv[][Q] \leq \sFunc[][\setQ] - \infR \kl.
     \end{equation}
 
     Now let $\tilde{P}(X) = Z P(X)$, where $Z > 0$ is a normalization constant.
@@ -54,22 +56,20 @@ for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
     \[
         \kl = \ln Z - \engFunc.
     \]
-    Since $\ln Z$ does not depend on $Q$, the supremum and infimum translate directly into the corresponding
-    expressions in terms of $\measure{F}{}{}$, and the result follows from Equation~\ref{eq:cdiv-upper-bound}.
+    Since $\ln Z$ does not depend on $Q$, we have
+    \begin{align*}
+        \infR \kl &= \ln Z - \supR \engFunc \\
+        \sup_{\inSet{Q}} \kl &= \ln Z - \inf_{\inSet{Q}} \engFunc,
+    \end{align*}
+    and the result follows from Equation~\ref{eq:cdiv-upper-bound}.
 \end{proof}
 
-The upper bound in Equation~\ref{eq:cdiv-upper-bound} becomes small precisely when the variation of $\measure{F}{}{}$
-across \inSet{Q} is small.
-The theorem therefore suggests seeking a $\tilde{P}$ such that $\engFunc$ is approximately constant over \inSet{Q}.
-This constant can be arbitrary, but it is convenient to choose it to be zero, in which case
-\[
-    \Ex{Q}{\ln \tilde{P}(X)} \approx - \entropy{Q}{X}.
-\]
-
-Note that the bound in Theorem~\ref{th:central-approx} is guaranteed only when $\tilde{P}$ is a non-negative
-linear combination of elements of \setQ.
-Furthermore, there must exist $\tilde{C}$, a strictly positive linear combination of elements of \setQ, such that
-for every \inSet{Q} the equality holds:
-\[
-    \Ex{Q}{\ln \tilde{C}(X)} = - \entropy{Q}{X}.
-\]
+Since central distributions are defined through marginal distributions, their construction may be interpreted as
+combining prior specification and Bayesian prediction into a single optimization problem.
+As we shall see in a later section, this perspective extends to infinite sequences through suitable limiting
+constructions.
+A key question is whether central distributions for finite initial segments $S_n$ converge sufficiently rapidly
+to the corresponding central distribution of the underlying infinite sequence.
+Establishing such approximation results would make it possible to perform inference by approximating a
+tractable central distribution while retaining the objectivity properties associated with the
+infinite-sequence formulation.

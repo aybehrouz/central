@@ -25,12 +25,26 @@ In this setting, the weight function $R(i)$ appearing in the finite case becomes
 \begin{definition}[Interior Distribution]
     \label{def:interior}
     Let \setQ be a set of probability distributions over a random variable $X$.
-    A distribution $R$ is called an \emph{interior distribution} of \setQ if, for every probability distribution $P$,
-    there exists some $\inSet{Q}$ such that
-    \begin{equation*}
-        \kl[R] \leq \kl[Q].
-    \end{equation*}
+    A distribution $R$ is called an \emph{interior distribution} of \setQ if
+    the sets \setQ and $\setQ \cup \{R\}$ have the same central distributions.
 \end{definition}
+
+\begin{theorem}
+    Suppose that the conditions of Theorem~\ref{th:centrality} hold.
+    and let \cDist denote the unique central distribution of \setQ (as defined therein).
+    If for some \inSet{Q}
+    \[
+        \kl[][\cDist] < \lambda,
+    \]
+    then $Q$ is an interior distribution of \setQ.
+\end{theorem}
+
+\begin{proof}
+    Since $\kl[][\cDist] < \lambda$, the distribution $Q$ must have zero weight in the convex representation of \cDist.
+    Hence, removing $Q$ from \setQ does not alter the convex representation of \cDist.
+    It follows that the conditions of Theorem~\ref{th:centrality} remain satisfied for $\setQ \setminus{Q}$,
+    and \cDist remains the unique central distribution.
+\end{proof}
 
 \begin{theorem}
     Any distribution that can be expressed as a convex combination of elements of \setQ is an
@@ -50,21 +64,11 @@ In this setting, the weight function $R(i)$ appearing in the finite case becomes
     \[
         \kl[R] \leq \kl[Q_j].
     \]
-    Since $Q_j \in \setQ$, the condition in Definition~\ref{def:interior} is satisfied,
-    and $R$ is indeed an interior distribution of \setQ.
-\end{proof}
-
-\begin{theorem}
-    Let $R$ be an interior distribution of \setQ.
-    If $C$ is a central distribution of \setQ, it is also a central distribution of $\setQ \cup \{R\}$ and vice versa.
-\end{theorem}
-
-\begin{proof}
-    This theorem follows directly from the definition of an interior distribution, which implies that for any
-    probability distribution $P$, we have
+    Since $Q_j \in \setQ$, that implies
     \[
-        \sFunc[P][\setQ] = \sFunc[P][\setQ \cup \{R\}]. \qedhere
+        \sFunc[P][\setQ] = \sFunc[P][\setQ \cup \{R\}].
     \]
+    Therefore, \setQ and $\setQ \cup \{R\}$ have the same central distributions.
 \end{proof}
 
 One important consequence of this theorem is that, in order to identify a central distribution within a parametric
@@ -137,9 +141,9 @@ prior methodology~\cite{BERNARDO200517}.
     \[
         \kl[Q_{\paramVal{}}][C] = \lambda\,.
     \]
-    This holds for all \paramVal, and \cPrior is a strictly positive distribution,
-    by Theorem~\ref{th:centrality} it follows that \cDist is a central distribution of \setQ for $X$.
-    Thus, by definition, \cPrior is a central prior of \setQ for $X$.
+    This holds for all \paramVal.
+    By Theorem~\ref{th:centrality} it follows that \cDist is a central distribution of \setQ for $X$,
+    and by definition, \cPrior is a central prior of \setQ for $X$.
 \end{proof}
 
 This theorem provides a sufficient fixed-point characterization of central priors; it does not address existence or

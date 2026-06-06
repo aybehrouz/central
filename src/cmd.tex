@@ -11,7 +11,7 @@
 \newcommand{\paramVal}[1][]{\mathFix{\sub{\theta}{#1}}}
 \newcommandx{\kl}[4][1=Q, 2=P, 3=X, 4=\mathrm{KL}, usedefault]{ \Dkl[#4]{#1(#3)}{#2(#3)} }
 \newcommand{\Dkl}[3][\mathrm{KL}]{\measure{D}{#1}{#2 \,\middle\|\, #3}}
-\newcommandx{\myDiv}[2][1=P(X), 2=h, usedefault]{\measure{D}{\mathrm{C}}{\set{#2}(X) \,\middle\|\, #1}}
+\newcommandx{\myDiv}[3][1=P, 2=h, 3=(X), usedefault]{\measure{D}{\mathrm{C}}{\set{#2}#3 \,\middle\|\, #1#3}}
 \newcommand{\none}{\, \cdot \,}
 
 \newcommand{\Ex}[2]{\measure{E}{#1}{#2}}
@@ -23,7 +23,7 @@
 \newcommand{\setQ}{\set{q}}
 \newcommand{\setQQ}{\set{h^*}}
 
-\newcommand{\theKL}{the Kullback-Leibler divergence}
+\newcommand{\theKL}{the Kullback--Leibler divergence}
 \newcommand{\infSeq}[2][n]{\mathFix{\left\{ \sub{#2}{#1} \right\}_{n = 1}^{\infty}}}
 \newcommand{\infSeqExp}[1]{\mathFix{#1_1, #1_2, \ldots}}
 \newcommand{\seqExp}[2][n]{\mathFix{#2_1, #2_2, \ldots, #2_{#1}}}

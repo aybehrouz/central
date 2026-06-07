@@ -41,7 +41,7 @@ As shown in Equation~\ref{eq:bayes-action}, the optimal Bayesian decision rule d
 In this example, we use the zero--one loss, under which the optimal strategy predicts the target class with the highest
 posterior probability.
 These posterior probabilities are computed using the central distribution derived in Example~\ref{ex:fused-multinomial}.
-In the present construction, we note that each subset-specific fused multinomial model is assigned its corresponding
+It turns out that each subset-specific fused multinomial model is assigned its corresponding
 Jeffreys' prior.
 Consequently, the resulting predictive distribution can be interpreted as Bayesian model averaging over all
 candidate feature subsets, with each model equipped with its Jeffreys' prior.
@@ -78,9 +78,9 @@ nature of the data.
 To assess robustness to irrelevant features, we progressively removed one attribute at a time from the full set
 of 12, starting with irrelevant ones and stopping just before removing any of the three relevant attributes.
 
-At each step, we trained and tested two versions of the central distribution: one assuming a deterministic class
-assignment function (CD-Det), where the target class is a deterministic function of the relevant attributes,
-and one allowing for a conditional (probabilistic) class assignment distribution (CD-Prob).
+At each step, we trained and tested two versions of the central distribution: one assuming that the target class is
+a deterministic function of the attributes (CD-Det), and one allowing the target class to follow a conditional
+probability distribution given the attributes (CD-Prob).
 Both versions are constructed by aggregating over $2^{12}$ fused multinomial models, corresponding to all subsets of
 the 12 attributes.
 As a baseline, we also trained a decision tree classifier (DTree).
@@ -98,7 +98,7 @@ predictions divided by total test instances) over these trials.
             ylabel={Accuracy},
             xmin=3, xmax=12,
             ymin=0.1, ymax=1.0,
-            xtick={3,4,5,6,7,8,9,10,11,12},
+            xtick={3,...,12},
             ytick={0.1,0.3,0.5,0.7,0.9},
         ]
 
@@ -131,7 +131,7 @@ predictions divided by total test instances) over these trials.
             ylabel={Accuracy},
             xmin=3, xmax=12,
             ymin=0.1, ymax=1.0,
-            xtick={3,4,5,6,7,8,9,10,11,12},
+            xtick={3,...,12},
             ytick={0.1,0.3,0.5,0.7,0.9},
         ]
 
@@ -154,18 +154,43 @@ predictions divided by total test instances) over these trials.
     \end{tikzpicture}\label{fig:f2-results}
 \end{figure}
 
-The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, reveal notable differences in
-performance depending on the underlying class assignment function.
-For function $Y_1$, both deterministic and probabilistic methods achieve high accuracy, with the deterministic
-version of the central distribution slightly outperforming the other.
-In contrast, function $Y_2$ is more difficult to predict, leading to a clearer separation in performance between the
-two methods.
-This difficulty primarily arises from strong non-deterministic dependencies between subsets of input bits and the
-assigned class.
-For instance, when the first input bit of $Y_2$ is 1, the class is often $D$, creating a misleading
-probabilistic association.
-In this case, the deterministic central distribution remains the most accurate overall, while the probabilistic
-version shows reduced performance due to misleading patterns.
+The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, show that both central-distribution
+methods substantially outperform the decision tree on the two classification tasks.
+Interestingly, the relative difficulty of the tasks differs between the methods.
+For the central-distribution approach, $Y_2$ is more challenging than $Y_1$, resulting in a larger gap between the
+deterministic and probabilistic variants.
+This difficulty arises from strong non-deterministic dependencies between subsets of input bits and the assigned
+class, which can create misleading probabilistic associations.
+In contrast, the decision tree performs worse on $Y_1$ than on $Y_2$.
+Overall, the deterministic central distribution achieved the highest accuracy, while the probabilistic version
+produced similar but slightly weaker results.
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Accuracy vs. Number of Attributes (Function $Y_1$, 10 train samples)}
+    \begin{tikzpicture}
+        \begin{axis}[
+            globalstyle,
+            xlabel={Number of Attributes},
+            ylabel={Accuracy},
+            xmin=3, xmax=12,
+            ymin=0.4, ymax=0.8,
+            xtick={3,...,12},
+        ]
+
+            \addplot+[mark=*, blue] coordinates {
+                (3, 0.765833) (4, 0.753) (5, 0.742333) (6, 0.725667) (7, 0.711167) (8, 0.695667) (9, 0.678833) (10, 0.661) (11, 0.643) (12, 0.624833)
+            };
+            \addlegendentry{CD-Det}
+
+            \addplot+[mark=square*, red] coordinates {
+                (3, 0.724667) (4, 0.7095) (5, 0.6835) (6, 0.649) (7, 0.611333) (8, 0.582667) (9, 0.553167) (10, 0.518) (11, 0.492667) (12, 0.4715)
+            };
+            \addlegendentry{CD-Prob}
+
+        \end{axis}
+    \end{tikzpicture}\label{fig:f1-10samples-results}
+\end{figure}
 
 \begin{figure}[htbp]
     \centering
@@ -176,9 +201,8 @@ version shows reduced performance due to misleading patterns.
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,
-            ymin=0.55, ymax=0.8,
-            xtick={3,4,5,6,7,8,9,10,11,12},
-            ytick={0.6,0.65,0.7,0.75,0.8},
+            ymin=0.4, ymax=0.8,
+            xtick={3,...,12},
         ]
 
             \addplot+[mark=*, blue] coordinates {
@@ -195,11 +219,11 @@ version shows reduced performance due to misleading patterns.
     \end{tikzpicture}\label{fig:f2-10samples-results}
 \end{figure}
 
-While removing irrelevant attributes generally led to slight improvements in accuracy, the effect was not
-substantial in our primary experiments with 20 training samples.
-However, we observed that the benefit of attribute removal becomes more noticeable when the training set is
-smaller.
-In particular, additional experiments with 10 training samples showed a clearer performance gain as
-irrelevant features were removed, indicating that the impact of irrelevant attributes is more pronounced in
-low-data regimes (see Figure~\ref{fig:f2-10samples-results}).
+With 20 training samples, removing irrelevant attributes had little effect on performance.
+Accuracy remained nearly constant as the number of attributes increased from 3 to 12, and the decision tree showed a
+similar insensitivity to attribute count.
+However, with only 10 training samples (Figures~\ref{fig:f1-10samples-results} and~\ref{fig:f2-10samples-results}),
+accuracy decreased noticeably as additional irrelevant attributes were introduced, indicating that irrelevant
+features become more problematic in low-data regimes.
+
 

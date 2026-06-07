@@ -24,8 +24,8 @@ According to Bayesian decision theory, the optimal strategy is the one that mini
 where $\envDist$ is the joint probability distribution of the environment state and the evidence.
 
 One can show that there always exists a deterministic optimal strategy,
-and a strategy that for each evidence $e$ selects the action minimizing the expected loss conditioned
-on $e$, is optimal:
+namely a strategy that, for each evidence $e$, selects the action minimizing the expected loss conditioned
+on $e$:
 \begin{equation}
     \label{eq:bayes-action}
     S_{\text{opt}}(e) = \arg\min_a \Ex{\envDist}{\util \mid e}.
@@ -50,11 +50,11 @@ based on $E'$.
 
 One might argue that adopting a strategy based on simpler evidence may discard useful information and is therefore not
 justified by Bayesian decision theory.
-The key point here is that the space of strategies using $E'$ is a subset of the strategies that use $E$.
+The key point is that the space of strategies using~$E'$ is a subset of the space of strategies using~$E$.
 When we are searching for the best strategy based on $E$, we are implicitly evaluating all simpler forms as well.
-This may explain why the standard Bayesian framework does not favor the simpler evidence $E'$.
+This helps explain why standard Bayesian inference does not inherently favor simpler evidence representations.
 
-With an appropriate choice of prior distribution, the Bayesian framework should automatically extract
+With an appropriate choice of prior distribution, the Bayesian framework can automatically extract
 the relevant information from the evidence when determining an optimal strategy.
 In this sense, an appropriate prior could induce feature selection.
 However, when applied in a conventional Bayesian setting, many commonly used noninformative priors,
@@ -67,5 +67,5 @@ this framework offers a new information-theoretic generalization of objective Ba
 reference analysis~\cite{BERNARDO200517}.
 It moves beyond maximizing expected missing information to provide a unified mechanism for minimizing worst-case
 divergence under layered, set-valued uncertainty.
-Furthermore, we derive asymptotic characterizations of central priors and investigate the role of hierarchical central
+Furthermore, we propose asymptotic characterizations of central priors and investigate the role of hierarchical central
 distributions in Bayesian feature selection.

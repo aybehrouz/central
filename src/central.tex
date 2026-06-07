@@ -1,5 +1,5 @@
-\newcommandx{\sFuncExpand}[3][1=P, 2=\setQ, 3=X]{\sup_{Q \in #2} \kl[Q][#1][#3]}
-\newcommandx{\sFunc}[2][1=P, 2=]{\measure{S}{#2}{#1}}
+\newcommandx{\sFuncExpand}[3][1=P, 2=\setQ, 3=X]{\sup_{Q \in #2} \klx[Q][#1][#3]}
+\newcommandx{\sFunc}[2][1=P, 2=, usedefault]{\measure{S}{#2}{#1}}
 \newcommandx{\klExp}[3][1=Q, 2=P, 3=x]{\sum_{#3} #1(#3) \ln \frac{#1(#3)}{#2(#3)}}
 \newcommand{\inSet}[1]{\mathFix{#1 \in \set{#1}}}
 
@@ -65,6 +65,20 @@ representative distribution is one that minimizes the worst-case divergence to t
 Such a distribution may be viewed as the most conservative or robust single-distribution summary of the available
 partial knowledge.
 
+\begin{notation}[Kullback–Leibler Divergence]
+    For probability distributions $P$ and $Q$
+    \[
+        \klx
+    \]
+    denotes the Kullback--Leibler divergence between $P$ and $Q$ over a random variable $X$.
+    For a discrete random variable $X$ we have
+    \[
+        \klx = \klExp.
+    \]
+    When the underlying random variable is clear from context, we omit the argument and write $\kl$.
+\end{notation}
+
+
 \begin{definition}\label{def:center-of-set}
     Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
     We call a distribution $C$ a \emph{central distribution} of \setQ for $X$ if, for every probability
@@ -73,7 +87,6 @@ partial knowledge.
         \sFuncExpand[\cDist] \leq \sFuncExpand[P],
         \label{eq:central-def}
     \end{equation}
-    where $\measure{D}{\mathrm{KL}}{}$ denotes the Kullback–-Leibler (KL) divergence.
 \end{definition}
 
 By convention, any probability distribution is regarded as its own central distribution.
@@ -115,7 +128,7 @@ central distributions.
     For any distribution $P$, we define the \emph{central divergence} of $P$ from a hierarchy of distributions \set{H},
     with respect to a random variable $X$, as follows:
     \begin{equation*}
-        \myDiv = \inf_{\cDist} \kl[{\cDist}],
+        \myDiv = \inf_{\cDist} \klx[{\cDist}],
     \end{equation*}
     where $\cDist$ denotes a central distribution of \set{H} for $X$.
 \end{definition}
@@ -129,7 +142,7 @@ The following definition extends the construction recursively to general hierarc
     We call a distribution \cDist a \emph{central distribution} of \setQQ if,
     for every probability distribution $P$, we have:
     \begin{equation*}
-        \sup_{\set{H} \in \setQQ} \myDiv[\cDist(X)]  \leq \sup_{\set{H} \in \setQQ} \myDiv.
+        \sup_{\set{H} \in \setQQ} \myDiv[\cDist]  \leq \sup_{\set{H} \in \setQQ} \myDiv.
     \end{equation*}
 \end{definition}
 
@@ -197,7 +210,7 @@ In particular, when the relevance of potential features is unknown, each candida
 distinct set of plausible models in which the target variable depends only on that feature subset.
 
 Feature selection may therefore be viewed as uncertainty over a collection of distributions.
-The hierarchical central distribution framework provides a natural mechanism for representing and aggregating such
+The hierarchical central distribution framework provides a principled mechanism for representing and aggregating such
 uncertainty.
 By organizing candidate models hierarchically, one can encode preferences over structural hypotheses, such as
 favoring sparse subsets, grouping related attributes, or privileging particular interactions.

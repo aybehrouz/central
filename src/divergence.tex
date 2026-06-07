@@ -1,3 +1,5 @@
+\newcommand{\Div}[1][X]{\Dkl[]{Q(#1)}{P(#1)}}
+
 Suppose that for a given environment, we have specified a probability measure $P$.
 In particular, we are interested in the distribution it induces on a random variable $X$, denoted $P(X)$.
 
@@ -6,7 +8,7 @@ The expert may hold different beliefs and instead favor another probability meas
 From the expert’s perspective, evaluating $P$ involves assessing the potential loss incurred by using
 the (in their view) incorrect distribution $P(X)$ when the true distribution is believed to be $Q(X)$.
 
-Let us assume that a real number can be used to measure this loss, and denote it as $\kl[][][][ ]$.
+Let us assume that a real number can be used to measure this loss, and denote it as $\Div$.
 It seems reasonable, as $P$ gets closer to $Q$ this measure decreases, and increases when $P$ diverges from $Q$.
 Therefore, $\measure{D}{}{}$ effectively is a measure of the divergence of $P(X)$ from $Q(X)$, when $Q$ is
 the believed true probability measure.
@@ -20,7 +22,7 @@ method for measuring divergence between distributions.
 
 \begin{theorem}
     Let $X$ be a discrete random variable.
-    Suppose $\kl[][][][ ]$ is some divergence measure that quantifies the divergence of $P(X)$ from $Q(X)$.
+    Suppose $\Div$ is some divergence measure that quantifies the divergence of $P(X)$ from $Q(X)$.
     Consider the following properties:
 
     \begin{description}
@@ -28,19 +30,18 @@ method for measuring divergence between distributions.
         measure.
         If $U(\varOmega)$ is the uniform distribution with the same support as $Q(\varOmega)$, then we have
         \[
-            \kl[Q][U][\varOmega][ ] = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
+            \Dkl[]{Q(\varOmega)}{U(\varOmega)} = \entropy{U}{\varOmega} - \entropy{Q}{\varOmega},
         \]
         where $\measure{H}{}{}$ denotes Shannon's entropy.
         \item[Additivity] For any two discrete random variables $X, Y$ and probability measures $P,Q$
         \[
-            \kl[][][X, Y][ ] = \kl[][][][ ] + \sum_x \kl[][][Y|x][ ]Q(x)\cdot
+            \Div[X,Y] = \Div + \sum_x \Div[Y|x]Q(x)\cdot
         \]
     \end{description}
     If $\measure{D}{}{\none}$ satisfies these properties, then it is the Kullback--Leibler divergence.
 \end{theorem}
 
 \begin{proof}
-    \newcommand{\D}[1][]{\kl[][][#1][ ]}
     \newcommand{\T}{\varOmega}
     \renewcommand{\t}{\omega}
     \renewcommand{\tIx}{\t \mid x}
@@ -54,7 +55,7 @@ method for measuring divergence between distributions.
     \newcommand{\Qx}{Q(x)}
     \newcommand{\sumx}{\sum_{x}}
 
-    Let $P(X)$ and $Q(X)$ be two arbitrary distributions for a discrete random variable X.
+    Let $P(X)$ and $Q(X)$ be two arbitrary distributions for a discrete random variable $X$.
     We define a new continuous random variable $\T$ and let
     \begin{equation*}
         p(\T = \t \mid \rvEq) =
@@ -70,18 +71,18 @@ method for measuring divergence between distributions.
     This ensures that $Q(\TX)$ and $P(\TX)$ have the same support as well.
     Thus, we have
     \begin{align*}
-        \D[\TX] & = \entropy{P}{\TX} - \entropy{Q}{\TX}    \\
+        \Div[\TX] & = \entropy{P}{\TX} - \entropy{Q}{\TX}    \\
         & = \sumx \tent{\tx}                       \\
         & = \sumx \Qx \int q(\tIx) \ln q(\tx) d\t,
     \end{align*}
     and
     \begin{align*}
-        \D[\TIx] & = \entropy{P}{\TIx} - \entropy{Q}{\TIx} \\
+        \Div[\TIx] & = \entropy{P}{\TIx} - \entropy{Q}{\TIx} \\
         & = \ln P(x) + \tent{\tIx}\cdot
     \end{align*}
     Now, we use the additivity property to obtain a formula for our divergence measure:
     \begin{align*}
-        \D & = \D[\TX] - \sumx \D[\TIx]\Qx                                                              \\
+        \Div & = \Div[\TX] - \sumx \Div[\TIx]\Qx                                                              \\
         & = \sumx \Qx  \left( \int q(\tIx) \ln \frac{q(\tx)}{q(\tIx)}d\t - \ln P(x) \right) \\
         & = \sumx \Qx  \left( \ln \Qx \int q(\tIx) d\t - \ln P(x) \right)                   \\
         & = \sumx \Qx \ln \frac{\Qx}{P(x)}\cdot \qedhere
@@ -110,14 +111,14 @@ We now briefly review some KL divergence properties needed in subsequent section
     Let $X$ be a random variable, and let $P$, $Q$, and $R$ be probability distributions over $X$.
     The Kullback–-Leibler divergence satisfies the following inequality:
     \begin{equation*}
-        \kl \geq \klRatio \cdot
+        \klx \geq \klRatio \cdot
     \end{equation*}
 \end{lemma}
 
 \begin{proof}
     The Kullback–-Leibler divergence is nonnegative and is defined when $R$ is a probability distribution:
     \begin{equation*}
-        \kl[][R] \geq 0 \cdot
+        \klx[][R] \geq 0 \cdot
     \end{equation*}
     By adding $\klRatio$ to both sides of the above inequality, the desired inequality follows.
 \end{proof}

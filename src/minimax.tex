@@ -1,7 +1,5 @@
 With the concept of hierarchical central distributions in place, we now develop the theoretical machinery needed
 to characterize and compute them.
-The following results provide optimization-theoretic characterizations of central distributions that form the
-foundation of the subsequent analysis.
 
 Throughout this subsection, all random variables are assumed to be discrete with finite support.
 Before proceeding, we establish the existence of central distributions in the finite setting considered throughout
@@ -16,7 +14,7 @@ this section.
 \begin{proof}
     For a fixed distribution $Q$, we may write
     \[
-        \kl = c - \sum_x Q(x) \ln P(x).
+        \klx = c - \sum_x Q(x) \ln P(x).
     \]
     Since $\ln$ is upper semicontinuous on $[0,+\infty)$ and $X$ has finite support, it follows that
     $\kl$ is lower semicontinuous as a function of $P$.
@@ -48,8 +46,6 @@ distribution using standard convex optimization techniques.
 \end{definition}
 
 Next, we establish the connection between saddle points and central distributions.
-One insight provided by the next theorem is that it suggests inference and searching for a central
-distribution can be combined and performed simultaneously.
 
 \begin{theorem}
     % I've been unable to prove that the central distribution is a saddle point for f, or characterize conditions
@@ -58,7 +54,7 @@ distribution can be combined and performed simultaneously.
     Let $X$ be a discrete random variable, and \setQ be a finite set of distributions over $X$.
     Consider the following function:
     \begin{equation*}
-        f(P, R)= \sum_i \kl[Q_i] R(i),
+        f(P, R)= \sum_i \klx[Q_i] R(i),
     \end{equation*}
     where $P$ and $R$ are probability distributions, $Q_i \in \setQ$ and the index $i$ ranges over all elements of \setQ.
 
@@ -216,7 +212,7 @@ distribution can be combined and performed simultaneously.
     Let \setQ be a finite set of probability distributions over a discrete random variable $X$.
     Define the function $g$ as:
     \[
-        g(R) = \sum_i \kl[Q_i][R] R(i),
+        g(R) = \sum_i \klx[Q_i][R] R(i),
     \]
     where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I).\]
     Let $f$ be the function defined in Theorem~\ref{th:saddle_is_central}.
@@ -255,50 +251,71 @@ Like the center of a circle, the central distribution is equidistant from the bo
 \begin{theorem} [Centrality]
     \label{th:centrality}
     Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
-    Suppose \cDist is a convex combination of elements of \setQ, with all mixture weights strictly positive.
-    If there exists a constant $\lambda$ such that
-    \begin{equation}
-        \label{eq:equal-div}
-        \kl[][\cDist] = \lambda,
-    \end{equation}
-    for every \inSet{Q}, then \cDist is the unique central distribution of \setQ for $X$.
+    Suppose that \cDist is a convex combination of elements of \setQ, that is,
+    \[
+        \cDist(x) = \sum_i Q_i(x) R(i),
+    \]
+    where $R$ is a probability distribution over the indices of $Q$.
+    Assume that there exists a constant $\lambda$ such that
+    \begin{equation*}
+        \klx[Q_i][\cDist] = \lambda
+    \end{equation*}
+    whenever $R(i) > 0$, and
+    \[
+        \klx[Q_i][\cDist] \leq \lambda
+    \]
+    whenever $R(i) = 0$.
+    Then \cDist is the unique central distribution of \setQ for $X$.
 \end{theorem}
 
 \begin{proof}
-    Lemma~\ref{lm:saddle_conditions} proves a set of sufficient conditions for a saddle point.
-    Note that more restrictive conditions can also be imposed to derive an alternative set of sufficient conditions.
-    Suppose additionally that $\saddR(i) > 0$ for every $i$.
-    Then Equation~\ref{eq:saddle_lm_rmu_is_zero} implies $\mu(i) = 0$,
-    and Lemma~\ref{lm:saddle_conditions} conditions can be simplified to
-    \begin{gather*}
-        \klExp[Q][\saddP][x] = \lambda, \\
-        \saddP(x) = \sum_i \saddR(i) Q_i(x),
-    \end{gather*}
-    which must hold for every \inSet{Q} and some strictly positive probability distribution \saddR.
-    Since \cDist is a convex combination of elements of \setQ, the corresponding convex
-    weights define the distribution \saddR and \cDist satisfies these conditions.
-    Therefore, by Lemma~\ref{lm:saddle_conditions} and Theorem~\ref{th:saddle_is_central}, \cDist is a central
-    distribution of \setQ for $X$.
+    By defining
+    \[
+        \mu(i) = \lambda - \kl[Q_i][\cDist],
+    \]
+    we have $\mu(i) \geq 0$ and $\mu(i)R(i) = 0$ for every $i$.
+    Therefore, by Lemma~\ref{lm:saddle_conditions}, the point $\left( \cDist, R \right)$ is a saddle point,
+    and Theorem~\ref{th:saddle_is_central} implies that \cDist is a central distribution of \setQ for $X$.
 
-    On the other hand, for any probability distribution $C'$, we have
+    To prove uniqueness, let $C'$ be an arbitrary probability distribution.
+    We have
     \begin{align}\label{eq:cd-relation-to-lambda}
         \nonumber
         \kl[\cDist][C']
-        &= \sum_i \saddR(i)\left(\kl[Q_i][C'] - \kl[Q_i][\cDist] \right) \\
+        &= \sum_i R(i)\left(\kl[Q_i][C'] - \kl[Q_i][\cDist] \right) \\
         \nonumber
-        &= \sum_i \saddR(i)\kl[Q_i][C'] - \lambda \\
+        &= \sum_i \kl[Q_i][C']R(i) - \lambda \\
         &\leq \sFunc[C'] - \lambda.
     \end{align}
-    If $C'$ is a central distribution of \setQ for $X$,
-    the definition of a central distribution implies
+
+    Suppose that $C'$ is also a central distribution of \setQ for $X$.
+    Since \cDist and $C'$ are both central distributions,
     \[
         \sFunc[C'] = \sFunc[\cDist] = \lambda.
     \]
     Therefore, by non-negativity of the KL divergence, we have
     \[
-        \kl[\cDist][C'] = 0.
+        \kl[\cDist][C'] = 0,
     \]
-    Hence \cDist and $C'$ are identical probability distributions.
+    which implies \cDist and $C'$ are identical probability distributions.
+\end{proof}
+
+\begin{corollary}
+    \label{cor:cdiv-lambda-bound}
+    Assume the conditions of Theorem~\ref{th:centrality} and let $\lambda$ be the corresponding constant.
+    Then, for any probability distribution $P$,
+    \begin{equation*}
+        \myDiv[P][Q][] \leq \sFunc - \lambda.
+    \end{equation*}
+\end{corollary}
+
+\begin{proof}
+    By Theorem~\ref{th:centrality}, \cDist is the unique central distribution of \setQ,
+    and
+    \[
+        \myDiv[P][Q][] = \kl[\cDist].
+    \]
+    The result then follows immediately from Equation~\ref{eq:cd-relation-to-lambda}.
 \end{proof}
 
 \begin{corollary}
@@ -308,25 +325,30 @@ Like the center of a circle, the central distribution is equidistant from the bo
 \end{corollary}
 
 \begin{proof}
-    In the proof of Theorem~\ref{th:centrality}, we showed that $(\cDist, \saddR)$ is a saddle point for $f$.
-    By letting $C(X, I) = Q_i(X)\saddR(I)$, Lemma~\ref{lm:saddle-is-maximizer} implies that \cDist is a maximizer
+    In the proof of Theorem~\ref{th:centrality}, we showed that $(\cDist, R)$ is a saddle point for $f$.
+    By letting $C(X, I) = Q_i(X)R(I)$, Lemma~\ref{lm:saddle-is-maximizer} implies that \cDist is a maximizer
     of the function $g$.
 \end{proof}
 
-\begin{lemma}
-    \label{lm:imperfection}
+\begin{corollary}
+    \label{cor:imperfection}
     Assuming the conditions of Theorem~\ref{th:centrality} and using the same $\lambda$,
-    if $P$ is a convex combination of elements of \setQ, then there exists some $Q_0 \in \setQ$ such that
+    let $P$ be a convex combination of elements of \setQ, i.e.,
+    \[
+        P(x) = \sum_i Q_i(x) R(i),
+    \]
+    where $R$ is a probability distribution.
+    Then there exists an index $k$ in the support of $R$ (that is, $R(k) > 0$) such that
     \begin{equation*}
-        \kl[Q_0][] \leq \lambda.
+        \lambda \geq \klx[Q_k].
     \end{equation*}
-\end{lemma}
+\end{corollary}
 
 \begin{proof}
     We proceed by contradiction.
-    Suppose that for every \inSet{Q}, we have
+    Suppose that for every $k$ in the support of $R$, we have
     \[
-        \kl > \lambda.
+        \lambda < \kl[Q_k].
     \]
     This implies that
     \[

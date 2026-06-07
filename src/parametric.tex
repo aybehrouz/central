@@ -25,14 +25,29 @@ In this setting, the weight function $R(i)$ appearing in the finite case becomes
 \begin{definition}[Interior Distribution]
     \label{def:interior}
     Let \setQ be a set of probability distributions over a random variable $X$.
-    A distribution $R$ is called an \emph{interior distribution} of \setQ if, for every probability distribution $P$,
-    there exists some $\inSet{Q}$ such that
-    \begin{equation*}
-        \kl[R] \leq \kl[Q].
-    \end{equation*}
+    A distribution $R$ is called an \emph{interior distribution} of \setQ iff
+    the sets \setQ and $\setQ \cup \{R\}$ have the same central distributions for $X$.
 \end{definition}
 
 \begin{theorem}
+    Suppose that the conditions of Theorem~\ref{th:centrality} hold,
+    and let \cDist denote the unique central distribution of \setQ (as defined therein).
+    If for some $Q_k \in \setQ$
+    \[
+        \klx[Q_k][\cDist] < \lambda,
+    \]
+    then $Q_k$ is an interior distribution of \setQ.
+\end{theorem}
+
+\begin{proof}
+    Since $\kl[Q_k][\cDist] < \lambda$, we must have $R(k) = 0$.
+    Hence, \cDist is a convex combination of elements of $\setQ \setminus{\{Q_k\}}$ and
+    the conditions of Theorem~\ref{th:centrality} remain satisfied for $\setQ \setminus{\{Q_k\}}$.
+    Thus, \cDist is the unique central distribution of $\setQ \setminus{\{Q_k\}}$ and \setQ.
+\end{proof}
+
+\begin{theorem}
+    Let $X$ be a random variable and let \setQ be a set of probability distributions over $X$.
     Any distribution that can be expressed as a convex combination of elements of \setQ is an
     interior distribution of \setQ.
 \end{theorem}
@@ -50,21 +65,11 @@ In this setting, the weight function $R(i)$ appearing in the finite case becomes
     \[
         \kl[R] \leq \kl[Q_j].
     \]
-    Since $Q_j \in \setQ$, the condition in Definition~\ref{def:interior} is satisfied,
-    and $R$ is indeed an interior distribution of \setQ.
-\end{proof}
-
-\begin{theorem}
-    Let $R$ be an interior distribution of \setQ.
-    If $C$ is a central distribution of \setQ, it is also a central distribution of $\setQ \cup \{R\}$ and vice versa.
-\end{theorem}
-
-\begin{proof}
-    This theorem follows directly from the definition of an interior distribution, which implies that for any
-    probability distribution $P$, we have
+    Since $Q_j \in \setQ$, that implies
     \[
-        \sFunc[P][\setQ] = \sFunc[P][\setQ \cup \{R\}]. \qedhere
+        \sFunc[P][\setQ] = \sFunc[P][\setQ \cup \{R\}].
     \]
+    Therefore, \setQ and $\setQ \cup \{R\}$ have the same central distributions.
 \end{proof}
 
 One important consequence of this theorem is that, in order to identify a central distribution within a parametric
@@ -130,16 +135,16 @@ prior methodology~\cite{BERNARDO200517}.
     \end{equation*}
     Since $\cp$ is strictly positive,
     \begin{align*}
-        \cp &= \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
-        &= \cp \exp \left\{-\lambda +  \kl[Q_{\paramVal{}}][C] \right\}
+        \cp &= \exp \left\{-\lambda +  \klx[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
+        &= \cp \exp \left\{-\lambda +  \klx[Q_{\paramVal{}}][C] \right\}
     \end{align*}
     implies
     \[
-        \kl[Q_{\paramVal{}}][C] = \lambda\,.
+        \klx[Q_{\paramVal{}}][C] = \lambda\,.
     \]
-    This holds for all \paramVal, and \cPrior is a strictly positive distribution,
-    by Theorem~\ref{th:centrality} it follows that \cDist is a central distribution of \setQ for $X$.
-    Thus, by definition, \cPrior is a central prior of \setQ for $X$.
+    This holds for all \paramVal.
+    By using a parametric extension of Theorem~\ref{th:centrality} one can show that \cDist is a central
+    distribution of \setQ for $X$, and by definition, \cPrior is a central prior of \setQ for $X$.
 \end{proof}
 
 This theorem provides a sufficient fixed-point characterization of central priors; it does not address existence or
@@ -147,5 +152,6 @@ uniqueness in full generality.
 
 Although this theorem is proved directly from Theorem~\ref{th:centrality}, Lemma~\ref{lm:saddle-is-maximizer}
 suggests an alternative route to the connection with Bernardo's reference prior methodology.
-Since reference priors are defined by maximizing missing information, the optimization characterization provided by
-Lemma~\ref{lm:saddle-is-maximizer} also offers another perspective on this relationship.
+Since reference priors are defined by maximizing missing information~\cite{BERNARDO200517},
+the optimization characterization provided by Lemma~\ref{lm:saddle-is-maximizer} also offers another perspective on
+this relationship.

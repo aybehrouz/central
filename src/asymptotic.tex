@@ -111,53 +111,7 @@ thereby providing a characterization of central distributions for infinite seque
     Thus, by Definition~\ref{def:infseq-central}, \cDist is a central distribution of \setQ for \infSeq{S}.
 \end{proof}
 
-We now present an asymptotic version of Theorem~\ref{th:estimator-to-var}, applicable to infinite sequences of
-random variables.
-
-\begin{theorem}
-    \label{th:estimator-to-infseq}
-    Let \infSeq{S} and \infSeq{T} be two sequences of random variables.
-    Let \setQ be a set of probability measures, where each \inSet{Q} defines a joint distribution
-    over $(S_n, T_n)$ for every $n$.
-
-    Assume there exists a natural number $M$ and a fixed conditional distribution $R$
-    such that, for all \inSet{Q} and all $n \geq M$,
-    \[
-        Q(S_n, T_n) = R(S_n \mid T_n)Q(T_n).
-    \]
-
-    Let $C$ be a central distribution of \setQ for \infSeq{T}.
-    Define
-    \[
-        C^*(S_n, T_n) = R(S_n \mid T_n)C(T_n), \quad n \geq M.
-    \]
-    If $C^*$ is a probability measure, then it is a central distribution of \setQ for \infSeq[]{(S_n, T_n)}.
-\end{theorem}
-
-\begin{proof}
-    By Theorem~\ref{th:estimator-to-var}, for each $n \geq M$ we have
-    \[
-        C_n(S_n, T_n) = R(S_n \mid T_n) C_n(T_n),
-    \]
-    where $C_n(T_n)$ is a central distribution for $T_n$, and $C_n(S_n,  T_n)$ is a central distribution for
-    $(S_n, T_n)$.
-    Given that $C^*$ is a probability measure, we have
-    \begin{align*}
-        \klx[{C_n}][C^*][S_n, T_n] &= \klx[{R(S_n \mid T_n)C_n}][R(S_n \mid T_n)C][T_n] \\
-        &= \klx[{C_n}][C][T_n].
-    \end{align*}
-    Since $C$ is a central distribution for \infSeq{T}, by definition,
-    \[
-        \toInf \klx[{C_n}][C][T_n] = 0.
-    \]
-    It follows that
-    \[
-        \toInf \klx[{C_n}][C^*][S_n, T_n] = 0,
-    \]
-    and therefore $C^*$ is a central distribution for \infSeq[]{(S_n, T_n)}.
-\end{proof}
-
-Theorems~\ref{th:limiting-centrality} and~\ref{th:estimator-to-infseq} establish the conditions for asymptotic
+Theorem~\ref{th:limiting-centrality} establishes the conditions for asymptotic
 centrality; however, proving general existence and uniqueness for infinite sequences remains an open problem.
 As such, we present the following construction as a conjectured framework.
 Under standard regularity conditions, this approach motivates the functional form of central priors and serves as a
@@ -220,7 +174,7 @@ expected to act as a central prior for the estimator sequence \infSeq{\est}.
 A central distribution over an estimator sequence cannot by itself be used to perform inference at the level of observed
 outcomes.
 To do so, we must convert it into a distribution over the primary variables of interest.
-Theorems~\ref{th:estimator-to-var} and~\ref{th:estimator-to-infseq} provide a simple
+Theorems~\ref{th:estimator-to-var} provides a simple
 method for this conversion.
 
 When dealing with layered ignorance and seeking the central distribution of a hierarchy of distributions, as defined
@@ -293,7 +247,7 @@ corresponding representative central distributions.
         \label{eq:fused-multinomial-conditional}
     \end{equation}
     Note that this distribution is independent of $\theta$.
-    Therefore, by Theorem~\ref{th:estimator-to-infseq}, a central distribution for $S_n$ can be obtained from a
+    Therefore, a central distribution for $S_n$ can be obtained from a
     central distribution for $T_n$.
 
     As $n \to \infty$, the distribution of $T_n$ converges to a multivariate Gaussian distribution.
@@ -310,7 +264,7 @@ corresponding representative central distributions.
     infinite sequence $T_\infty$.
     The notation $C(T_n)$ denotes the marginal distribution of $T_n$.
 
-    By Theorem~\ref{th:estimator-to-infseq} and Equation~\ref{eq:fused-multinomial-conditional}, we can derive a
+    By Equation~\ref{eq:fused-multinomial-conditional}, we can derive a
     central distribution for \infSeq{S}, which induces the following distribution over each $S_n$:
     \[
         C(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}

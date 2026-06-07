@@ -1,7 +1,5 @@
 With the concept of hierarchical central distributions in place, we now develop the theoretical machinery needed
 to characterize and compute them.
-The following results provide optimization-theoretic characterizations of central distributions that form the
-foundation of the subsequent analysis.
 
 Throughout this subsection, all random variables are assumed to be discrete with finite support.
 Before proceeding, we establish the existence of central distributions in the finite setting considered throughout
@@ -259,10 +257,9 @@ Like the center of a circle, the central distribution is equidistant from the bo
     \]
     where $R$ is a probability distribution over the indices of $Q$.
     Assume that there exists a constant $\lambda$ such that
-    \begin{equation}
-        \label{eq:equal-div}
+    \begin{equation*}
         \klx[Q_i][\cDist] = \lambda
-    \end{equation}
+    \end{equation*}
     whenever $R(i) > 0$, and
     \[
         \klx[Q_i][\cDist] \leq \lambda
@@ -343,7 +340,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     where $R$ is a probability distribution.
     Then there exists an index $k$ in the support of $R$ (that is, $R(k) > 0$) such that
     \begin{equation*}
-        \lambda \geq \kl[Q_k].
+        \lambda \geq \klx[Q_k].
     \end{equation*}
 \end{corollary}
 

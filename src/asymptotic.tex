@@ -116,34 +116,33 @@ centrality; however, proving general existence and uniqueness for infinite seque
 As such, we present the following construction as a conjectured framework.
 Under standard regularity conditions, this approach motivates the functional form of central priors and serves as a
 conceptual bridge to stimulate future formal proofs.
-
-Let \setQ be a family of probability distributions indexed by a parameter vector \param.
-Suppose \infSeq{\est} is a sequence of consistent estimators of \param.
-Let $P(\paramVal \mid\est_n)$ denote the posterior distribution obtained from an arbitrary smooth positive prior.
-
-Under regular parametric conditions, posterior distributions based on consistent estimators become asymptotically
-insensitive to the choice of smooth positive prior.
-
-Motivated by this phenomenon, we heuristically derive the asymptotic form of a central prior by considering the
-posterior density evaluated at the point $t=\paramVal$.
 A similar asymptotic construction also appears in~\cite{BERNARDO200517}.
 
-Specifically, we define
-\begin{equation}
-    \label{eq:central-limit}
-    \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\mu_n},
-\end{equation}
-where \infSeq{\mu} is a sequence of positive constants chosen so that the limit exists and the convergence is
-uniform over \paramVal.
+\begin{conjecture}
+    Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures,
+    where each element of \setQ defines a distribution over each $\est_n$.
+    Assume that \setQ can be indexed by a finite-dimensional vector \param,
+    and \infSeq{\est} is a consistent sequence of estimators for \param.
+    Define
+    \begin{equation}
+        \label{eq:central-limit}
+        \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = t_n)|_{t_n = \paramVal}}{\mu_n},
+    \end{equation}
+    where \infSeq{\mu} is a sequence of positive constants and $P(\paramVal \mid\est_n)$ denote the posterior
+    distribution obtained from an arbitrary smooth positive prior.
+    If this limit exists and the convergence is uniform over \paramVal,
+    under the usual regularity conditions,
+    $\cPrior(\paramVal)$ is a central prior of \setQ for \infSeq{\est}.
+\end{conjecture}
 
 Let $k$ denote the normalizing constant converting proportionality into equality.
-Since the logarithm is a continuous function, Equation~\ref{eq:central-limit} implies
+Since the convergence is uniform and the logarithm is a continuous function, Equation~\ref{eq:central-limit} implies
 \begin{equation*}
-    \uniConverge{\paramVal}{\ln \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}
+    \uniConverge{\paramVal}{\ln \frac{P(\paramVal \mid\est_n = t_n)|_{t_n = \paramVal}}
     {\cPrior(\paramVal)} - \ln \mu_n + \ln k }.
 \end{equation*}
 
-For every \paramVal, since $\est_n$ is a consistent estimator, the sampling distribution $\estLike$ becomes
+Because $\est_n$ is a consistent estimator for every \paramVal, the sampling distribution $\estLike$ becomes
 increasingly concentrated around $\paramVal$ as $n \to \infty$.
 Therefore, we may write
 \begin{equation*}
@@ -159,30 +158,18 @@ obtaining
 \begin{equation*}
     \uniConverge{\paramVal}{ \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{Q(t_n \mid \paramVal)}{C(t_n)} - \ln \mu_n + \ln k }.
 \end{equation*}
-Letting
-\[
-    \lambda_n = \ln \mu_n - \ln k,
-\]
-we observe that
+Letting $\lambda_n = \ln \mu_n - \ln k$, we observe that
 \begin{equation*}
     \uniConverge{\paramVal}{\Dkl{\estLike}{C(\est_n)} - \lambda_n}.
 \end{equation*}
 With appropriate additional assumptions, the conditions of Theorem~\ref{th:limiting-centrality} are satisfied.
-Thus, under the stated regularity assumptions and heuristic asymptotic arguments, $\cPrior(\paramVal)$ is
-expected to act as a central prior for the estimator sequence \infSeq{\est}.
+Thus, $\cPrior(\paramVal)$ is expected to act as a central prior for the estimator sequence \infSeq{\est}.
 
 A central distribution over an estimator sequence cannot by itself be used to perform inference at the level of observed
 outcomes.
 To do so, we must convert it into a distribution over the primary variables of interest.
 Theorems~\ref{th:estimator-to-var} provides a simple
 method for this conversion.
-
-When dealing with layered ignorance and seeking the central distribution of a hierarchy of distributions, as defined
-in Definition~\ref{def:hierarchy-of-distributions}, we typically encounter situations in which a given level of the
-hierarchy contains only finitely many alternatives.
-In such cases, and under appropriate regularity conditions, if there exists a consistent estimator for the index
-identifying these alternatives, then the central distribution reduces to an equally weighted average of the
-corresponding representative central distributions.
 
 \begin{example}[Binomial Experiment]
     \newcommand{\pv}{\paramVal}
@@ -264,10 +251,17 @@ corresponding representative central distributions.
     infinite sequence $T_\infty$.
     The notation $C(T_n)$ denotes the marginal distribution of $T_n$.
 
-    By Equation~\ref{eq:fused-multinomial-conditional}, we can derive a
+    By Theorem~\ref{th:estimator-to-var} and Equation~\ref{eq:fused-multinomial-conditional}, we can derive a
     central distribution for \infSeq{S}, which induces the following distribution over each $S_n$:
     \[
         C(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}
         \prodm \frac{\gm{n_y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}}\,.
     \]
 \end{example}
+
+When dealing with layered ignorance and seeking the central distribution of a hierarchy of distributions, as defined
+in Definition~\ref{def:hierarchy-of-distributions}, we typically encounter situations in which a given level of the
+hierarchy contains only finitely many alternatives.
+In such cases, and under appropriate regularity conditions, if there exists a consistent estimator for the index
+identifying these alternatives, then the central distribution reduces to an equally weighted average of the
+corresponding representative central distributions.

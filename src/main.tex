@@ -57,6 +57,7 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
 %% For Assumption, Definition, Example,     %%
@@ -84,7 +85,7 @@
 \pgfplotsset{
     compat=1.18,
     globalstyle/.style={
-        width=0.6\textwidth,
+        width=0.5\textwidth,
         height=0.45\textwidth,
         xlabel near ticks,
         ylabel near ticks,
@@ -92,6 +93,8 @@
         grid=major,
         grid style={dotted,gray!30},
         legend style={
+            draw=none,
+            fill=none,
             font=\scriptsize
         },
         legend pos=south east,

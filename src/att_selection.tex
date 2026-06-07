@@ -19,7 +19,7 @@ We can use the fused multinomial model of Example~\ref{ex:fused-multinomial} to 
 As an example, assume that $Y$ depends only on $A_2$, $A_5$.
 Then, we define the labeling function $f$ as follows:
 \[
-    f(\seqExp{A}, Y) = (A_2, A_5, Y) \cdot
+    f(\seqExp{A}, Y) = (A_2, A_5, Y).
 \]
 In a fused multinomial model with this labeling function, given $A_2, A_5$, the target class $Y$ is conditionally
 independent from other attributes.
@@ -57,7 +57,7 @@ The target class was defined as a deterministic function of a fixed subset of 3 
 shown in Table~\ref{tab:functions}.
 The same subset of relevant attributes and class assignment function were used across all trials.
 
-\begin{table}[htbp]
+\begin{table}[tb]
     \centering
     \caption{Mappings of 3-bit inputs under class functions $Y_1$ and $Y_2$}
     \begin{tabular}{ccc}
@@ -92,12 +92,11 @@ All methods were trained on the same training data and evaluated on the same tes
 Each configuration was repeated for 100 independent trials, and we reported the average accuracy (correct
 predictions divided by total test instances) over these trials.
 
-\begin{figure}[htbp]
+\begin{figure}[t]
     \centering
     \begin{tikzpicture}
         \begin{axis}[
             globalstyle,
-            width=0.5\textwidth,
             xlabel={Number of Attributes},
             ylabel={Accuracy},
             xmin=3, xmax=12,
@@ -126,7 +125,6 @@ predictions divided by total test instances) over these trials.
     \begin{tikzpicture}
         \begin{axis}[
             globalstyle,
-            width=0.5\textwidth,
             xlabel={Number of Attributes},
             xmin=3, xmax=12,
             ymin=0.0, ymax=1.0,
@@ -162,7 +160,7 @@ predictions divided by total test instances) over these trials.
     \label{fig:f1-f2-results}
 \end{figure}
 
-The results, shown in Figures~\ref{fig:f1-results} and~\ref{fig:f2-results}, show that both central-distribution
+The results, shown in Figures~\ref{fig:f1-f2-results}, show that both central-distribution
 methods substantially outperform the decision tree on the two classification tasks.
 Interestingly, the relative difficulty of the tasks differs between the methods.
 For the central-distribution approach, $Y_2$ is more challenging than $Y_1$, resulting in a larger gap between the
@@ -173,9 +171,8 @@ In contrast, the decision tree performs worse on $Y_1$ than on $Y_2$.
 Overall, the deterministic central distribution achieved the highest accuracy, while the probabilistic version
 produced similar but slightly weaker results.
 
-\begin{figure}[htbp]
+\begin{figure}[t]
     \centering
-    \caption{Accuracy vs. Number of Attributes (Function $Y_1$, 10 train samples)}
     \begin{tikzpicture}
         \begin{axis}[
             globalstyle,
@@ -197,16 +194,11 @@ produced similar but slightly weaker results.
             \addlegendentry{CD-Prob}
 
         \end{axis}
-    \end{tikzpicture}\label{fig:f1-10samples-results}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
+    \end{tikzpicture}
     \begin{tikzpicture}
         \begin{axis}[
             globalstyle,
             xlabel={Number of Attributes},
-            ylabel={Accuracy},
             xmin=3, xmax=12,
             ymin=0.4, ymax=0.8,
             xtick={3,...,12},
@@ -224,14 +216,17 @@ produced similar but slightly weaker results.
 
         \end{axis}
     \end{tikzpicture}
-    \caption{Accuracy versus number of attributes for 10 training samples under class assignment function $Y_2$}
-    \label{fig:f2-10samples-results}
+    \caption{
+        Accuracy versus number of attributes for 10 training samples.
+        Left: under class assignment function $Y_1$.
+        Right: under class assignment function $Y_2$.}
+    \label{fig:f1-f2-10samples-results}
 \end{figure}
 
 With 20 training samples, removing irrelevant attributes had little effect on performance.
 Accuracy remained nearly constant as the number of attributes increased from 3 to 12, and the decision tree showed a
 similar insensitivity to attribute count.
-However, with only 10 training samples (Figures~\ref{fig:f1-10samples-results} and~\ref{fig:f2-10samples-results}),
+However, with only 10 training samples (Figure~\ref{fig:f1-f2-10samples-results}),
 accuracy decreased noticeably as additional irrelevant attributes were introduced, indicating that irrelevant
 features become more problematic in low-data regimes.
 

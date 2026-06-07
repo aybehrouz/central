@@ -1,5 +1,5 @@
 This repository contains a
-[draft paper](https://github.com/aybehrouz/central/blob/main/out/main.pdf)
+[draft paper](https://github.com/aybehrouz/central/blob/isba/out/main.pdf)
 introducing **central distributions**, a minimax-KL framework for representing
 hierarchical uncertainty and performing automatic feature selection.
 

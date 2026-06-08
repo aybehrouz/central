@@ -22,8 +22,8 @@ In Bayesian modeling, our knowledge about
 $X$ is represented by a probability distribution, which serves as a basis for making inferences.
 
 However, in many situations, our information may be too limited to justify choosing a single distribution.
-Instead, we may be able to specify only a set of plausible distributions.
-Such a set represents some form of \emph{uncertainty} or \emph{partial knowledge}: although it does not identify a
+Instead, we may be able to specify a set of plausible distributions.
+Such a set represents some form of knowledge: although it does not identify a
 single distribution, it constrains the range of plausible probabilistic models.
 
 A well-known example of this idea is the exchangeability assumption used in de Finetti’s theorem.
@@ -33,10 +33,11 @@ That is, the joint probability distribution remains invariant under permutations
 This assumption imposes a constraint, effectively introducing a set of plausible distributions.
 Thus, exchangeability can be seen as a specific form of partial knowledge.
 
-In this work, we adopt the view that a set of probability distributions can represent a meaningful state of partial
-knowledge, and that such set-valued uncertainty may itself be used as the basis for inference.
+In this work, we adopt the view that a set of probability distributions can represent a meaningful state of
+\emph{uncertainty} or \emph{partial knowledge}, and that such set-valued uncertainty may itself be used as the basis
+for inference.
 
-More generally, partial knowledge may possess a hierarchical structure.
+More generally, this partial knowledge may possess a hierarchical structure.
 In the simplest case, uncertainty is represented by a single set of candidate distributions.
 In richer settings, however, this uncertainty may be organized into nested collections, where elements of a set may
 themselves be sets of distributions.
@@ -47,7 +48,7 @@ expresses that certain alternatives are regarded as belonging to a common episte
 aggregated before being compared with alternatives in other groups.
 Therefore, the hierarchy encodes information beyond the collection of leaf distributions alone.
 
-This hierarchical organization may be interpreted as introducing multiple layers of latent structural decisions,
+This organization may be interpreted as introducing multiple layers of latent structural decisions,
 where higher-level choices restrict the admissible lower-level alternatives.
 
 Within a Bayesian framework, inference ultimately requires a single probability measure.
@@ -55,15 +56,10 @@ Hence, to use hierarchical partial knowledge in Bayesian inference, we require a
 transforming a nested set-valued uncertainty into a single probability distribution while preserving
 the informational structure encoded by the hierarchy.
 
-We adopt the principle that the probability measure used to represent prior beliefs about the environment should
-depend only on the available information about the environment itself, and not on agent-specific considerations such as
-the loss function or the informativeness of observations.
-We call this modeling assumption the \emph{principle of objectivity}.
-
 From a minimax perspective, when uncertainty is represented by a set of candidate distributions, a natural
 representative distribution is one that minimizes the worst-case divergence to the members of the set.
 Such a distribution may be viewed as the most conservative or robust single-distribution summary of the available
-partial knowledge.
+knowledge.
 
 \begin{notation}[Kullback–Leibler Divergence]
     For probability distributions $P$ and $Q$, $\klx$
@@ -144,7 +140,7 @@ The following definition extends the construction recursively to general hierarc
 \end{definition}
 
 Definition~\ref{def:central-dist} generalizes Definition~\ref{def:center-of-set}, which is recovered when the hierarchy
-consists of a set of probability distributions.
+is a set of probability distributions.
 
 For later use, we introduce a compact notation for the minimax objective appearing in
 Definition~\ref{def:center-of-set}.
@@ -155,7 +151,7 @@ Definition~\ref{def:center-of-set}.
     \]
     When \setQ and $X$ are clear from the context, we may simply write $\sFunc$.
 \end{notation}
-This notation will be used throughout the sequel and allows Definition~\ref{def:center-of-set} to be written
+This notation allows Definition~\ref{def:center-of-set} to be written
 compactly as
 \[
     \cDist \in \arg\min_{P} \sFunc[P(X)][\setQ].
@@ -164,40 +160,43 @@ compactly as
 A simple example illustrates that hierarchical organization can affect the resulting representative distribution
 even when the underlying admissible sets remain unchanged.
 
-Let \(X\) be a random variable with three possible outcomes \(x_1,x_2,x_3\).
-For each \(i\), let \(S_i\) denote the set of all probability distributions over \(X\) that assign zero probability to \(x_i\).
+\begin{example}
+    Let \(X\) be a random variable with three possible outcomes \(x_1,x_2,x_3\).
+    For each \(i\), let \(S_i\) denote the set of all probability distributions over \(X\) that assign zero probability to \(x_i\).
 
-By symmetry, the central distribution of each set \(S_i\) is the uniform distribution over its support:
-\[
-    C_{S_1}=\left(0,0.5,0.5\right),\qquad
-    C_{S_2}=\left(0.5,0,0.5\right),\qquad
-    C_{S_3}=\left(0.5,0.5,0\right).
-\]
+    By symmetry, the central distribution of each set \(S_i\) is the uniform distribution over its support:
+    \[
+        C_{S_1}=\left(0,0.5,0.5\right),\qquad
+        C_{S_2}=\left(0.5,0,0.5\right),\qquad
+        C_{S_3}=\left(0.5,0.5,0\right).
+    \]
 
-If the three sets \(S_1,S_2,S_3\) are treated symmetrically as elements of a single set, then their central
-distribution is
-\[
-    C_{\{S_1,S_2,S_3\}}=
-    \left(\frac13,\frac13,\frac13\right).
-\]
+    If the three sets \(S_1,S_2,S_3\) are treated symmetrically as elements of a single set, then their central
+    distribution is
+    \[
+        C_{\{S_1,S_2,S_3\}}=
+        \left(\frac13,\frac13,\frac13\right).
+    \]
 
-Now consider instead a hierarchical organization in which \(S_1\) and \(S_2\) are grouped together, while \(S_3\)
-forms its own separate branch.
-By numerically solving the minimax problem in
-Definition~\ref{def:central-dist}, we obtain
-\[
-    C_{\{S_1,S_2\}} = \left(0.25, 0.25, 0.5\right).
-\]
-Applying the same procedure to the two distributions
-$C_{\{S_1,S_2\}}$ and $C_{S_3}$ yields
-\[
-    C_{\{\{S_1,S_2\}, S_3\}} = \left(0.4, 0.4, 0.2\right).
-\]
+    Now consider instead a hierarchical organization in which \(S_1\) and \(S_2\) are grouped together, while \(S_3\)
+    forms its own separate branch.
 
-Thus, although the underlying admissible sets are identical in both constructions, the resulting representative
-distribution differs.
+    By numerically solving the minimax problem in
+    Definition~\ref{def:central-dist}, we obtain
+    \[
+        C_{\{S_1,S_2\}} = \left(0.25, 0.25, 0.5\right).
+    \]
+    Applying the same procedure to the two distributions
+    $C_{\{S_1,S_2\}}$ and $C_{S_3}$ yields
+    \[
+        C_{\{\{S_1,S_2\}, S_3\}} = \left(0.4, 0.4, 0.2\right).
+    \]
 
-This demonstrates that hierarchical structure carries informational content beyond the collection of leaf distributions
+    Although the underlying admissible sets are identical in both constructions, the resulting representative
+    distribution differs.
+\end{example}
+
+This demonstrates that hierarchical structure carries information beyond the collection of leaf distributions
 alone.
 Consequently, flattening a hierarchy into a single unstructured set may discard meaningful epistemic structure.
 
@@ -216,5 +215,5 @@ Candidate feature subsets typically induce overlapping families of admissible di
 Distributions representing simpler dependency structure may belong simultaneously to many such families, whereas more
 complex dependency patterns belong to fewer.
 As a result, hierarchical aggregation through central distributions can induce a preference toward structurally
-simpler models by assigning more weight to distributions compatible with multiple structural hypotheses.
+simpler models by naturally assigning more weight to distributions compatible with multiple structural hypotheses.
 

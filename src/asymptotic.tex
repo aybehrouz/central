@@ -11,24 +11,26 @@ infinite sequence of random variables:
 \[
     S_n = (X_1, X_2, \ldots, X_n).
 \]
-The collection \infSeq{S} therefore forms a sequence of random variables.
+The collection \infSeq{S} therefore defines a second sequence of random variables.
 
 In many settings, our uncertainty about $S_n$ can be represented by a central distribution.
 A prominent example arises when the sequence is assumed to be exchangeable.
 As discussed earlier, exchangeability can be viewed as a form of partial knowledge that defines a set of plausible
 distributions, from which a central distribution for $S_n$ can be constructed.
 
-However, this central distribution generally depends on the sequence length $n$.
-According to the principle of objectivity, our beliefs should depend only on the available information and not on
-arbitrary aspects of the experimental setup, such as the number of variables under consideration.
+However, this central distribution generally depends on the sequence length~$n$.
+In this work, we adopt the principle that the probability measure used to represent prior beliefs about the
+environment should depend only on the available information about the environment itself,
+and not on arbitrary aspects of the experimental setup,
+such as the number of variables under consideration.
 
 Importantly, a distribution defined over a longer sequence induces marginal distributions over all shorter
 initial segments.
-This suggests that, rather than constructing a separate central distribution for each
-$S_n$, we should seek a single probability measure over the infinite sequence, from which the distributions of all
+This suggests that, rather than constructing a separate central distribution for each~$S_n$,
+we should seek a single probability measure over the infinite sequence, from which the distributions of all
 finite initial segments can be obtained as marginals.
 
-This motivates the construction of a central distribution that is well defined over $S_{\infty}$.
+This motivates the construction of a central distribution that is well defined over~$S_{\infty}$.
 
 \begin{definition}
     \label{def:infseq-central}
@@ -42,8 +44,8 @@ This motivates the construction of a central distribution that is well defined o
 \end{definition}
 
 Intuitively, this definition states that as $n \to \infty$ the distribution that $C$ induces over $S_n$ becomes
-increasingly similar to a central distribution for $S_n$.
-In other words, \cDist is a central distribution for the infinite sequence $S_{\infty}$.
+increasingly similar to a central distribution for~$S_n$.
+In other words, \cDist is a central distribution for the infinite sequence~$S_{\infty}$.
 
 Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in this asymptotic setting,
 thereby providing a characterization of central distributions for infinite sequences.
@@ -56,7 +58,7 @@ thereby providing a characterization of central distributions for infinite seque
     for every $n \geq M$, there exists a distribution $C_n$ satisfying the
     conditions of Theorem~\ref{th:centrality} for $S_n$.
 
-    Let \cDist be a probability measure that defines a distribution over every $S_n$.
+    Let \cDist be a probability measure that defines a distribution over every~$S_n$.
     If there exists a sequence of constants \infSeq{\lambda} such that
     \[
         \uniConverge{\inSet{Q}}{\klx[][\cDist][S_n] - \lambda_n},
@@ -90,8 +92,8 @@ thereby providing a characterization of central distributions for infinite seque
         \leq \sup_{\inSet{Q}}  \left|\klx[][\cDist][S_n] - \lambda_n \right|.
     \]
     Hence, both \infSeq[]{\inf_{\inSet{Q}} \klx[][\cDist][S_n] - \lambda_n}
-    and \infSeq[]{ \sFunc[\cDist(S_n)] - \lambda_n} converge to $0$.
-    By the squeeze theorem, the sequence \infSeq[]{\mu_n - \lambda_n} also converges to $0$.
+    and \infSeq[]{ \sFunc[\cDist(S_n)] - \lambda_n} converge to~$0$.
+    By the squeeze theorem, the sequence \infSeq[]{\mu_n - \lambda_n} also converges to~$0$.
     We may write
     \begin{align*}
         \toInf \left( \sFunc[\cDist(S_n)] - \mu_n \right)
@@ -143,7 +145,7 @@ Since the convergence is uniform and the logarithm is a continuous function, Equ
 \end{equation*}
 
 Because $\est_n$ is a consistent estimator for every \paramVal, the sampling distribution $\estLike$ becomes
-increasingly concentrated around $\paramVal$ as $n \to \infty$.
+increasingly concentrated around $\paramVal$ as~$n \to \infty$.
 Therefore, we may write
 \begin{equation*}
     \uniConverge{\paramVal}{\sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{P(\paramVal \mid t_n)}
@@ -153,7 +155,7 @@ Therefore, we may write
 Furthermore, under the usual regularity conditions, the posterior distribution becomes asymptotically
 insensitive to the choice of smooth positive prior.
 Motivated by this asymptotic prior-insensitivity, we heuristically replace $P(\paramVal \mid \est_n)$
-with $c(\paramVal \mid \est_n)$,
+with~$c(\paramVal \mid \est_n)$,
 obtaining
 \begin{equation*}
     \uniConverge{\paramVal}{ \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{Q(t_n \mid \paramVal)}{C(t_n)} - \ln \mu_n + \ln k }.
@@ -217,10 +219,10 @@ method for this conversion.
     Assume that for all $i$ and $\Qt \in \setQ$, if $f(x_i) = f(x'_i)$ we have \[\Qt(\seqExp{x}) = \Qt(\seqExp{x'}).\]
     That is, the conditional distribution $\Qt(X_i \mid Y_i = y)$ is uniform over the preimage $f^{-1}(y)$.
 
-    We can consider $\theta = (\theta_1, \dots, \theta_m)$ to be a probability vector over $\mathcal{Y}$,
-    where each $\theta_y$ specifies the probability of observing label $y$.
+    We can consider $\theta = (\theta_1, \dots, \theta_m)$ to be a probability vector over~$\mathcal{Y}$,
+    where each~$\theta_y$ specifies the probability of observing label~$y$.
     For a sequence $S_n$, let $n_y$ denote the number of times label $y \in \mathcal{Y}$ appears.
-    Let $|f^{-1}(y)|$ denote the number of outcomes in $\mathcal{X}$ that are mapped to label $y$ by $f$.
+    Let $|f^{-1}(y)|$ denote the number of outcomes in $\mathcal{X}$ that are mapped to label $y$ by~$f$.
     Then the probability of observing $S_n$ under $\Qt \in \setQ$, denoted $Q(S_n \mid \theta)$, is:
     \[
         Q(S_n \mid \theta) = \prodm \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y}.
@@ -242,17 +244,17 @@ method for this conversion.
     \[
         c(\theta) \propto \prodm \theta_y^{-\hf}.
     \]
-    This is a Dirichlet prior and induces a Dirichlet-multinomial distribution for each $T_n$:
+    This is a Dirichlet prior and induces a Dirichlet-multinomial distribution for each~$T_n$:
     \[
         C(T_n) = \frac{\gm{\hf[m]}\gm{n+1}}{\gm{n + \hf[m]}}
         \prodm \frac{\gm{n_y + \hf}}{\gm{\hf}\gm{n_y+1}}\,.
     \]
     Note that $C$ is a central distribution for the sequence \infSeq{T}, viewed as a probability measure on the
-    infinite sequence $T_\infty$.
-    The notation $C(T_n)$ denotes the marginal distribution of $T_n$.
+    infinite sequence~$T_\infty$.
+    The notation $C(T_n)$ denotes the marginal distribution of~$T_n$.
 
     By Theorem~\ref{th:estimator-to-var} and Equation~\ref{eq:fused-multinomial-conditional}, we can derive a
-    central distribution for \infSeq{S}, which induces the following distribution over each $S_n$:
+    central distribution for \infSeq{S}, which induces the following distribution over each~$S_n$:
     \[
         C(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}
         \prodm \frac{\gm{n_y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}}\,.

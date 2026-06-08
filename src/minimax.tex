@@ -5,7 +5,7 @@ Throughout this subsection, all random variables are assumed to be discrete with
 Before proceeding, we establish the existence of central distributions in the finite setting considered throughout
 this section.
 
-\begin{theorem}
+\begin{theorem}\label{th:existence}
     Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
     distributions over $X$.
     Then a central distribution of \setQ for $X$ exists.
@@ -14,21 +14,21 @@ this section.
 \begin{proof}
     For a fixed distribution $Q$, we may write
     \[
-        \klx = c - \sum_x Q(x) \ln P(x).
+        \kl = c - \sum_x Q(x) \ln P(x).
     \]
-    Since $\ln$ is upper semicontinuous on $[0,+\infty)$ and $X$ has finite support, it follows that
-    $\kl$ is lower semicontinuous as a function of $P$.
+    Since $\ln$ is upper semicontinuous on $[0,+\infty)$ and the summation is finite, $\kl$ is lower
+    semicontinuous as a function of $P$.
 
     Because \setQ is finite, $\sFunc[P(X)][\setQ]$ is the maximum of finitely many lower semicontinuous functions
     and is therefore itself lower semicontinuous.
-
     The set of probability distributions over $X$ is a compact simplex.
-    Hence, by the extreme value theorem, $\sFunc[][\setQ]$ attains its minimum.
+    Hence, by the extreme value theorem for lower semicontinuous functions on compact sets, $\sFunc[P(X)][\setQ]$
+    attains its minimum.
     Therefore there exists a probability distribution \cDist such that
     \[
         \sFunc[\cDist(X)][\setQ] = \inf_P \sFunc[P(X)][\setQ].
     \]
-    Thus $C$ is a central distribution of \setQ for $X$.
+    By Definition~\ref{def:center-of-set}, $C$ is a central distribution of \setQ for $X$.
 \end{proof}
 
 The central distribution is essentially the solution to a convex--concave game.
@@ -63,9 +63,9 @@ Next, we establish the connection between saddle points and central distribution
 
 \begin{proof}
     Let \cDist be a central distribution of \setQ for $X$, and \saddle be a saddle point for $f$.
-    Since $X$ is a discrete random variable and \setQ is finite, \cDist exists.
+    By Theorem~\ref{th:existence}, \cDist exists.
     As $C$ is a probability distribution, the point $(\cDist, \saddR)$ lies within the domain of $f$.
-    By the definition of a saddle point, this implies that
+    By the definition of a saddle point,
     \begin{equation}
         \label{eq:th_proof_saddle_lq_dx}
         f\saddle \leq f(\cDist, \saddR).
@@ -77,9 +77,9 @@ Next, we establish the connection between saddle points and central distribution
 
     On the other hand, by the definition of a saddle point
     \[
-        f\saddle = \max_{R} f(\saddP, R),
+        f\saddle = \max_{R} f(\saddP, R).
     \]
-    where $R$ is a probability distribution, and therefore
+    where $R$ is a probability distribution, and
     \[
         \max_{R} f(\saddP, R) = \sFunc[\saddP].
     \]
@@ -188,11 +188,9 @@ Next, we establish the connection between saddle points and central distribution
         \mu(i) \saddR(i) = 0.
     \end{gather}
     By summing Equation~\ref{eq:kkt_proof_R_is_pxIe} over $x$ and using Equation~\ref{eq:kkt_proof_r_sums_one},
-    we have
-    \[
-        \eta = 1\,.
-    \]
-    Thus, we get Equation~\ref{eq:kkt_w_avg} which also implicitly implies Equation~\ref{eq:kkt_proof_p_sums_one}.
+    we obtain $\eta = 1$.
+    Substituting this into Equation~\ref{eq:kkt_proof_R_is_pxIe} yields Equation Equation~\ref{eq:kkt_w_avg},
+    which in turn implies Equation Equation~\ref{eq:kkt_proof_p_sums_one}.
 
     To prove the second part of the lemma,
     we observe that when $R$ is a probability distribution, Equations~\ref{eq:kkt_proof_R_is_pxIe}
@@ -265,6 +263,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
         \klx[Q_i][\cDist] \leq \lambda
     \]
     whenever $R(i) = 0$.
+
     Then \cDist is the unique central distribution of \setQ for $X$.
 \end{theorem}
 
@@ -305,7 +304,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     Assume the conditions of Theorem~\ref{th:centrality} and let $\lambda$ be the corresponding constant.
     Then, for any probability distribution $P$,
     \begin{equation*}
-        \myDiv[P][Q][] \leq \sFunc - \lambda.
+        \myDiv[P][Q][] \leq \sFunc[][\setQ] - \lambda.
     \end{equation*}
 \end{corollary}
 
@@ -340,7 +339,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     where $R$ is a probability distribution.
     Then there exists an index $k$ in the support of $R$ (that is, $R(k) > 0$) such that
     \begin{equation*}
-        \lambda \geq \klx[Q_k].
+        \lambda \geq \kl[Q_k].
     \end{equation*}
 \end{corollary}
 
@@ -351,7 +350,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
     \[
         g(P) > \lambda = g(C),
     \]
-    where $C$ is the distribution specified in Theorem~\ref{th:centrality}, and $g$ is the function defined in
+    where $C$ is the central distribution specified in Theorem~\ref{th:centrality}, and $g$ is the function defined in
     Lemma~\ref{lm:saddle-is-maximizer}.
     Note that $g(P)$ is defined, because $P$ is a convex combination of elements of \setQ.
 

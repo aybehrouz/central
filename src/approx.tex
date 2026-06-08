@@ -2,13 +2,13 @@
 \newcommand{\infR}{\inf_{Q \in \set{R}}}
 \newcommand{\supR}{\sup_{Q \in \set{R}}}
 
-Suppose we want to approximate the central distribution of a hierarchy of distributions \set{h}.
+Suppose we want to approximate the central distribution of a hierarchy of distributions~\set{h}.
 To do so, we need a measure that quantifies the quality of an approximation.
 A natural choice is the central divergence introduced in Definition~\ref{def:central-divergence}.
 Since central distributions are intended to serve as representatives of hierarchies of distributions,
-central divergence may be viewed as a measure of how well a probability distribution represents a hierarchy.
+central divergence can be viewed as a measure of how well a probability distribution represents a hierarchy.
 
-At first glance, computing this quantity appears to require explicit knowledge of the central distribution of \set{h}.
+At first glance, computing this quantity appears to require explicit knowledge of the central distributions of~\set{h}.
 However, it turns out that the central divergence admits an upper bound that can be estimated without explicitly
 knowing the central distribution.
 
@@ -19,7 +19,7 @@ We assume throughout that $\tilde P(x) > 0$ whenever $Q(x) > 0$
 for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
 
 \begin{theorem}\label{th:central-approx}
-    Let \setQ be a finite set of probability distributions over a discrete random variable $X$, and suppose the
+    Let \setQ be a finite set of probability distributions over a discrete random variable~$X$, and suppose the
     assumptions of Theorem~\ref{th:centrality} hold.
     Let $\tilde{P}$ be a linear combination of elements of $\set{R} \subseteq \setQ$ with strictly positive weights,
     and let $P$ be the corresponding normalized distribution.
@@ -51,8 +51,8 @@ for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
         \myDiv[P][Q][] \leq \sFunc[][\setQ] - \infR \kl.
     \end{equation}
 
-    Now let $\tilde{P}(X) = Z P(X)$, where $Z > 0$ is a normalization constant.
-    Then, for any $Q$,
+    Let $\tilde{P}(X) = Z P(X)$, where $Z > 0$ is a normalization constant.
+    Then for any~$Q$,
     \[
         \kl = \ln Z - \engFunc.
     \]
@@ -64,12 +64,13 @@ for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
     and the result follows from Equation~\ref{eq:cdiv-upper-bound}.
 \end{proof}
 
-Since central distributions are defined through marginal distributions, their construction may be interpreted as
-combining prior specification and Bayesian prediction into a single optimization problem.
-As we shall see in a later section, this perspective extends to infinite sequences through suitable limiting
-constructions.
-A key question is whether central distributions for finite initial segments $S_n$ converge sufficiently rapidly
-to the corresponding central distribution of the underlying infinite sequence.
-Establishing such approximation results would make it possible to perform inference by approximating a
-tractable central distribution while retaining the objectivity properties associated with the
-infinite-sequence formulation.
+Since central distributions are defined through marginal distributions, their construction may be viewed as
+combining prior specification and Bayesian prediction within a single optimization framework.
+Given $n$ observations, one may perform inference using the central distribution of the corresponding finite
+sequence~$S_n$, without separately specifying a prior distribution.
+
+As discussed later, in the case of sequences of random variables, central distributions are naturally defined on the
+underlying infinite sequence.
+Consequently, the central distribution of a finite initial segment $S_n$ should be viewed as an approximation to the
+corresponding marginal of the infinite-sequence central distribution.
+A natural question is how accurate this approximation is.

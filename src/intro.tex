@@ -1,6 +1,6 @@
 
 \newcommand{\util}[1][a]{\ell(#1, x)}
-\newcommand{\envDist}{P^*}
+\newcommand{\envDist}{P}
 \newcommand{\post}{\pi(x_i \mid \paramVal)}
 
 
@@ -17,7 +17,7 @@ this evidence to determine the best action.
 In other words, our agent aims to find an optimal strategy, where a strategy defines the distribution of each
 action conditioned on the observed evidence: $S(A \mid E)$.
 
-According to Bayesian decision theory, the optimal strategy is the one that minimizes the expected loss:
+In Bayesian decision theory, the optimal strategy is the one that minimizes the expected loss:
 \begin{equation*}
     S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e),
 \end{equation*}
@@ -31,7 +31,7 @@ on $e$:
     S_{\text{opt}}(e) = \arg\min_a \Ex{\envDist}{\util \mid e}.
 \end{equation}
 
-Now, suppose that we decide to use a different evidence $E'$ instead of $E$.
+Now, suppose that we decide to use a different evidence $E'$ instead of~$E$.
 Could this change potentially improve our strategy?
 Within the framework of Bayesian decision theory, we can easily answer this question:
 To compare any two strategies, we can simply compare their expected loss.
@@ -45,13 +45,13 @@ Using a simpler form of evidence resembles feature selection in machine learning
 For example, if the evidence is an image, we might replace it with the first three Fourier coefficients of the
 image.
 Since these coefficients are a function of the original evidence, they satisfy $E' = f(E)$.
-Under our Bayesian framework, however, the optimal strategy based on $E$ is always at least as good as any strategy
-based on $E'$.
+According to our Bayesian framework, however, the optimal strategy based on $E$ is always at least as good as any
+strategy based on~$E'$.
 
 One might argue that adopting a strategy based on simpler evidence may discard useful information and is therefore not
 justified by Bayesian decision theory.
 The key point is that the space of strategies using~$E'$ is a subset of the space of strategies using~$E$.
-When we are searching for the best strategy based on $E$, we are implicitly evaluating all simpler forms as well.
+When we are searching for the best strategy based on~$E$, we are implicitly evaluating all simpler forms as well.
 This helps explain why standard Bayesian inference does not inherently favor simpler evidence representations.
 
 With an appropriate choice of prior distribution, the Bayesian framework can automatically extract

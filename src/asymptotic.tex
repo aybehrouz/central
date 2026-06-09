@@ -36,8 +36,8 @@ This motivates the construction of a central distribution that is well defined o
     \label{def:infseq-central}
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $S_n$.
-    Let \cDist be a probability measure that defines a distribution over every $S_n$.
-    \cDist is a central distribution of \setQ for \infSeq{S}, if we have
+    Let \cDist be also a probability measure that defines a distribution over every $S_n$.
+    \cDist is a central distribution of \setQ for \infSeq{S}, if and only if we have
     \begin{equation*}
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \end{equation*}
@@ -47,8 +47,7 @@ Intuitively, this definition states that as $n \to \infty$ the distribution that
 increasingly similar to a central distribution for~$S_n$.
 In other words, \cDist is a central distribution for the infinite sequence~$S_{\infty}$.
 
-Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in this asymptotic setting,
-thereby providing a characterization of central distributions for infinite sequences.
+Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in this asymptotic setting.
 
 \begin{theorem}[Asymptotic Centrality]
     \label{th:limiting-centrality}
@@ -57,8 +56,7 @@ thereby providing a characterization of central distributions for infinite seque
     Assume that there exists a natural number $M$ such that,
     for every $n \geq M$, there exists a distribution $C_n$ satisfying the
     conditions of Theorem~\ref{th:centrality} for $S_n$.
-
-    Let \cDist be a probability measure that defines a distribution over every~$S_n$.
+    Suppose that \cDist is a convex combination of elements of \setQ.
     If there exists a sequence of constants \infSeq{\lambda} such that
     \[
         \uniConverge{\inSet{Q}}{\klx[][\cDist][S_n] - \lambda_n},
@@ -70,18 +68,19 @@ thereby providing a characterization of central distributions for infinite seque
     For $n \geq M$, Theorem~\ref{th:centrality} implies that $\cDist_n$ is the unique central distribution
     of \setQ for $S_n$.
     Let $\mu_n$ be the corresponding constant from Theorem~\ref{th:centrality}.
-    By the definition of a central distribution, we have
-    \begin{equation*}
-        \mu_n \leq \sFunc[\cDist(S_n)],
-        \label{eq:th_lim_central_proof_sup}
-    \end{equation*}
-    and, by Corollary~\ref{cor:imperfection}, it also follows that
+    Since \cDist is a convex combination of elements of \setQ, $\cDist(S_n)$ is well-defined and
+    Corollary~\ref{cor:imperfection} implies
     \begin{equation*}
         \mu_n \geq \inf_{\inSet{Q}} \klx[][\cDist][S_n].
         \label{eq:th_lim_central_proof_inf}
     \end{equation*}
+    Moreover, by the definition of a central distribution, we have
+    \begin{equation*}
+        \mu_n \leq \sFunc[\cDist(S_n)].
+        \label{eq:th_lim_central_proof_sup}
+    \end{equation*}
 
-    On the other hand, clearly
+    Clearly
     \[
         \left|\inf_{\inSet{Q}} \klx[][\cDist][S_n] - \lambda_n \right|
         \leq \sup_{\inSet{Q}}  \left|\klx[][\cDist][S_n] - \lambda_n \right|,
@@ -97,11 +96,9 @@ thereby providing a characterization of central distributions for infinite seque
     We may write
     \begin{align*}
         \toInf \left( \sFunc[\cDist(S_n)] - \mu_n \right)
-        &= \toInf (\sFunc[\cDist(S_n)] -\mu_n + \lambda_n - \lambda_n) \\
         &= \toInf(\sFunc[\cDist(S_n)] - \lambda_n) - \toInf(\mu_n - \lambda_n) \\
         &= 0.
     \end{align*}
-
     By Corollary~\ref{cor:cdiv-lambda-bound}, we have
     \[
         \myDiv[\cDist][Q][(S_n)] \leq \sFunc[\cDist(S_n)] - \mu_n,
@@ -113,8 +110,9 @@ thereby providing a characterization of central distributions for infinite seque
     Thus, by Definition~\ref{def:infseq-central}, \cDist is a central distribution of \setQ for \infSeq{S}.
 \end{proof}
 
-Theorem~\ref{th:limiting-centrality} establishes the conditions for asymptotic
-centrality; however, proving general existence and uniqueness for infinite sequences remains an open problem.
+Theorem~\ref{th:limiting-centrality} provides a sufficient condition for asymptotic centrality.
+General existence and uniqueness results for infinite sequences remain open.
+
 As such, we present the following construction as a conjectured framework.
 Under standard regularity conditions, this approach motivates the functional form of central priors and serves as a
 conceptual bridge to stimulate future formal proofs.
@@ -123,7 +121,7 @@ A similar asymptotic construction also appears in~\cite{BERNARDO200517}.
 \begin{conjecture}
     Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $\est_n$.
-    Assume that \setQ can be indexed by a finite-dimensional vector \param,
+    Assume that \setQ is indexed by a finite-dimensional vector \param,
     and \infSeq{\est} is a consistent sequence of estimators for \param.
     Define
     \begin{equation}
@@ -144,7 +142,7 @@ Since the convergence is uniform and the logarithm is a continuous function, Equ
     {\cPrior(\paramVal)} - \ln \mu_n + \ln k }.
 \end{equation*}
 
-Because $\est_n$ is a consistent estimator for every \paramVal, the sampling distribution $\estLike$ becomes
+Because $\est_n$ is a consistent estimator of every \paramVal, the sampling distribution $\estLike$ becomes
 increasingly concentrated around $\paramVal$ as~$n \to \infty$.
 Therefore, we may write
 \begin{equation*}
@@ -154,9 +152,8 @@ Therefore, we may write
 
 Furthermore, under the usual regularity conditions, the posterior distribution becomes asymptotically
 insensitive to the choice of smooth positive prior.
-Motivated by this asymptotic prior-insensitivity, we heuristically replace $P(\paramVal \mid \est_n)$
-with~$c(\paramVal \mid \est_n)$,
-obtaining
+Motivated by this, we heuristically replace $P(\paramVal \mid \est_n)$
+with~$c(\paramVal \mid \est_n)$, obtaining
 \begin{equation*}
     \uniConverge{\paramVal}{ \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{Q(t_n \mid \paramVal)}{C(t_n)} - \ln \mu_n + \ln k }.
 \end{equation*}
@@ -164,14 +161,8 @@ Letting $\lambda_n = \ln \mu_n - \ln k$, we observe that
 \begin{equation*}
     \uniConverge{\paramVal}{\Dkl{\estLike}{C(\est_n)} - \lambda_n}.
 \end{equation*}
-With appropriate additional assumptions, the conditions of Theorem~\ref{th:limiting-centrality} are satisfied.
-Thus, $\cPrior(\paramVal)$ is expected to act as a central prior for the estimator sequence \infSeq{\est}.
-
-A central distribution over an estimator sequence cannot by itself be used to perform inference at the level of observed
-outcomes.
-To do so, we must convert it into a distribution over the primary variables of interest.
-Theorems~\ref{th:estimator-to-var} provides a simple
-method for this conversion.
+With appropriate additional assumptions, the conditions of Theorem~\ref{th:limiting-centrality} can be satisfied.
+Thus, $\cPrior(\paramVal)$ is expected to be a central prior for the estimator sequence~\infSeq{\est}.
 
 \begin{example}[Binomial Experiment]
     \newcommand{\pv}{\paramVal}
@@ -195,7 +186,7 @@ method for this conversion.
     \end{equation*}
     Evaluating the asymptotic expression at $\frac{k}{n} = \pv$, we obtain
     \begin{equation*}
-        P(\paramVal \mid\est_n = t)|_{t = \paramVal} \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf}.
+        P(\paramVal \mid\est_n = t_n)|_{t_n = \paramVal} \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf}.
     \end{equation*}
     Therefore, if we define
     \[
@@ -203,12 +194,17 @@ method for this conversion.
     \]
     the following limit exists and the convergence is uniform over $\paramVal \in (0,1)$:
     \[
-        \toInf \frac{P(\paramVal \mid\est_n = t)|_{t = \paramVal}}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf}.
+        \toInf \frac{P(\paramVal \mid\est_n = t_n)|_{t_n = \paramVal}}{\mu_n} = \pv^{-\hf}(1 - \pv)^{-\hf}.
     \]
 \end{example}
 
-\begin{example}[Fused Multinomial Model]
-    \label{ex:fused-multinomial}
+A central distribution over an estimator sequence cannot by itself be used to perform inference at the level of observed
+outcomes.
+To do so, we must convert it into a distribution over the primary variables of interest.
+Theorems~\ref{th:estimator-to-var} provides a simple
+method for this conversion.
+
+\begin{example}[Fused Multinomial Model] \label{ex:fused-multinomial}
     \newcommand{\prodm}{\prod_{y=1}^m}
     \newcommand{\Qt}{Q_{\theta}}
     Let \infSeq{S} be a sequence in which each $S_n = (\seqExp{X})$ represents $n$ independent trials of an
@@ -228,9 +224,9 @@ method for this conversion.
         Q(S_n \mid \theta) = \prodm \left( \frac{1}{|f^{-1}(y)|} \cdot \theta_y \right)^{n_y}.
     \]
 
-    Now, consider the estimator sequence $T_n = \frac{1}{n} \left( \seqExp[m]{n} \right)$, which is a consistent
-    estimator for $\theta$.
-    The conditional distribution $\Qt(S_n \mid T_n)$ is then given by:
+    Consider the estimator sequence $T_n = \frac{1}{n} \left( \seqExp[m]{n} \right)$, which is a consistent
+    estimator of $\theta$.
+    The conditional distribution $\Qt(S_n \mid T_n)$ is given by:
     \begin{equation}
         R(S_n \mid T_n) = \frac{1}{n!} \prodm \frac{n_y!}{|f^{-1}(y)|^{n_y}}\,.
         \label{eq:fused-multinomial-conditional}
@@ -249,21 +245,20 @@ method for this conversion.
         C(T_n) = \frac{\gm{\hf[m]}\gm{n+1}}{\gm{n + \hf[m]}}
         \prodm \frac{\gm{n_y + \hf}}{\gm{\hf}\gm{n_y+1}}\,.
     \]
-    Note that $C$ is a central distribution for the sequence \infSeq{T}, viewed as a probability measure on the
+    Here, $C$ is a central distribution for the sequence \infSeq{T}, viewed as a probability measure on the
     infinite sequence~$T_\infty$.
     The notation $C(T_n)$ denotes the marginal distribution of~$T_n$.
 
     By Theorem~\ref{th:estimator-to-var} and Equation~\ref{eq:fused-multinomial-conditional}, we can derive a
-    central distribution for \infSeq{S}, which induces the following distribution over each~$S_n$:
+    central distribution for \infSeq{S}, which induces the following distribution over~$S_n$:
     \[
         C(S_n) = \frac{\gm{\hf[m]}}{\gm{n + \hf[m]}}
         \prodm \frac{\gm{n_y + \hf}}{\gm{\hf} |f^{-1}(y)|^{n_y}}\,.
     \]
 \end{example}
 
-When dealing with layered ignorance and seeking the central distribution of a hierarchy of distributions, as defined
-in Definition~\ref{def:hierarchy-of-distributions}, we typically encounter situations in which a given level of the
-hierarchy contains only finitely many alternatives.
+When dealing with layered ignorance and seeking the central distribution of a hierarchy of distributions,
+we typically encounter situations in which a given level of the hierarchy contains only finitely many alternatives.
 In such cases, and under appropriate regularity conditions, if there exists a consistent estimator for the index
 identifying these alternatives, then the central distribution reduces to an equally weighted average of the
 corresponding representative central distributions.

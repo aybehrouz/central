@@ -4,25 +4,22 @@ distributions.
 Feature selection can therefore be viewed as uncertainty over a hierarchy of probabilistic models, making it a
 natural setting for the central distribution framework.
 
-To illustrate this idea, we provide a proof-of-concept experiment using synthetic data.
-A comprehensive empirical evaluation against established feature-selection methods, such as Spike-and-Slab priors,
-on real-world datasets lies beyond the scope of this foundational paper and is left for future work.
+To illustrate this idea, we provide a proof of concept experiment using synthetic data.
+A comprehensive empirical evaluation against established feature selection methods, such as Spike-and-Slab priors,
+on real world datasets lies beyond the scope of this foundational paper and is left for future work.
 
 We consider a classification problem where the goal is to
 predict a target class, denoted by $Y$, from a set of observed nominal attributes $(\seqExp{A})$.
 We assume that $Y$ may depend on an unknown subset of the attributes, rather than the full set.
 
-This reflects a form of sparsity in the relationship between the class and the attributes, where irrelevant
-features are ignored in the true generative model.
-
-We can use the fused multinomial model of Example~\ref{ex:fused-multinomial} to capture this relationship.
+To capture this relationship, we use the fused multinomial model introduced in Section~\ref{subsec:asymptotic-cd}.
 As an example, assume that $Y$ depends only on $A_2$, $A_5$.
 Then, we define the labeling function $f$ as follows:
 \[
     f(\seqExp{A}, Y) = (A_2, A_5, Y).
 \]
-In a fused multinomial model with this labeling function, given $A_2, A_5$, the target class $Y$ is conditionally
-independent from other attributes.
+In a fused multinomial model with this labeling function, the target class $Y$ is conditionally independent of
+all other attributes given $A_2, A_5$.
 
 For every possible subset of attributes, a distinct fused multinomial model of this form is constructed.
 Each such model corresponds to a set of plausible probability distributions.
@@ -32,19 +29,19 @@ hierarchy of distributions (Definition~\ref{def:hierarchy-of-distributions}).
 Let $C_{\setQQ}$ denote a central distribution of the full hierarchy, and let $C_{f_i}$ denote the central
 distribution of the fused multinomial model associated with the labeling function $f_i$.
 As discussed earlier, because the number of candidate models is finite, we have
-\[
+\begin{equation}\label{eq:att-select-central}
     C_{\setQQ}(S_n) \propto \sum_i C_{f_i}(S_n).
-\]
+\end{equation}
 
-To justify this result, observe that we can construct a consistent estimator for the model indicator $I$ by examining
+To justify this, observe that we can construct a consistent estimator for the model indicator $I$ by examining
 equality relationships among the observed frequencies of outcomes.
-Specifically, the estimator identifies outcomes that occur with equal frequencies in the sample and returns the
+Specifically, the estimator identifies outcomes that occur with equal frequencies and returns the
 indicator corresponding to the model that supports those equalities.
 
-As shown in Equation~\ref{eq:bayes-action}, the optimal Bayesian decision rule depends on the choice of loss function.
+The optimal Bayesian decision rule depends on the choice of loss function.
 In this example, we use the zero--one loss, under which the optimal strategy predicts the target class with the highest
 posterior probability.
-These posterior probabilities are computed using the central distribution derived in Example~\ref{ex:fused-multinomial}.
+These posterior probabilities are computed using the central distribution of Equation~\ref{eq:att-select-central}.
 It turns out that each subset-specific fused multinomial model is assigned its corresponding
 Jeffreys' prior.
 Consequently, the resulting predictive distribution can be interpreted as Bayesian model averaging over all
@@ -76,7 +73,7 @@ The same subset of relevant attributes and class assignment function were used a
     \end{tabular}\label{tab:functions}
 \end{table}
 
-For each experiment, we generated a training set of size 20 and a test set of size 60.
+For each experiment, we generated a test set of size 60.
 A larger test set was used to reduce variability in performance estimates, taking advantage of the synthetic
 nature of the data.
 To assess robustness to irrelevant features, we progressively removed one attribute at a time from the full set
@@ -160,10 +157,10 @@ predictions divided by total test instances) over these trials.
     \label{fig:f1-f2-results}
 \end{figure}
 
-The results, presented in Figure~\ref{fig:f1-f2-results}, demonstrate that both central-distribution
+The results, presented in Figure~\ref{fig:f1-f2-results}, demonstrate that both central distribution
 methods substantially outperform the decision tree on the two classification tasks.
 Interestingly, the relative difficulty of the tasks differs between the methods.
-For the central-distribution approach, $Y_2$ is more challenging than $Y_1$, resulting in a larger gap between the
+For the central distribution approach, $Y_2$ is more challenging than $Y_1$, resulting in a larger gap between the
 deterministic and probabilistic variants.
 This difficulty arises from strong non-deterministic dependencies between subsets of input bits and the assigned
 class, which can create misleading probabilistic associations.
@@ -224,10 +221,10 @@ produced similar but slightly weaker results.
 \end{figure}
 
 With 20 training samples, removing irrelevant attributes had little effect on performance.
-Accuracy remained nearly constant as the number of attributes increased from 3 to 12, and the decision tree showed a
+Accuracy remained nearly constant as the number of attributes decreased from 12 to 3, and the decision tree showed a
 similar insensitivity to attribute count.
 However, with only 10 training samples (Figure~\ref{fig:f1-f2-10samples-results}),
-accuracy decreased noticeably as additional irrelevant attributes were introduced, indicating that irrelevant
+accuracy increased noticeably as irrelevant attributes were removed, indicating that irrelevant
 features become more problematic in low-data regimes.
 
 

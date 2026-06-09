@@ -26,10 +26,9 @@ where $\envDist$ is the joint probability distribution of the environment state 
 One can show that there always exists a deterministic optimal strategy,
 namely a strategy that, for each evidence $e$, selects the action minimizing the expected loss conditioned
 on $e$:
-\begin{equation}
-    \label{eq:bayes-action}
+\begin{equation*}
     S_{\text{opt}}(e) = \arg\min_a \Ex{\envDist}{\util \mid e}.
-\end{equation}
+\end{equation*}
 
 Now, suppose that we decide to use a different evidence $E'$ instead of~$E$.
 Could this change potentially improve our strategy?
@@ -62,10 +61,10 @@ such as the flat prior, do not naturally promote feature selection.
 
 In this paper, we introduce the central distribution, a minimax-KL representative of a set,
 or more generally a hierarchy, of probability distributions.
-By establishing a fixed-point condition for priors whose induced marginals are central,
-this framework offers a new information-theoretic generalization of objective Bayesian
+By establishing a fixed-point characterization of priors whose induced marginals are central,
+the framework reveals a formal connection between central priors and objective Bayesian
 reference analysis~\cite{BERNARDO200517}.
-It moves beyond maximizing expected missing information to provide a unified mechanism for minimizing worst-case
-divergence under layered, set-valued uncertainty.
-Furthermore, we propose asymptotic characterizations of central priors and investigate the role of hierarchical central
+From this perspective, central distributions provide an information-theoretic approach to representing layered and
+set-valued uncertainty through the minimization of worst-case Kullback--Leibler divergence.
+We further propose asymptotic characterizations of central priors and investigate the role of hierarchical central
 distributions in Bayesian feature selection.

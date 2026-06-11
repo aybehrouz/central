@@ -1,40 +1,19 @@
+\newcommandx{\objf}[2][1=P, 2=R]{
+    \ifthenelse{\isempty{#1}}{
+        f
+    }{
+        f(#1, #2)
+    }
+}
+
 With the concept of hierarchical central distributions in place, we now develop the theoretical machinery needed
 to characterize and compute them.
+Throughout this subsection, $X$ denotes a discrete random variable with finite support and \setQ denotes a finite
+set of probability distributions over $X$.
 
-Throughout this subsection, all random variables are assumed to be discrete with finite support.
-Before proceeding, we establish the existence of central distributions in the finite setting considered throughout
-this section.
-
-\begin{theorem}\label{th:existence}
-    Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
-    distributions over $X$.
-    Then a central distribution of \setQ for $X$ exists.
-\end{theorem}
-
-\begin{proof}
-    For a fixed distribution $Q$, we may write
-    \[
-        \kl = c - \sum_x Q(x) \ln P(x).
-    \]
-    Since $\ln$ is upper semicontinuous on $[0,+\infty)$ and the summation is finite, $\kl$ is lower
-    semicontinuous as a function of $P$.
-
-    Because \setQ is finite, $\sFunc[P(X)][\setQ]$ is the maximum of finitely many lower semicontinuous functions
-    and is therefore itself lower semicontinuous.
-    The set of probability distributions over $X$ is a compact simplex.
-    Hence, by the extreme value theorem for lower semicontinuous functions on compact sets, $\sFunc[P(X)][\setQ]$
-    attains its minimum.
-    Therefore there exists a probability distribution \cDist such that
-    \[
-        \sFunc[\cDist(X)][\setQ] = \inf_P \sFunc[P(X)][\setQ].
-    \]
-    By Definition~\ref{def:center-of-set}, $C$ is a central distribution of \setQ for $X$.
-\end{proof}
-
-The central distribution is essentially the solution to a convex--concave game.
-Because solutions of convex--concave games correspond to saddle points,
-by defining the appropriate objective function, we can characterize the central
-distribution using standard convex optimization techniques.
+As we shall see, central distributions arise naturally as solutions to a convex--concave optimization problem.
+By formulating the appropriate objective function, we obtain a saddle-point characterization that enables
+the use of standard techniques from convex optimization.
 
 \begin{definition} [Saddle Point]
     Consider a function $f:\set{w} \times \set{z} \to \field{R}$.
@@ -45,55 +24,71 @@ distribution using standard convex optimization techniques.
     for all \inSet{w} and \inSet{z}.
 \end{definition}
 
-Next, we establish the connection between saddle points and central distributions.
-
-\begin{theorem}
-    % I've been unable to prove that the central distribution is a saddle point for f, or characterize conditions
-    % that imply that.
-    \label{th:saddle_is_central}
-    Let $X$ be a discrete random variable, and \setQ be a finite set of distributions over $X$.
-    Consider the following function:
+\begin{lemma} \label{lm:saddle-exists}
+    Define:
     \begin{equation*}
-        f(P, R)= \sum_i \klx[Q_i] R(i),
+        \objf = \sum_i \klx[Q_i] R(i),
     \end{equation*}
-    where $P$ and $R$ are probability distributions, $Q_i \in \setQ$ and the index $i$ ranges over all elements of \setQ.
-
-    If \saddle is a saddle point for $f$, then \saddP is a central distribution of \setQ for $X$.
-\end{theorem}
+    where $P$ and $R$ are probability distributions, $Q_i \in \setQ$ and the index $i$ ranges over all elements of~\setQ.
+    Then there exists a saddle point for~$\objf[]$.
+\end{lemma}
 
 \begin{proof}
-    Let \cDist be a central distribution of \setQ for $X$, and \saddle be a saddle point for $f$.
-    By Theorem~\ref{th:existence}, \cDist exists.
-    As $C$ is a probability distribution, the point $(\cDist, \saddR)$ lies within the domain of $f$.
-    By the definition of a saddle point,
+    The Kullback--Leibler divergence is convex and lower-semicontinuous in its second argument.
+    Therefore, for any fixed probability distribution $R$,
+    the function $\objf[\none][R]$ is a finite convex combination of
+    lower-semicontinuous convex functions and is therefore itself convex and lower-semicontinuous in $P$.
+
+    For fixed $P$, the function $\objf[P][\none]$ is affine in $R$, and hence concave and continuous.
+
+    The set of probability distributions over a discrete random variable with finite support is a compact convex
+    simplex.
+    Therefore, the assumptions of Sion's minimax theorem are satisfied~\cite{10.2996/kmj/1138038812}, and
+    \[
+        \min_P \sup_R \objf = \sup_R \min_P \objf.
+    \]
+    Since $\objf[P][\none]$ is continuous and the feasible set for $R$ is compact,
+    the supremum is attained for every $P$.
+    Hence the minimax solution exists and $\objf[]$ admits a saddle point.
+\end{proof}
+
+Next, we establish the connection between saddle points and central distributions.
+
+\begin{lemma} \label{lm:saddle-is-central}
+    % I've been unable to prove that the central distribution is a saddle point for f, or characterize conditions
+    % that imply that.
+    Let $f$ be the function defined in Lemma~\ref{lm:saddle-exists}.
+    If \saddle is a saddle point for $f$, then \saddP is a \cd.
+\end{lemma}
+
+\begin{proof}
+    \newcommand{\fsaddle}{\objf[\saddP][\saddR]}
+    Let $P$ be an arbitrary probability distribution over $X$, and \saddle be a saddle point for $\objf[]$.
+    As $P$ is a probability distribution, $\objf[P][\saddR]$ is defined, and by the definition of a saddle point
     \begin{equation}
         \label{eq:th_proof_saddle_lq_dx}
-        f\saddle \leq f(\cDist, \saddR).
+        \fsaddle \leq \objf[P][\saddR].
     \end{equation}
-    Because \saddR is a probability distribution, the definition of $f$ implies:
+    Since \saddR is a probability distribution, the definition of $f$ implies:
     \[
-        f(\cDist, \saddR) \leq \sFunc[\cDist].
+        \objf[P][\saddR] \leq \sFunc[P].
     \]
 
     On the other hand, by the definition of a saddle point
     \[
-        f\saddle = \max_{R} f(\saddP, R).
+        \fsaddle = \max_{R} \objf[\saddP][R] = \sFunc[\saddP].
     \]
-    where $R$ is a probability distribution, and
+    Hence, Equation~\ref{eq:th_proof_saddle_lq_dx} implies
     \[
-        \max_{R} f(\saddP, R) = \sFunc[\saddP].
+        \sFunc[\saddP] \leq \sFunc[P].
     \]
-    Thus, Equation~\ref{eq:th_proof_saddle_lq_dx} implies
-    \[
-        \sFunc[\saddP] \leq \sFunc[\cDist].
-    \]
-    Since \cDist is a central distribution, we must have \[\sFunc[\saddP] = \sFunc[\cDist],\] and $\saddP$ is also a
-    central distribution of \setQ for $X$.
+    This holds for any arbitrary $P$.
+    Therefore, by Definition~\ref{def:center-of-set}, $\saddP$ is a \cd.
 \end{proof}
 
 \begin{lemma}
     \label{lm:saddle_conditions}
-    Let $f$ be the function defined in Theorem~\ref{th:saddle_is_central}.
+    Let $f$ be the function defined in Lemma~\ref{lm:saddle-exists}.
     The point \saddle is a saddle point for $f$, if and only if there are constants $\lambda$, $\eta$ and a
     function $\mu$, such that for every $i$, $x$ the following conditions hold:
     \begin{gather}
@@ -103,11 +98,11 @@ Next, we establish the connection between saddle points and central distribution
         \saddP(x) = \sum_i \saddR(i) Q_i(x) \\
         \label{eq:kkt_r_sums_one}
         \sum_i \saddR(i) = 1, \\
-        \label{eq:saddle_lm_r_geq_0}
+        \label{eq:kkt_r_geq_0}
         \saddR(i) \geq 0, \\
-        \nonumber
+        \label{eq:kkt_mu_geq_zero}
         \mu(i) \geq 0, \\
-        \label{eq:saddle_lm_rmu_is_zero}
+        \label{eq:kkt_rmu_is_zero}
         \mu(i) \saddR(i) = 0.
     \end{gather}
 
@@ -189,8 +184,8 @@ Next, we establish the connection between saddle points and central distribution
     \end{gather}
     By summing Equation~\ref{eq:kkt_proof_R_is_pxIe} over $x$ and using Equation~\ref{eq:kkt_proof_r_sums_one},
     we obtain $\eta = 1$.
-    Substituting this into Equation~\ref{eq:kkt_proof_R_is_pxIe} yields Equation Equation~\ref{eq:kkt_w_avg},
-    which in turn implies Equation Equation~\ref{eq:kkt_proof_p_sums_one}.
+    Substituting this into Equation~\ref{eq:kkt_proof_R_is_pxIe} yields Equation~\ref{eq:kkt_w_avg},
+    which in turn implies Equation~\ref{eq:kkt_proof_p_sums_one}.
 
     To prove the second part of the lemma,
     we observe that when $R$ is a probability distribution, Equations~\ref{eq:kkt_proof_R_is_pxIe}
@@ -207,13 +202,12 @@ Next, we establish the connection between saddle points and central distribution
 
 \begin{lemma}
     \label{lm:saddle-is-maximizer}
-    Let \setQ be a finite set of probability distributions over a discrete random variable $X$.
+    Let $f$ be the function defined in Lemma~\ref{lm:saddle-exists}.
     Define the function $g$ as:
     \[
         g(R) = \sum_i \klx[Q_i][R] R(i),
     \]
     where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I).\]
-    Let $f$ be the function defined in Theorem~\ref{th:saddle_is_central}.
     If \saddle is a saddle point for $f$, then the joint distribution $Q_i(X)\saddR(I)$ is a maximizer of $g$.
 \end{lemma}
 
@@ -242,19 +236,24 @@ Next, we establish the connection between saddle points and central distribution
     This shows that $g(\saddR)$ is the maximum of $g$, as desired.
 \end{proof}
 
-The following theorem gives a standard sufficient condition for optimality in the KL-minimax setting which is
-the rationale behind the term ``central distribution.''
+The following theorem establishes the existence and uniqueness of the central distribution and provides a
+characterization of its optimality in the KL-minimax setting.
+This characterization motivates the term ``central distribution.''
 Like the center of a circle, the central distribution is equidistant from the boundary.
 
 \begin{theorem} [Centrality]
     \label{th:centrality}
-    Let $X$ be a discrete random variable, and let \setQ be a finite set of distributions over $X$.
-    Suppose that \cDist is a convex combination of elements of \setQ, that is,
+    Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
+    distributions over $X$.
+    Then \setQ admits a unique central distribution for $X$.
+
+    Moreover, \cDist is the \cd\ if and only if \cDist can be expressed as a convex combination of the elements
+    of \setQ; that is,
     \[
         \cDist(x) = \sum_i Q_i(x) R(i),
     \]
-    where $R$ is a probability distribution over the indices of $Q$.
-    Assume that there exists a constant $\lambda$ such that
+    where $R$ is a probability distribution over the indices of $Q$,
+    and there exists a constant $\lambda$ such that
     \begin{equation*}
         \klx[Q_i][\cDist] = \lambda
     \end{equation*}
@@ -263,18 +262,27 @@ Like the center of a circle, the central distribution is equidistant from the bo
         \klx[Q_i][\cDist] \leq \lambda
     \]
     whenever $R(i) = 0$.
-
-    Then \cDist is the unique central distribution of \setQ for $X$.
 \end{theorem}
 
 \begin{proof}
-    By defining
+    By Lemma~\ref{lm:saddle-exists} the function $\objf[]$ has a saddle point.
+    By Lemma~\ref{lm:saddle-is-central} the $\saddP$-component of any saddle point is a \cd.
+    Let \cDist denote this central distribution.
+
+    Every saddle point of $\objf[]$ satisfies the conditions of Lemma~\ref{lm:saddle_conditions}.
+    Equation~\ref{eq:kkt_w_avg} implies that $\cDist$ is a convex combination of the elements of \setQ.
+
+    If $R(i) > 0$, then Equation~\ref{eq:kkt_rmu_is_zero} implies that $\mu(i) = 0$.
+    Substituting into Equation~\ref{eq:kkt_lambda} yields
     \[
-        \mu(i) = \lambda - \kl[Q_i][\cDist],
+        \klx[Q_i][\cDist] = \lambda.
     \]
-    we have $\mu(i) \geq 0$ and $\mu(i)R(i) = 0$ for every $i$.
-    Therefore, by Lemma~\ref{lm:saddle_conditions}, the point $\left( \cDist, R \right)$ is a saddle point,
-    and Theorem~\ref{th:saddle_is_central} implies that \cDist is a central distribution of \setQ for $X$.
+
+    If $R(i) = 0$, then Equation~\ref{eq:kkt_mu_geq_zero} implies that $\mu(i) \geq 0$.
+    Combining this with Equation~\ref{eq:kkt_lambda} gives
+    \[
+        \klx[Q_i][\cDist] \leq \lambda.
+    \]
 
     To prove uniqueness, let $C'$ be an arbitrary probability distribution.
     We have
@@ -301,59 +309,59 @@ Like the center of a circle, the central distribution is equidistant from the bo
 
 \begin{corollary}
     \label{cor:cdiv-lambda-bound}
-    Assume the conditions of Theorem~\ref{th:centrality} and let $\lambda$ be the corresponding constant.
-    Then, for any probability distribution $P$,
+    Let \cDist be the \cd.
+    For any probability distribution $P$, we have
     \begin{equation*}
-        \myDiv[P][Q][(X)] \leq \sFunc[P(X)][\setQ] - \lambda.
+        \myDiv[P][Q][(X)] \leq \sFunc[P(X)][\setQ] - \sFunc[\cDist(X)][\setQ].
     \end{equation*}
 \end{corollary}
 
 \begin{proof}
-    By Theorem~\ref{th:centrality}, \cDist is the unique central distribution of \setQ,
-    and
+    By Theorem~\ref{th:centrality}, \cDist is unique,
+    and therefore
     \[
         \myDiv[P][Q][] = \kl[\cDist].
     \]
     The result then follows immediately from Equation~\ref{eq:cd-relation-to-lambda}.
 \end{proof}
 
-\begin{corollary}
-    \label{cor:C-maximizes-g}
-    Under the assumptions of Theorem~\ref{th:centrality}, \cDist is a maximizer of the function $g$ defined in
-    Lemma~\ref{lm:saddle-is-maximizer}.
-\end{corollary}
+\begin{theorem}
+    \label{th:C-maximizes-g}
+    The \cd\ is a maximizer of the function $g$ defined in Lemma~\ref{lm:saddle-is-maximizer}.
+\end{theorem}
 
 \begin{proof}
-    In the proof of Theorem~\ref{th:centrality}, we showed that $(\cDist, R)$ is a saddle point for $f$.
-    By letting $C(X, I) = Q_i(X)R(I)$, Lemma~\ref{lm:saddle-is-maximizer} implies that \cDist is a maximizer
+    By Lemmas ~\ref{lm:saddle-exists} and~\ref{lm:saddle-is-central}, there exists a saddle point $(\cDist,R)$
+    of $\objf[]$, where \cDist is the unique \cd (Theorem~\ref{th:centrality}).
+    Defining $C(X, I) = Q_I(X)R(I)$, Lemma~\ref{lm:saddle-is-maximizer} implies that \cDist is a maximizer
     of the function $g$.
 \end{proof}
 
 \begin{corollary}
     \label{cor:imperfection}
-    Assuming the conditions of Theorem~\ref{th:centrality} and using the same $\lambda$,
-    let $P$ be a convex combination of elements of \setQ, i.e.,
+    Let \cDist be the \cd,
+    and let $P$ be a convex combination of the elements of \setQ, i.e.,
     \[
         P(x) = \sum_i Q_i(x) R(i),
     \]
     where $R$ is a probability distribution.
-    Then there exists an index $k$ in the support of $R$ (that is, $R(k) > 0$) such that
+    Then there exists an index $k$ in the support of $R$ such that
     \begin{equation*}
-        \lambda \geq \klx[Q_k].
+        \sFunc[\cDist] \geq \kl[Q_k].
     \end{equation*}
 \end{corollary}
 
 \begin{proof}
     We proceed by contradiction.
-    Suppose that for every $k$ in the support of $R$, we have $\lambda < \kl[Q_k]$.
+    Suppose that for every $k$ in the support of $R$, we have $\kl[Q_k] > \sFunc[\cDist]$.
     That implies
     \[
-        g(P) > \lambda = g(C),
+        g(P) > \sFunc[\cDist] = g(C),
     \]
     where $C$ is the central distribution specified in Theorem~\ref{th:centrality}, and $g$ is the function defined in
     Lemma~\ref{lm:saddle-is-maximizer}.
     Note that $g(P)$ is defined, because $P$ is a convex combination of elements of \setQ.
 
-    However, by Corollary~\ref{cor:C-maximizes-g}, the distribution $C$ maximizes $g$, which contradicts the
+    However, by Theorem~\ref{th:C-maximizes-g}, the distribution $C$ maximizes $g$, which contradicts the
     inequality $g(P) > g(C)$.
 \end{proof}

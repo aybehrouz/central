@@ -1,3 +1,5 @@
+\newcommand{\Qminus}[1][R]{\setQ \setminus{\{#1\}}}
+
 The results of the previous subsection were established under the assumption that \setQ is finite.
 Many of the underlying constructions, however, naturally extend to parametric families
 in which \setQ is indexed by a finite-dimensional parameter vector \param:
@@ -23,35 +25,37 @@ beyond the scope of the present paper.
 
 \begin{definition}[Interior Distribution] \label{def:interior}
     Let \setQ be a set of probability distributions over a random variable $X$.
-    A distribution $R$ is called an \emph{interior distribution} of \setQ if and only if
-    the sets \setQ and $\setQ \cup \{R\}$ have the same central distributions for $X$.
+    A distribution $R \in \setQ$ is called an \emph{interior distribution} of \setQ if and only if
+    the sets \setQ and $\Qminus$ have the same central distributions for $X$.
 \end{definition}
 
 \begin{theorem}
-    Suppose that the conditions of Theorem~\ref{th:centrality} hold,
-    and let \cDist denote the unique central distribution of \setQ (as defined therein).
+    Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
+    distributions over $X$.
+    Let \cDist be the \cd.
     If for some $Q_k \in \setQ$
-    \[
-        \klx[Q_k][\cDist] < \lambda,
-    \]
+    \begin{equation} \label{eq:interior-condition}
+        \kl[Q_k][\cDist] < \sFunc[\cDist][\setQ],
+    \end{equation}
     then $Q_k$ is an interior distribution of \setQ.
 \end{theorem}
 
 \begin{proof}
-    Since $\kl[Q_k][\cDist] < \lambda$, we must have $R(k) = 0$.
-    Hence, \cDist is a convex combination of elements of $\setQ \setminus{\{Q_k\}}$ and
-    the conditions of Theorem~\ref{th:centrality} remain satisfied for $\setQ \setminus{\{Q_k\}}$.
-    Thus, \cDist is the unique central distribution of $\setQ \setminus{\{Q_k\}}$ and \setQ.
+    By Theorem~\ref{th:centrality}, \cDist is a convex combination of elements of \setQ,
+    and Equation~\ref{eq:interior-condition} implies that $R(k) = 0$.
+    Hence, \cDist is also a convex combination of elements of $\Qminus[Q_k]$ and
+    the conditions of Theorem~\ref{th:centrality} remain satisfied for \cDist and $\Qminus[Q_k]$.
+    Thus, \cDist is the unique central distribution of $\Qminus[Q_k]$ and \setQ for $X$.
 \end{proof}
 
 \begin{theorem}
     Let $X$ be a random variable and let \setQ be a set of probability distributions over $X$.
-    Any distribution that can be expressed as a convex combination of elements of \setQ is an
+    If $R \in \setQ$ can be expressed as a convex combination of elements of $\Qminus$, then $R$ is an
     interior distribution of \setQ.
 \end{theorem}
 
 \begin{proof}
-    Let $R = \sum_i \alpha_i Q_i$, where $Q_i \in \setQ$, $\alpha_i \geq 0$, and $\sum_i \alpha_i = 1$.
+    Let $R = \sum_i \alpha_i Q_i$, where $Q_i \in \Qminus$, $\alpha_i \geq 0$, and $\sum_i \alpha_i = 1$.
 
     Fix an arbitrary probability distribution $P$.
     By the convexity of KL divergence in its first argument, we have:
@@ -63,12 +67,12 @@ beyond the scope of the present paper.
     \[
         \kl[R] \leq \kl[Q_k].
     \]
-    Since $Q_k \in \setQ$, it follows that
+    Since $Q_k \in \Qminus$, it follows that
     \[
-        \sFunc[P][\setQ] = \sFunc[P][\setQ \cup \{R\}]
+        \sFunc[P][\setQ] = \sFunc[P][\Qminus]
     \]
     for every probability distribution $P$.
-    Therefore, \setQ and $\setQ \cup \{R\}$ have the same central distributions.
+    Therefore, \setQ and $\Qminus$ have the same central distributions.
 \end{proof}
 
 One important consequence of this theorem is that, in order to identify a central distribution within a parametric

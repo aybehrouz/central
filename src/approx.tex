@@ -19,8 +19,7 @@ We assume throughout that $\tilde P(x) > 0$ whenever $Q(x) > 0$
 for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
 
 \begin{theorem}\label{th:central-approx}
-    Let \setQ be a finite set of probability distributions over a discrete random variable~$X$, and suppose the
-    assumptions of Theorem~\ref{th:centrality} hold.
+    Let \setQ be a finite set of probability distributions over a discrete random variable~$X$.
     Let $\tilde{P}$ be a linear combination of elements of $\set{R} \subseteq \setQ$ with strictly positive weights,
     and let $P$ be the corresponding normalized distribution.
     Then
@@ -34,16 +33,15 @@ for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
 \end{theorem}
 
 \begin{proof}
-    By Theorem~\ref{th:centrality}, $C$ is the unique central distribution of \setQ,
-    and therefore from Corollary~\ref{cor:cdiv-lambda-bound}, we have
+    By Corollary~\ref{cor:cdiv-lambda-bound}, we have
     \[
-        \myDiv[P][Q][] \leq \sFunc[][\setQ] - \lambda.
+        \myDiv[P][Q][] \leq \sFunc[][\setQ] - \sFunc[\cDist][\setQ].
     \]
 
-    On the other hand, since $P$ is a convex combination of elements of \set{R} with strictly positive weights,
+    Since $P$ is a convex combination of elements of \set{R} with strictly positive weights,
     Corollary~\ref{cor:imperfection} implies that
     \[
-        \lambda \geq \infR \kl.
+        \sFunc[\cDist][\setQ] \geq \infR \kl.
     \]
 
     Combining these two inequalities yields

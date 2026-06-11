@@ -33,7 +33,7 @@ finite initial segments can be obtained as marginals.
 This motivates the construction of a central distribution that is well defined over~$S_{\infty}$.
 
 \begin{definition}
-    \label{def:infseq-central}
+    \label{def:asymptotic-central}
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $S_n$.
     Let \cDist be also a probability measure that defines a distribution over every $S_n$.
@@ -49,23 +49,19 @@ In other words, \cDist is a central distribution for the infinite sequence~$S_{\
 
 Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in this asymptotic setting.
 
-\begin{theorem}[Asymptotic Centrality]
-    \label{th:limiting-centrality}
-    Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
-    where each element of \setQ defines a distribution over each $S_n$.
-    Assume that there exists a natural number $M$ such that,
-    for every $n \geq M$, there exists a distribution $C_n$ satisfying the
-    conditions of Theorem~\ref{th:centrality} for $S_n$.
+\begin{theorem}[Asymptotic Centrality] \label{th:limiting-centrality}
+    Let \infSeq{S} be a sequence of discrete random variables with finite support and let \setQ be a finite set of
+    probability measures, where each element of \setQ defines a distribution over each $S_n$.
     Suppose that \cDist is a convex combination of elements of \setQ.
     If there exists a sequence of constants \infSeq{\lambda} such that
     \[
         \uniConverge{\inSet{Q}}{\klx[][\cDist][S_n] - \lambda_n},
     \]
-    then \cDist is a central distribution of \setQ for \infSeq{S}.
+    then \cDist is a \cd[\infSeq{S}].
 \end{theorem}
 
 \begin{proof}
-    For $n \geq M$, Theorem~\ref{th:centrality} implies that $\cDist_n$ is the unique central distribution
+    By Theorem~\ref{th:centrality}, $\cDist_n$ is the unique central distribution
     of \setQ for $S_n$.
     Let $\mu_n$ be the corresponding constant from Theorem~\ref{th:centrality}.
     Since \cDist is a convex combination of elements of \setQ, $\cDist(S_n)$ is well-defined and
@@ -107,11 +103,11 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
     \[
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \]
-    Thus, by Definition~\ref{def:infseq-central}, \cDist is a central distribution of \setQ for \infSeq{S}.
+    Thus, by Definition~\ref{def:asymptotic-central}, \cDist is a central distribution of \setQ for \infSeq{S}.
 \end{proof}
 
-Theorem~\ref{th:limiting-centrality} provides a sufficient condition for asymptotic centrality.
-General existence and uniqueness results for infinite sequences remain open.
+Theorem~\ref{th:limiting-centrality} provides a sufficient condition for asymptotic centrality,
+while general existence and uniqueness results for infinite sequences are left for future work.
 
 As such, we present the following construction as a conjectured framework.
 Under standard regularity conditions, this approach motivates the functional form of central priors and serves as a
@@ -128,7 +124,7 @@ A similar asymptotic construction also appears in~\cite{BERNARDO200517}.
         \label{eq:central-limit}
         \cPrior(\paramVal) \propto \toInf \frac{P(\paramVal \mid\est_n = t_n)|_{t_n = \paramVal}}{\mu_n},
     \end{equation}
-    where \infSeq{\mu} is a sequence of positive constants and $P(\paramVal \mid\est_n)$ denote the posterior
+    where \infSeq{\mu} is a sequence of positive constants and $P(\paramVal \mid\est_n)$ denotes the posterior
     distribution obtained from an arbitrary smooth positive prior.
     If this limit exists and the convergence is uniform over \paramVal,
     under the usual regularity conditions,
@@ -161,8 +157,8 @@ Letting $\lambda_n = \ln \mu_n - \ln k$, we observe that
 \begin{equation*}
     \uniConverge{\paramVal}{\Dkl{\estLike}{C(\est_n)} - \lambda_n}.
 \end{equation*}
-With appropriate additional assumptions, the conditions of Theorem~\ref{th:limiting-centrality} can be satisfied.
-Thus, $\cPrior(\paramVal)$ is expected to be a central prior for the estimator sequence~\infSeq{\est}.
+By a parametric extension of Theorem~\ref{th:limiting-centrality}, it can be shown that $\cDist(\est_n)$ is a
+\cd[\infSeq{\est}]\, and therefore $\cPrior(\paramVal)$ is a central prior for the estimator sequence~\infSeq{\est}.
 
 \begin{example}[Binomial Experiment]
     \newcommand{\pv}{\paramVal}
@@ -198,10 +194,10 @@ Thus, $\cPrior(\paramVal)$ is expected to be a central prior for the estimator s
     \]
 \end{example}
 
-A central distribution over an estimator sequence cannot by itself be used to perform inference at the level of observed
-outcomes.
+A central distribution over an estimator sequence cannot, by itself, be used to perform inference at the level of
+observed outcomes.
 To do so, we must convert it into a distribution over the primary variables of interest.
-Theorems~\ref{th:estimator-to-var} provides a simple
+Theorem~\ref{th:estimator-to-var} provides a simple
 method for this conversion.
 
 \begin{example}[Fused Multinomial Model] \label{ex:fused-multinomial}
@@ -262,3 +258,35 @@ we typically encounter situations in which a given level of the hierarchy contai
 In such cases, and under appropriate regularity conditions, if there exists a consistent estimator for the index
 identifying these alternatives, then the central distribution reduces to an equally weighted average of the
 corresponding representative central distributions.
+
+%
+%\begin{lemma}
+%    Let \infSeq{S} be a sequence of discrete random variables with finite support,
+%    Let $Q$, $P$ and $R$ be probability measures that define a distribution over each $S_n$.
+%    If
+%    \[
+%        \toInf \klx[][][S_n] = 0
+%    \]
+%    and
+%    \[
+%        \toInf \klx[][R][S_n] = 0
+%    \]
+%    then
+%    \[
+%        \toInf \klx[P][R][S_n] = \toInf \klx[R][P][S_n] = 0.
+%    \]
+%\end{lemma}
+%
+%
+%\begin{theorem}
+%    Let \infSeq{S} be a sequence of discrete random variables with finite support,
+%    and let \cDist be the central distribution of \setQ for \infSeq{S}.
+%    If there exists a natural number $M$ such that, for every $n \geq M$,
+%    \setQ has a unique central distribution for $S_n$,
+%    then \cDist is asymptotically unique,
+%    that is, if $\cDist'$ is a central distribution of \setQ for \infSeq{S} then
+%    \[
+%        \toInf \klx[\cDist][\cDist'][S_n] = \toInf \klx[\cDist'][\cDist][S_n] = 0.
+%    \]
+%\end{theorem}
+%

@@ -1,10 +1,4 @@
-\newcommandx{\objf}[2][1=P, 2=R]{
-    \ifthenelse{\isempty{#1}}{
-        f
-    }{
-        f(#1, #2)
-    }
-}
+\newcommandx{\objf}[2][1=P, 2=R]{ \ifthenelse{\isempty{#1}} {f} {f(#1, #2)} }
 
 With the concept of hierarchical central distributions in place, we now develop the theoretical machinery needed
 to characterize and compute them.
@@ -51,8 +45,6 @@ the use of standard techniques from convex optimization.
     the supremum is attained for every $P$.
     Hence the minimax solution exists and $\objf[]$ admits a saddle point.
 \end{proof}
-
-Next, we establish the connection between saddle points and central distributions.
 
 \begin{lemma} \label{lm:saddle-is-central}
     % I've been unable to prove that the central distribution is a saddle point for f, or characterize conditions
@@ -238,16 +230,16 @@ Next, we establish the connection between saddle points and central distribution
 
 The following theorem establishes the existence and uniqueness of the central distribution and provides a
 characterization of its optimality in the KL-minimax setting.
-This characterization motivates the term ``central distribution.''
-Like the center of a circle, the central distribution is equidistant from the boundary.
+This characterization motivates the term \emph{central distribution}:
+like the center of a circle, the central distribution is equidistant from the boundary.
 
 \begin{theorem} [Centrality]
     \label{th:centrality}
     Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
     distributions over $X$.
-    Then \setQ admits a unique central distribution for $X$.
+    Then \setQ has a unique central distribution for $X$.
 
-    Moreover, \cDist is the \cd\ if and only if \cDist can be expressed as a convex combination of the elements
+    A measure \cDist over $X$ is the \cd\ if and only if it can be expressed as a convex combination of the elements
     of \setQ; that is,
     \[
         \cDist(x) = \sum_i Q_i(x) R(i),
@@ -266,26 +258,23 @@ Like the center of a circle, the central distribution is equidistant from the bo
 
 \begin{proof}
     By Lemma~\ref{lm:saddle-exists} the function $\objf[]$ has a saddle point.
-    By Lemma~\ref{lm:saddle-is-central} the $\saddP$-component of any saddle point is a \cd.
-    Let \cDist denote this central distribution.
+    Let $(\cDist, R)$ denote this saddle point.
+    By Lemma~\ref{lm:saddle-is-central}, \cDist is a \cd.
 
-    Every saddle point of $\objf[]$ satisfies the conditions of Lemma~\ref{lm:saddle_conditions}.
+    The saddle point $(\cDist,R)$ satisfies the conditions of Lemma~\ref{lm:saddle_conditions}.
     Equation~\ref{eq:kkt_w_avg} implies that $\cDist$ is a convex combination of the elements of \setQ.
-
     If $R(i) > 0$, then Equation~\ref{eq:kkt_rmu_is_zero} implies that $\mu(i) = 0$.
     Substituting into Equation~\ref{eq:kkt_lambda} yields
     \[
-        \klx[Q_i][\cDist] = \lambda.
+        \kl[Q_i][\cDist] = \lambda.
     \]
-
     If $R(i) = 0$, then Equation~\ref{eq:kkt_mu_geq_zero} implies that $\mu(i) \geq 0$.
     Combining this with Equation~\ref{eq:kkt_lambda} gives
     \[
-        \klx[Q_i][\cDist] \leq \lambda.
+        \kl[Q_i][\cDist] \leq \lambda.
     \]
 
-    To prove uniqueness, let $C'$ be an arbitrary probability distribution.
-    We have
+    For any probability distribution $C'$, we have
     \begin{align}\label{eq:cd-relation-to-lambda}
         \nonumber
         \kl[\cDist][C']
@@ -294,8 +283,7 @@ Like the center of a circle, the central distribution is equidistant from the bo
         &= \sum_i \kl[Q_i][C']R(i) - \lambda \\
         &\leq \sFunc[C'] - \lambda.
     \end{align}
-
-    Suppose that $C'$ is also a central distribution of \setQ for $X$.
+    Now suppose that $C'$ is also a central distribution of \setQ for $X$.
     Since \cDist and $C'$ are both central distributions,
     \[
         \sFunc[C'] = \sFunc[\cDist] = \lambda.
@@ -305,6 +293,19 @@ Like the center of a circle, the central distribution is equidistant from the bo
         \kl[\cDist][C'] = 0,
     \]
     which implies \cDist and $C'$ are identical probability distributions.
+
+    Thus, we have proved that \setQ has a unique central distribution satisfying the conditions of the theorem.
+    We now prove the ``if'' direction.
+    Assume that the conditions of the theorem hold for a measure \cDist over $X$.
+    Since \cDist is a convex combination of the elements of \setQ it is a probability distribution.
+    By defining
+    \[
+        \mu(i) = \lambda - \kl[Q_i][\cDist],
+    \]
+    we have $\mu(i) \geq 0$ and $\mu(i)R(i) = 0$ for every $i$.
+    We can verify that \cDist and $R$ satisfy the conditions of Lemma~\ref{lm:saddle_conditions} and therefore
+    the point $\left( \cDist, R \right)$ is a saddle point.
+    By Lemma~\ref{lm:saddle-is-central} \cDist is a \cd.
 \end{proof}
 
 \begin{corollary}

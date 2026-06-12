@@ -5,6 +5,8 @@ Feature selection can therefore be viewed as uncertainty over a hierarchy of pro
 natural setting for the central distribution framework.
 
 To illustrate this idea, we provide a proof of concept experiment using synthetic data.
+The purpose of this section is not to establish a competitive feature-selection procedure, but to illustrate how
+hierarchical central distributions can be used to represent uncertainty over model structure.
 A comprehensive empirical evaluation against established feature selection methods, such as Spike-and-Slab priors,
 on real-world datasets lies beyond the scope of this foundational paper and is left for future work.
 
@@ -13,7 +15,7 @@ predict a target class, denoted by $Y$, from a set of observed nominal attribute
 We assume that $Y$ may depend on an unknown subset of the attributes, rather than the full set.
 
 To capture this relationship, we use the fused multinomial model introduced in Section~\ref{subsec:asymptotic-cd}.
-As an example, assume that $Y$ depends only on $A_2$, $A_5$.
+As an example, assume that $Y$ depends only on $A_2$ and $A_5$.
 Then, we define the labeling function $f$ as follows:
 \[
     f(\seqExp{A}, Y) = (A_2, A_5, Y).
@@ -157,7 +159,7 @@ predictions divided by total test instances) over these trials.
     \label{fig:f1-f2-results}
 \end{figure}
 
-The results, presented in Figure~\ref{fig:f1-f2-results}, demonstrate that both central distribution
+The results, presented in Figure~\ref{fig:f1-f2-results}, show that both central distribution
 methods substantially outperform the decision tree on the two classification tasks.
 Interestingly, the relative difficulty of the tasks differs between the methods.
 For the central distribution approach, $Y_2$ is more challenging than $Y_1$, resulting in a larger gap between the

@@ -30,7 +30,7 @@ on $e$:
     S_{\text{opt}}(e) = \arg\min_a \Ex{\envDist}{\util \mid e}.
 \end{equation*}
 
-Now, suppose that we decide to use a different evidence $E'$ instead of~$E$.
+Now, suppose that we decide to use different evidence $E'$ instead of~$E$.
 Could this change potentially improve our strategy?
 Within the framework of Bayesian decision theory, we can easily answer this question:
 To compare any two strategies, we can simply compare their expected loss.
@@ -59,12 +59,13 @@ In this sense, an appropriate prior could induce feature selection.
 However, when applied in a conventional Bayesian setting, many commonly used noninformative priors,
 such as the flat prior, do not naturally promote feature selection.
 
-In this paper, we introduce the central distribution, a minimax-KL representative of a set,
-or more generally a hierarchy, of probability distributions.
-Central distributions provide an information-theoretic approach to representing layered and
-set-valued uncertainty through the minimization of worst-case Kullback--Leibler divergence.
-By establishing a fixed-point characterization of priors whose induced marginals are central,
-we reveal a formal connection between central priors and objective Bayesian
-reference analysis~\cite{BERNARDO200517}.
-We further propose asymptotic characterizations of central priors as directions for future development
-and investigate the role of hierarchical central distributions in Bayesian feature selection.
+In this paper, we introduce the central distribution, a minimax-KL representative of a set, or more generally a
+hierarchy, of probability distributions.
+This provides an information-theoretic framework for converting set-valued and hierarchical uncertainty into a
+single probability distribution suitable for Bayesian inference.
+We establish existence, uniqueness, and optimization-theoretic characterizations of central distributions, and
+develop the corresponding notions of central divergence and central priors.
+We further identify a sufficient fixed-point condition linking central priors to objective Bayesian reference
+analysis~\cite{BERNARDO200517}.
+Finally, we investigate asymptotic extensions of the framework and illustrate how hierarchical central distributions
+can be used to represent uncertainty about model structure in a feature-selection setting.

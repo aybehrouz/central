@@ -81,8 +81,8 @@ the use of standard techniques from convex optimization.
 \begin{lemma}
     \label{lm:saddle_conditions}
     Let $f$ be the function defined in Lemma~\ref{lm:saddle-exists}.
-    The point \saddle is a saddle point for $f$, if and only if there are constants $\lambda$, $\eta$ and a
-    function $\mu$, such that for every $i$, $x$ the following conditions hold:
+    The point \saddle is a saddle point for $f$, if and only if there is a constant $\lambda$, and a
+    function $\mu$, such that for every $x$ and $i$ the following conditions hold:
     \begin{gather}
         \label{eq:kkt_lambda}
         \klExp[Q_i][\saddP][x] + \mu(i) = \lambda, \\
@@ -107,13 +107,13 @@ the use of standard techniques from convex optimization.
 \end{lemma}
 
 \begin{proof}
-    Similar to $f$, we define $\hat{f}$ as follows:
+    We extend $\objf[]$ to a function $\hat{f}$ defined as follows:
     \begin{equation*}
         \hat{f}(P, R) = \fExp,
     \end{equation*}
-    where the constraints that $P$ and $R$ be probability distributions are omitted.
-    This enables us to formulate the saddle point of $f$ as the solution to a constrained optimization problem
-    defined for $\hat{f}$.
+    where the domain is extended by relaxing the constraints that $P$ and $R$ be probability distributions.
+    This enables us to formulate the saddle points of $\objf[]$ as solutions to a constrained optimization problem
+    defined for~$\hat{f}$.
 
     Let \saddle be a simultaneous solution to the following two optimization problems:
 
@@ -127,17 +127,14 @@ the use of standard techniques from convex optimization.
             & & &\sum_{i} R(i) = 1 &
         \end{aligned}\label{eq:twin_optimization}
     \end{equation}
-    Clearly, if $\saddle$ exists, it will be a saddle point for $f$.
+    Clearly, if $\saddle$ exists, it will be a saddle point for $\objf[]$.
 
-    Both of these optimization problems are convex and differentiable in the sense of convex
-    optimization; see~\cite{boyd2004convex}.
-    To establish this, consider that all the constraint functions are affine, and therefore are convex, concave and
-    differentiable.
+    Both optimization problems are convex and differentiable; see~\cite{boyd2004convex}.
+    To establish this, consider that all the constraint functions are affine.
+    Additionally, $\hat{f}$ is differentiable on its domain with respect to both $R$ and $P$.
 
-    Additionally, $\hat{f}$ is a differentiable function with respect to both $R$ and $P$.
     For any fixed $P$, $\hat{f}(P,\none)$ is an affine function and is concave.
-
-    On the other hand, for a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
+    For a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
     \begin{equation}
         \label{eq:simplified_f}
         \hat{f}(P,\hat{R}) = c - \sum_{i,x} \hat{R}(i) Q_i(x) \ln P(x),
@@ -147,17 +144,19 @@ the use of standard techniques from convex optimization.
     is therefore a valid probability distribution.
     Hence, for all $i$, $x$ we have $\hat{R}(i)Q_i(x) \geq 0$, and $\hat{f}(\none, \hat{R})$  is
     the negative of a linear combination of concave $\ln P(x)$ functions with nonnegative coefficients.
-    This function is convex.
+    This function is therefore convex.
 
-    Thus, both optimization problems are convex and differentiable, with affine constraints.
-    The constraints simply restrict the feasible set to the set of probability distributions, and it is always possible
-    to find feasible points that meet all the constraints.
-    Therefore, Slater’s condition is satisfied, and the KKT conditions provide necessary
-    and sufficient conditions for optimality~\cite{boyd2004convex}.
+    Thus, both optimization problems are convex and differentiable, with affine equality and inequality constraints.
+    In this setting, Slater's condition reduces to feasibility~\cite{boyd2004convex}.
+    The feasible set for the first problem is the probability simplex, while the feasible set for the second problem is
+    the strictly positive probability simplex.
+    Both sets are nonempty.
+    Therefore, Slater's condition holds, and the KKT conditions are necessary and sufficient for optimality.
     In other words, if there exists a point $\saddle$ that satisfies the KKT conditions for both problems, it will be a
-    saddle point for $f$, and vice versa.
+    saddle point for $\objf[]$, and vice versa.
 
-    The KKT conditions are as follows for every $x$, $i$ and constants $\lambda$, $\eta$:
+    The KKT conditions are as follows.
+    There exist constants $\lambda$, $\eta$ and a function $\mu$, such that for every $x$ and $i$:
     \begin{gather}
         \label{eq:kkt_proof_R_is_pxIe}
         \sum_i \saddR(i) Q_i(x) = \eta \saddP(x) \\
@@ -179,17 +178,14 @@ the use of standard techniques from convex optimization.
     Substituting this into Equation~\ref{eq:kkt_proof_R_is_pxIe} yields Equation~\ref{eq:kkt_w_avg},
     which in turn implies Equation~\ref{eq:kkt_proof_p_sums_one}.
 
-    To prove the second part of the lemma,
-    we observe that when $R$ is a probability distribution, Equations~\ref{eq:kkt_proof_R_is_pxIe}
+    To prove the second part of the lemma, we note that Equations~\ref{eq:kkt_proof_R_is_pxIe}
     and~\ref{eq:kkt_proof_p_sums_one} are the KKT conditions for the minimization problem
     in Equation~\ref{eq:twin_optimization}.
-    Since this minimization problem is convex and satisfies Slater's condition,
-    the KKT conditions are necessary and sufficient.
-    Hence
+    As shown above, the KKT conditions are necessary and sufficient for optimality,
+    and when $R$ is a probability distribution, these conditions simplify to
     \[
-        \hat P(x)=\sum_i Q_i(x)R(i)
+        \hat P(x)=\sum_i Q_i(x)R(i). \qedhere
     \]
-    if and only if $\hat P$ minimizes $f(\none,R)$, where $R$ is any fixed distribution.
 \end{proof}
 
 \begin{lemma}

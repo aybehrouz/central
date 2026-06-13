@@ -131,8 +131,7 @@ the use of standard techniques from convex optimization.
 
     Both optimization problems are convex and differentiable; see~\cite{boyd2004convex}.
     To establish this, consider that all the constraint functions are affine.
-    Additionally, $\hat{f}$ is differentiable on its domain with respect to both $R$ and $P$.
-
+    Additionally, both $\hat{f}(P,\none)$ and $\hat{f}(\none, R)$ are differentiable on their domains.
     For any fixed $P$, $\hat{f}(P,\none)$ is an affine function and is concave.
     For a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
     \begin{equation}
@@ -195,14 +194,17 @@ the use of standard techniques from convex optimization.
     \[
         g(R) = \sum_i \klx[Q_i][R] R(i),
     \]
-    where $Q_i \in \setQ$, and $R$ is a probability distribution such that \[R(X, I) = Q_i(X)R(I).\]
-    If \saddle is a saddle point for $f$, then the joint distribution $Q_i(X)\saddR(I)$ is a maximizer of $g$.
+    where $Q_i \in \setQ$, and $R$ is a probability distribution such that
+    \[
+        R(X, I) = Q_I(X)R(I).
+    \]
+    If \saddle is a saddle point for $f$, then the joint distribution $Q_I(X)\saddR(I)$ is a maximizer of $g$.
 \end{lemma}
 
 \begin{proof}
     Let \saddle be a saddle point for $f$.
     By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg}.
-    Letting $\saddR(X, I) = Q_i(X) \saddR(I)$ we have
+    Letting $\saddR(X, I) = Q_I(X) \saddR(I)$ we have
     \[
         g(\saddR) = f\saddle.
     \]
@@ -213,7 +215,7 @@ the use of standard techniques from convex optimization.
         g(R) \leq f(\saddP,R).
     \]
 
-    On the other hand, since \saddle is a saddle point, we also have
+    Since \saddle is a saddle point, we also have
     \[
         f(\saddP, R) \leq f\saddle.
     \]
@@ -235,7 +237,7 @@ like the center of a circle, the central distribution is equidistant from the bo
     distributions over $X$.
     Then \setQ has a unique central distribution for $X$.
 
-    A measure \cDist over $X$ is the \cd\ if and only if it can be expressed as a convex combination of the elements
+    Moreover, \cDist is the \cd\ if and only if it can be expressed as a convex combination of the elements
     of \setQ; that is,
     \[
         \cDist(x) = \sum_i Q_i(x) R(i),
@@ -258,7 +260,8 @@ like the center of a circle, the central distribution is equidistant from the bo
     By Lemma~\ref{lm:saddle-is-central}, \cDist is a \cd.
 
     The saddle point $(\cDist,R)$ satisfies the conditions of Lemma~\ref{lm:saddle_conditions}.
-    Equation~\ref{eq:kkt_w_avg} implies that $\cDist$ is a convex combination of the elements of \setQ.
+    Equations~\ref{eq:kkt_w_avg},~\ref{eq:kkt_r_sums_one} and~\ref{eq:kkt_r_geq_0} imply that $\cDist$ is a convex
+    combination of the elements of~\setQ.
     If $R(i) > 0$, then Equation~\ref{eq:kkt_rmu_is_zero} implies that $\mu(i) = 0$.
     Substituting into Equation~\ref{eq:kkt_lambda} yields
     \[
@@ -292,15 +295,15 @@ like the center of a circle, the central distribution is equidistant from the bo
 
     Thus, we have proved that \setQ has a unique central distribution satisfying the conditions of the theorem.
     We now prove the ``if'' direction.
-    Assume that the conditions of the theorem hold for a measure \cDist over $X$.
-    Since \cDist is a convex combination of the elements of \setQ it is a probability distribution.
+    Assume that the conditions of the theorem hold for \cDist.
+    Since \cDist is a convex combination of the elements of \setQ it is a probability distribution over $X$.
     By defining
     \[
         \mu(i) = \lambda - \kl[Q_i][\cDist],
     \]
     we have $\mu(i) \geq 0$ and $\mu(i)R(i) = 0$ for every $i$.
     We can verify that \cDist and $R$ satisfy the conditions of Lemma~\ref{lm:saddle_conditions} and therefore
-    the point $\left( \cDist, R \right)$ is a saddle point.
+    $\left( \cDist, R \right)$ is a saddle point.
     By Lemma~\ref{lm:saddle-is-central} \cDist is a \cd.
 \end{proof}
 
@@ -329,7 +332,7 @@ like the center of a circle, the central distribution is equidistant from the bo
 
 \begin{proof}
     By Lemmas ~\ref{lm:saddle-exists} and~\ref{lm:saddle-is-central}, there exists a saddle point $(\cDist,R)$
-    of $\objf[]$, where \cDist is the unique \cd (Theorem~\ref{th:centrality}).
+    of $\objf[]$, where \cDist is the unique \cd\ (Theorem~\ref{th:centrality}).
     Defining $C(X, I) = Q_I(X)R(I)$, Lemma~\ref{lm:saddle-is-maximizer} implies that \cDist is a maximizer
     of the function $g$.
 \end{proof}
@@ -344,7 +347,7 @@ like the center of a circle, the central distribution is equidistant from the bo
     where $R$ is a probability distribution.
     Then there exists an index $k$ in the support of $R$ such that
     \begin{equation*}
-        \sFunc[\cDist] \geq \kl[Q_k].
+        \sFunc[\cDist(X)][\setQ] \geq \klx[Q_k].
     \end{equation*}
 \end{corollary}
 
@@ -355,9 +358,9 @@ like the center of a circle, the central distribution is equidistant from the bo
     \[
         g(P) > \sFunc[\cDist] = g(C),
     \]
-    where $C$ is the central distribution specified in Theorem~\ref{th:centrality}, and $g$ is the function defined in
+    where $g$ is the function defined in
     Lemma~\ref{lm:saddle-is-maximizer}.
-    Note that $g(P)$ is defined, because $P$ is a convex combination of elements of \setQ.
+    Note that $g(P)$ is defined, because $P$ is a convex combination of the elements of \setQ.
 
     However, by Theorem~\ref{th:C-maximizes-g}, the distribution $C$ maximizes $g$, which contradicts the
     inequality $g(P) > g(C)$.

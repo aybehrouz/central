@@ -2,7 +2,7 @@
 \newcommand{\infR}{\inf_{Q \in \set{R}}}
 \newcommand{\supR}{\sup_{Q \in \set{R}}}
 
-Suppose we want to approximate the central distribution of a hierarchy of distributions~\set{h}.
+Suppose we want to approximate a central distribution of a hierarchy of distributions~\set{h}.
 To do so, we need a measure that quantifies the quality of an approximation.
 A natural choice is the central divergence introduced in Definition~\ref{def:central-divergence}.
 Since central distributions are intended to serve as representatives of hierarchies of distributions,
@@ -16,7 +16,7 @@ In variational settings, it is often more convenient to work with unnormalized m
 distributions.
 Therefore, we state the next theorem in terms of unnormalized measures.
 We assume throughout that $\tilde P(x) > 0$ whenever $Q(x) > 0$
-for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
+for some \inSet{Q}, so that all logarithms are well-defined.
 
 \begin{theorem}\label{th:central-approx}
     Let \setQ be a finite set of probability distributions over a discrete random variable~$X$.
@@ -63,12 +63,12 @@ for some \inSet{Q}, so that all logarithms and KL divergences are well-defined.
 \end{proof}
 
 Since central distributions are defined through marginal distributions, their construction may be viewed as
-combining prior specification and Bayesian prediction within a single optimization framework.
+combining prior specification and Bayesian inference within a single optimization framework.
 Given $n$ observations, one may perform inference using the central distribution of the corresponding finite
 sequence~$S_n$, without separately specifying a prior distribution.
 
-As discussed later, in the case of sequences of random variables, central distributions are naturally defined on the
+As discussed later, in the case of sequences of random variables, central distributions are defined on the
 underlying infinite sequence.
 Consequently, the central distribution of a finite initial segment $S_n$ should be viewed as an approximation to the
-corresponding marginal of the infinite-sequence central distribution.
+corresponding marginal of the infinite sequence central distribution.
 A natural question is how accurate this approximation is.

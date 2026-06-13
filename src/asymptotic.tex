@@ -32,8 +32,7 @@ finite initial segments can be obtained as marginals.
 
 This motivates the construction of a central distribution that is well defined over~$S_{\infty}$.
 
-\begin{definition}
-    \label{def:asymptotic-central}
+\begin{definition} [Asymptotic Central Distribution] \label{def:asymptotic-central}
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $S_n$.
     Let \cDist be also a probability measure that defines a distribution over every $S_n$.
@@ -52,7 +51,7 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
 \begin{theorem}[Asymptotic Centrality] \label{th:limiting-centrality}
     Let \infSeq{S} be a sequence of discrete random variables with finite support and let \setQ be a finite set of
     probability measures, where each element of \setQ defines a distribution over each $S_n$.
-    Suppose that \cDist is a convex combination of elements of \setQ.
+    Suppose that \cDist is a convex combination of the elements of \setQ.
     If there exists a sequence of constants \infSeq{\lambda} such that
     \[
         \uniConverge{\inSet{Q}}{\klx[][\cDist][S_n] - \lambda_n},
@@ -61,22 +60,21 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
 \end{theorem}
 
 \begin{proof}
-    By Theorem~\ref{th:centrality}, $\cDist_n$ is the unique central distribution
-    of \setQ for $S_n$.
-    Let $\mu_n$ be the corresponding constant from Theorem~\ref{th:centrality}.
+    For every $n$, let $\cDist_n$ be the unique \cd[S_n], and let $\mu_n$ denote the corresponding constant
+    from Theorem~\ref{th:centrality}.
     Since \cDist is a convex combination of elements of \setQ, $\cDist(S_n)$ is well-defined and
     Corollary~\ref{cor:imperfection} implies
     \begin{equation*}
-        \mu_n \geq \inf_{\inSet{Q}} \klx[][\cDist][S_n].
+        \mu_n \geq \inf_{\inSet{Q}} \klx[][\cDist][S_n],
         \label{eq:th_lim_central_proof_inf}
     \end{equation*}
-    Moreover, by the definition of a central distribution, we have
+    and, by the definition of a central distribution,
     \begin{equation*}
         \mu_n \leq \sFunc[\cDist(S_n)].
         \label{eq:th_lim_central_proof_sup}
     \end{equation*}
 
-    Clearly
+    Moreover, we have
     \[
         \left|\inf_{\inSet{Q}} \klx[][\cDist][S_n] - \lambda_n \right|
         \leq \sup_{\inSet{Q}}  \left|\klx[][\cDist][S_n] - \lambda_n \right|,
@@ -103,7 +101,7 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
     \[
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \]
-    Thus, by Definition~\ref{def:asymptotic-central}, \cDist is a central distribution of \setQ for \infSeq{S}.
+    Thus, by Definition~\ref{def:asymptotic-central}, \cDist is a \cd[\infSeq{S}].
 \end{proof}
 
 Theorem~\ref{th:limiting-centrality} provides a sufficient condition for asymptotic centrality,
@@ -151,8 +149,9 @@ insensitive to the choice of smooth positive prior.
 Motivated by this, we heuristically replace $P(\paramVal \mid \est_n)$
 with~$c(\paramVal \mid \est_n)$, obtaining
 \begin{equation*}
-    \uniConverge{\paramVal}{ \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{Q(t_n \mid \paramVal)}{C(t_n)} - \ln \mu_n + \ln k }.
+    \uniConverge{\paramVal}{ \sum_{t_n} Q(t_n \mid \paramVal) \ln \frac{Q(t_n \mid \paramVal)}{C(t_n)} - \ln \mu_n + \ln k },
 \end{equation*}
+where \[C(t_n) = \mrg[t_n].\]
 Letting $\lambda_n = \ln \mu_n - \ln k$, we observe that
 \begin{equation*}
     \uniConverge{\paramVal}{\Dkl{\estLike}{C(\est_n)} - \lambda_n}.

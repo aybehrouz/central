@@ -4,24 +4,20 @@
 \newcommand{\post}{\pi(x_i \mid \paramVal)}
 
 
-We begin by revisiting a fundamental decision-making problem and its treatment within Bayesian decision theory.
+We begin by revisiting a fundamental decision-making problem in Bayesian decision theory.
+An agent must choose from a set of available actions.
+The loss incurred depends on an unknown state of the environment and is quantified by a real-valued loss function.
+Specifically, let $a$ denote an action and $x$ the unknown state.
+The loss associated with choosing action $a$ when the state is $x$ is given by the loss function $\util$.
 
-Consider an environment where an agent must select an action from a set of available actions.
-The loss associated with each action depends on the unknown state of the environment
-and can be quantified by a real number.
-Specifically, let $a$ denote an action, and $x$ represent the unknown environment state.
-The loss function  $\util$ quantifies the loss for each action.
-
-We assume that some evidence $e$ about the unknown environment state is available, and the agent can leverage
-this evidence to determine the best action.
-In other words, our agent aims to find an optimal strategy, where a strategy defines the distribution of each
-action conditioned on the observed evidence: $S(A \mid E)$.
+We assume that some evidence $e$ about the unknown state is available and can be used to guide the agent's decision.
+In other words, the agent aims to find an optimal strategy, where a strategy is a conditional distribution over
+actions given the observed evidence, denoted by $S(A \mid E)$.
 
 In Bayesian decision theory, the optimal strategy is the one that minimizes the expected loss:
 \begin{equation*}
-    S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e),
+    S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
 \end{equation*}
-where $\envDist$ is the joint probability distribution of the environment state and the evidence.
 
 One can show that there always exists a deterministic optimal strategy,
 namely a strategy that, for each evidence $e$, selects the action minimizing the expected loss conditioned
@@ -30,41 +26,38 @@ on $e$:
     S_{\text{opt}}(e) = \arg\min_a \Ex{\envDist}{\util \mid e}.
 \end{equation*}
 
-Now, suppose that we decide to use different evidence $E'$ instead of~$E$.
-Could this change potentially improve our strategy?
-Within the framework of Bayesian decision theory, we can easily answer this question:
-To compare any two strategies, we can simply compare their expected loss.
-The strategy with the lower expected loss is the better one.
+Now suppose that, instead of basing our decisions on the original evidence $E$,
+we choose to use a transformed version~$E'$.
+In practice, the evidence available to the agent is fixed by the environment.
+However, the agent may choose to base its decisions on a deterministic transformation $E' = f(E)$.
+This is analogous to feature selection in machine learning, where a high-dimensional observation is replaced by a
+lower-dimensional representation.
 
-In practice, we cannot choose arbitrary evidence.
-We can only use evidence that is a deterministic function of the evidence provided by the environment, allowing its
-value to be determined after observing the original evidence.
+Could such a transformation improve the agent's strategy?
+Within the framework of Bayesian decision theory, this question has a straightforward answer.
+Any two strategies can be compared through their expected loss: the strategy with the lower expected loss is preferred.
+However, a fundamental result of Bayesian decision theory states that the optimal strategy based on $E$ is always at
+least as good as any strategy based on~$E'$.
 
-Using a simpler form of evidence resembles feature selection in machine learning.
-For example, if the evidence is an image, we might replace it with the first three Fourier coefficients of the
-image.
-Since these coefficients are a function of the original evidence, they satisfy $E' = f(E)$.
-According to our Bayesian framework, however, the optimal strategy based on $E$ is always at least as good as any
-strategy based on~$E'$.
-
-One might argue that adopting a strategy based on simpler evidence may discard useful information and is therefore not
+One might argue that adopting a strategy that uses simpler evidence may discard information and is therefore not
 justified by Bayesian decision theory.
-The key point is that the space of strategies using~$E'$ is a subset of the space of strategies using~$E$.
-When we are searching for the best strategy based on~$E$, we are implicitly evaluating all simpler forms as well.
-This helps explain why standard Bayesian inference does not inherently favor simpler evidence representations.
+The key point here is that the space of strategies using~$E'$ is a subset of the space of strategies using~$E$.
+When we search for the optimal strategy based on $E$, we are simultaneously considering all strategies that
+depend on $E'$, since every such strategy can also be expressed as a strategy based on $E$.
+This helps explain why standard Bayesian inference does not inherently favor simpler representations of the evidence.
 
-With an appropriate choice of prior distribution, the Bayesian framework can automatically extract
-the relevant information from the evidence when determining an optimal strategy.
-In this sense, an appropriate prior could induce feature selection.
-However, when applied in a conventional Bayesian setting, many commonly used noninformative priors,
-such as the flat prior, do not naturally promote feature selection.
+With an appropriate choice of prior distribution, the Bayesian framework may effectively favor strategies that
+depend only on relevant aspects of the evidence.
+In this sense, the prior can induce a form of feature selection.
+However, many commonly used noninformative priors, such as flat priors, do not appear to naturally promote feature
+selection.
 
 In this paper, we introduce the central distribution, a minimax-KL representative of a set, or more generally a
 hierarchy, of probability distributions.
 This provides an information-theoretic framework for converting set-valued and hierarchical uncertainty into a
 single probability distribution suitable for Bayesian inference.
 We establish existence, uniqueness, and optimization-theoretic characterizations of central distributions, and
-develop the corresponding notions of central divergence and central priors.
+develop the corresponding notion of central priors for parametric models.
 We further identify a sufficient fixed-point condition linking central priors to objective Bayesian reference
 analysis~\cite{BERNARDO200517}.
 Finally, we investigate asymptotic extensions of the framework and illustrate how hierarchical central distributions

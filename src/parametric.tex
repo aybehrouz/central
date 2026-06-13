@@ -1,7 +1,7 @@
 \newcommand{\Qminus}[1][R]{\setQ \setminus{\{#1\}}}
 
 The results of the previous subsection were established under the assumption that \setQ is finite.
-Many of the underlying constructions, however, naturally extend to parametric families
+Many of the underlying constructions, however, can be extended to parametric families
 in which \setQ is indexed by a finite-dimensional parameter vector \param:
 \[
     \setQ = \left\{ Q_{\theta} \mid \theta \in \operatorname{val}(\param) \right\}.
@@ -58,7 +58,7 @@ beyond the scope of the present paper.
     Let $R = \sum_i \alpha_i Q_i$, where $Q_i \in \Qminus$, $\alpha_i \geq 0$, and $\sum_i \alpha_i = 1$.
 
     Fix an arbitrary probability distribution $P$.
-    By the convexity of KL divergence in its first argument, we have:
+    By the convexity of the KL divergence in its first argument, we have
     \[
         \kl[R] \leq \sum_i \alpha_i \kl[Q_i].
     \]
@@ -87,19 +87,18 @@ model parameters.
         Q(X, T) = R(\XIT) Q(T),
     \]
     where $R$ is a fixed conditional distribution.
-    If $C$ is a central distribution of \setQ for $T$, then $R(\XIT)C(T)$ is a central
-    distribution of \setQ for $(X,T)$.
+    If $C$ is a \cd[T], then $R(\XIT)C(T)$ is a \cd[(X,T)].
 \end{theorem}
 
 \begin{proof}
-    Let $C$ be a central distribution of \setQ for $T$.
+    Let $C$ be a \cd[T].
     For any arbitrary probability distribution $P$, the definition of a central distribution implies
     \begin{equation}
         \label{eq:th5-proof}
         \sFunc[R(\XIT) C(T)] \leq \sFunc[R(\XIT) P(T)].
     \end{equation}
 
-    Since the KL divergence is nonnegative, for every probability distribution $P$ and every \inSet{Q} we have
+    Since the KL divergence is nonnegative, for any probability distribution $P$ and every \inSet{Q} we have
     \[
         \sum_t \Dkl{R(X \mid t)}{P(X \mid t)} Q(t) \geq 0.
     \]
@@ -111,9 +110,11 @@ model parameters.
     \[
         \sFunc[R(\XIT) P(T)] \leq \sFunc[P(X,T)].
     \]
-    Combining this inequality with Equation~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a
-    central distribution of \setQ for $(X,T)$.
+    Combining this inequality with Equation~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a \cd[(X,T)].
 \end{proof}
+
+The primary application of this theorem is to derive central distributions for observable variables from central
+distributions of sufficient statistics.
 
 The following theorem provides a sufficient fixed-point characterization of central priors
 and highlights a formal connection between the central distribution framework and Bernardo's reference
@@ -122,7 +123,7 @@ prior methodology~\cite{BERNARDO200517}.
 \begin{theorem}
     Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$, indexed by a
     finite-dimensional vector \param.
-    Let \cPrior be a (possibly improper) prior distribution for \param such that for every \paramVal we have
+    Let \cPrior be a (possibly improper) prior distribution for \param such that
     \begin{equation}
         \label{eq:central-prior}
         \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\}.
@@ -132,8 +133,8 @@ prior methodology~\cite{BERNARDO200517}.
 
 \begin{proof}
     \newcommand{\cp}{\cPrior(\paramVal{})}
-    For every \paramVal, since $Q_{\paramVal} \in \setQ$ is a probability distribution,
-    there exists $x$ such that $Q_{\paramVal}(x) > 0$.
+    Since $Q_{\paramVal} \in \setQ$ is a probability distribution,
+    for every \paramVal there exists $x$ such that $Q_{\paramVal}(x) > 0$.
     Equation~\ref{eq:central-prior} therefore implies $\cPrior(\tIx) > 0$,
     and consequently $\cp > 0$.
 
@@ -154,8 +155,9 @@ prior methodology~\cite{BERNARDO200517}.
     Therefore, by Definition~\ref{def:central-prior}, \cPrior is a central prior of \setQ for~$X$.
 \end{proof}
 
-Although this theorem is proved directly from Theorem~\ref{th:centrality}, Theorem~\ref{th:C-maximizes-g}
-suggests an alternative route to the connection with reference priors.
+This theorem is proved using Theorem~\ref{th:centrality}.
+However, Theorem~\ref{th:C-maximizes-g} suggests an alternative route to establishing the connection with reference
+priors.
 Since reference priors are defined by maximizing missing information,
 the optimization characterization provided by Theorem~\ref{th:C-maximizes-g} also offers another perspective on
 this relationship.

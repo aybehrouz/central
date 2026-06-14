@@ -1,19 +1,20 @@
+\newcommand{\Qminus}[1][R]{\setQ \setminus{\{#1\}}}
+
 The results of the previous subsection were established under the assumption that \setQ is finite.
-Many of the underlying constructions, however, naturally extend to parametric families where \setQ can be indexed by
-a finite-dimensional real vector \param:
+Many of the underlying constructions, however, can be extended to parametric families
+in which \setQ is indexed by a finite-dimensional parameter vector \param:
 \[
-    \setQ = \left\{ Q_{\theta} \mid \theta \in \Theta \right\}.
+    \setQ = \left\{ Q_{\theta} \mid \theta \in \operatorname{val}(\param) \right\}.
 \]
+In this setting, \param may be regarded as a random variable, with each $Q_{\paramVal}$ interpreted as a conditional
+distribution~$Q(\xIt)$.
+The weight function $R(i)$ appearing in the finite case is then replaced by a prior distribution over~\param.
 
-We do not pursue the most general extension here.
-Instead, we use this parametric formulation to motivate the notion of a central prior and to study its relationship
-with central distributions.
-We can treat \param as a random variable and interpret $Q_{\paramVal}$ as a conditional
-distribution $Q(\xIt)$.
-In this setting, the weight function $R(i)$ appearing in the finite case becomes a prior distribution over \param.
+A rigorous development of this extension requires additional measure-theoretic and regularity assumptions and is
+beyond the scope of the present paper.
 
-\begin{definition}[Central Prior]
-    Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$,
+\begin{definition}[Central Prior] \label{def:central-prior}
+    Let $X$ be a random variable, and let \setQ be a set of probability distributions over $X$,
     indexed by a parameter \param.
     A nonnegative measure $c$ on \param is called a central prior of \setQ for $X$ if,
     \[
@@ -22,54 +23,56 @@ In this setting, the weight function $R(i)$ appearing in the finite case becomes
     is a central distribution of \setQ for $X$.
 \end{definition}
 
-\begin{definition}[Interior Distribution]
-    \label{def:interior}
+\begin{definition}[Interior Distribution] \label{def:interior}
     Let \setQ be a set of probability distributions over a random variable $X$.
-    A distribution $R$ is called an \emph{interior distribution} of \setQ iff
-    the sets \setQ and $\setQ \cup \{R\}$ have the same central distributions for $X$.
+    A distribution $R \in \setQ$ is called an \emph{interior distribution} of \setQ if and only if
+    the sets \setQ and $\Qminus$ have the same central distributions for $X$.
 \end{definition}
 
 \begin{theorem}
-    Suppose that the conditions of Theorem~\ref{th:centrality} hold,
-    and let \cDist denote the unique central distribution of \setQ (as defined therein).
+    Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
+    distributions over $X$.
+    Let \cDist be the \cd.
     If for some $Q_k \in \setQ$
-    \[
-        \klx[Q_k][\cDist] < \lambda,
-    \]
+    \begin{equation} \label{eq:interior-condition}
+        \kl[Q_k][\cDist] < \sFunc[\cDist][\setQ],
+    \end{equation}
     then $Q_k$ is an interior distribution of \setQ.
 \end{theorem}
 
 \begin{proof}
-    Since $\kl[Q_k][\cDist] < \lambda$, we must have $R(k) = 0$.
-    Hence, \cDist is a convex combination of elements of $\setQ \setminus{\{Q_k\}}$ and
-    the conditions of Theorem~\ref{th:centrality} remain satisfied for $\setQ \setminus{\{Q_k\}}$.
-    Thus, \cDist is the unique central distribution of $\setQ \setminus{\{Q_k\}}$ and \setQ.
+    By Theorem~\ref{th:centrality}, \cDist is a convex combination of elements of \setQ,
+    and Equation~\ref{eq:interior-condition} implies that $R(k) = 0$.
+    Hence, \cDist is also a convex combination of elements of $\Qminus[Q_k]$ and
+    the conditions of Theorem~\ref{th:centrality} remain satisfied for \cDist and $\Qminus[Q_k]$.
+    Thus, \cDist is the unique central distribution of $\Qminus[Q_k]$ and \setQ for $X$.
 \end{proof}
 
 \begin{theorem}
     Let $X$ be a random variable and let \setQ be a set of probability distributions over $X$.
-    Any distribution that can be expressed as a convex combination of elements of \setQ is an
+    If $R \in \setQ$ can be expressed as a convex combination of elements of $\Qminus$, then $R$ is an
     interior distribution of \setQ.
 \end{theorem}
 
 \begin{proof}
-    Let $R = \sum_i \alpha_i Q_i$, where $Q_i \in \setQ$, $\alpha_i \geq 0$, and $\sum_i \alpha_i = 1$.
+    Let $R = \sum_i \alpha_i Q_i$, where $Q_i \in \Qminus$, $\alpha_i \geq 0$, and $\sum_i \alpha_i = 1$.
 
     Fix an arbitrary probability distribution $P$.
-    By the convexity of KL divergence in its first argument, we have:
+    By the convexity of the KL divergence in its first argument, we have
     \[
         \kl[R] \leq \sum_i \alpha_i \kl[Q_i].
     \]
-    Now, note that the right-hand side is a weighted average of the KL divergences.
-    So, there must be at least one index $j$ such that
+    Note that the right-hand side is a weighted average of the KL divergences.
+    So, there must be at least one index $k$ such that
     \[
-        \kl[R] \leq \kl[Q_j].
+        \kl[R] \leq \kl[Q_k].
     \]
-    Since $Q_j \in \setQ$, that implies
+    Since $Q_k \in \Qminus$, it follows that
     \[
-        \sFunc[P][\setQ] = \sFunc[P][\setQ \cup \{R\}].
+        \sFunc[P][\setQ] = \sFunc[P][\Qminus]
     \]
-    Therefore, \setQ and $\setQ \cup \{R\}$ have the same central distributions.
+    for every probability distribution $P$.
+    Therefore, \setQ and $\Qminus$ have the same central distributions.
 \end{proof}
 
 One important consequence of this theorem is that, in order to identify a central distribution within a parametric
@@ -84,19 +87,18 @@ model parameters.
         Q(X, T) = R(\XIT) Q(T),
     \]
     where $R$ is a fixed conditional distribution.
-    If $C$ is a central distribution of \setQ for $T$, then $R(\XIT)C(T)$ is a central
-    distribution of \setQ for $(X,T)$.
+    If $C$ is a \cd[T], then $R(\XIT)C(T)$ is a \cd[(X,T)].
 \end{theorem}
 
 \begin{proof}
-    Let $C$ be a central distribution of \setQ for $T$.
+    Let $C$ be a \cd[T].
     For any arbitrary probability distribution $P$, the definition of a central distribution implies
     \begin{equation}
         \label{eq:th5-proof}
         \sFunc[R(\XIT) C(T)] \leq \sFunc[R(\XIT) P(T)].
     \end{equation}
 
-    Since the KL divergence is nonnegative, for every probability distribution $P$ and every \inSet{Q} we have
+    Since the KL divergence is nonnegative, for any probability distribution $P$ and every \inSet{Q} we have
     \[
         \sum_t \Dkl{R(X \mid t)}{P(X \mid t)} Q(t) \geq 0.
     \]
@@ -108,17 +110,20 @@ model parameters.
     \[
         \sFunc[R(\XIT) P(T)] \leq \sFunc[P(X,T)].
     \]
-    Combining this inequality with Equation~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a
-    central distribution of \setQ for $(X,T)$.
+    Combining this inequality with Equation~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a \cd[(X,T)].
 \end{proof}
 
-The next theorem highlights a formal connection between the central distribution framework and Bernardo’s reference
+The primary application of this theorem is to derive central distributions for variables of interest from
+central distributions of sufficient statistics.
+
+The following theorem provides a sufficient fixed-point characterization of central priors
+and highlights a formal connection between the central distribution framework and Bernardo's reference
 prior methodology~\cite{BERNARDO200517}.
 
 \begin{theorem}
     Let $X$ be a discrete random variable, and let \setQ be a set of probability distributions over $X$, indexed by a
     finite-dimensional vector \param.
-    Let \cPrior be a strictly positive prior distribution for \param such that for all $\like(\xIt) \in \setQ$ we have
+    Let \cPrior be a (possibly improper) prior distribution for \param such that
     \begin{equation}
         \label{eq:central-prior}
         \cPrior(\paramVal) \propto \exp \left\{  \sum_{x} \like(\xIt) \ln \cPrior(\tIx) \right\}.
@@ -128,30 +133,31 @@ prior methodology~\cite{BERNARDO200517}.
 
 \begin{proof}
     \newcommand{\cp}{\cPrior(\paramVal{})}
-    From Equation~\ref{eq:central-prior}, it follows that there exists a constant $\lambda$ such that
-    \begin{equation*}
-        \cp = \exp \left\{-\lambda +  \sum_{x} \like(\xIt) \ln
-                       \frac{\like(\xIt) \cp}{\cDist(x)} \right\}.
-    \end{equation*}
-    Since $\cp$ is strictly positive,
+    Since $Q_{\paramVal} \in \setQ$ is a probability distribution,
+    for every \paramVal there exists $x$ such that $Q_{\paramVal}(x) > 0$.
+    Equation~\ref{eq:central-prior} therefore implies $\cPrior(\tIx) > 0$,
+    and consequently $\cp > 0$.
+
+    Using Equation~\ref{eq:central-prior} and $\cp > 0$, we obtain
     \begin{align*}
-        \cp &= \exp \left\{-\lambda +  \klx[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
-        &= \cp \exp \left\{-\lambda +  \klx[Q_{\paramVal{}}][C] \right\}
+        \cp
+        &= \exp \left\{-\lambda +  \sum_{x} \like(\xIt) \ln \frac{\like(\xIt) \cp}{\cDist(x)} \right\} \\
+        &= \exp \left\{-\lambda +  \klx[Q_{\paramVal{}}][C] + \ln \cp \right\} \\
+        &= \cp \exp \left\{-\lambda +  \klx[Q_{\paramVal{}}][C] \right\},
     \end{align*}
-    implies
+    and it follows that
     \[
-        \klx[Q_{\paramVal{}}][C] = \lambda\,.
+        \klx[Q_{\paramVal{}}][C] = \lambda.
     \]
-    This holds for all \paramVal.
-    By using a parametric extension of Theorem~\ref{th:centrality} one can show that \cDist is a central
-    distribution of \setQ for $X$, and by definition, \cPrior is a central prior of \setQ for $X$.
+    Since this holds for every \paramVal, and $\lambda$ is constant,
+    a parametric extension of Theorem~\ref{th:centrality} implies that $\cDist$,
+    the marginal distribution induced by \cPrior, is a central distribution of \setQ for~$X$.
+    Therefore, by Definition~\ref{def:central-prior}, \cPrior is a central prior of \setQ for~$X$.
 \end{proof}
 
-This theorem provides a sufficient fixed-point characterization of central priors; it does not address existence or
-uniqueness in full generality.
-
-Although this theorem is proved directly from Theorem~\ref{th:centrality}, Lemma~\ref{lm:saddle-is-maximizer}
-suggests an alternative route to the connection with Bernardo's reference prior methodology.
-Since reference priors are defined by maximizing missing information~\cite{BERNARDO200517},
-the optimization characterization provided by Lemma~\ref{lm:saddle-is-maximizer} also offers another perspective on
+This theorem is proved using Theorem~\ref{th:centrality}.
+However, Theorem~\ref{th:C-maximizes-g} suggests an alternative route to establishing the connection with reference
+priors.
+Since reference priors are defined by maximizing missing information,
+the optimization characterization provided by Theorem~\ref{th:C-maximizes-g} also offers another perspective on
 this relationship.

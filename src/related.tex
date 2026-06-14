@@ -33,7 +33,12 @@ Existing approaches generally focus on performing inference directly with sets o
 The central distribution framework instead seeks a single representative distribution that summarizes the available
 set-valued or hierarchical uncertainty while preserving its information-theoretic structure.
 
-To the best of our knowledge, existing objective-prior methodologies do not provide a unified mechanism for
-representing hierarchical uncertainty structures and converting them into a single probability distribution through
-a minimax-KL criterion.
-The central distribution framework is proposed as a step in that direction.
+The central distribution framework differs from these approaches in two respects.
+First, it is defined as a minimax-KL representative of a set, or more generally a hierarchy, of probability
+distributions.
+Second, it provides a mechanism for converting set-valued and hierarchical uncertainty into a single probability
+distribution suitable for Bayesian inference.
+While related to objective Bayesian inference, robust Bayesian analysis, and information-theoretic methods, its
+primary goal is not the direct specification of a prior distribution for parameters or inference with sets of
+distributions, but rather the construction of a representative distribution that preserves the informational
+structure of the underlying uncertainty.

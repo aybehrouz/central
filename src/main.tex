@@ -37,8 +37,8 @@
 \pgfplotsset{
     compat=1.18,
     globalstyle/.style={
-        width=0.7\textwidth,
-        height=0.5\textwidth,
+        width=6.7cm,
+        height=5cm,
         legend pos=south east,
         grid=major,
         mark options={solid}
@@ -53,7 +53,7 @@
 \fullversiontrue
 %\fullversionfalse
 
-\title{The Central Distribution: A Minimax-KL Approach to Noninformative Priors and Feature Selection}
+\title{The Central Distribution: A Minimax-KL Framework for Representing Partial Knowledge}
 \author{Behrouz Ayati \\ aybehrouz@gmail.com}
 \date{July 11, 2025}
 
@@ -72,7 +72,6 @@
     \input{related}
 
     \iffullversion
-
     \subsection{Divergence}\label{subsec:dive}
     \input{divergence}
     \fi
@@ -92,10 +91,8 @@
     \subsection{Asymptotic Central Distributions}\label{subsec:asymptotic-cd}
     \input{asymptotic}
 
-    \section{Illustrative Examples}\label{sec:examples}
-    \input{examples}
 
-    \subsection{Attribute Selection}\label{subsec:attribute-selection}
+    \section{Illustrative Example: Attribute Selection}\label{sec:attribute-selection}
     \input{att_selection}
 
 

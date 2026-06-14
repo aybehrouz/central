@@ -4,7 +4,7 @@ distributions.
 Feature selection can therefore be viewed as uncertainty over a hierarchy of probabilistic models, making it a
 natural setting for the central distribution framework.
 
-To illustrate this, we provide a proof of concept experiment using synthetic data.
+To illustrate this idea , we provide a proof of concept experiment using synthetic data.
 The purpose of this section is not to establish a competitive feature selection procedure, but to illustrate how
 hierarchical central distributions can be used to represent uncertainty over model structure.
 A comprehensive empirical evaluation against established feature selection methods, such as Spike-and-Slab priors,
@@ -48,7 +48,7 @@ It turns out that each subset-specific fused multinomial model is assigned its c
 Jeffreys' prior.
 Consequently, the resulting predictive distribution can be interpreted as Bayesian model averaging over all
 candidate feature subsets, with each model equipped with its Jeffreys' prior.
-The central distribution framework provides a minimax-KL justification for this aggregation.
+The central distribution framework provides a minimax-KL interpretation for this aggregation.
 
 To see how this approach works in practice, we carried out a synthetic experiment with the following setup.
 We considered binary attributes and generated each attribute independently with equal probability for 0 and 1.
@@ -228,5 +228,12 @@ similar insensitivity to attribute count.
 However, with only 10 training samples (Figure~\ref{fig:f1-f2-10samples-results}),
 accuracy increased noticeably as irrelevant attributes were removed, indicating that irrelevant
 features become more problematic in low-data regimes.
+
+The implementation used in this experiment evaluates all $2^{12}$ candidate feature subsets and therefore remains
+computationally feasible only because the dimensionality is small.
+More generally, because the central distribution aggregates over all candidate subsets, the resulting predictor is
+not expected to scale to high-dimensional problems without additional approximation techniques.
+Developing scalable approximation methods could be a direction for future work.
+
 
 

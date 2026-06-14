@@ -181,7 +181,8 @@ By a parametric extension of Theorem~\ref{th:limiting-centrality}, it can be sho
     \end{equation*}
     Evaluating the asymptotic expression at $\frac{k}{n} = \pv$, we obtain
     \begin{equation*}
-        P(\paramVal \mid\est_n = t_n)|_{t_n = \paramVal} \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{-\hf}.
+        P(\paramVal \mid\est_n = \frac{k}{n})|_{\frac{k}{n} = \paramVal} \sim \frac{n+1}{\sqrt{2 \pi n}} \, \pv^{-\hf}(1 - \pv)^{
+            -\hf}.
     \end{equation*}
     Therefore, if we define
     \[
@@ -210,7 +211,7 @@ method for this conversion.
     Assume that for all $i$ and $\Qt \in \setQ$, if $f(x_i) = f(x'_i)$ we have \[\Qt(\seqExp{x}) = \Qt(\seqExp{x'}).\]
     That is, the conditional distribution $\Qt(X_i \mid Y_i = y)$ is uniform over the preimage $f^{-1}(y)$.
 
-    We can consider $\theta = (\theta_1, \dots, \theta_m)$ to be a probability vector over~$\mathcal{Y}$,
+    We consider $\theta = (\theta_1, \dots, \theta_m)$ to be a probability vector over~$\mathcal{Y}$,
     where each~$\theta_y$ specifies the probability of observing label~$y$.
     For a sequence $S_n$, let $n_y$ denote the number of times label $y \in \mathcal{Y}$ appears.
     Let $|f^{-1}(y)|$ denote the number of outcomes in $\mathcal{X}$ that are mapped to label $y$ by~$f$.

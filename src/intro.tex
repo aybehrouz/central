@@ -3,9 +3,9 @@
 \newcommand{\envDist}{P}
 \newcommand{\post}{\pi(x_i \mid \paramVal)}
 
-We begin by revisiting a fundamental decision problem in Bayesian decision theory.
-An agent must select an action from a set of available actions.
-The resulting loss depends on an unknown state of the environment and is quantified by a real-valued loss function.
+Consider a standard decision problem in Bayesian decision theory.
+An agent must choose an action from a set of available alternatives, and the resulting loss depends on an unknown
+state of the environment and is quantified by a real-valued loss function.
 Specifically, let $a$ denote an action and $x$ the unknown state.
 The loss associated with choosing action $a$ when the state is $x$ is given by the loss function $\util$.
 
@@ -45,11 +45,18 @@ When we search for the optimal strategy based on $E$, we are simultaneously cons
 depend on $E'$, since every such strategy can also be expressed as a strategy based on $E$.
 This helps explain why standard Bayesian inference does not inherently favor simpler representations of the evidence.
 
-With an appropriate choice of prior distribution, the Bayesian framework may effectively favor strategies that
-depend only on relevant aspects of the evidence.
-In this sense, the prior can induce a form of feature selection.
-However, many commonly used noninformative priors, such as flat priors, do not appear to naturally promote feature
-selection.
+Although the optimal Bayesian strategy based on $E$ can always exploit all available information, the joint
+distribution $\envDist(x,e)$ determines which aspects of the evidence are actually useful for predicting the unknown
+state.
+With an appropriate choice of $\envDist(x,e)$, the optimal strategy based on $E$ may effectively ignore irrelevant
+components of the evidence and behave as though it were based on a lower-dimensional representation $E'$.
+In this sense, Bayesian inference can perform a form of automatic feature selection.
+In many statistical models, specifying $\envDist(x,e)$ amounts to choosing a prior distribution, so the ability to
+promote relevant information depends on how prior knowledge about the environment is encoded.
+This motivates the search for noninformative priors that represent partial knowledge while preserving such behavior.
+Many standard choices, including flat priors, do not appear to naturally encourage it.
+The central distribution framework developed in this paper can be viewed as an attempt to address this problem by
+providing a principled representation of partial knowledge for Bayesian inference.
 
 In this paper, we introduce the central distribution, a minimax-KL representative of a set, or more generally a
 hierarchy, of probability distributions.

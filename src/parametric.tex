@@ -113,6 +113,14 @@ model parameters.
     Combining this inequality with Equation~\ref{eq:th5-proof}, we conclude that $R(\XIT)C(T)$ is a \cd[(X,T)].
 \end{proof}
 
+A particularly important special case arises when $T$ is a deterministic function of $X$, say $T=f(X)$.
+In this case,
+\[
+    P(X) = P(X, T = f(X)),
+\]
+and therefore a central distribution for $X$ can be constructed directly from a central distribution for $T$ using
+Theorem~\ref{th:estimator-to-var}.
+
 The primary application of this theorem is to derive central distributions for variables of interest from
 central distributions of sufficient statistics.
 

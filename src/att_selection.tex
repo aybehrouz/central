@@ -56,10 +56,10 @@ The target class was defined as a deterministic function of a fixed subset of 3 
 shown in Table~\ref{tab:functions}.
 The same subset of relevant attributes and class assignment function were used across all trials.
 
-\begin{table}[tb]
+\begin{table}[width=.5\linewidth,cols=3,pos=h]
     \centering
     \caption{Mappings of 3-bit inputs under class functions $Y_1$ and $Y_2$}
-    \begin{tabular}{ccc}
+    \begin{tabular*}{\tblwidth}{@{} CCC@{} }
         \toprule
         Input (bits) & $Y_1$(Input) & $Y_2$(Input) \\
         \midrule
@@ -72,7 +72,7 @@ The same subset of relevant attributes and class assignment function were used a
         110          & g            & D            \\
         111          & h            & E            \\
         \bottomrule
-    \end{tabular}\label{tab:functions}
+    \end{tabular*}\label{tab:functions}
 \end{table}
 
 For each experiment, we generated a test set of size 100.
@@ -170,6 +170,13 @@ In contrast, the decision tree performs worse on $Y_1$ than on $Y_2$.
 Overall, the deterministic central distribution achieved the highest accuracy, while the probabilistic version
 produced similar but slightly weaker results.
 
+With 20 training samples, removing irrelevant attributes had little effect on performance.
+Accuracy remained nearly constant as the number of attributes decreased from 12 to 3, and the decision tree showed a
+similar insensitivity to attribute count.
+However, with only 10 training samples (Figure~\ref{fig:f1-f2-10samples-results}),
+accuracy increased noticeably as irrelevant attributes were removed, indicating that irrelevant
+features become more problematic in low-data regimes.
+
 \begin{figure}[t]
     \centering
     \begin{tikzpicture}
@@ -221,13 +228,6 @@ produced similar but slightly weaker results.
         Right: under class assignment function $Y_2$.}
     \label{fig:f1-f2-10samples-results}
 \end{figure}
-
-With 20 training samples, removing irrelevant attributes had little effect on performance.
-Accuracy remained nearly constant as the number of attributes decreased from 12 to 3, and the decision tree showed a
-similar insensitivity to attribute count.
-However, with only 10 training samples (Figure~\ref{fig:f1-f2-10samples-results}),
-accuracy increased noticeably as irrelevant attributes were removed, indicating that irrelevant
-features become more problematic in low-data regimes.
 
 The implementation used in this experiment evaluates all $2^{12}$ candidate feature subsets and therefore remains
 computationally feasible only because the dimensionality is small.

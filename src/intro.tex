@@ -4,8 +4,8 @@
 \newcommand{\post}{\pi(x_i \mid \paramVal)}
 
 Consider a standard decision problem in Bayesian decision theory.
-An agent must choose an action from a set of available alternatives, and the resulting loss depends on an unknown
-state of the environment and is quantified by a real-valued loss function.
+An agent must choose an action from a set of available alternatives.
+The resulting loss depends on an unknown state of the environment and is quantified by a real-valued loss function.
 Specifically, let $a$ denote an action and $x$ the unknown state.
 The loss associated with choosing action $a$ when the state is $x$ is given by the loss function $\util$.
 
@@ -17,7 +17,6 @@ In Bayesian decision theory, the optimal strategy is the one that minimizes the 
 \begin{equation*}
     S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
 \end{equation*}
-
 One can show that there always exists a deterministic optimal strategy,
 namely a strategy that, for each evidence $e$, selects the action minimizing the expected loss conditioned
 on $e$:
@@ -51,14 +50,15 @@ state.
 With an appropriate choice of $\envDist(x,e)$, the optimal strategy based on $E$ may effectively ignore irrelevant
 components of the evidence and behave as though it were based on a lower-dimensional representation $E'$.
 In this sense, Bayesian inference can perform a form of automatic feature selection.
+
 In many statistical models, specifying $\envDist(x,e)$ amounts to choosing a prior distribution, so the ability to
 promote relevant information depends on how prior knowledge about the environment is encoded.
 This motivates the search for noninformative priors that represent partial knowledge while preserving such behavior.
-Many standard choices, including flat priors, do not appear to naturally encourage it.
-The central distribution framework developed in this paper can be viewed as an attempt to address this problem by
+Many standard choices, including flat priors, do not appear to naturally encourage this.
+The central distribution framework developed in the present work can be viewed as an attempt to address this problem by
 providing a principled representation of partial knowledge for Bayesian inference.
 
-In this paper, we introduce the central distribution, a minimax-KL representative of a set, or more generally a
+In this paper, we introduce the central distribution, a representative of a set, or more generally a
 hierarchy, of probability distributions.
 This provides an information-theoretic framework for converting set-valued and hierarchical uncertainty into a
 single probability distribution suitable for Bayesian inference.

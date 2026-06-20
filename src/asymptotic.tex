@@ -62,13 +62,13 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
 \begin{proof}
     For every $n$, let $\cDist_n$ be the unique \cd[S_n], and let $\mu_n$ denote the corresponding constant
     from Theorem~\ref{th:centrality}.
-    Since \cDist is a convex combination of elements of \setQ, $\cDist(S_n)$ is well-defined and
+    Since \cDist is a convex combination of elements of \setQ, it defines a distribution over $S_n$, and
     Corollary~\ref{cor:imperfection} implies
     \begin{equation*}
         \mu_n \geq \inf_{\inSet{Q}} \klx[][\cDist][S_n],
         \label{eq:th_lim_central_proof_inf}
     \end{equation*}
-    and, by the definition of a central distribution,
+    By the definition of a central distribution,
     \begin{equation*}
         \mu_n \leq \sFunc[\cDist(S_n)].
         \label{eq:th_lim_central_proof_sup}

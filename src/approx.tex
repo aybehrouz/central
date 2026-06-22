@@ -1,4 +1,4 @@
-\newcommand{\engFunc}[1][P]{\measure{F}{}{Q,\tilde{#1}}}
+\newcommandx{\engFunc}[2][1=Q, 2=P]{\measure{F}{}{#1,\tilde{#2}}}
 \newcommand{\infR}{\inf_{\inSet{R}}}
 \newcommand{\supR}{\sup_{\inSet{R}}}
 
@@ -64,13 +64,13 @@ Therefore, we state the next theorem in terms of unnormalized measures.
     and the result follows from Equation~\ref{eq:cdiv-upper-bound}.
 \end{proof}
 
-By Theorem~\ref{th:central-approx}, it suffices to construct a positive measure $\tilde P$ for which $\engFunc$ is
-approximately constant over \setQ.
+To compute an approximate central distribution, Theorem~\ref{th:central-approx} suggests constructing a positive
+measure $\tilde P$ for which $\engFunc$ is approximately constant over \setQ.
 We may choose this constant to be zero and seek
 \[
     \engFunc \approx 0.
 \]
-In addition, the normalized distribution $P$ should be close to a convex combination of the elements of \setQ.
+In addition, the normalized distribution $P$ should be close enough to a convex combination of the elements of \setQ.
 
 Since central distributions are defined through marginal distributions, their construction may be viewed as
 combining prior specification and Bayesian inference within a single optimization framework.
@@ -81,10 +81,11 @@ For sequences of random variables, however, central distributions are defined on
 underlying infinite sequence.
 Consequently, the central distribution of a finite initial segment $S_n$ should be viewed as an approximation to the
 corresponding marginal of the infinite-sequence central distribution.
-The question then becomes how accurately this approximation can be constructed.
+The question then becomes how accurate this approximation is.
 
-One possible approach is to assume that $\ln \tilde P(X)$ can be represented by a linear combination of a
-collection of basis functions $b_i$, analogous to the log-density representation used in exponential families:
+One approach to computing an approximate central distribution is to represent $\ln \tilde P(X)$ as a linear
+combination of a suitable set of basis functions,
+analogous to the log-density representation used in exponential families:
 \[
     \ln \tilde P(x) = -\sum_i \alpha_i b_i(x).
 \]
@@ -95,23 +96,24 @@ Substituting this into $\measure{F}{}{}$ gives
 Therefore, enforcing $\engFunc \approx 0$ amounts to matching the entropy function.
 
 Suppose that \setQ is indexed by a parameter \param.
-Let \set{S} be a finite set of samples of parameter values.
-We may then choose the coefficients $\alpha_i$ so that for every \inSet[\paramVal]{S}
+We may then choose the coefficients $\alpha_i$ so that for every \paramVal
 \[
-    \sum_i \alpha_i \Ex{}{b_i(X) \mid \paramVal} \approx \entropy{Q}{X \mid \paramVal}.
+    \sum_i \alpha_i \Ex{}{b_i(X) \mid \paramVal} \approx \entropy{Q}{X \mid \paramVal},
 \]
-The resulting probability distribution is given by
+and the resulting probability distribution is given by
 \[
     P(x) \propto \exp \left\{-\sum_i \alpha_i b_i(x) \right\}.
 \]
 
-The quality of the approximation depends on how well $\tilde P$ can be represented as a nonnegative linear
-combination of the distributions $Q(X \mid \paramVal)$.
-This can be approximately assessed using the sample set \set{S} by finding nonnegative weights $w_i$ such that
+It should be noted that the quality of the approximation depends on how well $\tilde P$ can be represented as a
+nonnegative linear combination of distributions \inSet[Q_{\paramVal}]{Q}.
+This can be assessed approximately using a sample set of parameter values \set{S} by finding nonnegative weights $w_i$
+such that
 \[
-    \tilde P(x) \approx \sum_i w_i Q(x \mid \paramVal_i)
+    \tilde P(x) \approx \sum_i w_i Q(x \mid \paramVal_i),
 \]
-where $\inSet[\paramVal_i]{S}$ and $w_i\ge 0$.
+where $\inSet[\paramVal_i]{S}$.
+
 The following example illustrates the approximation procedure in a simple binomial setting.
 
 \begin{example}

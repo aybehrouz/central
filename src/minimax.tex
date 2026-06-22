@@ -7,7 +7,7 @@ to characterize and compute them.
 Throughout this subsection, $X$ denotes a discrete random variable with finite support and \setQ denotes a finite
 set of probability distributions over $X$.
 
-As we shall see, central distributions arise naturally as solutions to a convex--concave optimization problem.
+As we shall see, central distributions arise naturally as solutions to a convex--concave game.
 By formulating the appropriate objective function, we obtain a saddle-point characterization that enables
 the use of standard techniques from convex optimization.
 
@@ -191,25 +191,28 @@ the use of standard techniques from convex optimization.
 
 \begin{lemma}
     \label{lm:saddle-maximizes-g}
+    Let $P$ be a convex combination of the elements of \setQ such that
+    \[
+        \combination{P},
+    \]
+    where $R$ is a probability distribution over the indices of $Q$.
     Let $f$ be the function defined in Lemma~\ref{lm:saddle-exists}.
     Define the function $g$ as:
     \[
-        g(P) = f(P, R),
-    \]
-    where $Q_i \in \setQ$, and $P$ is a convex combination of the elements of \setQ such that
-    \[
-        \combination{P}.
+        g(P) = f(P, R).
     \]
     If \saddle is a saddle point for $f$, then $\saddP$ is a maximizer of $g$.
 \end{lemma}
 
 \begin{proof}
     Let \saddle be a saddle point for $f$.
-    By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg} and $g(\saddP)$ is defined,
-    we have
+    By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg} and \saddR satisfies
+    Equations~\ref{eq:kkt_r_sums_one} and~\ref{eq:kkt_r_geq_0}.
+    Therefore,
     \[
         g(\saddP) = f\saddle.
     \]
+
     Now, let $P$ be an arbitrary convex combination of the elements of \setQ, and let $R$ denote the corresponding
     weights.
     From the second part of Lemma~\ref{lm:saddle_conditions}, it follows that $g(P)$ indeed corresponds to the
@@ -222,6 +225,7 @@ the use of standard techniques from convex optimization.
     \[
         f(\saddP, R) \leq f\saddle.
     \]
+
     Combining the two inequalities, we get:
     \[
         g(P) \leq g(\saddP).
@@ -330,7 +334,7 @@ like the center of a circle, the central distribution is equidistant from the bo
     we have $\mu(i) \geq 0$ and $\mu(i)R(i) = 0$ for every $i$.
     We can verify that \cDist and $R$ satisfy the conditions of Lemma~\ref{lm:saddle_conditions} and therefore
     $\left( \cDist, R \right)$ is a saddle point.
-    By Lemma~\ref{lm:saddle-is-central} \cDist is a \cd.
+    By Lemma~\ref{lm:saddle-is-central}, \cDist is a \cd.
 \end{proof}
 
 \begin{corollary}
@@ -359,7 +363,7 @@ like the center of a circle, the central distribution is equidistant from the bo
 
 \begin{proof}
     By Lemmas~\ref{lm:saddle-exists} and~\ref{lm:saddle-maximizes-g}, there exists a saddle point $(\cDist, R)$
-    of $\objf[]$, where \cDist is a maximizer of the function~$g$..
+    of $\objf[]$, where \cDist is a maximizer of the function~$g$.
     By Lemma~\ref{lm:saddle-is-central}, \cDist is a \cd, and Theorem~\ref{th:centrality} implies that \cDist is unique.
 \end{proof}
 
@@ -384,7 +388,6 @@ like the center of a circle, the central distribution is equidistant from the bo
     Note that $g(P)$ is defined, because $P$ is a convex combination of the elements of \setQ.
 
     Theorem~\ref{th:centrality} implies that $g(C) = \sFunc[\cDist]$.
-    However, by Theorem~\ref{th:C-maximizes-g}, the distribution $C$ maximizes $g$, which
-    contradicts the
-    inequality $g(P) > g(C)$.
+    However, by Theorem~\ref{th:C-maximizes-g}, the central distribution $C$ maximizes $g$, which
+    contradicts the inequality $g(P) > g(C)$.
 \end{proof}

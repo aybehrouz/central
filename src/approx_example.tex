@@ -1,28 +1,31 @@
 \newcommand{\Fdelta}{$\mathbb{F}$-Delta}
 \newcommand{\PredErr}{Pred-Err}
 
-As an illustration, consider a binomial model with parameter $\theta$.
-Let $S_n = (X_1, X_2, \ldots, X_n)$ denote a sample of $n$ independent observations,
+Consider a binomial model with parameter $\theta$.
+Let \[S_n = (X_1, X_2, \ldots, X_n)\] denote a sample of $n$ independent observations,
 where $X_i \sim \operatorname{Bernoulli}(\theta)$.
-
 We use the basis functions
 \[
     b_k(s_n) \coloneqq \left(\frac1n \sum_{i=1}^n x_i \right)^k.
 \]
 These basis functions form polynomial features of the sufficient statistic.
-
-For a binomial model with success probability $\theta$, the entropy of $S_n$ is
+For a binomial model with success probability $\theta$, we have
+\[
+    \Ex{}{b_k(S_n) \mid \paramVal} = \paramVal^k,
+\]
+and
 \[
     \entropy{Q}{S_n \mid \paramVal} = -n \left(\paramVal \ln \paramVal + (1 - \paramVal) \ln (1 - \paramVal)  \right).
 \]
 
 We consider the case $n=7$ and approximate $\cDist(S_7)$ using the procedure described above.
+Here, \cDist denotes the marginal distribution induced by the central prior $\theta^{-\hf}(1 - \theta)^{-\hf}$.
 The parameter space is represented by a sample set \set{S} consisting of 30 values of $\theta$.
 
 When the approximation lies close to a marginal likelihood within the binomial family,
 the bound in Theorem~\ref{th:central-approx} can be estimated by
 \[
-    \max_{\inSet[\paramVal]{S}} \engFunc - \min_{\inSet[\paramVal]{S}} \engFunc,
+    \max_{\inSet[\paramVal]{S}} \engFunc[Q_{\paramVal}] - \min_{\inSet[\paramVal]{S}} \engFunc[Q_{\paramVal}],
 \]
 which we denote by \Fdelta.
 
@@ -80,13 +83,12 @@ The corresponding values of \Fdelta\ are shown in Figure~\ref{fig:error_comparis
 
 
 Next, we use the approximation to estimate the central predictive probability $C(X_7\mid S_6)$.
-Here, \cDist denotes the marginal distribution induced by the central prior $\theta^{-\hf}(1 - \theta)^{-\hf}$.
 We consider an observed sequence $S_6$ containing two successes and four failures.
-Under \cDist, the predictive probability of success is $\frac{5}{14}$.
+The corresponding predictive probability of success under \cDist is $\frac{5}{14}$.
 Figure~\ref{fig:error_comparision} reports the absolute difference between the estimated predictive probability and
 the central predictive probability, denoted by \PredErr.
-For comparison, the absolute difference of the predictive probability obtained from the
-uniform prior is also shown as the dotted line (Uni-Diff).
+For comparison, the absolute error of the predictive probability obtained under the uniform prior is shown as the
+dotted line (Uni-Diff).
 
 The results show that as the number of basis functions increases, both \Fdelta\ and \PredErr\ decrease substantially.
 This suggests that improvements in the approximation bound are accompanied by improvements in the resulting

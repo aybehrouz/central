@@ -1,5 +1,6 @@
 \newcommand{\uniConverge}[2]{\toInf  \sup_{#1} \left| {#2} \right| = 0}
 \newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
+\newcommand{\TVdist}[3][(S_{n})]{\left\| #2#1 - #3#1 \right\|_{\mathrm{TV}}}
 
 Many probabilistic models are naturally formulated in terms of a sequence of random variables whose length is not
 fixed in advance.
@@ -32,11 +33,11 @@ finite initial segments can be obtained as marginals.
 
 This motivates the construction of a central distribution that is well defined over~$S_{\infty}$.
 
-\begin{definition} [Asymptotic Central Distribution] \label{def:asymptotic-central}
+\begin{definition}[Asymptotic Central Distribution] \label{def:asymptotic-central}
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $S_n$.
     Let \cDist be also a probability measure that defines a distribution over every $S_n$.
-    \cDist is a central distribution of \setQ for \infSeq{S}, if and only if we have
+    \cDist is a \cd[\infSeq{S}], if and only if we have
     \begin{equation*}
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \end{equation*}
@@ -45,6 +46,37 @@ This motivates the construction of a central distribution that is well defined o
 Intuitively, this definition states that as $n \to \infty$ the distribution that $C$ induces over $S_n$ becomes
 increasingly similar to a central distribution for~$S_n$.
 In other words, \cDist is a central distribution for the infinite sequence~$S_{\infty}$.
+
+\begin{proposition}[Asymptotic Uniqueness] \label{prop:asymptotic-unique}
+    Suppose there exists $M$ such that for every $n \geq M$, \setQ has a unique central
+    distribution $\cDist_{n}$ for~$S_n$.
+    Then any two central distributions \cDist and $\cDist'$ of \setQ for \infSeq{S},
+    are asymptotically equivalent in total variation:
+    \[
+        \toInf \TVdist{\cDist}{\cDist'} = 0.
+    \]
+    Here, $\left\| \none \right\|_{\mathrm{TV}}$ denotes total variation distance.
+\end{proposition}
+
+\begin{proof}
+    Let \cDist and $\cDist'$ be two central distributions of \setQ for \infSeq{S}.
+    Since, for $n \geq M$, $\cDist_n$ is the unique \cd[S_n], we have
+    \[
+        \toInf \klx[\cDist_n][\cDist][S_n] = \toInf \klx[\cDist_n][\cDist'][S_n] = 0.
+    \]
+    By Pinsker's inequality and the squeeze theorem,
+    \begin{equation*}
+        \toInf \TVdist{\cDist_n}{\cDist} = \toInf \TVdist{\cDist_n}{\cDist'} = 0.
+    \end{equation*}
+    Using the triangle inequality,
+    \[
+        \TVdist{\cDist}{\cDist'} \leq \TVdist{\cDist_n}{\cDist} + \TVdist{\cDist_n}{\cDist'},
+    \]
+    the squeeze theorem yields
+    \[
+        \toInf \TVdist{\cDist}{\cDist'} = 0. \qedhere
+    \]
+\end{proof}
 
 Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in this asymptotic setting.
 
@@ -56,7 +88,7 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
     \[
         \uniConverge{\inSet{Q}}{\klx[][\cDist][S_n] - \lambda_n},
     \]
-    then \cDist is a \cd[\infSeq{S}].
+    then \cDist is a \cd[\infSeq{S}], and is unique up to asymptotic total variation equivalence.
 \end{theorem}
 
 \begin{proof}
@@ -102,6 +134,8 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \]
     Thus, by Definition~\ref{def:asymptotic-central}, \cDist is a \cd[\infSeq{S}].
+    Since $\cDist_n$ is the unique \cd[S_n], Proposition~\ref{prop:asymptotic-unique} implies that the \cd[\infSeq{S}]
+    is unique up to asymptotic total variation equivalence.
 \end{proof}
 
 Theorem~\ref{th:limiting-centrality} provides a sufficient condition for asymptotic centrality,

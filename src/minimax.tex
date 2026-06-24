@@ -261,11 +261,11 @@ the use of standard techniques from convex optimization.
 \end{proof}
 
 The following theorem establishes the existence and uniqueness of the central distribution and provides a
-characterization of its optimality in the KL-minimax setting.
+characterization of its optimality in the minimax setting.
 This characterization motivates the term \emph{central distribution}:
 like the center of a circle, the central distribution is equidistant from the boundary.
 
-\begin{theorem} [Centrality]
+\begin{theorem}[Centrality]
     \label{th:centrality}
     Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
     distributions over $X$.
@@ -321,7 +321,7 @@ like the center of a circle, the central distribution is equidistant from the bo
     \[
         \kl[\cDist][C'] = 0,
     \]
-    which implies \cDist and $C'$ are identical probability distributions.
+    which implies \cDist and $C'$ are equal probability distributions.
 
     Thus, we have proved that \setQ has a unique central distribution satisfying the conditions of the theorem.
     We now prove the ``if'' direction.

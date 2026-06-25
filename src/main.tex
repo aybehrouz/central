@@ -70,13 +70,14 @@
 
 % Uncomment and use as if needed
 \newtheorem{theorem}{Theorem}
-\newtheorem{conjecture}{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 
 %\newdefinition{rmk}{Remark}
 \newdefinition{definition}{Definition}
-\newdefinition{notation}{Notation}
+\newdefinition{notation}[definition]{Notation}
 \newdefinition{example}{Example}
 
 \newproof{proof}{Proof}
@@ -94,7 +95,7 @@
     \shortauthors{B. Ayati}
 
 % Main title of the paper
-    \title [mode = title]{The Central Distribution: A Representative of Partial Knowledge}
+    \title [mode = title]{The Central Distribution: Representing Hierarchical Partial Knowledge}
 
 % Title footnote mark
 % eg: \tnotemark[1]
@@ -139,7 +140,7 @@
 % Address/affiliation
     \affiliation[1]{organization={Independent Researcher},
     %addressline={},
-        city={Tehran},
+    %city={Tehran},
 %          citysep={}, % Uncomment if no comma needed between city and postcode
     %postcode={},
     %state={},
@@ -179,23 +180,27 @@
 
 % Here goes the abstract
     \begin{abstract}
-        We introduce the \emph{central distribution}, a probability distribution that represents a hierarchy of probability
-        distributions by minimizing the worst-case Kullback--Leibler (KL)
+        We introduce the \emph{central distribution}, a probability distribution that represents a set or hierarchy of
+        probability distributions by minimizing the worst-case Kullback--Leibler (KL)
         divergence to the admissible models.
         This provides a principled method for converting partial knowledge and set-valued uncertainty into a single
-        probability measure suitable for Bayesian inference.
+        probability measure.
 
-        We show that central distributions admit a minimax characterization and can be obtained as solutions to
-        convex--concave saddle point problems.
-        For parametric models, we establish a sufficient fixed-point condition for priors whose induced marginal
-        distributions are central, establishing a formal connection with Bernardo's reference prior methodology.
+        For finite sets of distributions, we show that central distributions admit a minimax characterization and can be
+        obtained as solutions to convex--concave saddle-point problems.
+        We establish existence, uniqueness, and characterization results.
+        For parametric models, we derive a sufficient fixed-point condition for priors whose induced marginals
+        are central, revealing a formal connection with Bernardo's reference prior methodology.
+
         We extend the framework to hierarchical uncertainty structures and propose an asymptotic notion of centrality for
         infinite sequences.
+        We further derive approximation bounds that lead to practical procedures for constructing approximate central
+        distributions and performing Bayesian inference without explicit knowledge of the exact solution.
 
-        Finally, we illustrate how uncertainty about relevant feature subsets can be represented hierarchically, and how
-        central distributions can be used to aggregate such structural uncertainty into a single predictive model.
-        This suggests an information-theoretic framework for constructing noninformative priors and
-        performing Bayesian feature selection.
+        Finally, we illustrate how uncertainty about relevant feature subsets can be represented hierarchically and
+        aggregated into a single predictive model.
+        These results suggest a general information-theoretic framework for representing partial knowledge, constructing
+        noninformative priors, and reasoning under model uncertainty.
     \end{abstract}
 
 % Use if graphical abstract is present
@@ -238,19 +243,17 @@
     \subsection{Minimax Characterization}\label{subsec:minimax}
     \input{minimax}
 
-    \subsection{Approximate Central Distributions}\label{subsec:approx-cd}
-    \input{approx}
-
     \subsection{Parametric Families and Central Priors}\label{subsec:parametric}
     \input{parametric}
 
     \subsection{Asymptotic Central Distributions}\label{subsec:asymptotic-cd}
     \input{asymptotic}
 
+    \subsection{Approximate Central Distributions}\label{subsec:approx-cd}
+    \input{approx}
 
     \section{Illustrative Example: Attribute Selection}\label{sec:attribute-selection}
     \input{att_selection}
-
 
     \section{Conclusion}\label{sec:conclusion}
     \input{conclu}
@@ -302,11 +305,10 @@
 %\printcredits
 
 
-    \section{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
+    \section{Declaration of generative AI and AI-assisted technologies}
     \label{sec:ai}
-
-    During the preparation of this work, the author used the free version of ChatGPT to improve the readability and
-    presentation of the manuscript and to help identify errors.
+    During the preparation of this work, the author used the free version of ChatGPT and Google Gemini to improve the
+    readability and presentation of the manuscript and to help identify errors.
     After using this tool/service, the author reviewed and edited the content as needed and take full responsibility for
     the content of the published article.
 %% Loading bibliography style file

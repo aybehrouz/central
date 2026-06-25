@@ -1,0 +1,98 @@
+\newcommand{\Fdelta}{$\mathbb{F}$-Delta}
+\newcommand{\PredErr}{Pred-Err}
+
+Consider a binomial model with parameter $\theta$.
+Let \[S_n = (X_1, X_2, \ldots, X_n)\] denote a sample of $n$ independent observations,
+where $X_i \sim \operatorname{Bernoulli}(\theta)$.
+We use the basis functions
+\[
+    b_k(s_n) \coloneqq \left(\frac1n \sum_{i=1}^n x_i \right)^k.
+\]
+These basis functions form polynomial features of the sufficient statistic.
+For a binomial model with success probability $\theta$, we have
+\[
+    \Ex{}{b_k(S_n) \mid \paramVal} = \paramVal^k,
+\]
+and
+\[
+    \entropy{Q}{S_n \mid \paramVal} = -n \left(\paramVal \ln \paramVal + (1 - \paramVal) \ln (1 - \paramVal)  \right).
+\]
+
+We consider the case $n=7$ and approximate $\cDist(S_7)$ using the procedure described above.
+Here, \cDist denotes the marginal distribution induced by the central prior $\theta^{-\hf}(1 - \theta)^{-\hf}$.
+The parameter space is represented by a sample set \set{S} consisting of 30 values of $\theta$.
+
+When the approximation lies close to a marginal likelihood within the binomial family,
+the bound in Theorem~\ref{th:central-approx} can be estimated by
+\[
+    \max_{\inSet[\paramVal]{S}} \engFunc[Q_{\paramVal}] - \min_{\inSet[\paramVal]{S}} \engFunc[Q_{\paramVal}],
+\]
+which we denote by \Fdelta.
+
+To investigate the effect of the number of basis functions on the quality of the approximation, we vary the number
+of basis functions from 4 to 14.
+The corresponding values of \Fdelta\ are shown in Figure~\ref{fig:error_comparision}.
+
+\begin{figure}[t]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            globalstyle,
+            legend pos=north east,
+            xlabel={Number of Basis},
+            xmin=4, xmax=14,
+            ymin=0.0
+        %xtick={3,...,14},
+        ]
+
+            \addplot+[mark=*, blue] coordinates {
+                (4, 0.622701) (5, 0.192069) (6, 0.192069) (7, 0.076361) (8, 0.076361) (9, 0.028878) (10, 0.028878) (11, 0.011228) (12, 0.015049) (13, 0.012935) (14, 0.014727)
+            };
+            \addlegendentry{\Fdelta}
+
+        \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+        \begin{axis}[
+            globalstyle,
+            legend pos=north east,
+            xlabel={Number of Basis},
+            xmin=4, xmax=14,
+            ymin=0.0
+        %xtick={3,...,14},
+        ]
+
+            \addplot+[mark=*, blue] coordinates {
+                (4, 0.033566) (5, 0.012962) (6, 0.012962) (7, 0.006028) (8, 0.006028) (9, 0.000312) (10, 0.000312) (11, 0.000675) (12, 0.000083) (13, 0.000426) (14, 0.000171)
+            };
+            \addlegendentry{\PredErr}
+
+            \addplot[very thick, dashed, red] coordinates {(4, 0.01785714) (14, 0.01785714)};
+            \addlegendentry{Uni-Diff}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{
+        Approximation quality as a function of the number of basis functions.
+        Left: \Fdelta, the bound derived from Theorem~\ref{th:central-approx}.
+        Right: \PredErr\, the absolute difference between the estimated predictive probability and the
+        central predictive probability.
+        The dotted line (Uni-Diff) indicates the corresponding error obtained using a uniform prior.
+    }
+    \label{fig:error_comparision}
+\end{figure}
+
+
+Next, we use the approximation to estimate the central predictive probability $C(X_7\mid S_6)$.
+We consider an observed sequence $S_6$ containing two successes and four failures.
+The corresponding predictive probability of success under \cDist is $5/14$.
+Figure~\ref{fig:error_comparision} reports the absolute difference between the estimated predictive probability and
+the central predictive probability, denoted by \PredErr.
+For comparison, the absolute error of the predictive probability obtained under the uniform prior is shown as the
+dotted line (Uni-Diff).
+
+The results show that as the number of basis functions increases, both \Fdelta\ and \PredErr\ decrease substantially.
+This suggests that improvements in the approximation bound are accompanied by improvements in the resulting
+predictive distribution.
+Moreover, with a sufficient number of basis functions, the predictive estimate becomes considerably closer to the
+central posterior than the estimate obtained from the uniform prior.
+

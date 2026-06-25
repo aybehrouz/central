@@ -1,10 +1,10 @@
-\newcommand{\engFunc}[1][P]{\measure{F}{}{Q,\tilde{#1}}}
-\newcommand{\infR}{\inf_{Q \in \set{R}}}
-\newcommand{\supR}{\sup_{Q \in \set{R}}}
+\newcommandx{\engFunc}[2][1=Q, 2=P]{\measure{F}{}{#1,\tilde{#2}}}
+\newcommand{\infR}{\inf_{\inSet{R}}}
+\newcommand{\supR}{\sup_{\inSet{R}}}
 
 Suppose we want to approximate a central distribution of a hierarchy of distributions~\set{h}.
 To do so, we need a measure that quantifies the quality of an approximation.
-A natural choice is the central divergence introduced in Definition~\ref{def:central-divergence}.
+A natural choice for this purpose is the central divergence introduced in Definition~\ref{def:central-divergence}.
 Since central distributions are intended to serve as representatives of hierarchies of distributions,
 central divergence can be viewed as a measure of how well a probability distribution represents a hierarchy.
 
@@ -15,16 +15,15 @@ knowing the central distribution.
 In variational settings, it is often more convenient to work with unnormalized measures rather than normalized
 distributions.
 Therefore, we state the next theorem in terms of unnormalized measures.
-We assume throughout that $\tilde P(x) > 0$ whenever $Q(x) > 0$
-for some \inSet{Q}, so that all logarithms are well-defined.
 
 \begin{theorem}\label{th:central-approx}
     Let \setQ be a finite set of probability distributions over a discrete random variable~$X$.
-    Let $\tilde{P}$ be a linear combination of elements of $\set{R} \subseteq \setQ$ with strictly positive weights,
+    Let $\tilde{P}$ be a positive measure over $X$,
     and let $P$ be the corresponding normalized distribution.
+    Let $R$ be an arbitrary convex combination of the elements of $\set{R} \subseteq \setQ$.
     Then
     \[
-        \myDiv[P][Q][] \leq \supR \engFunc - \inf_{\inSet{Q}} \engFunc,
+        \myDiv[P][Q][] \leq \supR \engFunc - \inf_{\inSet{Q}} \engFunc + \kl[R][P],
     \]
     where
     \[
@@ -35,22 +34,25 @@ for some \inSet{Q}, so that all logarithms are well-defined.
 \begin{proof}
     By Corollary~\ref{cor:cdiv-lambda-bound}, we have
     \[
-        \myDiv[P][Q][] \leq \sFunc[][\setQ] - \sFunc[\cDist][\setQ].
+        \myDiv[P][Q][] \leq \sFunc[][\setQ] - g(\cDist).
     \]
+    where \cDist is the \cd.
 
-    Since $P$ is a convex combination of elements of \set{R} with strictly positive weights,
-    Corollary~\ref{cor:imperfection} implies that
+    Since $R$ is a convex combination of the elements of \set{R}, Lemma~\ref{lm:kl-bound} implies
     \[
-        \sFunc[\cDist][\setQ] \geq \infR \kl.
+        g(R) \geq \infR \kl - \kl[R][P].
     \]
-
-    Combining these two inequalities yields
+    By Theorem~\ref{th:C-maximizes-g}, \cDist is a maximizer of $g$, and therefore
+    \[
+        g(\cDist) \geq g(R).
+    \]
+    Combining these three inequalities yields
     \begin{equation} \label{eq:cdiv-upper-bound}
-        \myDiv[P][Q][] \leq \sFunc[][\setQ] - \infR \kl.
+        \myDiv[P][Q][]  \leq \sFunc[][\setQ] - \infR \kl + \kl[R][P].
     \end{equation}
 
     Let $\tilde{P}(X) = Z P(X)$, where $Z > 0$ is a normalization constant.
-    Then for any~$Q$,
+    Then for any probability distribution~$Q$,
     \[
         \kl = \ln Z - \engFunc.
     \]
@@ -62,13 +64,60 @@ for some \inSet{Q}, so that all logarithms are well-defined.
     and the result follows from Equation~\ref{eq:cdiv-upper-bound}.
 \end{proof}
 
+To compute an approximate central distribution, Theorem~\ref{th:central-approx} suggests constructing a positive
+measure $\tilde P$ for which $\engFunc$ is approximately constant with respect to $Q$.
+We may choose this constant to be zero and seek
+\[
+    \engFunc \approx 0,
+\]
+for every \inSet{Q}.
+In addition, the normalized distribution $P$ should be close enough to a convex combination of the elements of \setQ.
+
 Since central distributions are defined through marginal distributions, their construction may be viewed as
 combining prior specification and Bayesian inference within a single optimization framework.
 Given $n$ observations, one may perform inference using the central distribution of the corresponding finite
 sequence~$S_n$, without separately specifying a prior distribution.
 
-As discussed later, in the case of sequences of random variables, central distributions are defined on the
+For sequences of random variables, however, central distributions are defined on the
 underlying infinite sequence.
 Consequently, the central distribution of a finite initial segment $S_n$ should be viewed as an approximation to the
-corresponding marginal of the infinite sequence central distribution.
-A natural question is how accurate this approximation is.
+corresponding marginal of the infinite-sequence central distribution.
+The question then becomes how accurate this approximation is.
+
+One approach to computing an approximate central distribution is to represent $\ln \tilde P(X)$ as a linear
+combination of a suitable set of basis functions,
+analogous to the log-density representation used in exponential families:
+\[
+    \ln \tilde P(x) = -\sum_i \alpha_i b_i(x).
+\]
+Substituting this into $\measure{F}{}{}$ gives
+\[
+    \engFunc = \entropy{Q}{X} - \sum_i \alpha_i \Ex{Q}{b_i(X)}.
+\]
+Therefore, enforcing $\engFunc \approx 0$ amounts to approximating the entropy function by a linear
+combination of the feature expectations $\Ex{Q}{b_i(X)}$.
+
+Suppose that \setQ is indexed by a parameter \param.
+We may then choose the coefficients $\alpha_i$ so that for every \paramVal
+\[
+    \sum_i \alpha_i \Ex{}{b_i(X) \mid \paramVal} \approx \entropy{Q}{X \mid \paramVal},
+\]
+and the resulting probability distribution is given by
+\[
+    P(x) \propto \exp \left\{-\sum_i \alpha_i b_i(x) \right\}.
+\]
+
+It should be noted that the quality of the approximation depends on how well $\tilde P$ can be represented as a
+nonnegative linear combination of distributions \inSet[Q_{\paramVal}]{Q}.
+This can be assessed approximately using a sample set of parameter values \set{S}, by finding nonnegative weights $w_i$
+such that
+\[
+    \tilde P(x) \approx \sum_i w_i Q(x \mid \paramVal_i),
+\]
+where $\inSet[\paramVal_i]{S}$.
+
+The following example illustrates the approximation procedure in a simple binomial setting.
+
+\begin{example}
+    \input{approx_example}
+\end{example}

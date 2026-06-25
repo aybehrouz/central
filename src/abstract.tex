@@ -1,17 +1,21 @@
-We introduce the \emph{central distribution}, a probability distribution that represents a hierarchy of probability
-distributions by minimizing the worst-case Kullback--Leibler (KL)
+We introduce the \emph{central distribution}, a probability distribution that represents a set or hierarchy of
+probability distributions by minimizing the worst-case Kullback--Leibler (KL)
 divergence to the admissible models.
 This provides a principled method for converting partial knowledge and set-valued uncertainty into a single
-probability measure suitable for Bayesian inference.
+probability measure.
 
-We show that central distributions admit a minimax characterization and can be obtained as solutions to
-convex--concave saddle point problems.
-For parametric models, we establish a sufficient fixed-point condition for priors whose induced marginal
-distributions are central, establishing a formal connection with Bernardo's reference prior methodology.
+For finite sets of distributions, we show that central distributions admit a minimax characterization and can be
+obtained as solutions to convex--concave saddle-point problems.
+We establish existence, uniqueness, and characterization results.
+For parametric models, we derive a sufficient fixed-point condition for priors whose induced marginals
+are central, revealing a formal connection with Bernardo's reference prior methodology.
+
 We extend the framework to hierarchical uncertainty structures and propose an asymptotic notion of centrality for
 infinite sequences.
+We further derive approximation bounds that lead to practical procedures for constructing approximate central
+distributions and performing Bayesian inference without explicit knowledge of the exact solution.
 
-Finally, we illustrate how uncertainty about relevant feature subsets can be represented hierarchically, and how
-central distributions can be used to aggregate such structural uncertainty into a single predictive model.
-This suggests an information-theoretic framework for constructing noninformative priors and
-performing Bayesian feature selection.
+Finally, we illustrate how uncertainty about relevant feature subsets can be represented hierarchically and
+aggregated into a single predictive model.
+These results suggest a general information-theoretic framework for representing partial knowledge, constructing
+noninformative priors, and reasoning under model uncertainty.

@@ -1,15 +1,17 @@
 \newcommandx{\objf}[2][1=P, 2=R]{ \ifthenelse{\isempty{#1}} {f} {f(#1, #2)} }
+\newcommand{\combination}[2][R]{#2(x) = \sum_i Q_i(x) #1(i)}
+
 
 With the concept of hierarchical central distributions in place, we now develop the theoretical machinery needed
 to characterize and compute them.
 Throughout this subsection, $X$ denotes a discrete random variable with finite support and \setQ denotes a finite
 set of probability distributions over $X$.
 
-As we shall see, central distributions arise naturally as solutions to a convex--concave optimization problem.
+As we shall see, central distributions arise naturally as solutions to a convex--concave game.
 By formulating the appropriate objective function, we obtain a saddle-point characterization that enables
 the use of standard techniques from convex optimization.
 
-\begin{definition} [Saddle Point]
+\begin{definition} [Saddle Point] \label{def:saddle-point}
     Consider a function $f:\set{w} \times \set{z} \to \field{R}$.
     We refer to a pair $(w^*, z^*)$ as a \emph{saddle point} for $f$ if we have
     \[
@@ -21,7 +23,7 @@ the use of standard techniques from convex optimization.
 \begin{lemma} \label{lm:saddle-exists}
     Define:
     \begin{equation*}
-        \objf = \sum_i \klx[Q_i] R(i),
+        \objf \coloneqq \sum_i \klx[Q_i] R(i),
     \end{equation*}
     where $P$ and $R$ are probability distributions, $Q_i \in \setQ$ and the index $i$ ranges over all elements of~\setQ.
     Then there exists a saddle point for~$\objf[]$.
@@ -87,7 +89,7 @@ the use of standard techniques from convex optimization.
         \label{eq:kkt_lambda}
         \klExp[Q_i][\saddP][x] + \mu(i) = \lambda, \\
         \label{eq:kkt_w_avg}
-        \saddP(x) = \sum_i \saddR(i) Q_i(x) \\
+        \combination[\saddR]{\saddP} \\
         \label{eq:kkt_r_sums_one}
         \sum_i \saddR(i) = 1, \\
         \label{eq:kkt_r_geq_0}
@@ -102,14 +104,14 @@ the use of standard techniques from convex optimization.
     only if for all $x$ it satisfies
     \begin{equation}
         \label{eq:saddle_lm_minimizer_dist}
-        \hat{P}(x) = \sum_i Q_i(x)R(i).
+        \combination{\hat{P}}.
     \end{equation}
 \end{lemma}
 
 \begin{proof}
     We extend $\objf[]$ to a function $\hat{f}$ defined as follows:
     \begin{equation*}
-        \hat{f}(P, R) = \fExp,
+        \hat{f}(P, R) \coloneqq \fExp,
     \end{equation*}
     where the domain is extended by relaxing the constraints that $P$ and $R$ be probability distributions.
     This enables us to formulate the saddle points of $\objf[]$ as solutions to a constrained optimization problem
@@ -183,55 +185,87 @@ the use of standard techniques from convex optimization.
     As shown above, the KKT conditions are necessary and sufficient for optimality,
     and when $R$ is a probability distribution, these conditions simplify to
     \[
-        \hat P(x)=\sum_i Q_i(x)R(i). \qedhere
+        \combination{\hat P}. \qedhere
     \]
 \end{proof}
 
 \begin{lemma}
-    \label{lm:saddle-is-maximizer}
-    Let $f$ be the function defined in Lemma~\ref{lm:saddle-exists}.
+    \label{lm:saddle-maximizes-g}
+    Let $P$ be a convex combination of the elements of \setQ such that
+    \[
+        \combination{P},
+    \]
+    where $R$ is a probability distribution over the index set of \setQ.
+    Let $\objf[]$ be the function defined in Lemma~\ref{lm:saddle-exists}.
     Define the function $g$ as:
     \[
-        g(R) = \sum_i \klx[Q_i][R] R(i),
+        g(P) \coloneqq f(P, R).
     \]
-    where $Q_i \in \setQ$, and $R$ is a probability distribution such that
-    \[
-        R(X, I) = Q_I(X)R(I).
-    \]
-    If \saddle is a saddle point for $f$, then the joint distribution $Q_I(X)\saddR(I)$ is a maximizer of $g$.
+
+    If \saddle is a saddle point for $f$, then $\saddP$ is a maximizer of $g$.
 \end{lemma}
 
 \begin{proof}
     Let \saddle be a saddle point for $f$.
-    By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg}.
-    Letting $\saddR(X, I) = Q_I(X) \saddR(I)$ we have
+    By Lemma~\ref{lm:saddle_conditions}, \saddP satisfies Equation~\ref{eq:kkt_w_avg} and \saddR satisfies
+    Equations~\ref{eq:kkt_r_sums_one} and~\ref{eq:kkt_r_geq_0}.
+    Therefore,
     \[
-        g(\saddR) = f\saddle.
-    \]
-    Now, let $R$ be an arbitrary probability distribution such that $g(R)$ is defined.
-    From the second part of Lemma~\ref{lm:saddle_conditions}, it follows that $g(R)$ indeed corresponds to the
-    minimum of $f(\none, R)$, which implies
-    \[
-        g(R) \leq f(\saddP,R).
+        g(\saddP) = f\saddle.
     \]
 
-    Since \saddle is a saddle point, we also have
+    Now, let $P$ be an arbitrary convex combination of the elements of \setQ, and let $R$ denote the corresponding
+    weights.
+    From the second part of Lemma~\ref{lm:saddle_conditions}, it follows that $g(P)$ indeed corresponds to the
+    minimum of $f(\none, R)$, which implies
+    \[
+        g(P) \leq f(\saddP,R).
+    \]
+    Since \saddle is a saddle point, by Definition~\ref{def:saddle-point},
     \[
         f(\saddP, R) \leq f\saddle.
     \]
+
     Combining the two inequalities, we get:
     \[
-        g(R) \leq g(\saddR).
+        g(P) \leq g(\saddP).
     \]
-    This shows that $g(\saddR)$ is the maximum of $g$, as desired.
+    This shows that $g(\saddP)$ is the maximum of $g$, as desired.
+\end{proof}
+
+\begin{lemma} \label{lm:kl-bound}
+    Let $\set{R} \subseteq \setQ$, let $P$ be a convex combination of the elements of $\set{R}$, and
+    let $P'$ be any probability distribution.
+    Then
+    \begin{equation*}
+        \inf_{\inSet{R}} \kl[Q][P'] \leq \kl[P][P'] + g(P) \leq \sup_{\inSet{R}} \kl[Q][P'],
+    \end{equation*}
+    where $g$ is the function defined in Lemma~\ref{lm:saddle-maximizes-g}.
+\end{lemma}
+
+\begin{proof}
+    Let $R$ denote the weights associated with the convex representation of $P$.
+    For any probability distribution $P'$
+    \begin{align*}
+        \kl[P][P']
+        &= \sum_i R(i)\left(\kl[Q_i][P'] - \kl[Q_i][P] \right) \\
+        \nonumber
+        &= \sum_i \kl[Q_i][P']R(i) - g(P),
+    \end{align*}
+    where $i$ ranges over the elements of \set{R}.
+    Because $R$ is a probability distribution, we have
+    \[
+        \inf_{\inSet{R}} \kl[Q][P'] \leq \sum_i \kl[Q_i][P']R(i) \leq \sup_{\inSet{R}} \kl[Q][P'],
+    \]
+    which proves the lemma.
 \end{proof}
 
 The following theorem establishes the existence and uniqueness of the central distribution and provides a
-characterization of its optimality in the KL-minimax setting.
+characterization of its optimality in the minimax setting.
 This characterization motivates the term \emph{central distribution}:
 like the center of a circle, the central distribution is equidistant from the boundary.
 
-\begin{theorem} [Centrality]
+\begin{theorem}[Centrality]
     \label{th:centrality}
     Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
     distributions over $X$.
@@ -240,9 +274,9 @@ like the center of a circle, the central distribution is equidistant from the bo
     Moreover, \cDist is the \cd\ if and only if it can be expressed as a convex combination of the elements
     of \setQ; that is,
     \[
-        \cDist(x) = \sum_i Q_i(x) R(i),
+        \combination{\cDist},
     \]
-    where $R$ is a probability distribution over the indices of $Q$,
+    where $R$ is a probability distribution over the index set of \setQ,
     and there exists a constant $\lambda$ such that
     \begin{equation*}
         \klx[Q_i][\cDist] = \lambda
@@ -273,17 +307,13 @@ like the center of a circle, the central distribution is equidistant from the bo
         \kl[Q_i][\cDist] \leq \lambda.
     \]
 
-    For any probability distribution $C'$, we have
-    \begin{align}\label{eq:cd-relation-to-lambda}
-        \nonumber
-        \kl[\cDist][C']
-        &= \sum_i R(i)\left(\kl[Q_i][C'] - \kl[Q_i][\cDist] \right) \\
-        \nonumber
-        &= \sum_i \kl[Q_i][C']R(i) - \lambda \\
-        &\leq \sFunc[C'] - \lambda.
-    \end{align}
+    Since \cDist is a convex combination of the elements of \setQ, and $g(C) = \lambda$, by Lemma~\ref{lm:kl-bound},
+    for any probability distribution $C'$, we have
+    \[
+        \kl[\cDist][C'] \leq \sFunc[C'] - \lambda.
+    \]
     Now suppose that $C'$ is also a central distribution of \setQ for $X$.
-    Since \cDist and $C'$ are both central distributions,
+    Because \cDist and $C'$ are both central distributions,
     \[
         \sFunc[C'] = \sFunc[\cDist] = \lambda.
     \]
@@ -291,7 +321,7 @@ like the center of a circle, the central distribution is equidistant from the bo
     \[
         \kl[\cDist][C'] = 0,
     \]
-    which implies \cDist and $C'$ are identical probability distributions.
+    which implies \cDist and $C'$ are equal probability distributions.
 
     Thus, we have proved that \setQ has a unique central distribution satisfying the conditions of the theorem.
     We now prove the ``if'' direction.
@@ -301,10 +331,10 @@ like the center of a circle, the central distribution is equidistant from the bo
     \[
         \mu(i) = \lambda - \kl[Q_i][\cDist],
     \]
-    we have $\mu(i) \geq 0$ and $\mu(i)R(i) = 0$ for every $i$.
+    we have $\mu(i) \geq 0$ and $\mu(i)R(i) = 0$ for every index $i$.
     We can verify that \cDist and $R$ satisfy the conditions of Lemma~\ref{lm:saddle_conditions} and therefore
     $\left( \cDist, R \right)$ is a saddle point for $\objf[]$.
-    By Lemma~\ref{lm:saddle-is-central} \cDist is a \cd.
+    By Lemma~\ref{lm:saddle-is-central}, \cDist is a \cd.
 \end{proof}
 
 \begin{corollary}
@@ -322,30 +352,26 @@ like the center of a circle, the central distribution is equidistant from the bo
     \[
         \myDiv[P][Q][] = \kl[\cDist].
     \]
-    The result then follows immediately from Equation~\ref{eq:cd-relation-to-lambda}.
+    Moreover, \cDist is a convex combination of the elements of \setQ, and $g(C) = \sFunc[\cDist]$.
+    The result then follows immediately from Lemma~\ref{lm:kl-bound}.
 \end{proof}
 
 \begin{theorem}
     \label{th:C-maximizes-g}
-    The \cd\ is a maximizer of the function $g$ defined in Lemma~\ref{lm:saddle-is-maximizer}.
+    The \cd\ is a maximizer of the function $g$ defined in Lemma~\ref{lm:saddle-maximizes-g}.
 \end{theorem}
 
 \begin{proof}
-    By Lemmas ~\ref{lm:saddle-exists} and~\ref{lm:saddle-is-central}, there exists a saddle point $(\cDist,R)$
-    of $\objf[]$, where \cDist is the unique \cd\ (Theorem~\ref{th:centrality}).
-    Defining $C(X, I) = Q_I(X)R(I)$, Lemma~\ref{lm:saddle-is-maximizer} implies that \cDist is a maximizer
-    of the function $g$.
+    By Lemmas~\ref{lm:saddle-exists} and~\ref{lm:saddle-maximizes-g}, there exists a saddle point $(\cDist, R)$
+    for $\objf[]$, where \cDist is a maximizer of the function~$g$.
+    By Lemma~\ref{lm:saddle-is-central}, \cDist is a \cd, and Theorem~\ref{th:centrality} implies that \cDist is unique.
 \end{proof}
 
 \begin{corollary}
     \label{cor:imperfection}
     Let \cDist be the \cd,
-    and let $P$ be a convex combination of the elements of \setQ, i.e.,
-    \[
-        P(x) = \sum_i Q_i(x) R(i),
-    \]
-    where $R$ is a probability distribution.
-    Then there exists an index $k$ in the support of $R$ such that
+    and let $P$ be a convex combination of the elements of $\set{R} \subseteq \setQ$.
+    Then there exists $Q_k \in \set{R}$ such that
     \begin{equation*}
         \sFunc[\cDist(X)][\setQ] \geq \klx[Q_k].
     \end{equation*}
@@ -353,15 +379,15 @@ like the center of a circle, the central distribution is equidistant from the bo
 
 \begin{proof}
     We proceed by contradiction.
-    Suppose that for every $k$ in the support of $R$, we have $\kl[Q_k] > \sFunc[\cDist]$.
+    Suppose that for every \inSet{R}, we have $\kl > \sFunc[\cDist]$.
     That implies
     \[
-        g(P) > \sFunc[\cDist] = g(C),
+        g(P) > \sFunc[\cDist],
     \]
-    where $g$ is the function defined in
-    Lemma~\ref{lm:saddle-is-maximizer}.
+    where $g$ is the function defined in Lemma~\ref{lm:saddle-maximizes-g}.
     Note that $g(P)$ is defined, because $P$ is a convex combination of the elements of \setQ.
 
-    However, by Theorem~\ref{th:C-maximizes-g}, the distribution $C$ maximizes $g$, which contradicts the
-    inequality $g(P) > g(C)$.
+    Theorem~\ref{th:centrality} implies that $g(C) = \sFunc[\cDist]$.
+    However, by Theorem~\ref{th:C-maximizes-g}, the central distribution $C$ maximizes $g$, which
+    contradicts the inequality $g(P) > g(C)$.
 \end{proof}

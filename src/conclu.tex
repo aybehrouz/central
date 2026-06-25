@@ -1,17 +1,25 @@
-We introduced the central distribution, a minimax-KL representative of a set or hierarchy of probability distributions.
-This provides an information-theoretic framework for converting set-valued and hierarchical uncertainty into a
-single distribution suitable for Bayesian inference.
+In this paper, we introduced the central distribution as a representative probability distribution for a set or
+hierarchy of admissible distributions.
+The central distribution is characterized by a minimax-KL principle, providing a principled probabilistic
+representation of partial knowledge while remaining within the standard framework of Bayesian probability theory.
 
-We established existence, uniqueness, and optimization-theoretic characterizations of central distributions,
-introduced central divergence as a measure of representational quality, and determined bounds for approximating
+For finite sets of distributions, we established existence, uniqueness, and characterization results and showed that
+central distributions admit a convex-combination representation.
+We extended the framework to hierarchies of distributions and introduced the notion of a central prior for
+parametric families.
+To address problems involving growing sequences of observations, we proposed the concept of asymptotic central
+distributions and derived sufficient conditions for asymptotic centrality.
+The resulting asymptotic framework suggests a connection between central priors and classical noninformative priors,
+including Jeffreys' prior in several standard models.
+In addition, we developed approximation bounds that lead to practical procedures for constructing approximate
 central distributions.
-We further developed the corresponding notion of a central prior and identified a sufficient fixed-point condition
-linking central priors to Bernardo's reference prior methodology.
-We also proposed an asymptotic extension of the framework for future investigation.
 
-The framework also provides a natural way to represent uncertainty about model structure through hierarchical
-collections of distributions.
-As a proof of concept, we illustrated this idea in a feature selection setting.
+The framework suggests a new way of representing uncertainty about probabilistic models themselves.
+Rather than selecting a single model or beginning with a prior distribution over models, uncertainty may be
+represented directly through sets or hierarchies of admissible distributions and summarized by their corresponding
+central distributions.
+From this perspective, central distributions provide a bridge between robust, information-theoretic, and Bayesian
+approaches.
 
 Several important questions remain open.
 In particular, a rigorous extension of the theory to general parametric families,
@@ -19,5 +27,5 @@ computational methods for computing and approximating central distributions,
 and a rigorous asymptotic theory for central priors require further investigation.
 It would also be valuable to study central distributions in a broader range of practical statistical problems in
 order to better understand their computational and inferential properties.
-We hope that the central distribution framework provides a useful foundation for the study of Bayesian inference and
-hierarchical uncertainty from an information-theoretic perspective.
+We hope that the central distribution framework provides a useful foundation for studying noninformative priors and
+hierarchical partial knowledge from an information-theoretic perspective.

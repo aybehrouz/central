@@ -1,7 +1,7 @@
 \newcommandx{\sFuncExpand}[3][1=P, 2=\setQ, 3=X]{\sup_{Q \in #2} \klx[Q][#1][#3]}
 \newcommandx{\sFunc}[2][1=P, 2=, usedefault]{\measure{S}{#2}{#1}}
 \newcommandx{\klExp}[3][1=Q, 2=P, 3=x]{\sum_{#3} #1(#3) \ln \frac{#1(#3)}{#2(#3)}}
-\newcommand{\inSet}[1]{\mathFix{#1 \in \set{#1}}}
+
 
 \newcommand{\saddle}{\mathFix{(\saddP, \saddR)}}
 \newcommand{\fExp}{\sum_i R(i) \klExp[Q_i]}
@@ -64,7 +64,7 @@ knowledge.
 \begin{notation}[Kullback–Leibler Divergence]
     For probability distributions $P$ and $Q$, $\klx$
     denotes the Kullback--Leibler divergence between $P$ and $Q$ over a random variable $X$.
-    For a discrete random variable $X$ we have
+    For a discrete random variable $X$ with finite support we have
     \[
         \klx = \klExp.
     \]
@@ -100,9 +100,9 @@ central distributions and feature selection, a connection that will become clear
     \label{def:hierarchy-of-distributions}
     A \emph{hierarchy of distributions} over $X$ is defined recursively as follows:
     \begin{itemize}
-        \item Any probability distribution over $X$ is a hierarchy of distributions over $X$.
+        \item Any probability distribution over $X$ is a hierarchy of distributions over~$X$.
         \item Any set whose elements are hierarchies of distributions over $X$ is itself a hierarchy of
-        distributions over $X$.
+        distributions over~$X$.
     \end{itemize}
 \end{definition}
 

@@ -1,5 +1,6 @@
 \newcommand{\uniConverge}[2]{\toInf  \sup_{#1} \left| {#2} \right| = 0}
 \newcommand{\estLike}{Q \left( \est_{n} \mid \paramVal \right) }
+\newcommand{\TVdist}[3][(S_{n})]{\left\| #2#1 - #3#1 \right\|_{\mathrm{TV}}}
 
 Many probabilistic models are naturally formulated in terms of a sequence of random variables whose length is not
 fixed in advance.
@@ -13,16 +14,14 @@ infinite sequence of random variables:
 \]
 The collection \infSeq{S} therefore defines a second sequence of random variables.
 
-In many settings, our uncertainty about $S_n$ can be represented by a central distribution.
-A prominent example arises when the sequence is assumed to be exchangeable.
-As discussed earlier, exchangeability can be viewed as a form of partial knowledge that defines a set of plausible
-distributions, from which a central distribution for $S_n$ can be constructed.
+Given $n$ observations, we may consider a set of admissible distributions over $S_n$ and then construct a central
+distribution of that set for~$S_n$.
+However, the resulting central distribution generally depends on the sequence length~$n$.
 
-However, this central distribution generally depends on the sequence length~$n$.
-In this work, we adopt the principle that the probability measure used to represent prior beliefs about the
-environment should depend only on the available information about the environment itself,
-and not on arbitrary aspects of the experimental setup,
+We believe that the probability measure used to represent partial knowledge about an environment should depend
+only on the available information about that environment, and not on arbitrary aspects of the experimental setup,
 such as the number of variables under consideration.
+This motivates the search for a single probability measure that remains representative across all sequence lengths.
 
 Importantly, a distribution defined over a longer sequence induces marginal distributions over all shorter
 initial segments.
@@ -30,13 +29,13 @@ This suggests that, rather than constructing a separate central distribution for
 we should seek a single probability measure over the infinite sequence, from which the distributions of all
 finite initial segments can be obtained as marginals.
 
-This motivates the construction of a central distribution that is well defined over~$S_{\infty}$.
+This motivates the construction of a central distribution that is well defined for~$S_{\infty}$.
 
-\begin{definition} [Asymptotic Central Distribution] \label{def:asymptotic-central}
+\begin{definition}[Asymptotic Central Distribution] \label{def:asymptotic-central}
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $S_n$.
     Let \cDist be also a probability measure that defines a distribution over every $S_n$.
-    \cDist is a central distribution of \setQ for \infSeq{S}, if and only if we have
+    \cDist is called a \cd[\infSeq{S}] if,
     \begin{equation*}
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \end{equation*}
@@ -45,6 +44,37 @@ This motivates the construction of a central distribution that is well defined o
 Intuitively, this definition states that as $n \to \infty$ the distribution that $C$ induces over $S_n$ becomes
 increasingly similar to a central distribution for~$S_n$.
 In other words, \cDist is a central distribution for the infinite sequence~$S_{\infty}$.
+
+\begin{proposition}[Asymptotic Uniqueness] \label{prop:asymptotic-unique}
+    Suppose there exists $M$ such that for every $n \geq M$, \setQ has a unique central
+    distribution $\cDist_{n}$ for~$S_n$.
+    Then any two central distributions \cDist and $\cDist'$ of \setQ for \infSeq{S},
+    are asymptotically equivalent in total variation:
+    \[
+        \toInf \TVdist{\cDist}{\cDist'} = 0.
+    \]
+    Here, $\left\| \none \right\|_{\mathrm{TV}}$ denotes total variation distance.
+\end{proposition}
+
+\begin{proof}
+    Let \cDist and $\cDist'$ be two central distributions of \setQ for \infSeq{S}.
+    Since, for $n \geq M$, $\cDist_n$ is the unique \cd[S_n], we have
+    \[
+        \toInf \klx[\cDist_n][\cDist][S_n] = \toInf \klx[\cDist_n][\cDist'][S_n] = 0.
+    \]
+    By Pinsker's inequality and the squeeze theorem,
+    \begin{equation*}
+        \toInf \TVdist{\cDist_n}{\cDist} = \toInf \TVdist{\cDist_n}{\cDist'} = 0.
+    \end{equation*}
+    Using the triangle inequality,
+    \[
+        \TVdist{\cDist}{\cDist'} \leq \TVdist{\cDist_n}{\cDist} + \TVdist{\cDist_n}{\cDist'},
+    \]
+    the squeeze theorem yields
+    \[
+        \toInf \TVdist{\cDist}{\cDist'} = 0. \qedhere
+    \]
+\end{proof}
 
 Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in this asymptotic setting.
 
@@ -56,19 +86,19 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
     \[
         \uniConverge{\inSet{Q}}{\klx[][\cDist][S_n] - \lambda_n},
     \]
-    then \cDist is a \cd[\infSeq{S}].
+    then \cDist is a \cd[\infSeq{S}], and is unique up to asymptotic total variation equivalence.
 \end{theorem}
 
 \begin{proof}
     For every $n$, let $\cDist_n$ be the unique \cd[S_n], and let $\mu_n$ denote the corresponding constant
     from Theorem~\ref{th:centrality}.
-    Since \cDist is a convex combination of elements of \setQ, $\cDist(S_n)$ is well-defined and
+    Since \cDist is a convex combination of elements of \setQ, it defines a distribution over $S_n$, and
     Corollary~\ref{cor:imperfection} implies
     \begin{equation*}
         \mu_n \geq \inf_{\inSet{Q}} \klx[][\cDist][S_n],
         \label{eq:th_lim_central_proof_inf}
     \end{equation*}
-    and, by the definition of a central distribution,
+    By the definition of a central distribution,
     \begin{equation*}
         \mu_n \leq \sFunc[\cDist(S_n)].
         \label{eq:th_lim_central_proof_sup}
@@ -102,15 +132,13 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \]
     Thus, by Definition~\ref{def:asymptotic-central}, \cDist is a \cd[\infSeq{S}].
+    Since for every $n$, $\cDist_n$ is the unique \cd[S_n], Proposition~\ref{prop:asymptotic-unique} implies that
+    the \cd[\infSeq{S}] is unique up to asymptotic total variation equivalence.
 \end{proof}
 
-Theorem~\ref{th:limiting-centrality} provides a sufficient condition for asymptotic centrality,
-while general existence and uniqueness results for infinite sequences remain open.
-
-We present the following construction as a conjectured framework.
-Under standard regularity conditions, this approach motivates the functional form of central priors and serves as a
-conceptual bridge to stimulate future formal proofs.
-This construction is motivated by a similar asymptotic approach in~\cite{BERNARDO200517}.
+We present the following conjecture as a heuristic framework for understanding the asymptotic form of central
+priors.
+The argument is inspired by a similar asymptotic approach in~\cite{BERNARDO200517}.
 
 \begin{conjecture}
     Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures,
@@ -157,7 +185,7 @@ Letting $\lambda_n = \ln \mu_n - \ln k$, we observe that
     \uniConverge{\paramVal}{\Dkl{\estLike}{C(\est_n)} - \lambda_n}.
 \end{equation*}
 By a parametric extension of Theorem~\ref{th:limiting-centrality}, it can be shown that $\cDist$ is a
-\cd[\infSeq{\est}]\ and therefore $\cPrior(\paramVal)$ is a central prior for the estimator sequence~\infSeq{\est}.
+\cd[\infSeq{\est}], and therefore $\cPrior(\paramVal)$ is a central prior for the estimator sequence~\infSeq{\est}.
 
 \begin{example}[Binomial Experiment]
     \newcommand{\pv}{\paramVal}

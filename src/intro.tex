@@ -17,6 +17,7 @@ In Bayesian decision theory, the optimal strategy is the one that minimizes the 
 \begin{equation*}
     S_{\text{opt}} = \arg\min_S\sum_a\sum_{x,e} \util S(a \mid e)\envDist(x, e).
 \end{equation*}
+
 One can show that there always exists a deterministic optimal strategy,
 namely a strategy that, for each evidence $e$, selects the action minimizing the expected loss conditioned
 on $e$:
@@ -51,12 +52,14 @@ With an appropriate choice of $\envDist(x,e)$, the optimal strategy based on $E$
 components of the evidence and behave as though it were based on a lower-dimensional representation $E'$.
 In this sense, Bayesian inference can perform a form of automatic feature selection.
 
-In many statistical models, specifying $\envDist(x,e)$ amounts to choosing a prior distribution, so the ability to
-promote relevant information depends on how prior knowledge about the environment is encoded.
-This motivates the search for noninformative priors that represent partial knowledge while preserving such behavior.
-Many standard choices, including flat priors, do not appear to naturally encourage this.
-The central distribution framework developed in the present work can be viewed as an attempt to address this problem by
-providing a principled representation of partial knowledge for Bayesian inference.
+In many statistical models, specifying $\envDist(x,e)$ amounts to choosing a prior distribution.
+Consequently, the ability to promote relevant information depends on how prior knowledge about the environment is
+encoded.
+This motivates the search for noninformative priors that represent partial knowledge in a manner that naturally
+gives rise to this behavior.
+Many standard choices, including flat priors, do not appear to do so.
+The central distribution framework developed in the present work can be viewed as an attempt to address this problem
+by providing a principled representation of partial knowledge for Bayesian inference.
 
 In this paper, we introduce the central distribution, a representative of a set, or more generally a
 hierarchy, of probability distributions.

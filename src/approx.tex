@@ -4,7 +4,7 @@
 
 Suppose we want to approximate a central distribution of a hierarchy of distributions~\set{h}.
 To do so, we need a measure that quantifies the quality of an approximation.
-A natural choice is the central divergence introduced in Definition~\ref{def:central-divergence}.
+A natural choice for this purpose is the central divergence introduced in Definition~\ref{def:central-divergence}.
 Since central distributions are intended to serve as representatives of hierarchies of distributions,
 central divergence can be viewed as a measure of how well a probability distribution represents a hierarchy.
 
@@ -52,7 +52,7 @@ Therefore, we state the next theorem in terms of unnormalized measures.
     \end{equation}
 
     Let $\tilde{P}(X) = Z P(X)$, where $Z > 0$ is a normalization constant.
-    Then for any~$Q$,
+    Then for any probability distribution~$Q$,
     \[
         \kl = \ln Z - \engFunc.
     \]
@@ -65,11 +65,12 @@ Therefore, we state the next theorem in terms of unnormalized measures.
 \end{proof}
 
 To compute an approximate central distribution, Theorem~\ref{th:central-approx} suggests constructing a positive
-measure $\tilde P$ for which $\engFunc$ is approximately constant over \setQ.
+measure $\tilde P$ for which $\engFunc$ is approximately constant with respect to $Q$.
 We may choose this constant to be zero and seek
 \[
-    \engFunc \approx 0.
+    \engFunc \approx 0,
 \]
+for every \inSet{Q}.
 In addition, the normalized distribution $P$ should be close enough to a convex combination of the elements of \setQ.
 
 Since central distributions are defined through marginal distributions, their construction may be viewed as
@@ -108,7 +109,7 @@ and the resulting probability distribution is given by
 
 It should be noted that the quality of the approximation depends on how well $\tilde P$ can be represented as a
 nonnegative linear combination of distributions \inSet[Q_{\paramVal}]{Q}.
-This can be assessed approximately using a sample set of parameter values \set{S} by finding nonnegative weights $w_i$
+This can be assessed approximately using a sample set of parameter values \set{S}, by finding nonnegative weights $w_i$
 such that
 \[
     \tilde P(x) \approx \sum_i w_i Q(x \mid \paramVal_i),

@@ -86,7 +86,7 @@ a deterministic function of the attributes (CD-Det), and one allowing the target
 probability distribution given the attributes (CD-Prob).
 Both versions are constructed by aggregating over $2^{12}$ fused multinomial models, corresponding to all subsets of
 the 12 attributes.
-As a baseline, we also trained a decision tree classifier (DTree).
+As a baseline, we also trained a decision tree classifier (D-Tree).
 All methods were trained on the same training data and evaluated on the same test data.
 Each configuration was repeated for 100 independent trials, and we reported the average accuracy (correct
 predictions divided by total test instances) over these trials.
@@ -117,7 +117,7 @@ predictions divided by total test instances) over these trials.
             \addplot+[mark=triangle*, black] coordinates {
                 (3, 0.1885) (4, 0.1881) (5, 0.19) (6, 0.189) (7, 0.188) (8, 0.1883) (9, 0.1869) (10, 0.1862) (11, 0.1864) (12, 0.1855)
             };
-            \addlegendentry{DTree}
+            \addlegendentry{D-Tree}
 
         \end{axis}
     \end{tikzpicture}
@@ -143,11 +143,11 @@ predictions divided by total test instances) over these trials.
             };
             \addlegendentry{CD-Prob}
 
-            % --- DTree ---
+            % --- D-Tree ---
             \addplot+[black, mark=triangle*, line width=0.9pt] coordinates {
                 (3, 0.3685) (4, 0.3668) (5, 0.3609) (6, 0.3589) (7, 0.358) (8, 0.357) (9, 0.3571) (10, 0.3545) (11, 0.3528) (12, 0.3516)
             };
-            \addlegendentry{DTree}
+            \addlegendentry{D-Tree}
 
         \end{axis}
     \end{tikzpicture}

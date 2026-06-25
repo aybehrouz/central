@@ -14,16 +14,14 @@ infinite sequence of random variables:
 \]
 The collection \infSeq{S} therefore defines a second sequence of random variables.
 
-In many settings, our uncertainty about $S_n$ can be represented by a central distribution.
-A prominent example arises when the sequence is assumed to be exchangeable.
-As discussed earlier, exchangeability can be viewed as a form of partial knowledge that defines a set of plausible
-distributions, from which a central distribution for $S_n$ can be constructed.
+Given $n$ observations, we may consider a set of admissible distributions over $S_n$ and then construct a central
+distribution of that set for~$S_n$.
+However, the resulting central distribution generally depends on the sequence length~$n$.
 
-However, this central distribution generally depends on the sequence length~$n$.
-In this work, we adopt the principle that the probability measure used to represent prior beliefs about the
-environment should depend only on the available information about the environment itself,
-and not on arbitrary aspects of the experimental setup,
+We believe that the probability measure used to represent partial knowledge about an environment should depend
+only on the available information about that environment, and not on arbitrary aspects of the experimental setup,
 such as the number of variables under consideration.
+This motivates the search for a single probability measure that remains representative across all sequence lengths.
 
 Importantly, a distribution defined over a longer sequence induces marginal distributions over all shorter
 initial segments.
@@ -31,13 +29,13 @@ This suggests that, rather than constructing a separate central distribution for
 we should seek a single probability measure over the infinite sequence, from which the distributions of all
 finite initial segments can be obtained as marginals.
 
-This motivates the construction of a central distribution that is well defined over~$S_{\infty}$.
+This motivates the construction of a central distribution that is well defined for~$S_{\infty}$.
 
 \begin{definition}[Asymptotic Central Distribution] \label{def:asymptotic-central}
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $S_n$.
     Let \cDist be also a probability measure that defines a distribution over every $S_n$.
-    \cDist is a \cd[\infSeq{S}], if and only if we have
+    \cDist is called a \cd[\infSeq{S}] if,
     \begin{equation*}
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \end{equation*}
@@ -134,17 +132,13 @@ Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies i
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \]
     Thus, by Definition~\ref{def:asymptotic-central}, \cDist is a \cd[\infSeq{S}].
-    Since $\cDist_n$ is the unique \cd[S_n], Proposition~\ref{prop:asymptotic-unique} implies that the \cd[\infSeq{S}]
-    is unique up to asymptotic total variation equivalence.
+    Since for every $n$, $\cDist_n$ is the unique \cd[S_n], Proposition~\ref{prop:asymptotic-unique} implies that
+    the \cd[\infSeq{S}] is unique up to asymptotic total variation equivalence.
 \end{proof}
 
-Theorem~\ref{th:limiting-centrality} provides a sufficient condition for asymptotic centrality,
-while general existence and uniqueness results for infinite sequences remain open.
-
-We present the following construction as a conjectured framework.
-Under standard regularity conditions, this approach motivates the functional form of central priors and serves as a
-conceptual bridge to stimulate future formal proofs.
-This construction is motivated by a similar asymptotic approach in~\cite{BERNARDO200517}.
+We present the following conjecture as a heuristic framework for understanding the asymptotic form of central
+priors.
+The argument is inspired by a similar asymptotic approach in~\cite{BERNARDO200517}.
 
 \begin{conjecture}
     Let \infSeq{\est} be a sequence of random variables, and let \setQ be a set of probability measures,
@@ -191,7 +185,7 @@ Letting $\lambda_n = \ln \mu_n - \ln k$, we observe that
     \uniConverge{\paramVal}{\Dkl{\estLike}{C(\est_n)} - \lambda_n}.
 \end{equation*}
 By a parametric extension of Theorem~\ref{th:limiting-centrality}, it can be shown that $\cDist$ is a
-\cd[\infSeq{\est}]\ and therefore $\cPrior(\paramVal)$ is a central prior for the estimator sequence~\infSeq{\est}.
+\cd[\infSeq{\est}], and therefore $\cPrior(\paramVal)$ is a central prior for the estimator sequence~\infSeq{\est}.
 
 \begin{example}[Binomial Experiment]
     \newcommand{\pv}{\paramVal}

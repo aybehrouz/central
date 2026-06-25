@@ -1,6 +1,6 @@
 \newcommand{\Qminus}[1][R]{\setQ \setminus{\{#1\}}}
 
-The results of the previous subsection were established under the assumption that \setQ is finite.
+The results of the previous subsection were established under the assumption that \setQ was finite.
 Many of the underlying constructions, however, can be extended to parametric families
 in which \setQ is indexed by a finite-dimensional parameter vector \param:
 \[
@@ -25,11 +25,11 @@ beyond the scope of the present paper.
 
 \begin{definition}[Interior Distribution] \label{def:interior}
     Let \setQ be a set of probability distributions over a random variable $X$.
-    A distribution $R \in \setQ$ is called an \emph{interior distribution} of \setQ if and only if
+    A distribution $R \in \setQ$ is called an \emph{interior distribution} of \setQ if,
     the sets \setQ and $\Qminus$ have the same central distributions for $X$.
 \end{definition}
 
-\begin{theorem}
+\begin{proposition}
     Let $X$ be a discrete random variable with finite support, and let \setQ be a finite set of probability
     distributions over $X$.
     Let \cDist be the \cd.
@@ -38,7 +38,7 @@ beyond the scope of the present paper.
         \kl[Q_k][\cDist] < \sFunc[\cDist][\setQ],
     \end{equation}
     then $Q_k$ is an interior distribution of \setQ.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
     By Theorem~\ref{th:centrality}, \cDist is a convex combination of elements of \setQ,
@@ -50,7 +50,7 @@ beyond the scope of the present paper.
 
 \begin{theorem}
     Let $X$ be a random variable and let \setQ be a set of probability distributions over $X$.
-    If $R \in \setQ$ can be expressed as a convex combination of elements of $\Qminus$, then $R$ is an
+    If $R \in \setQ$ can be expressed as a convex combination of the elements of $\Qminus$, then $R$ is an
     interior distribution of \setQ.
 \end{theorem}
 
@@ -114,13 +114,13 @@ model parameters.
 \end{proof}
 
 A particularly important special case arises when $T$ is a deterministic function of $X$, say $T=f(X)$.
-In this case,
+In this case
 \[
     P(X = x) = P(X = x, T = f(x)),
 \]
-and therefore a central distribution for $X$ can be constructed directly from a central distribution for $T$ using
+and a central distribution for $X$ can be constructed directly from a central distribution for $T$ using
 Theorem~\ref{th:estimator-to-var}.
-Thus, the primary application of this theorem is to derive central distributions for variables of interest from
+Therefore, the primary application of this theorem is to derive central distributions for variables of interest from
 central distributions of sufficient statistics.
 
 The following theorem provides a sufficient fixed point characterization of central priors
@@ -141,8 +141,8 @@ prior methodology~\cite{BERNARDO200517}.
 \begin{proof}
     \newcommand{\cp}{\cPrior(\paramVal{})}
     Since $Q_{\paramVal} \in \setQ$ is a probability distribution,
-    for every \paramVal there exists $x$ such that $Q_{\paramVal}(x) > 0$.
-    Equation~\ref{eq:central-prior} therefore implies $\cPrior(\tIx) > 0$,
+    for every \paramVal there exists $x_0$ such that $Q_{\paramVal}(x_0) > 0$.
+    Equation~\ref{eq:central-prior} therefore implies $\cPrior(\tIx_0) > 0$,
     and consequently $\cp > 0$.
 
     Using Equation~\ref{eq:central-prior} and $\cp > 0$, we obtain

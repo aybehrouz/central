@@ -28,7 +28,7 @@ on $e$:
 Now suppose that, instead of basing our decisions on the original evidence $E$,
 we choose to use a transformed version~$E'$.
 In practice, the evidence available to the agent is fixed by the environment.
-However, the agent may choose to base its decisions on a deterministic transformation $E' = f(E)$.
+However, the agent may choose to base their decisions on a deterministic transformation $E' = f(E)$.
 This is analogous to feature selection in machine learning, where a high-dimensional observation is replaced by a
 lower-dimensional representation.
 
@@ -55,7 +55,7 @@ In this sense, Bayesian inference can perform a form of automatic feature select
 In many statistical models, specifying $\envDist(x,e)$ amounts to choosing a prior distribution.
 Consequently, the ability to promote relevant information depends on how prior knowledge about the environment is
 encoded.
-The difficulty therefore does not lie in Bayesian decision theory itself.
+The difficulty, therefore, does not lie in Bayesian decision theory itself.
 Rather, it lies in how partial knowledge is represented.
 If partial knowledge is represented appropriately, standard Bayesian inference can naturally extract relevant
 information while disregarding irrelevant aspects of the evidence.
@@ -66,11 +66,13 @@ by providing a principled representation of partial knowledge for Bayesian infer
 In this paper, we introduce the \emph{central distribution}, an information-theoretic representation of partial
 knowledge that converts set-valued, and more generally hierarchical, uncertainty into a single probability
 distribution suitable for Bayesian inference.
+
 We establish the theoretical foundations of the framework by developing the theory of central distributions for
 finite sets of probability distributions, including existence, uniqueness, and minimax characterizations,
 and by introducing the corresponding notion of central priors for parametric models.
 We further identify a sufficient fixed-point condition linking central priors to objective Bayesian reference
 analysis~\cite{BERNARDO200517}.
+
 Building on these foundations, we investigate asymptotic extensions of the framework and develop a practical
 approximation method for constructing central distributions.
 Finally, we illustrate how representing uncertainty about model structure through hierarchical central distributions

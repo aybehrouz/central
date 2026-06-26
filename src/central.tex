@@ -77,14 +77,14 @@ knowledge.
 
 \begin{definition}\label{def:center-of-set}
     Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
-    We call a distribution $C$ a \emph{\cd}\ if, for every probability
+    We say that a distribution $C$ is a \emph{\cd}\ if for any probability
     distribution $P$, we have
     \begin{equation*}
         \sFuncExpand[\cDist] \leq \sFuncExpand[P],
     \end{equation*}
 \end{definition}
 
-By convention, any probability distribution is regarded as its own central distribution.
+By convention, every probability distribution is regarded as its own central distribution.
 
 Under this definition, the central distribution of \setQ is not necessarily an element of \setQ.
 That is, the distribution that best represents the set in the specified sense may lie outside the set it summarizes.
@@ -125,7 +125,7 @@ central distributions.
     \begin{equation*}
         \myDiv = \inf_{\cDist} \klx[{\cDist}],
     \end{equation*}
-    where $\cDist$ denotes a \cd[X][\set{H}].
+    where the infimum is taken over all central distributions $\cDist$ of \set{H} for $X$.
 \end{definition}
 
 So far, this definition applies only when the hierarchy is a single set of distributions.
@@ -134,8 +134,8 @@ The following definition extends the construction recursively to general hierarc
 \begin{definition}[Central Distribution]
     \label{def:central-dist}
     Let $X$ be a random variable, and let \setQQ be a hierarchy of distributions over $X$.
-    We call a distribution \cDist a \emph{\cd[X][\setQQ]}\ if,
-    for every probability distribution $P$, we have:
+    We say that a distribution \cDist is a \emph{\cd[X][\setQQ]}\ if
+    for any probability distribution $P$, we have:
     \begin{equation*}
         \sup_{\set{H} \in \setQQ} \myDiv[\cDist]  \leq \sup_{\set{H} \in \setQQ} \myDiv.
     \end{equation*}

@@ -77,7 +77,7 @@ knowledge.
 
 \begin{definition}\label{def:center-of-set}
     Let $X$ be a random variable and \setQ be a set of probability distributions over $X$.
-    We call a distribution $C$ a \emph{\cd}\ if, for every probability
+    We say that a distribution $C$ is a \emph{\cd}\ if for every probability
     distribution $P$, we have
     \begin{equation*}
         \sFuncExpand[\cDist] \leq \sFuncExpand[P],
@@ -120,12 +120,12 @@ central distributions.
 
 \begin{definition}[Central Divergence]
     \label{def:central-divergence}
-    For any distribution $P$, we define the \emph{central divergence} of $P$ from a hierarchy of distributions \set{H},
+    For every distribution $P$, we define the \emph{central divergence} of $P$ from a hierarchy of distributions \set{H},
     with respect to a random variable $X$, as follows:
     \begin{equation*}
         \myDiv = \inf_{\cDist} \klx[{\cDist}],
     \end{equation*}
-    where $\cDist$ denotes a \cd[X][\set{H}].
+    where the infimum is taken over all central distributions of \set{H} for $X$.
 \end{definition}
 
 So far, this definition applies only when the hierarchy is a single set of distributions.
@@ -134,7 +134,7 @@ The following definition extends the construction recursively to general hierarc
 \begin{definition}[Central Distribution]
     \label{def:central-dist}
     Let $X$ be a random variable, and let \setQQ be a hierarchy of distributions over $X$.
-    We call a distribution \cDist a \emph{\cd[X][\setQQ]}\ if,
+    We say that a distribution \cDist is a \emph{\cd[X][\setQQ]}\ if
     for every probability distribution $P$, we have:
     \begin{equation*}
         \sup_{\set{H} \in \setQQ} \myDiv[\cDist]  \leq \sup_{\set{H} \in \setQQ} \myDiv.

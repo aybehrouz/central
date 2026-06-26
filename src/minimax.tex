@@ -26,7 +26,8 @@ the use of standard techniques from convex optimization.
         \objf \coloneqq \sum_i \klx[Q_i] R(i),
     \end{equation*}
     where $P$ and $R$ are probability distributions, $Q_i \in \setQ$ and the index $i$ ranges over all elements of~\setQ.
-    Then there exists a saddle point for~$\objf[]$.
+
+    There exists a saddle point for~$\objf[]$.
 \end{lemma}
 
 \begin{proof}
@@ -58,7 +59,7 @@ the use of standard techniques from convex optimization.
 \begin{proof}
     \newcommand{\fsaddle}{\objf[\saddP][\saddR]}
     Let $P$ be an arbitrary probability distribution over $X$, and \saddle be a saddle point for $\objf[]$.
-    As $P$ is a probability distribution, $\objf[P][\saddR]$ is defined, and by the definition of a saddle point
+    As $P$ is a probability distribution, $\objf[P][\saddR]$ is defined, and by Definition~\ref{def:saddle-point}
     \begin{equation}
         \label{eq:th_proof_saddle_lq_dx}
         \fsaddle \leq \objf[P][\saddR].
@@ -136,10 +137,9 @@ the use of standard techniques from convex optimization.
     Additionally, both $\hat{f}(P,\none)$ and $\hat{f}(\none, R)$ are differentiable on their domains.
     For any fixed $P$, $\hat{f}(P,\none)$ is an affine function and is concave.
     For a fixed solution to the second optimization problem denoted by $\hat{R}$, we can write
-    \begin{equation}
-        \label{eq:simplified_f}
+    \begin{equation*}
         \hat{f}(P,\hat{R}) = c - \sum_{i,x} \hat{R}(i) Q_i(x) \ln P(x),
-    \end{equation}
+    \end{equation*}
     where $c$ is not a function of $P$.
     Since $\hat{R}$ is a solution to the second optimization problem, it satisfies the corresponding constraints and
     is therefore a valid probability distribution.

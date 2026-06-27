@@ -21,7 +21,8 @@ However, the resulting central distribution generally depends on the sequence le
 We believe that the probability measure used to represent partial knowledge about an environment should depend
 only on the available information about that environment, and not on arbitrary aspects of the experimental setup,
 such as the number of variables under consideration.
-This motivates the search for a single probability measure that remains representative across all sequence lengths.
+Therefore, our goal is to identify a single probability measure that remains representative across all sequence
+lengths.
 
 Importantly, a distribution defined over a longer sequence induces marginal distributions over all shorter
 initial segments.
@@ -29,7 +30,7 @@ This suggests that, rather than constructing a separate central distribution for
 we should seek a single probability measure over the infinite sequence, from which the distributions of all
 finite initial segments can be obtained as marginals.
 
-This motivates the construction of a central distribution that is well defined for the infinite sequence~$S_{\infty}$.
+This leads to the following definition of a central distribution on the infinite sequence~$S_{\infty}$.
 
 \begin{definition}[Asymptotic Central Distribution] \label{def:asymptotic-central}
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,

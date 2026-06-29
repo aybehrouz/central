@@ -46,10 +46,13 @@ Such nesting can continue recursively, yielding a hierarchical structure.
 Crucially, the choice of hierarchical organization is itself informative: grouping distributions into subsets
 expresses that certain alternatives are regarded as belonging to a common epistemic category and should therefore be
 aggregated before being compared with alternatives in other groups.
-Therefore, the hierarchy encodes information beyond the collection of leaf distributions alone.
+Thus, the hierarchy encodes information beyond the collection of leaf distributions alone.
 
-This organization may be interpreted as introducing multiple layers of latent structural decisions,
-where higher-level choices restrict the admissible lower-level alternatives.
+This organization reflects the fact that partial knowledge is often expressed at different levels of abstraction.
+High-level assumptions determine which classes of models are admissible, while lower-level assumptions further
+refine the remaining possibilities.
+A hierarchical representation therefore provides a natural way to encode partial knowledge by allowing successive
+structural assumptions to progressively restrict the space of admissible distributions.
 
 Within a Bayesian framework, inference ultimately requires a single probability measure.
 Hence, to use hierarchical partial knowledge in Bayesian inference, we require a principled method for
@@ -58,8 +61,8 @@ the informational structure encoded by the hierarchy.
 
 From a minimax perspective, when uncertainty is represented by a set of candidate distributions, a natural
 representative distribution is one that minimizes the worst-case divergence to the members of the set.
-Such a distribution may be viewed as the most conservative or robust single-distribution summary of the available
-knowledge.
+Such a distribution may be viewed as the most \emph{conservative} or \emph{robust} single-distribution summary of the
+available knowledge.
 
 \begin{notation}[Kullback–Leibler Divergence]
     For probability distributions $P$ and $Q$, $\klx$
@@ -214,8 +217,8 @@ By organizing candidate models hierarchically, one can encode preferences over s
 favoring sparse subsets, grouping related attributes, or privileging particular interactions.
 
 Candidate feature subsets typically induce overlapping families of admissible distributions.
-Distributions representing simpler dependency structure may belong simultaneously to many such families, whereas more
-complex dependency patterns belong to fewer.
+Models with simpler dependency structure are often compatible with multiple candidate feature subsets, whereas
+models with more complex dependencies are compatible with fewer.
 As a result, hierarchical aggregation through central distributions can induce a preference toward structurally
 simpler models by naturally assigning more weight to distributions compatible with multiple structural hypotheses.
 

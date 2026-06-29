@@ -36,7 +36,7 @@ This leads to the following definition of a central distribution on the infinite
     Let \infSeq{S} be a sequence of random variables and \setQ be a set of probability measures,
     where each element of \setQ defines a distribution over each $S_n$.
     Let \cDist also be a probability measure that defines a distribution over every $S_n$.
-    \cDist is called a \cd[\infSeq{S}] if,
+    We say that \cDist is a \emph{\cd[\infSeq{S}]} if,
     \begin{equation*}
         \toInf \myDiv[\cDist][Q][(S_n)] = 0.
     \end{equation*}
@@ -77,7 +77,7 @@ In other words, \cDist is a central distribution for the infinite sequence~$S_{\
     \]
 \end{proof}
 
-Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in this asymptotic setting.
+Our next goal is to extend Theorem~\ref{th:centrality} so that it also applies in the asymptotic setting.
 
 \begin{theorem}[Asymptotic Centrality] \label{th:limiting-centrality}
     Let \infSeq{S} be a sequence of discrete random variables with finite support and let \setQ be a finite set of
@@ -188,6 +188,12 @@ Letting $\lambda_n = \ln \mu_n - \ln k$, we observe that
 By a parametric extension of Theorem~\ref{th:limiting-centrality}, it can be shown that $\cDist$ is a
 \cd[\infSeq{\est}], and therefore $\cPrior(\paramVal)$ is a central prior for the estimator sequence~\infSeq{\est}.
 
+When dealing with layered ignorance and seeking the central distribution of a hierarchy of distributions,
+we typically encounter situations in which a given level of the hierarchy contains only finitely many alternatives.
+In such cases, and under appropriate regularity conditions, if there exists a consistent estimator for the index
+identifying these alternatives, then the central distribution reduces to an equally weighted average of the
+corresponding representative central distributions.
+
 \begin{example}[Binomial Experiment]
     \newcommand{\pv}{\paramVal}
     Consider a binomial experiment consisting of $n$ independent Bernoulli trials.
@@ -282,11 +288,6 @@ method for this conversion.
     \]
 \end{example}
 
-When dealing with layered ignorance and seeking the central distribution of a hierarchy of distributions,
-we typically encounter situations in which a given level of the hierarchy contains only finitely many alternatives.
-In such cases, and under appropriate regularity conditions, if there exists a consistent estimator for the index
-identifying these alternatives, then the central distribution reduces to an equally weighted average of the
-corresponding representative central distributions.
 
 %
 %\begin{lemma}

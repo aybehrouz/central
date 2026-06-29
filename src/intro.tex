@@ -28,11 +28,11 @@ on $e$:
 Now suppose that, instead of basing our decisions on the original evidence $E$,
 we choose to use a transformed version~$E'$.
 In practice, the evidence available to the agent is fixed by the environment.
-However, the agent may choose to base their decisions on a deterministic transformation $E' = f(E)$.
+However, the agent may choose to base its decisions on a deterministic transformation $E' = f(E)$.
 This is analogous to feature selection in machine learning, where a high-dimensional observation is replaced by a
 lower-dimensional representation.
 
-Could such a transformation improve the agent's strategy?
+Can such a transformation improve the agent's strategy?
 Within the framework of Bayesian decision theory, this question has a straightforward answer.
 Any two strategies can be compared through their expected loss: the strategy with the lower expected loss is preferred.
 However, a fundamental result of Bayesian decision theory states that the optimal strategy based on $E$ is always at
@@ -45,34 +45,34 @@ When we search for the optimal strategy based on $E$, we are simultaneously cons
 depend on $E'$, since every such strategy can also be expressed as a strategy based on $E$.
 This helps explain why standard Bayesian inference does not inherently favor simpler representations of the evidence.
 
-Although the optimal Bayesian strategy based on $E$ can always exploit all available information, the joint
-distribution $\envDist(x,e)$ determines which aspects of the evidence are actually useful for predicting the unknown
-state.
+Although the evidence $E$ contains all available information about the environment, the joint distribution
+$\envDist(x,e)$ determines which aspects of that information are actually relevant for predicting the unknown state.
 With an appropriate choice of $\envDist(x,e)$, the optimal strategy based on $E$ may effectively ignore irrelevant
 components of the evidence and behave as though it were based on a lower-dimensional representation $E'$.
 In this sense, Bayesian inference can perform a form of automatic feature selection.
 
-In many statistical models, specifying $\envDist(x,e)$ amounts to choosing a prior distribution.
-Consequently, the ability to promote relevant information depends on how prior knowledge about the environment is
-encoded.
+In many statistical models, the assumptions and prior knowledge about the environment are encoded in the joint
+distribution~$\envDist(x,e)$.
+Consequently, the ability to promote relevant information depends on how this knowledge is encoded.
 The difficulty, therefore, does not lie in Bayesian decision theory itself.
 Rather, it lies in how partial knowledge is represented.
 If partial knowledge is represented appropriately, standard Bayesian inference can naturally extract relevant
 information while disregarding irrelevant aspects of the evidence.
-Many commonly used priors, including flat priors, do not generally provide this behavior.
-The central distribution framework addresses this problem by providing a principled representation of partial
-knowledge for Bayesian inference.
+
+However, many commonly used priors, including flat priors, do not generally provide this behavior.
+The central distribution framework is an attempt to address this problem by providing a principled representation of
+partial knowledge for Bayesian inference.
 
 In this paper, we introduce the central distribution, an information-theoretic representation of partial
 knowledge that converts set-valued, and more generally hierarchical, uncertainty into a single probability
 distribution suitable for Bayesian inference.
 
-We establish the theoretical foundations of the framework by developing a theory of central distributions for finite
+We establish the theoretical foundations of the framework by developing the theory of central distributions for finite
 sets of probability distributions, including existence, uniqueness, and minimax characterizations.
 We introduce the corresponding notion of central priors for parametric models and identify a sufficient fixed-point
 condition linking central priors to Bayesian reference analysis~\cite{BERNARDO200517}.
 
-Building on these foundations, we investigate asymptotic extensions of the framework and develop a practical
+Building on these foundations, we investigate asymptotic extensions of the framework and develop a variational
 approximation method for constructing central distributions.
 Finally, we illustrate how representing uncertainty about model structure through hierarchical central distributions
-allows standard Bayesian inference to naturally perform feature selection.
+allows standard Bayesian inference to perform feature selection.
